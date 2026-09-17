@@ -55,11 +55,11 @@ progress bar.** Everything else is neutral. Gold appears only as the bullet
 marker in "What you would gain".
 
 **Club data is scraped from Iowa State's official student organization
-directory, not written by hand.** `scripts/scrape.py` walks the A-Z list at
+directory, not written by hand.** `active/execution/scripts/scrape.py` walks the A-Z list at
 `stuorg.iastate.edu/organizations` and pulls each group's `/information` page
 (categories, description, tier, membership rules, meetings, activities, special
 events), falling back to the org's own landing page for the three records with
-no `/information` page. `scripts/transform.py` maps that onto the `Club` shape.
+no `/information` page. `active/execution/scripts/transform.py` maps that onto the `Club` shape.
 Raw responses are kept in `data/stuorg-raw.json` so the transform can be re-run
 without re-scraping. Regenerate with `npm run scrape:clubs` then
 `npm run build:clubs`.
@@ -77,7 +77,7 @@ because `/explore` is a client component the whole 1.2 MB landed in a browser
 chunk. Importing `lib/clubs-detail.ts` from a client component brings it back.
 
 **Taxonomy is inferred from registry text with deliberately narrow patterns.**
-`scripts/classify.py` matches multi-word phrases rather than bare words, because
+`active/execution/scripts/classify.py` matches multi-word phrases rather than bare words, because
 single words collide badly with registry boilerplate: "business" matches "orders
 of business", "equity" matches "social equity", "race" matches "regardless of
 race". Category-to-area mapping runs against the club's own name and description
@@ -123,12 +123,26 @@ the ISU directory along with the listed member count.
 sibling-relative paths inside the docs still resolve.
 
 **Runnable code did not move.**
-`app/`, `components/`, `lib/`, `data/`, `public/`, `scripts/`, and the config
-files stay at the root. Next.js resolves `app/` and the `@/data/...` alias from
-the project root, and `scripts/*.py` locate `data/` relative to their own
-parent, so relocating any of them breaks the build or the data pipeline.
+`app/`, `components/`, `lib/`, `data/`, `public/`, and the config files stay
+at the root. Next.js resolves `app/` and the `@/data/...` alias from the
+project root, so relocating any of them breaks the build. (`scripts/` moved
+the next day, see the 2026-09-18 entry below.)
 
 **New design reference screenshots stored in `references/real/`.**
 Four full-page PNG captures, roughly 30 MB total, kept alongside the existing
 SVG reference boards rather than in `public/`, since they are direction for the
 build and not assets the site serves.
+
+### 2026-09-18 - `scripts/` moved under `active/execution/`
+
+**The Python data pipeline moved to `active/execution/scripts/`.**
+`scrape.py`, `transform.py`, and `classify.py` are the only remaining
+non-framework folder at root, so they moved to match the workspace
+convention. Each script's `DATA` path calculation was updated (two more
+`os.path.dirname()` calls, to walk up from the new, deeper location back to
+the project root); `classify.py`'s import in `transform.py` is unaffected
+since it resolves relative to the script's own folder, which didn't change
+relative to its siblings. The two npm scripts (`scrape:clubs`, `build:clubs`)
+in `package.json` were updated to the new path. Verified both scripts still
+resolve `data/`, `data/stuorg-raw.json`, `data/clubs.json`, and
+`data/clubs-index.json` to the same absolute paths as before the move.

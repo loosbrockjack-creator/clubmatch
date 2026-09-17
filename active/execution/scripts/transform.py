@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import classify as C
 
-DATA = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+DATA = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "data")
 RAW = os.path.join(DATA, "stuorg-raw.json")
 OUT = os.path.join(DATA, "clubs.json")
 INDEX_OUT = os.path.join(DATA, "clubs-index.json")

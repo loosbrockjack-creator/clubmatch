@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "scrape:clubs": "python3 scripts/scrape.py",
-    "build:clubs": "python3 scripts/transform.py"
+    "scrape:clubs": "python3 active/execution/scripts/scrape.py",
+    "build:clubs": "python3 active/execution/scripts/transform.py"
   },
   "dependencies": {
     "lucide-react": "^1.46.0",
