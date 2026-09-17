@@ -25,7 +25,7 @@ export function SaveButton({
         event.stopPropagation();
         toggle(slug);
       }}
-      className={`inline-flex h-9 w-9 items-center justify-center rounded-full border border-transparent text-ink-muted transition-colors hover:border-line hover:bg-muted hover:text-ink ${className}`}
+      className={`relative z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-transparent text-ink-muted transition-colors hover:border-line hover:bg-muted hover:text-ink ${className}`}
     >
       <Heart
         size={18}
