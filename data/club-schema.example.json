@@ -1,0 +1,22 @@
+[
+  {
+    "id": "example-investment-group",
+    "name": "Investment Group",
+    "slug": "investment-group",
+    "shortDescription": "Build investing skills through market research, discussion, and hands-on analysis.",
+    "colleges": ["Ivy College of Business"],
+    "majors": ["Finance", "Accounting", "Economics"],
+    "categories": ["Finance", "Professional"],
+    "careerPaths": ["Investing", "Asset Management", "Corporate Finance"],
+    "interests": ["Markets", "Investing", "Finance"],
+    "goalsServed": ["Career Development", "Networking", "Skill Building"],
+    "experienceTypes": ["Professional", "Academic"],
+    "commitmentLevel": "moderate",
+    "commitmentText": "About 1-2 hours per week",
+    "meetingFrequency": "Weekly",
+    "beginnerFriendly": true,
+    "freshmenWelcome": true,
+    "applicationRequired": false,
+    "verified": false
+  }
+]
