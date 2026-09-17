@@ -90,10 +90,6 @@ export default function LandingPage() {
                 <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
               </Link>
             </div>
-
-            <p className="mt-7 text-[14px] text-white/75">
-              Free, and no account needed.
-            </p>
           </div>
         </div>
       </section>
