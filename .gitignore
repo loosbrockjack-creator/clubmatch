@@ -43,3 +43,6 @@ next-env.d.ts
 # python
 __pycache__/
 *.pyc
+
+# local design reference captures (large, not needed for build)
+/active/research/references/real/
