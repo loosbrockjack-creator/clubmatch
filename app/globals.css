@@ -1,25 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-canvas: #f7f6f3;
+  /* Surfaces. Iowa State runs white pages with light gray quiet bands. */
+  --color-canvas: #ffffff;
   --color-surface: #ffffff;
-  --color-muted: #f2f1ee;
-  --color-muted-deep: #edebe6;
-  --color-ink: #171717;
+  --color-muted: #f4f3f1;
+  --color-muted-deep: #e9e7e3;
+
+  /* Ink */
+  --color-ink: #1a1a1a;
   --color-ink-soft: #4a4a4a;
-  --color-ink-muted: #6b6b6b;
-  --color-line: #e8e6e1;
-  --color-line-strong: #d9d6cf;
+  --color-ink-muted: #6e6e6e;
+
+  /* Rules */
+  --color-line: #e3e1dd;
+  --color-line-strong: #cfccc6;
+
+  /* Iowa State cardinal and gold */
   --color-cardinal: #c8102e;
-  --color-cardinal-dark: #a40d26;
-  --color-cardinal-tint: #fff3f5;
+  --color-cardinal-dark: #9b0c23;
+  --color-cardinal-deep: #7a0a1c;
+  --color-cardinal-tint: #fdf2f4;
   --color-gold: #f1be48;
-  --color-gold-tint: #fdf6e6;
+  --color-gold-deep: #cf9e2c;
+  --color-gold-tint: #fdf7e9;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
+  --font-display: var(--font-source-serif), ui-serif, Georgia, "Times New Roman",
+    serif;
 
-  --radius-card: 16px;
+  --radius-card: 14px;
 
   --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -43,8 +54,13 @@
     border-radius: 4px;
   }
 
+  /* On cardinal panels the red outline disappears. Switch to gold. */
+  .on-cardinal :focus-visible {
+    outline-color: var(--color-gold);
+  }
+
   ::selection {
-    background-color: var(--color-cardinal-tint);
+    background-color: var(--color-gold-tint);
   }
 }
 
@@ -62,6 +78,41 @@
     }
   }
 
+  /* ---- Display type -------------------------------------------------- */
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+  }
+
+  /* Iowa State's wordmark idiom: serif, small caps, wide tracking. */
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- Gold rule ----------------------------------------------------- */
+  /* The signature ISU section marker: a short gold bar above a heading. */
+
+  .gold-rule::before {
+    content: "";
+    display: block;
+    width: 54px;
+    height: 4px;
+    background-color: var(--color-gold);
+    margin-bottom: 20px;
+  }
+
+  .gold-rule-center::before {
+    margin-inline: auto;
+  }
+
+  /* ---- Cards --------------------------------------------------------- */
+
   .card {
     background-color: var(--color-surface);
     border: 1px solid var(--color-line);
@@ -77,18 +128,38 @@
 
   .card-interactive:hover {
     border-color: var(--color-line-strong);
-    box-shadow: 0 1px 2px rgb(23 23 23 / 0.04), 0 8px 24px rgb(23 23 23 / 0.06);
+    box-shadow:
+      0 1px 2px rgb(26 26 26 / 0.04),
+      0 10px 28px rgb(26 26 26 / 0.07);
     transform: translateY(-2px);
   }
+
+  /* Airbnb-style tile: no chrome at rest, the image carries the card. */
+  .tile-image {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--color-muted);
+  }
+
+  .tile img {
+    transition: transform 400ms var(--ease-out-soft);
+  }
+
+  .tile:hover img {
+    transform: scale(1.04);
+  }
+
+  /* ---- Buttons ------------------------------------------------------- */
+  /* ISU uses squared-off rectangles, not pills. 4px radius throughout. */
 
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     height: 48px;
-    padding-inline: 22px;
-    border-radius: 14px;
+    padding-inline: 24px;
+    border-radius: 4px;
     font-size: 15px;
     font-weight: 600;
     line-height: 1;
@@ -120,12 +191,42 @@
   .btn-secondary {
     background-color: var(--color-surface);
     color: var(--color-ink);
-    border: 1px solid var(--color-line-strong);
+    border: 1px solid var(--color-ink);
   }
 
   .btn-secondary:hover:not(:disabled) {
-    border-color: #c4c0b7;
-    background-color: var(--color-muted);
+    background-color: var(--color-ink);
+    color: #ffffff;
+  }
+
+  .btn-secondary:disabled {
+    border-color: var(--color-line);
+    color: var(--color-ink-muted);
+    cursor: not-allowed;
+  }
+
+  /* White button for use inside cardinal panels. */
+  .btn-on-cardinal {
+    background-color: #ffffff;
+    color: var(--color-cardinal);
+    border: 1px solid #ffffff;
+  }
+
+  .btn-on-cardinal:hover:not(:disabled) {
+    background-color: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  .btn-ghost-on-cardinal {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid rgb(255 255 255 / 0.55);
+  }
+
+  .btn-ghost-on-cardinal:hover:not(:disabled) {
+    background-color: rgb(255 255 255 / 0.12);
+    border-color: #ffffff;
   }
 
   .btn-quiet {
@@ -139,20 +240,86 @@
     background-color: var(--color-muted);
   }
 
+  /* ---- Links --------------------------------------------------------- */
+  /* ISU underlines its link lists. Keeps them scannable and unambiguous. */
+
+  .link-isu {
+    color: var(--color-cardinal);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 140ms var(--ease-out-soft);
+  }
+
+  .link-isu:hover {
+    color: var(--color-cardinal-dark);
+    text-decoration-thickness: 2px;
+  }
+
+  .link-on-cardinal {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 140ms var(--ease-out-soft);
+  }
+
+  .link-on-cardinal:hover {
+    color: var(--color-gold);
+  }
+
+  /* ---- Chips --------------------------------------------------------- */
+
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    height: 32px;
-    padding-inline: 12px;
-    border-radius: 999px;
+    height: 30px;
+    padding-inline: 11px;
+    border-radius: 3px;
     border: 1px solid var(--color-line);
     background-color: var(--color-muted);
     color: var(--color-ink-soft);
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 500;
     white-space: nowrap;
   }
+
+  .chip-cardinal {
+    border-color: rgb(200 16 46 / 0.28);
+    background-color: var(--color-cardinal-tint);
+    color: var(--color-cardinal-dark);
+  }
+
+  .chip-gold {
+    border-color: rgb(207 158 44 / 0.35);
+    background-color: var(--color-gold-tint);
+    color: #7a5c12;
+  }
+
+  /* ---- Cardinal panel ------------------------------------------------ */
+
+  .panel-cardinal {
+    background-color: var(--color-cardinal);
+    color: #ffffff;
+  }
+
+  .panel-cardinal .eyebrow {
+    color: var(--color-gold);
+  }
+
+  /* ---- Eyebrow ------------------------------------------------------- */
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  /* ---- Loading ------------------------------------------------------- */
 
   .skeleton {
     background: linear-gradient(

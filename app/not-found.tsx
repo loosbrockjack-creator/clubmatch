@@ -4,13 +4,12 @@ export default function NotFound() {
   return (
     <div className="shell py-28">
       <div className="mx-auto max-w-md text-center">
-        <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
-          404
-        </p>
-        <h1 className="mt-4 text-[30px] font-bold tracking-tight text-ink">
+        <p className="eyebrow">404</p>
+        <h1 className="display mt-5 text-[34px] text-cardinal">
           We could not find that page.
         </h1>
-        <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">
+        <div className="mx-auto mt-5 h-1 w-[54px] bg-gold" />
+        <p className="mt-5 text-[15.5px] leading-relaxed text-ink-soft">
           The club or page you were looking for may have moved.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">

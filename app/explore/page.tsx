@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { ClubCard } from "@/components/club-card";
+import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
 import { scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
@@ -36,17 +38,26 @@ const AREA_DUPLICATES = new Set([
  * the non-academic half of campus reachable: Greek life, service, sports clubs,
  * residence communities, and so on.
  */
-const CATEGORIES = Array.from(
-  clubs.reduce((counts, club) => {
-    for (const category of club.categories) {
-      counts.set(category, (counts.get(category) ?? 0) + 1);
-    }
-    return counts;
-  }, new Map<string, number>()),
-)
+const CATEGORY_COUNTS = clubs.reduce((counts, club) => {
+  for (const category of club.categories) {
+    counts.set(category, (counts.get(category) ?? 0) + 1);
+  }
+  return counts;
+}, new Map<string, number>());
+
+const CATEGORIES = Array.from(CATEGORY_COUNTS)
   .filter(([id, count]) => count >= 8 && !AREA_DUPLICATES.has(id))
   .sort((a, b) => a[0].localeCompare(b[0]))
   .map(([id]) => ({ id, label: id }));
+
+/**
+ * Landing-page interest tiles deep-link to categories the chip row hides
+ * (Engineering, Business and friends live in the Area row instead). Validate
+ * against every real category, then surface whatever came in as a removable
+ * chip so the filter is never invisible.
+ */
+const ALL_CATEGORIES = new Set(CATEGORY_COUNTS.keys());
+const CHIP_ROW_CATEGORIES = new Set(CATEGORIES.map((c) => c.id));
 
 function FilterRow<T extends string>({
   label,
@@ -87,10 +98,42 @@ function FilterRow<T extends string>({
 }
 
 export default function ExplorePage() {
+  return (
+    <Suspense fallback={<ExploreFallback />}>
+      <ExploreView />
+    </Suspense>
+  );
+}
+
+function ExploreFallback() {
+  return (
+    <>
+      <PageHeader
+        title="Explore clubs"
+        intro="Every registered student organization at Iowa State. Search by name, major, or career area."
+      />
+      <div className="shell py-10">
+        <div className="skeleton h-14 w-full rounded-[4px]" />
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="skeleton h-[228px] rounded-[14px]" />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ExploreView() {
   const prefs = useStoredPreferences();
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
   const [areas, setAreas] = useState<AcademicAreaId[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  // The landing page interest tiles deep-link in with ?category=...
+  const [categories, setCategories] = useState<string[]>(() => {
+    const requested = searchParams.get("category");
+    return requested && ALL_CATEGORIES.has(requested) ? [requested] : [];
+  });
   const [commitments, setCommitments] = useState<CommitmentId[]>([]);
   const [experiences, setExperiences] = useState<ExperienceId[]>([]);
   const [sort, setSort] = useState<SortMode>("fit");
@@ -175,40 +218,41 @@ export default function ExplorePage() {
     };
   }
 
+  /** Active categories the chip row cannot show, e.g. a landing-page tile. */
+  const offRowCategories = categories.filter((c) => !CHIP_ROW_CATEGORIES.has(c));
+
   return (
-    <div className="shell pb-8 pt-12 sm:pt-16">
-      <h1 className="text-[32px] font-bold leading-tight tracking-[-0.02em] text-ink sm:text-[40px]">
-        Explore clubs
-      </h1>
-      <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-muted sm:text-[16px]">
-        Every registered student organization at Iowa State. Search by name,
-        major, or career area.
-      </p>
+    <>
+      <PageHeader
+        title="Explore clubs"
+        intro="Every registered student organization at Iowa State. Search by name, major, or career area."
+      >
+        <div className="relative mt-8 max-w-2xl">
+          <Search
+            size={19}
+            strokeWidth={1.75}
+            aria-hidden
+            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-muted"
+          />
+          <label htmlFor="club-search" className="sr-only">
+            Search clubs
+          </label>
+          <input
+            id="club-search"
+            type="search"
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setVisible(PAGE_SIZE);
+            }}
+            placeholder="Search clubs, majors, or career areas..."
+            className="h-14 w-full rounded-[4px] border border-line-strong bg-white pl-12 pr-5 text-[15px] text-ink shadow-sm placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal sm:h-[58px]"
+          />
+        </div>
+      </PageHeader>
 
-      <div className="relative mt-8">
-        <Search
-          size={18}
-          strokeWidth={1.75}
-          aria-hidden
-          className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-ink-muted"
-        />
-        <label htmlFor="club-search" className="sr-only">
-          Search clubs
-        </label>
-        <input
-          id="club-search"
-          type="search"
-          value={query}
-          onChange={(event) => {
-            setQuery(event.target.value);
-            setVisible(PAGE_SIZE);
-          }}
-          placeholder="Search clubs, majors, or career areas..."
-          className="h-14 w-full rounded-[16px] border border-line bg-surface pl-[52px] pr-5 text-[15px] text-ink placeholder:text-ink-muted focus:border-line-strong focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal sm:h-[58px]"
-        />
-      </div>
-
-      <div className="mt-6 space-y-3">
+      <div className="shell pb-8 pt-10">
+        <div className="space-y-3">
         <FilterRow
           label="Area"
           options={ACADEMIC_AREAS}
@@ -236,11 +280,27 @@ export default function ExplorePage() {
           selected={categories}
           onToggle={toggler(setCategories)}
         />
-      </div>
+        </div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
+        {offRowCategories.length > 0 && (
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            {offRowCategories.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => toggler(setCategories)(category)}
+                className="chip chip-cardinal transition-colors hover:border-cardinal"
+              >
+                {category}
+                <X size={13} strokeWidth={2.25} aria-hidden />
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         <div className="flex items-center gap-3">
-          <p className="text-[14px] font-medium text-ink">
+          <p className="text-[14px] font-semibold text-ink">
             {filtered.length} {filtered.length === 1 ? "club" : "clubs"}
           </p>
           {(filterCount > 0 || query) && (
@@ -270,7 +330,7 @@ export default function ExplorePage() {
                 setSort(event.target.value as SortMode);
                 setVisible(PAGE_SIZE);
               }}
-              className="h-9 rounded-lg border border-line bg-surface px-2.5 text-[13px] font-medium text-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
+              className="h-9 rounded-[4px] border border-line-strong bg-white px-2.5 text-[13px] font-medium text-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
             >
               <option value="fit">Best fit for you</option>
               <option value="az">A to Z</option>
@@ -281,10 +341,8 @@ export default function ExplorePage() {
 
       {filtered.length === 0 ? (
         <div className="card mt-6 px-6 py-20 text-center">
-          <h2 className="text-[20px] font-bold tracking-tight text-ink">
-            No clubs match that.
-          </h2>
-          <p className="mx-auto mt-3 max-w-sm text-[14px] leading-relaxed text-ink-muted">
+          <h2 className="display text-[24px] text-ink">No clubs match that.</h2>
+          <p className="mx-auto mt-3 max-w-sm text-[14.5px] leading-relaxed text-ink-soft">
             Try a broader search term or remove one of the filters.
           </p>
           <button type="button" onClick={clearAll} className="btn btn-secondary mt-7">
@@ -293,9 +351,17 @@ export default function ExplorePage() {
         </div>
       ) : (
         <>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.slice(0, visible).map((club) => (
-              <ClubCard key={club.id} club={club} />
+              <ClubCard
+                key={club.id}
+                club={club}
+                score={
+                  activeSort === "fit" && hasPrefs
+                    ? scoreClub(prefs, club).score
+                    : undefined
+                }
+              />
             ))}
           </div>
 
@@ -315,6 +381,7 @@ export default function ExplorePage() {
           )}
         </>
       )}
-    </div>
+      </div>
+    </>
   );
 }

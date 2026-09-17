@@ -232,7 +232,7 @@ export default function MatchPage() {
         </div>
 
         <div
-          className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted-deep"
+          className="mt-3 h-1.5 w-full overflow-hidden bg-muted-deep"
           role="progressbar"
           aria-valuemin={1}
           aria-valuemax={TOTAL_STEPS}
@@ -240,7 +240,7 @@ export default function MatchPage() {
           aria-label="Quiz progress"
         >
           <div
-            className="h-full rounded-full bg-cardinal transition-[width] duration-300 ease-out"
+            className="h-full bg-cardinal transition-[width] duration-300 ease-out"
             style={{ width: `${((step + 1) / TOTAL_STEPS) * 100}%` }}
           />
         </div>
@@ -252,11 +252,11 @@ export default function MatchPage() {
             <h1
               ref={headingRef}
               tabIndex={-1}
-              className="text-center text-[28px] font-bold leading-tight tracking-[-0.02em] text-ink outline-none sm:text-[38px]"
+              className="display gold-rule gold-rule-center text-center text-[30px] text-ink outline-none sm:text-[40px]"
             >
               {current.question}
             </h1>
-            <p className="mt-3 text-center text-[15px] text-ink-muted sm:text-[16px]">
+            <p className="mt-4 text-center text-[15.5px] text-ink-soft sm:text-[16.5px]">
               {current.subtitle}
             </p>
 

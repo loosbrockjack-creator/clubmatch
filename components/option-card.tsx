@@ -32,7 +32,7 @@ export function OptionCard({
         className="peer sr-only"
       />
       <span
-        className={`flex h-full items-start justify-between gap-3 rounded-[16px] border border-line bg-surface transition-all duration-200 ease-out peer-hover:border-line-strong peer-checked:border-cardinal peer-checked:bg-cardinal-tint peer-checked:shadow-[inset_0_0_0_1px_var(--color-cardinal)] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-cardinal ${
+        className={`flex h-full items-start justify-between gap-3 rounded-[4px] border border-line bg-white transition-all duration-200 ease-out peer-hover:border-line-strong peer-checked:border-cardinal peer-checked:bg-cardinal-tint peer-checked:shadow-[inset_0_0_0_1px_var(--color-cardinal)] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-cardinal ${
           compact ? "px-4 py-3.5" : "px-5 py-4"
         }`}
       >
@@ -56,7 +56,7 @@ export function OptionCard({
         <span
           aria-hidden
           className={`mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center border transition-colors ${
-            type === "radio" ? "rounded-full" : "rounded-[7px]"
+            type === "radio" ? "rounded-full" : "rounded-[3px]"
           } ${
             checked
               ? "border-cardinal bg-cardinal text-white"

@@ -14,32 +14,40 @@ export function WhyItFits({ club }: { club: ClubSummary }) {
   const { score, reasons } = scoreClub(prefs, club);
 
   return (
-    <section className="card rise mt-10 p-6 sm:p-7">
+    <section className="rise mt-10 border-l-[3px] border-gold bg-gold-tint p-6 sm:p-7">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-[20px] font-bold tracking-tight text-ink">
-          <Sparkles size={18} strokeWidth={1.75} aria-hidden className="text-cardinal" />
+        <h2 className="display flex items-center gap-2.5 text-[22px] text-ink">
+          <Sparkles
+            size={18}
+            strokeWidth={1.75}
+            aria-hidden
+            className="text-cardinal"
+          />
           Why it fits you
         </h2>
-        <span className="text-[20px] font-bold tabular-nums text-cardinal">
+        <span className="text-[22px] font-bold tabular-nums text-cardinal">
           {score}% fit
         </span>
       </div>
 
-      <ul className="mt-4 space-y-2">
+      <ul className="mt-5 space-y-2.5">
         {reasons.map((reason) => (
           <li
             key={reason}
-            className="flex gap-2.5 text-[15px] leading-relaxed text-ink-soft"
+            className="flex gap-3 text-[15px] leading-relaxed text-ink-soft"
           >
-            <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-cardinal" />
+            <span
+              aria-hidden
+              className="mt-[9px] h-1.5 w-1.5 shrink-0 bg-cardinal"
+            />
             {reason}
           </li>
         ))}
       </ul>
 
-      <p className="mt-5 text-[13px] text-ink-muted">
+      <p className="mt-6 text-[13px] text-ink-muted">
         Based on the answers you gave.{" "}
-        <Link href="/match" className="font-semibold text-ink underline underline-offset-2">
+        <Link href="/match" className="link-isu">
           Change them
         </Link>
         .

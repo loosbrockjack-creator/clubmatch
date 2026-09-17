@@ -146,3 +146,52 @@ relative to its siblings. The two npm scripts (`scrape:clubs`, `build:clubs`)
 in `package.json` were updated to the new path. Verified both scripts still
 resolve `data/`, `data/stuorg-raw.json`, `data/clubs.json`, and
 `data/clubs-index.json` to the same absolute paths as before the move.
+
+### 2026-09-17 - Visual system rebuilt against the Iowa State brand
+
+**The restrained-accent rule in `CLAUDE.md` was overridden by explicit
+direction.** The prior rule ("cardinal as a restrained accent, not a giant
+paint bucket") was set aside in favor of matching iastate.edu directly: solid
+cardinal panels, a cardinal footer, cardinal section headings, and gold rules.
+This was a deliberate owner decision, not drift. The Airbnb references still
+govern card and grid structure.
+
+**Type is now a serif/sans pair.** Source Serif 4 (`--font-display`) for
+headlines and the wordmark, Inter for UI and body, matching Iowa State's own
+serif-headline / sans-body split. Added `.display`, `.wordmark`, and
+`.gold-rule` component classes so the idiom is applied consistently rather
+than re-specified per page.
+
+**Squared geometry replaced rounded.** Buttons and inputs went from 14-16px
+radius to 4px, chips from full pills to 3px, to match the university's
+rectangular UI. Cards stay at 14px.
+
+**Photography is keyed to category, and only used where it is 1:1.**
+16 hand-picked Pexels images in `public/photos` (~2.8 MB total), mapped in
+`lib/photos.ts`. Used on the hero, the eight landing-page interest tiles, and
+the club detail banner. The Explore and Results grids stay typographic on
+purpose: with 28 categories over 726 clubs, a 48-card page would repeat the
+same photo two to four times on one screen.
+
+**`photoForClub()` keys off `college` before `categories`.** 33 clubs carry a
+dozen-plus categories (Solar Car is tagged everything from Agriculture to
+Veterinary Medicine), so first-category matching picked essentially at random.
+College is the reliable signal. `Programming` maps to the generic photo
+because in Iowa State's taxonomy it covers both software clubs and event
+programming (Blood Drive, Dance Marathon).
+
+### 2026-09-17 - Two pre-existing bugs fixed during the redesign
+
+**The landing page's featured clubs had been rendering empty.** The three
+hardcoded slugs (`isu-investment-group`, `cyclone-racing`,
+`information-assurance-student-group`) were placeholders that did not survive
+the 726-club dataset import, and the `.filter(Boolean)` swallowed the miss
+silently. Replaced with real slugs (`solar-car`, `investment-group`,
+`dance-marathon`) plus a fallback that backfills from the dataset, so the
+section can never silently empty again.
+
+**"Similar clubs" ranked by raw tag overlap, which was meaningless.**
+"Special Interest" covers 143 clubs, so Solar Car's related list was Pakistan
+Student Association and the Saudi Arabia Students Association. Shared tags are
+now weighted by rarity (`log(total / count)`) and damped by the other club's
+tag breadth. Solar Car now surfaces Cardinal Space Mining Club.

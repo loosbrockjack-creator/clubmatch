@@ -15,7 +15,11 @@ export function MatchRow({
   const { club, score, reasons } = result;
 
   return (
-    <article className="card card-interactive group relative flex gap-4 p-5 sm:gap-5 sm:p-6">
+    <article
+      className={`card card-interactive group relative flex gap-4 p-5 sm:gap-5 sm:p-6 ${
+        rank === 1 ? "border-t-2 border-t-cardinal" : ""
+      }`}
+    >
       <div className="hidden sm:block">
         <ClubMark mark={club.mark} size="lg" />
       </div>
@@ -27,10 +31,14 @@ export function MatchRow({
               <ClubMark mark={club.mark} size="sm" />
             </div>
             <div className="min-w-0">
-              <p className="text-[12px] font-semibold uppercase tracking-wider text-ink-muted">
+              <p
+                className={`text-[11px] font-bold uppercase tracking-[0.14em] ${
+                  rank === 1 ? "text-cardinal" : "text-ink-muted"
+                }`}
+              >
                 {rank === 1 ? "Best match" : `Match ${rank}`}
               </p>
-              <h3 className="mt-1 text-[18px] font-bold leading-snug tracking-tight text-ink sm:text-[21px]">
+              <h3 className="display mt-1.5 text-[20px] text-ink sm:text-[24px]">
                 <Link
                   href={`/clubs/${club.slug}`}
                   className="after:absolute after:inset-0 after:content-['']"

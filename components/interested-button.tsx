@@ -6,24 +6,35 @@ import { useSavedClubs } from "@/lib/preferences";
 export function InterestedButton({
   slug,
   clubName,
+  onCardinal = false,
 }: {
   slug: string;
   clubName: string;
+  /** Inverts the color pair for use inside a solid cardinal panel. */
+  onCardinal?: boolean;
 }) {
   const { saved, toggle, ready } = useSavedClubs();
-  const isSaved = ready && saved.includes(slug);
+  const isSaved = saved.includes(slug);
+
+  const variant = onCardinal
+    ? isSaved
+      ? "btn-ghost-on-cardinal"
+      : "btn-on-cardinal"
+    : isSaved
+      ? "btn-secondary"
+      : "btn-primary";
 
   return (
     <button
       type="button"
-      onClick={() => toggle(slug)}
       aria-pressed={ready ? isSaved : undefined}
-      className={`btn w-full sm:w-auto ${isSaved ? "btn-secondary" : "btn-primary"}`}
+      onClick={() => toggle(slug)}
+      className={`btn ${variant} w-full sm:w-auto`}
     >
       {isSaved ? (
         <>
           <Check size={16} strokeWidth={2.25} aria-hidden />
-          On your list
+          Saved to your list
         </>
       ) : (
         <>
