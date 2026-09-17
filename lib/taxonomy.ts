@@ -260,6 +260,74 @@ export const COMMITMENT_SHORT: Record<CommitmentId, string> = {
   high: "8+ hr/wk",
 };
 
+export const COMMITMENT_TEXT: Record<CommitmentId, string> = {
+  casual: "About 1 to 2 hours a week",
+  moderate: "About 2 to 4 hours a week",
+  involved: "About 5 to 8 hours a week",
+  high: "8 or more hours a week",
+};
+
+/**
+ * Representative majors per academic area. Derived rather than stored so the
+ * club index stays small; these are the majors a student in that area would
+ * recognize, not a roster of who actually joins.
+ */
+const MAJORS_BY_AREA: Record<AcademicAreaId, string[]> = {
+  business: ["Finance", "Marketing", "Accounting", "Supply Chain", "Management"],
+  engineering: [
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Electrical Engineering",
+    "Aerospace Engineering",
+    "Industrial Engineering",
+  ],
+  computing: [
+    "Computer Science",
+    "Software Engineering",
+    "Data Science",
+    "Cybersecurity",
+    "Management Information Systems",
+  ],
+  agriculture: [
+    "Agronomy",
+    "Animal Science",
+    "Agricultural Business",
+    "Food Science",
+    "Horticulture",
+  ],
+  design: [
+    "Architecture",
+    "Graphic Design",
+    "Industrial Design",
+    "Interior Design",
+    "Landscape Architecture",
+  ],
+  "liberal-arts": [
+    "Biology",
+    "Psychology",
+    "Political Science",
+    "Communication",
+    "English",
+  ],
+  "human-sciences": [
+    "Kinesiology",
+    "Dietetics",
+    "Education",
+    "Event Management",
+    "Apparel Merchandising",
+  ],
+};
+
+export function majorsForAreas(areas: AcademicAreaId[]): string[] {
+  const out: string[] = [];
+  for (const area of areas) {
+    for (const major of MAJORS_BY_AREA[area] ?? []) {
+      if (!out.includes(major)) out.push(major);
+    }
+  }
+  return out.slice(0, 5);
+}
+
 export function joinWithAnd(items: string[]): string {
   if (items.length === 0) return "";
   if (items.length === 1) return items[0];

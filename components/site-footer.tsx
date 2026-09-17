@@ -8,10 +8,10 @@ export function SiteFooter() {
         <div className="max-w-md">
           <p className="text-[15px] font-semibold text-ink">ClubMatch</p>
           <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">
-            A student project for Iowa State. Club profiles cover{" "}
-            {clubs.length} academic and professional organizations and were
-            compiled for this prototype, so details have not yet been confirmed
-            with each group.
+            A student project for Iowa State. Covers all {clubs.length}{" "}
+            organizations listed in the university&apos;s student organization
+            directory. Fit scores and category tags are our own, so check each
+            group&apos;s ISU page before you show up.
           </p>
         </div>
         <nav className="flex gap-6 text-[13px] font-medium text-ink-muted">

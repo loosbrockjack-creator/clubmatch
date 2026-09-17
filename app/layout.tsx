@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | ClubMatch",
   },
   description:
-    "Answer five quick questions and get a ranked shortlist of Iowa State academic and professional clubs that match your major, goals, career interests, and schedule.",
+    "Answer five quick questions and get a ranked shortlist from all of Iowa State's registered student organizations, matched to your major, goals, career interests, and schedule.",
 };
 
 export default function RootLayout({

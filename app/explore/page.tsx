@@ -12,10 +12,41 @@ import {
   COMMITMENTS,
   COMMITMENT_SHORT,
   EXPERIENCES,
+  majorsForAreas,
 } from "@/lib/taxonomy";
 import type { AcademicAreaId, CommitmentId, ExperienceId } from "@/lib/types";
 
 type SortMode = "fit" | "az";
+
+/** Enough to fill a few scrolls without rendering 700+ cards at once. */
+const PAGE_SIZE = 48;
+
+/** Categories the Area row already covers; listing them twice is just noise. */
+const AREA_DUPLICATES = new Set([
+  "Business",
+  "Engineering",
+  "Design",
+  "Agriculture & Life Sciences",
+  "Liberal Arts & Sciences",
+  "Health & Human Sciences",
+]);
+
+/**
+ * Iowa State's own category labels, minus the academic ones. This is what makes
+ * the non-academic half of campus reachable: Greek life, service, sports clubs,
+ * residence communities, and so on.
+ */
+const CATEGORIES = Array.from(
+  clubs.reduce((counts, club) => {
+    for (const category of club.categories) {
+      counts.set(category, (counts.get(category) ?? 0) + 1);
+    }
+    return counts;
+  }, new Map<string, number>()),
+)
+  .filter(([id, count]) => count >= 8 && !AREA_DUPLICATES.has(id))
+  .sort((a, b) => a[0].localeCompare(b[0]))
+  .map(([id]) => ({ id, label: id }));
 
 function FilterRow<T extends string>({
   label,
@@ -59,9 +90,11 @@ export default function ExplorePage() {
   const prefs = useStoredPreferences();
   const [query, setQuery] = useState("");
   const [areas, setAreas] = useState<AcademicAreaId[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [commitments, setCommitments] = useState<CommitmentId[]>([]);
   const [experiences, setExperiences] = useState<ExperienceId[]>([]);
   const [sort, setSort] = useState<SortMode>("fit");
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const hasPrefs = prefs !== null && prefs !== false;
   const activeSort: SortMode = hasPrefs ? sort : "az";
@@ -71,6 +104,12 @@ export default function ExplorePage() {
 
     const matches = clubs.filter((club) => {
       if (areas.length > 0 && !club.academicAreas.some((a) => areas.includes(a))) {
+        return false;
+      }
+      if (
+        categories.length > 0 &&
+        !club.categories.some((c) => categories.includes(c))
+      ) {
         return false;
       }
       if (commitments.length > 0 && !commitments.includes(club.commitmentLevel)) {
@@ -88,10 +127,9 @@ export default function ExplorePage() {
         club.name,
         club.mark,
         club.tagline,
-        club.summary,
         club.college,
         ...club.categories,
-        ...club.majors,
+        ...majorsForAreas(club.academicAreas),
         ...club.careerPaths.map((id) => CAREER_BY_ID[id].label),
       ]
         .join(" ")
@@ -108,26 +146,33 @@ export default function ExplorePage() {
     }
 
     return matches.sort((a, b) => a.name.localeCompare(b.name));
-  }, [query, areas, commitments, experiences, activeSort, hasPrefs, prefs]);
+  }, [query, areas, categories, commitments, experiences, activeSort, hasPrefs, prefs]);
 
-  const filterCount = areas.length + commitments.length + experiences.length;
+  const filterCount =
+    areas.length + categories.length + commitments.length + experiences.length;
 
   function clearAll() {
     setQuery("");
     setAreas([]);
+    setCategories([]);
     setCommitments([]);
     setExperiences([]);
+    setVisible(PAGE_SIZE);
   }
 
   function toggler<T extends string>(
     setter: React.Dispatch<React.SetStateAction<T[]>>,
   ) {
-    return (id: T) =>
+    return (id: T) => {
       setter((current) =>
         current.includes(id)
           ? current.filter((value) => value !== id)
           : [...current, id],
       );
+      // A narrowed list should start at its own top, not halfway down the
+      // previous one.
+      setVisible(PAGE_SIZE);
+    };
   }
 
   return (
@@ -136,8 +181,8 @@ export default function ExplorePage() {
         Explore clubs
       </h1>
       <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-muted sm:text-[16px]">
-        Every academic and professional organization in ClubMatch. Search by
-        name, major, or career area.
+        Every registered student organization at Iowa State. Search by name,
+        major, or career area.
       </p>
 
       <div className="relative mt-8">
@@ -154,7 +199,10 @@ export default function ExplorePage() {
           id="club-search"
           type="search"
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setVisible(PAGE_SIZE);
+          }}
           placeholder="Search clubs, majors, or career areas..."
           className="h-14 w-full rounded-[16px] border border-line bg-surface pl-[52px] pr-5 text-[15px] text-ink placeholder:text-ink-muted focus:border-line-strong focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal sm:h-[58px]"
         />
@@ -181,6 +229,12 @@ export default function ExplorePage() {
           options={EXPERIENCES}
           selected={experiences}
           onToggle={toggler(setExperiences)}
+        />
+        <FilterRow
+          label="Category"
+          options={CATEGORIES}
+          selected={categories}
+          onToggle={toggler(setCategories)}
         />
       </div>
 
@@ -212,7 +266,10 @@ export default function ExplorePage() {
             <select
               id="sort"
               value={sort}
-              onChange={(event) => setSort(event.target.value as SortMode)}
+              onChange={(event) => {
+                setSort(event.target.value as SortMode);
+                setVisible(PAGE_SIZE);
+              }}
               className="h-9 rounded-lg border border-line bg-surface px-2.5 text-[13px] font-medium text-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
             >
               <option value="fit">Best fit for you</option>
@@ -235,11 +292,28 @@ export default function ExplorePage() {
           </button>
         </div>
       ) : (
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((club) => (
-            <ClubCard key={club.id} club={club} />
-          ))}
-        </div>
+        <>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.slice(0, visible).map((club) => (
+              <ClubCard key={club.id} club={club} />
+            ))}
+          </div>
+
+          {visible < filtered.length && (
+            <div className="mt-10 flex flex-col items-center gap-3">
+              <p className="text-[13px] text-ink-muted">
+                Showing {visible} of {filtered.length}
+              </p>
+              <button
+                type="button"
+                onClick={() => setVisible((n) => n + PAGE_SIZE)}
+                className="btn btn-secondary"
+              >
+                Show more clubs
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

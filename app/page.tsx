@@ -56,9 +56,9 @@ export default function LandingPage() {
             Find the clubs that fit you.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-[17px] leading-relaxed text-ink-muted sm:text-[18px]">
-            Iowa State has hundreds of student organizations. Tell us what you
-            are studying and what you want out of one, and we will narrow it to
-            the handful worth your time.
+            Iowa State has more than seven hundred student organizations. Tell us
+            what you are studying and what you want out of one, and we will narrow
+            it to the handful worth your time.
           </p>
 
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -72,7 +72,7 @@ export default function LandingPage() {
           </div>
 
           <p className="mt-6 text-[14px] text-ink-muted">
-            {clubs.length} academic and professional clubs. No account needed.
+            All {clubs.length} registered organizations. No account needed.
           </p>
         </div>
       </section>

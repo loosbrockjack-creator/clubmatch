@@ -119,7 +119,7 @@ export default function ResultsPage() {
           </h1>
           <p className="mt-3 text-[15px] leading-relaxed text-ink-muted sm:text-[16px]">
             {top.length > 0
-              ? `${top.length} clubs ranked from the answers you gave us. Fit scores are a guide, not a grade.`
+              ? `Your top ${top.length} of ${results.length} clubs that fit your answers. Fit scores are a guide, not a grade.`
               : "Nothing cleared the bar with these answers."}
           </p>
 

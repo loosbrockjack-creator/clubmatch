@@ -4,9 +4,9 @@ import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
-import type { Club } from "@/lib/types";
+import type { ClubSummary } from "@/lib/types";
 
-export function WhyItFits({ club }: { club: Club }) {
+export function WhyItFits({ club }: { club: ClubSummary }) {
   const prefs = useStoredPreferences();
 
   if (prefs === null || prefs === false) return null;

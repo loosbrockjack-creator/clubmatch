@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "scrape:clubs": "python3 scripts/scrape.py",
+    "build:clubs": "python3 scripts/transform.py"
   },
   "dependencies": {
     "lucide-react": "^1.46.0",

@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CalendarDays, Clock, FileText, UserPlus } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  CalendarDays,
+  Clock,
+  FileText,
+  UserPlus,
+} from "lucide-react";
 import { ClubMark } from "@/components/club-mark";
 import { InterestedButton } from "@/components/interested-button";
 import { WhyItFits } from "@/components/why-it-fits";
 import { ClubCard } from "@/components/club-card";
-import { clubs, getClub } from "@/lib/clubs";
-import { CAREER_BY_ID } from "@/lib/taxonomy";
+import { clubs } from "@/lib/clubs";
+import { getClub } from "@/lib/clubs-detail";
+import { CAREER_BY_ID, COMMITMENT_TEXT, majorsForAreas } from "@/lib/taxonomy";
 
 export function generateStaticParams() {
   return clubs.map((club) => ({ slug: club.slug }));
@@ -33,8 +41,20 @@ export default async function ClubDetailPage({
   const club = getClub(slug);
   if (!club) notFound();
 
+  const majors = majorsForAreas(club.academicAreas);
+
+  // Thin registry entries give a one-line description, which then becomes both
+  // the tagline and the whole summary. Don't print the same sentence twice.
+  const taglineStem = club.tagline.replace(/\.\.\.$/, "").trim();
+  const summaryIsOneSentence = !/[.!?]\s+\S/.test(club.summary);
+  const summaryAddsNothing =
+    club.summary.startsWith(taglineStem) && summaryIsOneSentence;
+
+  // "Biweekly" on its own reads like a stray word under a how-to heading.
+  const meetingNote = club.meetingDetail.length >= 40 ? club.meetingDetail : "";
+
   const facts = [
-    { icon: Clock, label: "Time", value: club.commitmentText },
+    { icon: Clock, label: "Time", value: COMMITMENT_TEXT[club.commitmentLevel] },
     { icon: CalendarDays, label: "Meetings", value: club.meetingFrequency },
     {
       icon: UserPlus,
@@ -48,13 +68,21 @@ export default async function ClubDetailPage({
     },
   ];
 
+  // Broad categories like "Special Interest" match hundreds of clubs, so rank
+  // by how much they actually overlap rather than taking the first three.
   const related = clubs
-    .filter(
-      (other) =>
-        other.id !== club.id &&
-        other.categories.some((category) => club.categories.includes(category)),
-    )
-    .slice(0, 3);
+    .filter((other) => other.id !== club.id)
+    .map((other) => ({
+      club: other,
+      shared:
+        other.categories.filter((c) => club.categories.includes(c)).length +
+        other.academicAreas.filter((a) => club.academicAreas.includes(a)).length +
+        other.careerPaths.filter((c) => club.careerPaths.includes(c)).length,
+    }))
+    .filter((entry) => entry.shared > 0)
+    .sort((a, b) => b.shared - a.shared || a.club.name.localeCompare(b.club.name))
+    .slice(0, 3)
+    .map((entry) => entry.club);
 
   return (
     <div className="shell pb-8 pt-6 sm:pt-8">
@@ -75,9 +103,11 @@ export default async function ClubDetailPage({
                 <h1 className="text-[28px] font-bold leading-tight tracking-[-0.02em] text-ink sm:text-[36px]">
                   {club.name}
                 </h1>
-                <p className="mt-2 text-[14px] font-medium text-ink-muted">
-                  {club.college}
-                </p>
+                {club.college && (
+                  <p className="mt-2 text-[14px] font-medium text-ink-muted">
+                    {club.college}
+                  </p>
+                )}
                 <p className="mt-1 text-[14px] font-medium text-ink-muted">
                   {club.categories.join(" · ")}
                 </p>
@@ -112,91 +142,105 @@ export default async function ClubDetailPage({
           </div>
         </section>
 
-        <section className="mt-12">
-          <h2 className="text-[22px] font-bold tracking-tight text-ink">
-            About the club
-          </h2>
-          <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-soft">
-            {club.summary}
-          </p>
-        </section>
-
-        <div className="mt-12 grid gap-10 sm:grid-cols-2">
-          <section>
+        {!summaryAddsNothing && (
+          <section className="mt-12">
             <h2 className="text-[22px] font-bold tracking-tight text-ink">
-              What you would actually do
+              About the club
             </h2>
-            <ul className="mt-4 space-y-3">
-              {club.whatYouDo.map((item) => (
-                <li
-                  key={item}
-                  className="flex gap-3 text-[15px] leading-relaxed text-ink-soft"
-                >
-                  <span
-                    aria-hidden
-                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-line-strong"
-                  />
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-soft">
+              {club.summary}
+            </p>
           </section>
+        )}
 
-          <section>
-            <h2 className="text-[22px] font-bold tracking-tight text-ink">
-              What you would gain
-            </h2>
-            <ul className="mt-4 space-y-3">
-              {club.whatYouGain.map((item) => (
-                <li
-                  key={item}
-                  className="flex gap-3 text-[15px] leading-relaxed text-ink-soft"
-                >
-                  <span
-                    aria-hidden
-                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold"
-                  />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+        {(club.whatYouDo.length > 0 || club.whatYouGain.length > 0) && (
+          <div className="mt-12 grid gap-10 sm:grid-cols-2">
+            {club.whatYouDo.length > 0 && (
+              <section>
+                <h2 className="text-[22px] font-bold tracking-tight text-ink">
+                  What you would actually do
+                </h2>
+                <ul className="mt-4 space-y-3">
+                  {club.whatYouDo.map((item) => (
+                    <li
+                      key={item}
+                      className="flex gap-3 text-[15px] leading-relaxed text-ink-soft"
+                    >
+                      <span
+                        aria-hidden
+                        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-line-strong"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {club.whatYouGain.length > 0 && (
+              <section>
+                <h2 className="text-[22px] font-bold tracking-tight text-ink">
+                  What you would gain
+                </h2>
+                <ul className="mt-4 space-y-3">
+                  {club.whatYouGain.map((item) => (
+                    <li
+                      key={item}
+                      className="flex gap-3 text-[15px] leading-relaxed text-ink-soft"
+                    >
+                      <span
+                        aria-hidden
+                        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </div>
+        )}
 
         <section className="mt-12">
           <h2 className="text-[22px] font-bold tracking-tight text-ink">
             Best for
           </h2>
-          <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-soft">
-            {club.bestFor}
-          </p>
+          {club.bestFor && (
+            <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-soft">
+              {club.bestFor}
+            </p>
+          )}
 
           <div className="mt-6 space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="w-full text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted sm:w-[104px]">
-                Majors
-              </span>
-              {club.majors.map((major) => (
-                <span key={major} className="chip">
-                  {major}
+            {(majors.length > 0 || club.openToAllMajors) && (
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="w-full text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted sm:w-[104px]">
+                  Majors
                 </span>
-              ))}
-              {club.openToAllMajors && (
-                <span className="chip border-cardinal bg-cardinal-tint text-cardinal">
-                  Open to all majors
+                {majors.map((major) => (
+                  <span key={major} className="chip">
+                    {major}
+                  </span>
+                ))}
+                {club.openToAllMajors && (
+                  <span className="chip border-cardinal bg-cardinal-tint text-cardinal">
+                    Open to all majors
+                  </span>
+                )}
+              </div>
+            )}
+            {club.careerPaths.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="w-full text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted sm:w-[104px]">
+                  Careers
                 </span>
-              )}
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="w-full text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted sm:w-[104px]">
-                Careers
-              </span>
-              {club.careerPaths.map((id) => (
-                <span key={id} className="chip">
-                  {CAREER_BY_ID[id].label}
-                </span>
-              ))}
-            </div>
+                {club.careerPaths.map((id) => (
+                  <span key={id} className="chip">
+                    {CAREER_BY_ID[id].label}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -204,17 +248,34 @@ export default async function ClubDetailPage({
           <h2 className="text-[20px] font-bold tracking-tight text-ink">
             How to get involved
           </h2>
-          <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-muted">
-            Add {club.name} to your list, then look the group up in Iowa State&apos;s
-            student organization directory for their current officers and next
-            meeting. Most groups here welcome students who simply show up.
-          </p>
+          {meetingNote ? (
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-muted">
+              {meetingNote}
+            </p>
+          ) : (
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-muted">
+              Add {club.name} to your list, then check their Iowa State page for
+              current officers and the next meeting. Most groups here welcome
+              students who simply show up.
+            </p>
+          )}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <InterestedButton slug={club.slug} clubName={club.name} />
-            <Link href="/explore" className="btn btn-secondary w-full sm:w-auto">
-              Compare with other clubs
-            </Link>
+            <a
+              href={club.stuorgUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-secondary w-full sm:w-auto"
+            >
+              Visit club on stuorg
+              <ArrowUpRight size={15} strokeWidth={2} aria-hidden />
+            </a>
           </div>
+          <p className="mt-4 text-[13px] text-ink-muted">
+            {`Details come from Iowa State's student organization directory${
+              club.memberCount ? ` · ${club.memberCount} student members listed` : ""
+            }.`}
+          </p>
         </section>
 
         {related.length > 0 && (

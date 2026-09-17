@@ -3,9 +3,9 @@ import { ArrowRight, Clock } from "lucide-react";
 import { ClubMark } from "./club-mark";
 import { SaveButton } from "./save-button";
 import { COMMITMENT_SHORT } from "@/lib/taxonomy";
-import type { Club } from "@/lib/types";
+import type { ClubSummary } from "@/lib/types";
 
-export function ClubCard({ club }: { club: Club }) {
+export function ClubCard({ club }: { club: ClubSummary }) {
   return (
     <article className="card card-interactive group relative flex flex-col p-5">
       <div className="flex items-start justify-between gap-3">

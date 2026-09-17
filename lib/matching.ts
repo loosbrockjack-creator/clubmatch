@@ -4,11 +4,12 @@ import {
   CAREER_BY_ID,
   COMMITMENT_BY_ID,
   COMMITMENT_ORDER,
+  COMMITMENT_TEXT,
   EXPERIENCE_PHRASE,
   GOAL_PHRASE,
   joinWithAnd,
 } from "./taxonomy";
-import type { Club, MatchResult, Preferences } from "./types";
+import type { ClubSummary, MatchResult, Preferences } from "./types";
 
 const WEIGHTS = {
   academic: 30,
@@ -41,7 +42,7 @@ function overlap<T extends string>(
   return { points: weight * ratio, hits };
 }
 
-function academicPoints(prefs: Preferences, club: Club) {
+function academicPoints(prefs: Preferences, club: ClubSummary) {
   const weight = WEIGHTS.academic;
   const area = prefs.academicArea;
 
@@ -60,7 +61,7 @@ function academicPoints(prefs: Preferences, club: Club) {
   return { points: weight * 0.15, direct: false };
 }
 
-function commitmentPoints(prefs: Preferences, club: Club) {
+function commitmentPoints(prefs: Preferences, club: ClubSummary) {
   const weight = WEIGHTS.commitment;
   const pref = prefs.commitment;
 
@@ -76,7 +77,7 @@ function commitmentPoints(prefs: Preferences, club: Club) {
 
 function buildReasons(
   prefs: Preferences,
-  club: Club,
+  club: ClubSummary,
   parts: {
     academic: ReturnType<typeof academicPoints>;
     career: Overlap;
@@ -144,13 +145,15 @@ function buildReasons(
     .map((c) => c.text);
 
   if (reasons.length === 0) {
-    reasons.push(`${club.categories[0]} organization with a ${club.commitmentText.toLowerCase()} commitment.`);
+    reasons.push(
+      `${club.categories[0]} organization, ${COMMITMENT_TEXT[club.commitmentLevel].toLowerCase()}.`,
+    );
   }
 
   return reasons;
 }
 
-export function scoreClub(prefs: Preferences, club: Club): MatchResult {
+export function scoreClub(prefs: Preferences, club: ClubSummary): MatchResult {
   const academic = academicPoints(prefs, club);
   const career = overlap(prefs.careers, club.careerPaths, WEIGHTS.career, 2);
   const goals = overlap(prefs.goals, club.goalsServed, WEIGHTS.goals, 2);
@@ -180,7 +183,7 @@ export function scoreClub(prefs: Preferences, club: Club): MatchResult {
 
 export const MATCH_THRESHOLD = 45;
 
-export function matchClubs(prefs: Preferences, pool: Club[] = clubs): MatchResult[] {
+export function matchClubs(prefs: Preferences, pool: ClubSummary[] = clubs): MatchResult[] {
   return pool
     .map((club) => scoreClub(prefs, club))
     .filter((result) => result.score >= MATCH_THRESHOLD)
@@ -197,7 +200,7 @@ export function buildInvolvementStack(results: MatchResult[]) {
       key: "career",
       label: "Career",
       note: "Builds your professional track record",
-      test: (club: Club) =>
+      test: (club: ClubSummary) =>
         club.experienceTypes.includes("professional") ||
         club.goalsServed.includes("career"),
     },
@@ -205,7 +208,7 @@ export function buildInvolvementStack(results: MatchResult[]) {
       key: "hands-on",
       label: "Hands-on",
       note: "Where you actually build something",
-      test: (club: Club) =>
+      test: (club: ClubSummary) =>
         club.experienceTypes.includes("projects") ||
         club.experienceTypes.includes("competition"),
     },
@@ -213,7 +216,7 @@ export function buildInvolvementStack(results: MatchResult[]) {
       key: "community",
       label: "Community",
       note: "People you will keep after graduation",
-      test: (club: Club) =>
+      test: (club: ClubSummary) =>
         club.experienceTypes.includes("community") ||
         club.goalsServed.includes("community"),
     },

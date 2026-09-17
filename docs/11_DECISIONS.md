@@ -39,9 +39,11 @@ Using each organization's actual logo would mean reproducing marks without
 permission. A uniform monogram tile also keeps the grid calm.
 
 **No invented meeting times, locations, officers, or contact links.**
-`09_QUALITY_BAR.md` forbids unsupported claims about clubs. Commitment and
-cadence are described in general terms only, and the footer states that profiles
-were compiled for the prototype rather than confirmed with each group.
+`09_QUALITY_BAR.md` forbids unsupported claims about clubs. Superseded in part
+by the scrape below: meeting cadence and activity text now come from the ISU
+registry rather than being described in general terms, and the footer credits
+that directory. Commitment level and the taxonomy tags are still our inference,
+which the footer says plainly.
 
 **Added the involvement stack ("A balanced start") in P0 rather than P1.**
 Three complementary picks, one career-leaning, one hands-on, one community. It
@@ -51,3 +53,63 @@ creativity line on the rubric.
 **Cardinal is reserved for the primary CTA, fit scores, selected states, and the
 progress bar.** Everything else is neutral. Gold appears only as the bullet
 marker in "What you would gain".
+
+**Club data is scraped from Iowa State's official student organization
+directory, not written by hand.** `scripts/scrape.py` walks the A-Z list at
+`stuorg.iastate.edu/organizations` and pulls each group's `/information` page
+(categories, description, tier, membership rules, meetings, activities, special
+events), falling back to the org's own landing page for the three records with
+no `/information` page. `scripts/transform.py` maps that onto the `Club` shape.
+Raw responses are kept in `data/stuorg-raw.json` so the transform can be re-run
+without re-scraping. Regenerate with `npm run scrape:clubs` then
+`npm run build:clubs`.
+
+This replaces the 32 hand-written placeholder clubs with all 726 registered
+organizations. Three registry records that exist only to test the ISU database
+are filtered out.
+
+**The dataset ships as two files, and that split is load-bearing.**
+`data/clubs-index.json` (~384 KB) holds only what a card, a filter, and a match
+score need, and is the one the browser gets. `data/clubs.json` (~1.2 MB) holds
+the prose and is reachable only through `lib/clubs-detail.ts`, which server
+components import. An earlier version exposed both through `lib/clubs.ts`, and
+because `/explore` is a client component the whole 1.2 MB landed in a browser
+chunk. Importing `lib/clubs-detail.ts` from a client component brings it back.
+
+**Taxonomy is inferred from registry text with deliberately narrow patterns.**
+`scripts/classify.py` matches multi-word phrases rather than bare words, because
+single words collide badly with registry boilerplate: "business" matches "orders
+of business", "equity" matches "social equity", "race" matches "regardless of
+race". Category-to-area mapping runs against the club's own name and description
+only; the wider text (meeting notes, activity blurbs) is used only for softer
+signals like "does this group compete" or "does it do service".
+
+**Where the registry says nothing, the field is empty and the UI adapts.**
+Registry entries vary from two sentences to several paragraphs. Rather than
+invent "What you would do" bullets for thin entries, the transform emits an
+empty array and the club page drops the section. Same for "What you would gain",
+"Best for", and the college label on non-academic orgs. Six clubs have neither
+activity list; roughly 100 have no "Best for" line. This keeps
+`09_QUALITY_BAR.md`'s no-unsupported-claims rule intact at 726 clubs.
+
+**Commitment level is inferred, and it is the weakest field in the dataset.**
+It comes from the meeting cadence text plus category (Greek life and sports
+clubs default to "involved") plus competition and project signals. Clubs whose
+meeting text gives no cadence default to "moderate". The club page shows the
+registry's own meeting sentence when it has one, so students can check the
+inference against the source.
+
+**`majors` and `commitmentText` are derived in `lib/taxonomy.ts`, not stored.**
+Both are pure functions of fields already present, and storing them per club
+cost ~90 KB in the client index for no added information.
+
+**Explore paginates at 48 cards with a "Show more" button, and gained a Category
+filter row.** 726 cards in one grid is slow and unreadable. The Category row
+exposes the non-academic half of campus (Greek life, service, sports clubs,
+residence communities) that the academic Area filter cannot reach; categories
+that duplicate an Area chip are excluded from it.
+
+**Club pages link out to the group's real ISU page.** Now that every club has a
+canonical `stuorgUrl`, "Visit club on stuorg" is a real destination for the
+"Visit Club" step of the core path, and the page states that details come from
+the ISU directory along with the listed member count.
