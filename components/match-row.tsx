@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Clock, Users } from "lucide-react";
-import { ClubMark } from "./club-mark";
 import { SaveButton } from "./save-button";
+import { photoForClub } from "@/lib/photos";
 import { COMMITMENT_SHORT } from "@/lib/taxonomy";
 import type { MatchResult } from "@/lib/types";
 
@@ -13,22 +14,23 @@ export function MatchRow({
   rank: number;
 }) {
   const { club, score, reasons } = result;
+  const photo = photoForClub(club);
 
   return (
     <article
-      className={`card card-interactive group relative flex gap-4 p-5 sm:gap-5 sm:p-6 ${
+      className={`card card-interactive group relative flex gap-4 overflow-hidden p-4 sm:gap-5 sm:p-5 ${
         rank === 1 ? "border-t-2 border-t-cardinal" : ""
       }`}
     >
-      <div className="hidden sm:block">
-        <ClubMark mark={club.mark} size="lg" />
+      <div className="relative hidden h-24 w-24 shrink-0 overflow-hidden rounded-[6px] sm:block">
+        <Image src={photo.src} alt={photo.alt} fill sizes="96px" className="object-cover" />
       </div>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-3">
-            <div className="sm:hidden">
-              <ClubMark mark={club.mark} size="sm" />
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[5px] sm:hidden">
+              <Image src={photo.src} alt={photo.alt} fill sizes="56px" className="object-cover" />
             </div>
             <div className="min-w-0">
               <p

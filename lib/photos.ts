@@ -2,10 +2,12 @@
  * Photography mapping.
  *
  * The 726 clubs have no photos of their own, so imagery is keyed to category.
- * That only reads well where a viewer sees one photo at a time: the landing
- * page interest tiles (eight distinct categories, side by side) and the club
- * detail banner. Dense grids (Explore, Results) deliberately stay typographic,
- * because one photo repeated four times on a screen looks broken.
+ * Every category resolves to a pool of 2-5 photos rather than one, and each
+ * club deterministically picks one member of its pool (hashed from its slug),
+ * so the same club always shows the same photo, but a page full of Engineering
+ * clubs doesn't show the same picture in every card. The landing page's eight
+ * interest tiles and the hero use one fixed photo each, since those are never
+ * repeated on screen to begin with.
  *
  * Files live in public/photos and are hand-picked Pexels images, free license.
  */
@@ -21,31 +23,45 @@ export type PhotoKey =
   | "music"
   | "culture"
   | "sports"
-  | "technology"
   | "veterinary"
   | "leadership"
   | "community"
-  | "health"
-  | "science";
+  | "health";
+
+/** How many photos exist for each pool (variant 1 is "<key>.jpg", not "<key>-1.jpg"). */
+const POOL_SIZE: Record<PhotoKey, number> = {
+  hero: 1,
+  academics: 3,
+  engineering: 4,
+  business: 4,
+  agriculture: 3,
+  design: 2,
+  service: 3,
+  music: 4,
+  culture: 3,
+  sports: 2,
+  veterinary: 2,
+  leadership: 2,
+  community: 5,
+  health: 3,
+};
 
 /** Short alt text, written to describe the photo rather than the category. */
 const ALT: Record<PhotoKey, string> = {
   hero: "Four Iowa State students walking together outside a campus building, laughing",
-  academics: "Three students reading and taking notes at a table in a library",
-  engineering: "Two students assembling electronics at a workbench",
-  business: "Students presenting at a flip chart during a team meeting",
-  agriculture: "Rows of young corn in an Iowa field at sunrise",
-  design: "Hands drawing an architectural elevation at a drafting table",
-  service: "Volunteers handing out supplies from a table on the street",
-  music: "A band performing live on a lit stage",
+  academics: "Students reading and studying together at a table or in a library",
+  engineering: "Students building and testing electronics or machinery at a workbench",
+  business: "Students or professionals in a meeting, presenting, or shaking hands",
+  agriculture: "A cornfield or farmland in Iowa at sunrise or sunset",
+  design: "Hands drawing an architectural elevation or reviewing blueprints",
+  service: "Volunteers handing out supplies or donations from a table",
+  music: "A band or musician performing live on a lit stage",
   culture: "Dancers in regalia performing at an outdoor cultural celebration",
-  sports: "Students on an outdoor basketball court with a ball",
-  technology: "Two students reading code together on a laptop",
-  veterinary: "A veterinarian and a volunteer examining a dog in a clinic",
+  sports: "Students playing or standing together on an outdoor court",
+  veterinary: "A veterinarian examining a dog in a clinic",
   leadership: "Students planning around a whiteboard in a meeting room",
-  community: "Students working together on couches in a shared campus lounge",
-  health: "Two researchers in protective gear working at a lab whiteboard",
-  science: "A student testing a robot in a laboratory",
+  community: "A small group of students together on campus or in a lounge",
+  health: "Healthcare workers in scrubs and white coats together",
 };
 
 /**
@@ -67,7 +83,8 @@ const COLLEGE_PHOTO: Record<string, PhotoKey> = {
 /**
  * Every category in the dataset maps to a photo. Categories that describe a
  * kind of group rather than a subject (Residence, Special Interest, Greek
- * life) share the "community" photo, which is deliberately generic.
+ * life) share the "community" pool, which is deliberately generic and has the
+ * most variants since it is the largest fallback bucket.
  *
  * "Programming" is deliberately generic too: in Iowa State's taxonomy it
  * covers both software clubs (Data Science Club) and event programming
@@ -104,8 +121,17 @@ const CATEGORY_PHOTO: Record<string, PhotoKey> = {
   "Veterinary Medicine": "veterinary",
 };
 
-export function photoSrc(key: PhotoKey): string {
-  return `/photos/${key}.jpg`;
+/** Small deterministic string hash (djb2), used to pick a stable pool index. */
+function hash(input: string): number {
+  let h = 5381;
+  for (let i = 0; i < input.length; i++) {
+    h = (h * 33) ^ input.charCodeAt(i);
+  }
+  return h >>> 0;
+}
+
+export function photoSrc(key: PhotoKey, variant = 1): string {
+  return variant <= 1 ? `/photos/${key}.jpg` : `/photos/${key}-${variant}.jpg`;
 }
 
 export function photoAlt(key: PhotoKey): string {
@@ -113,15 +139,12 @@ export function photoAlt(key: PhotoKey): string {
 }
 
 /**
- * Picks the photo for a club: college first, then the first category with a
- * specific (non-"community") photo, then the generic shot. A club tagged
- * "Special Interest, Engineering" gets the engineering photo, and Solar Car
- * gets engineering rather than the cornfield its first category implies.
+ * Picks the photo key for a club: college first, then the first category with
+ * a specific (non-"community") photo, then the generic pool. A club tagged
+ * "Special Interest, Engineering" gets engineering, and Solar Car gets
+ * engineering rather than the cornfield its first category implies.
  */
-export function photoForClub(club: {
-  college: string;
-  categories: string[];
-}): PhotoKey {
+function keyForClub(club: { college: string; categories: string[] }): PhotoKey {
   const fromCollege = COLLEGE_PHOTO[club.college];
   if (fromCollege) return fromCollege;
 
@@ -131,6 +154,23 @@ export function photoForClub(club: {
   }
 
   return "community";
+}
+
+/**
+ * Full photo pick for a club: which pool, and which member of that pool.
+ * The variant is hashed from the slug so it's stable across renders and
+ * across pages (a club always shows the same photo everywhere it appears),
+ * while different clubs sharing a pool spread across its variants.
+ */
+export function photoForClub(club: {
+  slug: string;
+  college: string;
+  categories: string[];
+}): { key: PhotoKey; variant: number; src: string; alt: string } {
+  const key = keyForClub(club);
+  const size = POOL_SIZE[key];
+  const variant = (hash(club.slug) % size) + 1;
+  return { key, variant, src: photoSrc(key, variant), alt: photoAlt(key) };
 }
 
 /**

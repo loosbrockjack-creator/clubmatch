@@ -195,3 +195,23 @@ section can never silently empty again.
 Student Association and the Saudi Arabia Students Association. Shared tags are
 now weighted by rarity (`log(total / count)`) and damped by the other club's
 tag breadth. Solar Car now surfaces Cardinal Space Mining Club.
+
+### 2026-09-17 - Card covers added everywhere, photo pools instead of one-per-category
+
+**Every club card now shows a photo, not just the hero/tiles/detail banner.**
+The Explore grid, landing page featured section, Saved, "Similar clubs", and
+the Results ranked list (`ClubCard` and `MatchRow`) all render a category
+photo as the card's cover, Airbnb-style, with the save heart and (where
+applicable) the fit score overlaid on the image rather than sitting in the
+text block below.
+
+**Each category is now a pool of 2-5 photos, not one.** A flat one-photo-per-
+category mapping meant the Explore grid (28 categories, 726 clubs, 48 cards a
+page) showed the same picture repeatedly on one screen. `photoForClub()` now
+hashes the club's slug (djb2) to deterministically pick one member of its
+category's pool, so a given club always shows the same photo on every page it
+appears on, but two different clubs in the same category usually don't.
+`community`, the largest fallback bucket (Special Interest, Residence, Greek
+life, Religious, ~380 clubs combined), got the most variants (5); smaller
+categories got 2-3. 27 new photos added (all Pexels, same sourcing pass as
+the original 16), total photo weight ~7.1 MB across 43 files.

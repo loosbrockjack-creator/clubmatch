@@ -16,7 +16,7 @@ import { WhyItFits } from "@/components/why-it-fits";
 import { ClubCard } from "@/components/club-card";
 import { clubs } from "@/lib/clubs";
 import { getClub } from "@/lib/clubs-detail";
-import { photoAlt, photoForClub, photoSrc } from "@/lib/photos";
+import { photoForClub } from "@/lib/photos";
 import { CAREER_BY_ID, COMMITMENT_TEXT, majorsForAreas } from "@/lib/taxonomy";
 
 export function generateStaticParams() {
@@ -116,8 +116,8 @@ export default async function ClubDetailPage({
       {/* Category banner */}
       <div className="relative h-[180px] sm:h-[280px]">
         <Image
-          src={photoSrc(photo)}
-          alt={photoAlt(photo)}
+          src={photo.src}
+          alt={photo.alt}
           fill
           priority
           sizes="100vw"
