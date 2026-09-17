@@ -28,21 +28,27 @@ export type PhotoKey =
   | "community"
   | "health";
 
-/** How many photos exist for each pool (variant 1 is "<key>.jpg", not "<key>-1.jpg"). */
+/**
+ * How many photos exist for each pool (variant 1 is "<key>.jpg", not
+ * "<key>-1.jpg"). Sized roughly to how many clubs actually land in each
+ * pool: "community" is the largest fallback bucket by far (Special Interest,
+ * Residence, Greek life, Religious, Programming - around 380 clubs combined)
+ * so it gets the most variants; niche pools like veterinary stay small.
+ */
 const POOL_SIZE: Record<PhotoKey, number> = {
   hero: 1,
-  academics: 3,
-  engineering: 4,
-  business: 4,
-  agriculture: 3,
-  design: 2,
-  service: 3,
+  academics: 4,
+  engineering: 5,
+  business: 5,
+  agriculture: 6,
+  design: 3,
+  service: 5,
   music: 4,
   culture: 3,
-  sports: 2,
+  sports: 3,
   veterinary: 2,
-  leadership: 2,
-  community: 5,
+  leadership: 3,
+  community: 10,
   health: 3,
 };
 

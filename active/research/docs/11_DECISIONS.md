@@ -215,3 +215,27 @@ appears on, but two different clubs in the same category usually don't.
 life, Religious, ~380 clubs combined), got the most variants (5); smaller
 categories got 2-3. 27 new photos added (all Pexels, same sourcing pass as
 the original 16), total photo weight ~7.1 MB across 43 files.
+
+### 2026-09-17 - Photo pools scaled up to actually fix repeats
+
+**Pool sizes were too small relative to how many clubs share them.** The
+first pass gave every category 2-5 photos regardless of how many clubs
+landed in it, so filtering to a single large category (e.g. "Special
+Interest," 143 clubs) still repeated a handful of photos constantly. Sized
+pools to bucket volume instead: `community` (the largest fallback, ~380
+clubs across Special Interest/Residence/Greek life/Religious/Programming)
+went from 5 to 10 photos, `agriculture` 3 to 6, `engineering` and `business`
+4 to 5, `academics` 3 to 4, `service` 3 to 5, `design` and `leadership` 2 to
+3, `sports` 2 to 3. Left `culture`, `music`, `health`, `veterinary` alone,
+their existing pools already matched their smaller club counts.
+
+16 more Pexels photos added on top of the prior 43, all free license.
+Rejected from this pass: a photo with visible face masks (pandemic-dated), a
+tight face-crop meant to represent "culture" broadly (too specific to read as
+generic), a uniformed-scout-march photo (too specific to one kind of group),
+and a shirtless-runner sports photo (wrong tone for the site). Total photo
+weight now ~9.9 MB across 59 files.
+
+Verified by filtering Explore to Special Interest (143 clubs, the largest
+single category) and checking the rendered `<img src>` list: 48 cards on
+screen, 29 distinct photos, no run of identical photos in the visible grid.
