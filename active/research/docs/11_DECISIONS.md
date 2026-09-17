@@ -21,8 +21,8 @@ static HTML. Nothing needs a server, which keeps the deploy trivial.
 
 **App code lives at the repository root.**
 This conflicts with the usual `active/` workspace layout, but Next.js requires
-its own conventions at the root. The agent pack (`docs/`, `references/`,
-`source_materials/`) stays where it was.
+its own conventions at the root. See the 2026-09-17 entry for where the agent
+pack ended up.
 
 **Preferences live in `localStorage`, read through `useSyncExternalStore`.**
 No auth, per scope. The store hook distinguishes "still hydrating" from "nothing
@@ -113,3 +113,22 @@ that duplicate an Area chip are excluded from it.
 canonical `stuorgUrl`, "Visit club on stuorg" is a real destination for the
 "Visit Club" step of the core path, and the page states that details come from
 the ISU directory along with the listed member count.
+
+### 2026-09-17 - Agent pack moved under `active/research/`
+
+**Non-code material now lives in `active/research/`.**
+`docs/`, `references/`, `source_materials/`, `START_HERE.md`, and
+`FIRST_PROMPT.md` moved there to match the standard workspace layout. Paths in
+`CLAUDE.md` were rewritten to match. Because all three folders moved together,
+sibling-relative paths inside the docs still resolve.
+
+**Runnable code did not move.**
+`app/`, `components/`, `lib/`, `data/`, `public/`, `scripts/`, and the config
+files stay at the root. Next.js resolves `app/` and the `@/data/...` alias from
+the project root, and `scripts/*.py` locate `data/` relative to their own
+parent, so relocating any of them breaks the build or the data pipeline.
+
+**New design reference screenshots stored in `references/real/`.**
+Four full-page PNG captures, roughly 30 MB total, kept alongside the existing
+SVG reference boards rather than in `public/`, since they are direction for the
+build and not assets the site serves.

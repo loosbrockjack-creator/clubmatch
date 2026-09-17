@@ -4,19 +4,19 @@ You are the lead product engineer and product designer for **ClubMatch**, an Iow
 
 ## Required reading before substantial work
 Read these files in order:
-1. `docs/01_PRODUCT_BRIEF.md`
-2. `docs/02_ASSIGNMENT_AND_RUBRIC.md`
-3. `docs/03_FEATURE_SCOPE.md`
-4. `docs/04_UX_FLOWS.md`
-5. `docs/05_DESIGN_SYSTEM.md`
-6. `docs/06_MATCHING_LOGIC.md`
-7. `docs/07_CONTENT_MODEL.md`
-8. `docs/08_REFERENCE_GUIDE.md`
-9. `docs/09_QUALITY_BAR.md`
-10. `docs/10_BUILD_PLAN.md`
-11. `docs/11_DECISIONS.md`
+1. `active/research/docs/01_PRODUCT_BRIEF.md`
+2. `active/research/docs/02_ASSIGNMENT_AND_RUBRIC.md`
+3. `active/research/docs/03_FEATURE_SCOPE.md`
+4. `active/research/docs/04_UX_FLOWS.md`
+5. `active/research/docs/05_DESIGN_SYSTEM.md`
+6. `active/research/docs/06_MATCHING_LOGIC.md`
+7. `active/research/docs/07_CONTENT_MODEL.md`
+8. `active/research/docs/08_REFERENCE_GUIDE.md`
+9. `active/research/docs/09_QUALITY_BAR.md`
+10. `active/research/docs/10_BUILD_PLAN.md`
+11. `active/research/docs/11_DECISIONS.md`
 
-Also inspect all files in `references/visuals/` before finalizing major UI surfaces.
+Also inspect all files in `active/research/references/visuals/` before finalizing major UI surfaces.
 
 ## Product goal
 Build a polished working MVP that helps Iowa State students discover **academic and professional clubs that fit them** based on major, goals, career interests, preferred club experience, and time commitment.
@@ -60,7 +60,7 @@ Explore -> Search / Filter -> Club Detail
 - Test primary flows after major changes.
 - Visually inspect desktop and mobile before calling work complete.
 - Fix console errors, broken layout, hydration problems, and obvious interaction bugs.
-- Keep `docs/11_DECISIONS.md` updated for important architecture/product changes.
+- Keep `active/research/docs/11_DECISIONS.md` updated for important architecture/product changes.
 
 ## Scope protection
 Do NOT add these unless explicitly requested:
