@@ -37,19 +37,19 @@ export type PhotoKey =
  */
 const POOL_SIZE: Record<PhotoKey, number> = {
   hero: 1,
-  academics: 4,
-  engineering: 5,
-  business: 5,
-  agriculture: 6,
-  design: 3,
-  service: 5,
-  music: 4,
-  culture: 3,
-  sports: 3,
+  academics: 10,
+  engineering: 10,
+  business: 8,
+  agriculture: 9,
+  design: 6,
+  service: 9,
+  music: 8,
+  culture: 4,
+  sports: 11,
   veterinary: 2,
-  leadership: 3,
-  community: 10,
-  health: 3,
+  leadership: 7,
+  community: 29,
+  health: 5,
 };
 
 /** Short alt text, written to describe the photo rather than the category. */

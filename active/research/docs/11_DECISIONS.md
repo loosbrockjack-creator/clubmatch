@@ -239,3 +239,39 @@ weight now ~9.9 MB across 59 files.
 Verified by filtering Explore to Special Interest (143 clubs, the largest
 single category) and checking the rendered `<img src>` list: 48 cards on
 screen, 29 distinct photos, no run of identical photos in the visible grid.
+
+### 2026-09-17 - Photo pools expanded to 121 files, community pool prioritized
+
+**No bulk image API was available.** Checked for Pexels/Unsplash API keys in
+the environment and tried an unauthenticated request to `api.pexels.com`
+(401 Unauthorized). Without one, images were sourced the same way as every
+prior round: individual `WebSearch` queries against pexels.com, then direct
+CDN download by photo ID. This does not scale to hundreds of images in one
+session with real vetting, so the honest target for this round was "as many
+as can be reasonably sourced and checked," not a literal 700.
+
+**Diagnosed the actual bottleneck: the `community` pool, not total image
+count.** Filtering Explore to "Residence" (which routes to `community` with
+no other signal - no college, no secondary category) showed only 15 unique
+photos in 48 cards even after the previous round's general expansion,
+because that one pool was capped at 13 regardless of how many photos existed
+elsewhere. `community` is also the single largest bucket in the dataset
+(Special Interest, Residence, Fraternities, Sororities, Religious &
+Spiritual, Programming - several hundred clubs combined), so it was
+prioritized over other pools in this round: 13 -> 29.
+
+Other pools grew too: `academics` 4 to 10, `engineering` 5 to 10, `sports` 3
+to 11, `leadership` 3 to 7, plus smaller bumps elsewhere. `veterinary` stayed
+at 2 - text search kept surfacing only Pexels collection pages, not
+individual vet-specific photos, for that niche. Total: 121 photo files,
+~21 MB, up from 59 files / ~9.9 MB.
+
+Rejected this round: fashion-editorial/studio-backdrop photos (broke the
+candid documentary feel established elsewhere), a photo with a specific
+national flag prominent (avoid one country reading as the default), formal
+dinner-party/date-night photos (wrong tone, reads as couples not clubs), and
+a couple of photos that leaned family rather than peer-group.
+
+Verified: filtering Explore to Residence went from 15/48 unique photos to
+25/48; Special Interest 29/48 to 38/48; Sororities checked fresh at 26/34.
+npm run build passes (734 pages), eslint clean.
