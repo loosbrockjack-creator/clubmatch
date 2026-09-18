@@ -54,7 +54,7 @@ export default function LandingPage() {
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[50%_35%]"
+            className="object-cover object-[42%_35%] sm:object-[50%_35%]"
           />
           {/* A left-weighted gradient keeps the photo readable behind the
               headline on wide screens. At phone width the text spans the full
