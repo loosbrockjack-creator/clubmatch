@@ -21,12 +21,12 @@ const steps = [
 ];
 
 /**
- * Hand-picked for range: a build team, a finance group, and a service org.
+ * Hand-picked for range: a build team, a finance group, and a dance club.
  * These are slugs from the live dataset, so they can go stale if the scrape
  * renames a club. FEATURED_FALLBACK keeps the section from silently emptying
  * out the way it did when the placeholder dataset was replaced.
  */
-const FEATURED_SLUGS = ["solar-car", "investment-group", "dance-marathon"];
+const FEATURED_SLUGS = ["solar-car", "investment-group", "dubh"];
 
 export default function LandingPage() {
   const picked = FEATURED_SLUGS.map((slug) =>
