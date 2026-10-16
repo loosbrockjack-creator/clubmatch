@@ -3,7 +3,9 @@
 import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
+import Link from "next/link";
 import { ClubCard } from "@/components/club-card";
+import { FilterRow } from "@/components/filter-row";
 import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
 import { scoreClub } from "@/lib/matching";
@@ -58,44 +60,6 @@ const CATEGORIES = Array.from(CATEGORY_COUNTS)
  */
 const ALL_CATEGORIES = new Set(CATEGORY_COUNTS.keys());
 const CHIP_ROW_CATEGORIES = new Set(CATEGORIES.map((c) => c.id));
-
-function FilterRow<T extends string>({
-  label,
-  options,
-  selected,
-  onToggle,
-}: {
-  label: string;
-  options: { id: T; label: string }[];
-  selected: T[];
-  onToggle: (id: T) => void;
-}) {
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="w-full text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted sm:w-[104px]">
-        {label}
-      </span>
-      {options.map((option) => {
-        const active = selected.includes(option.id);
-        return (
-          <button
-            key={option.id}
-            type="button"
-            aria-pressed={active}
-            onClick={() => onToggle(option.id)}
-            className={`chip transition-colors ${
-              active
-                ? "border-cardinal bg-cardinal-tint text-cardinal"
-                : "hover:border-line-strong hover:bg-muted-deep"
-            }`}
-          >
-            {option.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
 
 export default function ExplorePage() {
   return (
@@ -181,9 +145,12 @@ function ExploreView() {
       return haystack.includes(needle);
     });
 
+    // Chapters are not ranked against clubs (see matchChapters): the quiz
+    // barely tells them apart, and the opt-in bonus would float them above
+    // every club. In fit order they follow the clubs, alphabetically.
     if (activeSort === "fit" && hasPrefs) {
       return matches
-        .map((club) => ({ club, score: scoreClub(prefs, club).score }))
+        .map((club) => ({ club, score: club.greek ? -1 : scoreClub(prefs, club).score }))
         .sort((a, b) => b.score - a.score || a.club.name.localeCompare(b.club.name))
         .map((entry) => entry.club);
     }
@@ -217,6 +184,15 @@ function ExploreView() {
       setVisible(PAGE_SIZE);
     };
   }
+
+  // Carry a single Fraternities or Sororities filter over to /greek.
+  const greekChips = categories.filter((c) => c === "Fraternities" || c === "Sororities");
+  const greekCategoryHref =
+    greekChips.length === 0
+      ? null
+      : greekChips.length === 2
+        ? "/greek"
+        : `/greek?kind=${greekChips[0] === "Fraternities" ? "fraternity" : "sorority"}`;
 
   /** Active categories the chip row cannot show, e.g. a landing-page tile. */
   const offRowCategories = categories.filter((c) => !CHIP_ROW_CATEGORIES.has(c));
@@ -298,6 +274,15 @@ function ExploreView() {
           </div>
         )}
 
+        {greekCategoryHref && (
+          <p className="mt-5 text-[14px] text-ink-soft">
+            Looking at Greek life?{" "}
+            <Link href={greekCategoryHref} className="link-isu">
+              Compare chapters by council, affiliation, and housing
+            </Link>
+          </p>
+        )}
+
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         <div className="flex items-center gap-3">
           <p className="text-[14px] font-semibold text-ink">
@@ -357,7 +342,7 @@ function ExploreView() {
                 key={club.id}
                 club={club}
                 score={
-                  activeSort === "fit" && hasPrefs
+                  activeSort === "fit" && hasPrefs && !club.greek
                     ? scoreClub(prefs, club).score
                     : undefined
                 }

@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "scrape:clubs": "python3 active/execution/scripts/scrape.py",
+    "scrape:greek": "python3 active/execution/scripts/scrape_greek.py",
     "build:clubs": "python3 active/execution/scripts/transform.py"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 import { clubs } from "./clubs";
 import {
   ACADEMIC_AREA_BY_ID,
+  COUNCIL_BY_ID,
   CAREER_BY_ID,
   COMMITMENT_BY_ID,
   COMMITMENT_ORDER,
@@ -9,7 +10,7 @@ import {
   GOAL_PHRASE,
   joinWithAnd,
 } from "./taxonomy";
-import type { ClubSummary, MatchResult, Preferences } from "./types";
+import type { ClubSummary, GreekInterest, MatchResult, Preferences } from "./types";
 
 const WEIGHTS = {
   academic: 30,
@@ -18,6 +19,51 @@ const WEIGHTS = {
   commitment: 15,
   experience: 10,
 } as const;
+
+/**
+ * Chapters have no career tags, so on the base weights alone they rarely clear
+ * the threshold even for a student who asked for them. Opting in to Greek life
+ * is a strong, explicit signal, so it earns a flat bonus. Naming the kind
+ * (fraternity or sorority) is a stronger signal than "either".
+ */
+const GREEK_BONUS = { exact: 22, either: 16 } as const;
+
+/** How many chapters Results suggests; /greek is where to browse every one. */
+export const GREEK_SUGGESTIONS = 3;
+
+/** Which SFE affiliation tag lines up with each quiz academic area. */
+const AFFILIATION_FOR_AREA: Partial<Record<string, string>> = {
+  engineering: "STEM",
+  computing: "STEM",
+  agriculture: "Agriculture",
+  design: "Architecture",
+};
+
+const FOCUS_PHRASE: Record<string, string> = {
+  STEM: "A STEM-focused chapter",
+  Agriculture: "An agriculture-focused chapter",
+  Architecture: "An architecture-focused chapter",
+};
+
+export function greekInterest(prefs: Preferences): GreekInterest {
+  return prefs.greek ?? "no";
+}
+
+/** Whether a club can appear in this student's results at all. */
+export function allowedForPrefs(prefs: Preferences, club: ClubSummary): boolean {
+  if (!club.greek) return true;
+  const interest = greekInterest(prefs);
+  if (interest === "no") return false;
+  return interest === "either" || interest === club.greek.kind;
+}
+
+function greekPoints(prefs: Preferences, club: ClubSummary) {
+  if (!club.greek) return 0;
+  const interest = greekInterest(prefs);
+  if (interest === club.greek.kind) return GREEK_BONUS.exact;
+  if (interest === "either") return GREEK_BONUS.either;
+  return 0;
+}
 
 /** Distance in commitment steps -> share of the commitment weight awarded. */
 const COMMITMENT_FALLOFF = [1, 0.6, 0.25, 0.1];
@@ -65,7 +111,8 @@ function commitmentPoints(prefs: Preferences, club: ClubSummary) {
   const weight = WEIGHTS.commitment;
   const pref = prefs.commitment;
 
-  if (!pref || pref === "flexible") {
+  // SFE publishes no time commitment for chapters, so don't pretend to match it.
+  if (!pref || pref === "flexible" || club.greek) {
     return { points: weight * 0.8, exact: false };
   }
   const distance = Math.abs(
@@ -88,6 +135,27 @@ function buildReasons(
 ): string[] {
   const candidates: { text: string; weight: number }[] = [];
 
+  if (club.greek) {
+    const interest = greekInterest(prefs);
+    const council = club.greek.council ? COUNCIL_BY_ID[club.greek.council].name : "";
+    const kindPlural = club.greek.kind === "fraternity" ? "fraternities" : "sororities";
+    if (interest !== "no") {
+      candidates.push({
+        text: council
+          ? `${council} chapter, and you said you're open to ${kindPlural}.`
+          : `You said you're open to ${kindPlural}.`,
+        weight: 100,
+      });
+    }
+    const focus = prefs.academicArea ? AFFILIATION_FOR_AREA[prefs.academicArea] : undefined;
+    if (focus && club.greek.affiliations.includes(focus)) {
+      candidates.push({
+        text: `${FOCUS_PHRASE[focus]}, which fits your major.`,
+        weight: 90,
+      });
+    }
+  }
+
   if (parts.career.hits.length > 0) {
     const labels = parts.career.hits
       .slice(0, 2)
@@ -98,13 +166,20 @@ function buildReasons(
     });
   }
 
-  if (parts.academic.direct && prefs.academicArea && prefs.academicArea !== "undecided") {
+  // A chapter's academic match only ever comes from its SFE affiliation, which
+  // the focus reason above already names.
+  if (
+    parts.academic.direct &&
+    !club.greek &&
+    prefs.academicArea &&
+    prefs.academicArea !== "undecided"
+  ) {
     const label = ACADEMIC_AREA_BY_ID[prefs.academicArea].label.toLowerCase();
     candidates.push({
       text: `Built for ${label} students.`,
       weight: parts.academic.points,
     });
-  } else if (club.openToAllMajors) {
+  } else if (club.openToAllMajors && !club.greek) {
     candidates.push({
       text: "Open to students from any major.",
       weight: parts.academic.points * 0.6,
@@ -129,8 +204,13 @@ function buildReasons(
     });
   }
 
-  if (parts.experience.hits.length > 0) {
-    const labels = parts.experience.hits
+  // Every chapter is tagged "community", which the goals reason already says,
+  // so for chapters only service (from listed philanthropy) adds anything.
+  const experienceHits = club.greek
+    ? parts.experience.hits.filter((id) => id === "service")
+    : parts.experience.hits;
+  if (experienceHits.length > 0) {
+    const labels = experienceHits
       .slice(0, 2)
       .map((id) => EXPERIENCE_PHRASE[id as keyof typeof EXPERIENCE_PHRASE]);
     candidates.push({
@@ -165,7 +245,8 @@ export function scoreClub(prefs: Preferences, club: ClubSummary): MatchResult {
     career.points +
     goals.points +
     commitment.points +
-    experience.points;
+    experience.points +
+    greekPoints(prefs, club);
 
   return {
     club,
@@ -183,11 +264,46 @@ export function scoreClub(prefs: Preferences, club: ClubSummary): MatchResult {
 
 export const MATCH_THRESHOLD = 45;
 
+/** Ranked clubs. Greek chapters are suggested separately, see matchChapters. */
 export function matchClubs(prefs: Preferences, pool: ClubSummary[] = clubs): MatchResult[] {
   return pool
+    .filter((club) => !club.greek)
     .map((club) => scoreClub(prefs, club))
     .filter((result) => result.score >= MATCH_THRESHOLD)
     .sort((a, b) => b.score - a.score || a.club.name.localeCompare(b.club.name));
+}
+
+/** djb2, for a stable tie-break that differs from student to student. */
+function hash(input: string): number {
+  let h = 5381;
+  for (let i = 0; i < input.length; i++) h = (h * 33) ^ input.charCodeAt(i);
+  return h >>> 0;
+}
+
+/**
+ * A few chapters for a student who opted in to Greek life. Chapters look
+ * alike to the quiz (no careers, same goals, same time commitment), so most
+ * tie. Breaking ties alphabetically would hand every student the same three
+ * "Alpha" chapters; hashing the student's answers with the slug spreads
+ * suggestions across all of them while staying stable for one student.
+ */
+export function matchChapters(
+  prefs: Preferences,
+  limit = GREEK_SUGGESTIONS,
+  pool: ClubSummary[] = clubs,
+): MatchResult[] {
+  if (greekInterest(prefs) === "no") return [];
+  const seed = [prefs.academicArea, ...prefs.goals, ...prefs.careers, prefs.commitment, prefs.greek].join("|");
+  return pool
+    .filter((club) => club.greek && allowedForPrefs(prefs, club))
+    .map((club) => scoreClub(prefs, club))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        Number(Boolean(b.club.greek?.photo)) - Number(Boolean(a.club.greek?.photo)) ||
+        hash(seed + a.club.slug) - hash(seed + b.club.slug),
+    )
+    .slice(0, limit);
 }
 
 /**

@@ -275,3 +275,78 @@ a couple of photos that leaned family rather than peer-group.
 Verified: filtering Explore to Residence went from 15/48 unique photos to
 25/48; Special Interest 29/48 to 38/48; Sororities checked fresh at 26/34.
 npm run build passes (734 pages), eslint clean.
+
+### 2026-10-16 - Greek life added from the SFE office
+
+**Iowa State's Office of Sorority and Fraternity Engagement is the source of
+truth for Greek chapters.** `active/execution/scripts/scrape_greek.py`
+(`npm run scrape:greek`) reads the fraternity and sorority lists at
+`sfe.dso.iastate.edu`, then each chapter page: nickname, chapter-written
+description, motto, philanthropy, founding dates, member quote, housing table,
+and alcohol status. It also downloads one chapter photo per chapter to
+`public/photos/greek/` (1400px, about 275 KB each, 51 photos, 14 MB). Raw
+output is kept in `data/sfe-raw.json`.
+
+**Scope is exactly the SFE list: 36 fraternities and 23 sororities.**
+`active/execution/scripts/greek.py` runs at the end of `transform.py`. It
+matches 54 SFE chapters to existing stuorg records (normalized names plus a
+two-entry alias map), creates 5 chapters stuorg did not have (Alpha Phi Alpha,
+Kappa Alpha Psi, Lambda Theta Phi, Omega Psi Phi, Phi Delta Theta), and strips
+the Fraternities/Sororities tags from 14 records that are not chapters
+(councils, music fraternities, and mis-tags like AA Stand Up Comedy Club).
+Matched chapters take SFE's cleaner official name; slugs are unchanged so
+existing links still work.
+
+**Chapter photos yes, headshots no.** Each SFE page also has a portrait of a
+chapter officer inside the member-quote block. Those are never downloaded.
+Square and portrait images are skipped (on SFE they are usually graphics with
+baked-in text), except Sigma Lambda Beta's group photo, which was checked by
+eye and center-cropped to 3:2. Eight chapters have no usable photo and fall
+back to the generic community pool, never the "culture" pool.
+
+**Names appear only as text the chapter published.** The member quote keeps
+its attribution line (normalized to "Name, Role"). There is no separate
+president row: it was always derived from that caption and only repeated it.
+No portraits.
+
+**Greek letters stand in for the monogram.** Chapters named entirely in Greek
+letters (Alpha Gamma Rho) render as ΑΓΡ in the display serif. This is derived
+from the name, not a reproduced crest. Source Serif 4 now loads its Greek
+subset so the letters render in the same face.
+
+**The quiz has a sixth, opt-in step.** "Open to Greek life?" with Fraternities,
+Sororities, Open to either, Not for me. Preferences saved before this step
+default to "no", and Results shows a one-line prompt to answer it. Chapters
+never appear in the ranked club list: chapters look alike to the quiz (no
+career tags, same goals and time), so mixing them in either crowded out clubs
+or left opted-in students with none. Results instead shows a separate
+"Chapters to look at" row of three, with a flat opt-in bonus, an affiliation
+boost (STEM, Agriculture, Architecture map to academic areas), and ties broken
+by a hash of the student's answers rather than alphabetically, so suggestions
+spread across all chapters.
+
+**New `/greek` page, nav link, and landing section.** Photo hero, a
+four-council explainer (recruitment summaries written from each council's SFE
+page), then a filterable grid (type, council, affiliation, housing). Kind and
+council sync to the URL. Chapter pages get a chapter-facts sheet, the member
+quote, and a council-specific "How to join" panel linking to SFE's interest
+form.
+
+**No em or en dashes anywhere in the dataset.** `transform.py` now normalizes
+dashes in all scraped text to commas (or hyphens inside number ranges), which
+also fixed three pre-existing club records.
+
+**Chapters carry only what SFE supports (review rounds 1 and 2).** A
+fresh-context design review flagged that chapters had inherited stuorg keyword
+tags that were false (Alpha Chi Omega tagged "finance", Pi Beta Phi
+"software"). For chapters, careers are now empty, academic areas come only
+from SFE affiliation tags, categories are kind plus "Culture & Identity" when
+SFE says so, and the keyword-inferred "What you would do", "What you would
+gain", and "Best for" are cleared. SFE publishes no time commitment, so
+chapter cards and pages show none and scoring gives chapters neutral
+commitment credit. Explore lists chapters after clubs with no fit badge.
+`housed` is null when a chapter's SFE page is empty, and housing is then not
+shown at all. Instagram links SFE lists are captured. `transform.py` repairs
+double-encoded text (em dashes showing as "â€”") and fails the build if any
+mangled characters or dashes remain. `/match?step=greek` opens the Greek
+question directly for students whose saved answers predate it.

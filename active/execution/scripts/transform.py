@@ -12,9 +12,11 @@ import re
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import classify as C
+import greek as G
 
 DATA = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "data")
 RAW = os.path.join(DATA, "stuorg-raw.json")
+SFE_RAW = os.path.join(DATA, "sfe-raw.json")
 OUT = os.path.join(DATA, "clubs.json")
 INDEX_OUT = os.path.join(DATA, "clubs-index.json")
 
@@ -22,7 +24,7 @@ INDEX_OUT = os.path.join(DATA, "clubs-index.json")
 INDEX_FIELDS = [
     "id", "name", "mark", "slug", "college", "tagline", "categories",
     "academicAreas", "openToAllMajors", "careerPaths", "goalsServed",
-    "experienceTypes", "commitmentLevel", "freshmenWelcome",
+    "experienceTypes", "commitmentLevel", "freshmenWelcome", "greek",
 ]
 
 # --- ISU category -> ClubMatch taxonomy -------------------------------------
@@ -571,6 +573,45 @@ if __name__ == "__main__":
         club = build(rec) if rec.get("ok") else None
         (built if club else skipped).append(club or rec["name"])
 
+    # Greek chapters come from the SFE office's list, not stuorg's tags.
+    if os.path.exists(SFE_RAW):
+        report = G.apply(built, json.load(open(SFE_RAW)), slugify, initials)
+        print(f"greek: {len(report['matched'])} matched, {len(report['created'])} created, "
+              f"{len(report['untagged'])} untagged")
+        print(f"  created:  {report['created']}")
+        print(f"  untagged: {report['untagged']}")
+
+    # House style has no em or en dashes, including in quoted registry text.
+    # Spaced dashes become commas; a dash inside a number range becomes a hyphen.
+    # Some SFE text arrives double-encoded (UTF-8 read as Windows-1252, so an
+    # em dash shows as "â€”"). Repair that first, then strip the dashes.
+    def fix_encoding(value):
+        if "â€" not in value and "Ã" not in value:
+            return value
+        try:
+            return value.encode("cp1252").decode("utf-8")
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            for bad, good in (("â€”", "—"), ("â€“", "–"), ("â€œ", '"'), ("â€\x9d", '"'),
+                              ("â€™", "'"), ("â€˜", "'")):
+                value = value.replace(bad, good)
+            return value
+
+    def no_dashes(value):
+        if isinstance(value, str):
+            value = fix_encoding(value)
+            value = re.sub(r"(\d)\s*[—–]\s*(\d)", r"\1-\2", value)
+            value = re.sub(r"\s*[—–]\s*", ", ", value)
+            return value.replace(", ,", ",")
+        if isinstance(value, list):
+            return [no_dashes(v) for v in value]
+        if isinstance(value, dict):
+            return {k: no_dashes(v) for k, v in value.items()}
+        return value
+
+    built = [no_dashes(club) for club in built]
+    leftovers = [c["name"] for c in built if re.search(r"â€|Ã|[—–]", json.dumps(c, ensure_ascii=False))]
+    assert not leftovers, f"mangled characters or dashes left in: {leftovers}"
+
     # Slug collisions would break /clubs/[slug] routing.
     seen = {}
     for club in built:
@@ -583,7 +624,7 @@ if __name__ == "__main__":
 
     # The client filters and ranks every club, so the browser gets a lean index.
     # The prose only a detail page renders stays server-side.
-    index = [{k: club[k] for k in INDEX_FIELDS} for club in built]
+    index = [{k: club[k] for k in INDEX_FIELDS if k in club} for club in built]
 
     json.dump(index, open(INDEX_OUT, "w"), separators=(",", ":"), ensure_ascii=False)
     json.dump(built, open(OUT, "w"), separators=(",", ":"), ensure_ascii=False)

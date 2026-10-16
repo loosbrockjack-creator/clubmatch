@@ -2,8 +2,11 @@ import type {
   AcademicAreaId,
   CareerId,
   CommitmentId,
+  CouncilId,
   ExperienceId,
   GoalId,
+  GreekInterest,
+  GreekKind,
 } from "./types";
 
 export interface Option<T extends string> {
@@ -333,4 +336,116 @@ export function joinWithAnd(items: string[]): string {
   if (items.length === 1) return items[0];
   if (items.length === 2) return `${items[0]} and ${items[1]}`;
   return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
+}
+
+// --- Greek life ---------------------------------------------------------------
+
+export interface Council {
+  id: CouncilId;
+  name: string;
+  short: string;
+  /** One line for the council tiles on /greek. */
+  line: string;
+  /** How joining works, summarized from the council's own SFE page. */
+  joining: string;
+  url: string;
+}
+
+/**
+ * Iowa State's four governing councils. Every fact here is from the council's
+ * page on sfe.dso.iastate.edu; recruitment works differently in each one.
+ */
+export const COUNCILS: Council[] = [
+  {
+    id: "ifc",
+    name: "Interfraternity Council",
+    short: "IFC",
+    line: "Recruits year-round. Most chapters have a house south of campus.",
+    joining:
+      "IFC fraternities recruit informally 365 days a year, so there is no single sign-up week. Most chapters have a house south of campus, with room for roughly 29 to 89 members.",
+    url: "https://sfe.dso.iastate.edu/interfraternity-council",
+  },
+  {
+    id: "cpc",
+    name: "Collegiate Panhellenic Council",
+    short: "Panhellenic",
+    line: "Primary recruitment each fall, plus secondary recruitment all year.",
+    joining:
+      "Panhellenic sororities hold Primary Recruitment each fall, before classes start, and Secondary Recruitment through the rest of the school year. Fifteen of the sixteen chapters have a house south of campus.",
+    url: "https://sfe.dso.iastate.edu/collegiate-panhellenic-council",
+  },
+  {
+    id: "mgc",
+    name: "Multicultural Greek Council",
+    short: "Multicultural",
+    line: "Chapters built on cultural identity or awareness, open to all.",
+    joining:
+      "Multicultural Greek Council chapters are founded on cultural identity or awareness, including Latino/a/x, Asian/Pacific Islander, and LGBTQIA+ communities. Membership is open to people of all identities, and each chapter runs its own membership process.",
+    url: "https://sfe.dso.iastate.edu/multicultural-greek-council",
+  },
+  {
+    id: "nphc",
+    name: "National Pan-Hellenic Council",
+    short: "NPHC",
+    line: "Historically African American fraternities and sororities.",
+    joining:
+      "NPHC chapters are historically African American fraternities and sororities, often called the Divine Nine. Each chapter runs its own membership intake.",
+    url: "https://sfe.dso.iastate.edu/national-pan-hellenic-council",
+  },
+];
+
+export const COUNCIL_BY_ID = Object.fromEntries(
+  COUNCILS.map((c) => [c.id, c]),
+) as Record<CouncilId, Council>;
+
+/** SFE's general interest form for anyone thinking about joining. */
+export const SFE_INTEREST_FORM =
+  "https://iastate.qualtrics.com/jfe/form/SV_1LBlEzmKNtDQgXI";
+
+export const GREEK_KIND_LABEL: Record<GreekKind, string> = {
+  fraternity: "Fraternity",
+  sorority: "Sorority",
+};
+
+export const GREEK_OPTIONS: Option<GreekInterest>[] = [
+  {
+    id: "fraternity",
+    label: "Fraternities",
+    hint: "IFC, multicultural, and NPHC chapters",
+  },
+  {
+    id: "sorority",
+    label: "Sororities",
+    hint: "Panhellenic, multicultural, and NPHC chapters",
+  },
+  {
+    id: "either",
+    label: "Open to either",
+    hint: "Include fraternities and sororities",
+  },
+  {
+    id: "no",
+    label: "Not for me",
+    hint: "Keep my results to clubs",
+  },
+];
+
+export const GREEK_OPTION_BY_ID = toLookup(GREEK_OPTIONS);
+
+/**
+ * The quiet metadata line under a card title. Clubs show their first two
+ * categories; chapters show kind and council, which is how students compare
+ * them.
+ */
+export function cardMeta(club: {
+  categories: string[];
+  greek?: { kind: GreekKind; council: CouncilId | null };
+}): string {
+  if (club.greek) {
+    const kind = GREEK_KIND_LABEL[club.greek.kind];
+    return club.greek.council
+      ? `${kind} · ${COUNCIL_BY_ID[club.greek.council].name}`
+      : kind;
+  }
+  return club.categories.slice(0, 2).join(" · ");
 }

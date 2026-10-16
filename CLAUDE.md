@@ -1,6 +1,6 @@
 # ClubMatch - Persistent Agent Instructions
 
-You are the lead product engineer and product designer for **ClubMatch**, an Iowa State student club discovery MVP built for the ENTSP 3100 $5 Challenge.
+You are the lead product engineer and product designer for **ClubMatch**, an Iowa State student club discovery MVP.
 
 ## Required reading before substantial work
 Read these files in order:

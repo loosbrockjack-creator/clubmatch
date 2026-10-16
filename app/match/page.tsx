@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { OptionCard } from "@/components/option-card";
+import { clubs } from "@/lib/clubs";
 import {
   ACADEMIC_AREAS,
   CAREERS,
@@ -11,6 +12,7 @@ import {
   EXPERIENCES,
   FLEXIBLE_OPTION,
   GOALS,
+  GREEK_OPTIONS,
   UNDECIDED_OPTION,
 } from "@/lib/taxonomy";
 import {
@@ -24,12 +26,15 @@ import type {
   CommitmentId,
   ExperienceId,
   GoalId,
+  GreekInterest,
   Preferences,
 } from "@/lib/types";
 
 type Draft = Preferences;
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
+
+const CHAPTER_COUNT = clubs.filter((club) => club.greek).length;
 
 function toggle<T>(list: T[], value: T): T[] {
   return list.includes(value)
@@ -37,10 +42,29 @@ function toggle<T>(list: T[], value: T): T[] {
     : [...list, value];
 }
 
+const subscribeNothing = () => () => {};
+
+/**
+ * Read from the URL after hydration (false on the server), so the quiz still
+ * prerenders as HTML instead of waiting on useSearchParams and Suspense.
+ */
+function useWantsGreekStep() {
+  return useSyncExternalStore(
+    subscribeNothing,
+    () => new URLSearchParams(window.location.search).get("step") === "greek",
+    () => false,
+  );
+}
+
 export default function MatchPage() {
   const router = useRouter();
-  const [step, setStep] = useState(0);
   const stored = useStoredPreferences();
+  const wantsGreek = useWantsGreekStep();
+  // null until the student moves. Results links students whose saved answers
+  // predate the Greek question straight to it, but only when those answers
+  // exist; otherwise steps 1 to 5 would be skipped and saved empty.
+  const [chosenStep, setStep] = useState<number | null>(null);
+  const step = chosenStep ?? (wantsGreek && stored ? TOTAL_STEPS - 1 : 0);
   const [edits, setEdits] = useState<Draft | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
@@ -205,6 +229,27 @@ export default function MatchPage() {
           />
         )),
     },
+    {
+      question: "Open to Greek life?",
+      subtitle: `Iowa State has ${CHAPTER_COUNT} fraternities and sororities. We can include a few that fit.`,
+      columns: "sm:grid-cols-2",
+      valid: draft.greek != null,
+      render: () =>
+        GREEK_OPTIONS.map((option) => (
+          <OptionCard
+            key={option.id}
+            type="radio"
+            name="greek"
+            value={option.id}
+            checked={draft.greek === option.id}
+            onChange={() =>
+              setDraft((d) => ({ ...d, greek: option.id as GreekInterest }))
+            }
+            label={option.label}
+            hint={option.hint}
+          />
+        )),
+    },
   ];
 
   const current = steps[step];
@@ -218,7 +263,7 @@ export default function MatchPage() {
       router.push("/results");
       return;
     }
-    setStep((s) => s + 1);
+    setStep(step + 1);
   }
 
   return (
@@ -268,7 +313,7 @@ export default function MatchPage() {
           <div className="mt-10 flex items-center justify-between gap-4">
             <button
               type="button"
-              onClick={() => setStep((s) => Math.max(0, s - 1))}
+              onClick={() => setStep(Math.max(0, step - 1))}
               disabled={step === 0}
               className="btn btn-quiet disabled:invisible"
             >

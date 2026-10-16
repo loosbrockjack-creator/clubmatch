@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
-import { scoreClub } from "@/lib/matching";
+import { allowedForPrefs, greekInterest, scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
 import type { ClubSummary } from "@/lib/types";
 
@@ -10,6 +10,26 @@ export function WhyItFits({ club }: { club: ClubSummary }) {
   const prefs = useStoredPreferences();
 
   if (prefs === null || prefs === false) return null;
+
+  // A fit score for a chapter means nothing to someone who opted out of Greek
+  // life (or never saw that question). Say why instead of showing a low number.
+  if (!allowedForPrefs(prefs, club)) {
+    const interest = greekInterest(prefs);
+    return (
+      <section className="rise mt-10 border-l-[3px] border-line-strong bg-muted p-6 sm:p-7">
+        <p className="text-[15px] leading-relaxed text-ink-soft">
+          {prefs.greek == null
+            ? "Your answers are from before we added Greek life. Answer one more question to see how this chapter fits."
+            : interest === "no"
+              ? "Your quiz answers keep Greek chapters out of your matches, so this one is not scored."
+              : `Your quiz answers only include ${interest === "fraternity" ? "fraternities" : "sororities"}, so this chapter is not scored.`}{" "}
+          <Link href="/match?step=greek" className="link-isu">
+            {prefs.greek == null ? "Answer it" : "Change your answer"}
+          </Link>
+        </p>
+      </section>
+    );
+  }
 
   const { score, reasons } = scoreClub(prefs, club);
 

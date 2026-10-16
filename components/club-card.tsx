@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Clock } from "lucide-react";
+import { Clock, House } from "lucide-react";
 import { SaveButton } from "./save-button";
 import { photoForClub } from "@/lib/photos";
-import { COMMITMENT_SHORT } from "@/lib/taxonomy";
+import { COMMITMENT_SHORT, cardMeta } from "@/lib/taxonomy";
 import type { ClubSummary } from "@/lib/types";
 
 /**
@@ -13,6 +13,7 @@ import type { ClubSummary } from "@/lib/types";
  * own, so the cover is picked deterministically from a category photo pool
  * (see lib/photos.ts) so the same club always shows the same image, while a
  * grid full of clubs in one category doesn't repeat a single picture.
+ * Greek chapters are the exception: they show their own SFE photo.
  */
 export function ClubCard({
   club,
@@ -64,25 +65,48 @@ export function ClubCard({
         </h3>
 
         <p className="mt-1.5 text-[13px] text-ink-muted">
-          {club.categories.slice(0, 2).join(" · ")}
+          {cardMeta(club)}
         </p>
 
         <p className="mt-3 line-clamp-2 text-[14px] leading-relaxed text-ink-soft">
           {club.tagline}
         </p>
 
-        <div className="mt-auto flex items-center gap-2 pt-5 text-[13px] text-ink-muted">
-          <Clock size={13.5} strokeWidth={1.75} aria-hidden />
-          <span>{COMMITMENT_SHORT[club.commitmentLevel]}</span>
-          {club.openToAllMajors && (
-            <>
-              <span aria-hidden className="text-line-strong">
-                ·
-              </span>
-              <span>Open to all majors</span>
-            </>
-          )}
-        </div>
+        {club.greek ? (
+          // SFE publishes no time commitment for chapters, so the footer
+          // carries what it does publish: housing and the chapter's focus.
+          <div className="mt-auto flex items-center gap-2 pt-5 text-[13px] text-ink-muted">
+            {club.greek.housed !== null && (
+              <>
+                <House size={13.5} strokeWidth={1.75} aria-hidden />
+                <span>{club.greek.housed ? "Chapter house" : "No chapter house"}</span>
+              </>
+            )}
+            {club.greek.affiliations[0] && (
+              <>
+                {club.greek.housed !== null && (
+                  <span aria-hidden className="text-line-strong">
+                    ·
+                  </span>
+                )}
+                <span className="truncate">{club.greek.affiliations[0]}</span>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="mt-auto flex items-center gap-2 pt-5 text-[13px] text-ink-muted">
+            <Clock size={13.5} strokeWidth={1.75} aria-hidden />
+            <span>{COMMITMENT_SHORT[club.commitmentLevel]}</span>
+            {club.openToAllMajors && (
+              <>
+                <span aria-hidden className="text-line-strong">
+                  ·
+                </span>
+                <span>Open to all majors</span>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </article>
   );

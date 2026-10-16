@@ -4,13 +4,15 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, SlidersHorizontal } from "lucide-react";
 import { MatchRow } from "@/components/match-row";
+import { ClubCard } from "@/components/club-card";
 import { ClubMark } from "@/components/club-mark";
-import { buildInvolvementStack, matchClubs } from "@/lib/matching";
+import { buildInvolvementStack, matchChapters, matchClubs } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
   ACADEMIC_AREA_BY_ID,
   CAREER_BY_ID,
   COMMITMENT_BY_ID,
+  GREEK_OPTION_BY_ID,
 } from "@/lib/taxonomy";
 import type { Preferences } from "@/lib/types";
 
@@ -37,6 +39,14 @@ function answerChips(prefs: Preferences) {
     chips.push(COMMITMENT_BY_ID[prefs.commitment].label);
   } else if (prefs.commitment === "flexible") {
     chips.push("Flexible on time");
+  }
+
+  if (prefs.greek && prefs.greek !== "no") {
+    chips.push(
+      prefs.greek === "either"
+        ? "Open to Greek life"
+        : `Open to ${GREEK_OPTION_BY_ID[prefs.greek].label.toLowerCase()}`,
+    );
   }
 
   return chips;
@@ -84,6 +94,7 @@ export default function ResultsPage() {
     [prefs],
   );
   const stack = useMemo(() => buildInvolvementStack(results), [results]);
+  const chapters = useMemo(() => (prefs ? matchChapters(prefs) : []), [prefs]);
 
   if (prefs === null || !settled) {
     return <ResultsSkeleton />;
@@ -96,7 +107,7 @@ export default function ResultsPage() {
           <h1 className="display text-[32px] text-cardinal">No answers yet</h1>
           <div className="mx-auto mt-5 h-1 w-[54px] bg-gold" />
           <p className="mt-5 text-[15.5px] leading-relaxed text-ink-soft">
-            Answer five quick questions and we will rank the clubs that fit you.
+            Answer six quick questions and we will rank the clubs that fit you.
           </p>
           <Link href="/match" className="btn btn-primary mt-7">
             Start the match quiz
@@ -139,6 +150,15 @@ export default function ResultsPage() {
                 Adjust answers
               </Link>
             </div>
+
+            {prefs.greek == null && (
+              <p className="mt-5 text-[14px] text-ink-soft">
+                New: your results can now include fraternities and sororities.{" "}
+                <Link href="/match?step=greek" className="link-isu">
+                  Answer one more question
+                </Link>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -221,13 +241,51 @@ export default function ResultsPage() {
                 These were the strongest fits. The full list is searchable and
                 filterable.
               </p>
-              <Link href="/explore" className="btn btn-on-cardinal mt-7">
-                Browse all clubs
-                <ArrowRight size={16} strokeWidth={2} aria-hidden />
-              </Link>
+              <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link href="/explore" className="btn btn-on-cardinal w-full sm:w-auto">
+                  Browse all clubs
+                  <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                </Link>
+                {prefs.greek && prefs.greek !== "no" && (
+                  <Link
+                    href={
+                      prefs.greek === "either"
+                        ? "/greek"
+                        : `/greek?kind=${prefs.greek}`
+                    }
+                    className="btn btn-ghost-on-cardinal w-full sm:w-auto"
+                  >
+                    Compare every chapter
+                    <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                  </Link>
+                )}
+              </div>
             </div>
           </>
         )}
+
+            {chapters.length > 0 && (
+              <section className="mt-16">
+                <h2 className="display gold-rule text-[26px] text-ink">
+                  Chapters to look at
+                </h2>
+                <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">
+                  You said Greek life is on the table. These{" "}
+                  {prefs.greek === "fraternity"
+                    ? "fraternities"
+                    : prefs.greek === "sorority"
+                      ? "sororities"
+                      : "chapters"}{" "}
+                  line up best with your answers, but houses and people are
+                  what decide it, so compare a few.
+                </p>
+                <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {chapters.map((result) => (
+                    <ClubCard key={result.club.id} club={result.club} />
+                  ))}
+                </div>
+              </section>
+            )}
         </div>
       </div>
     </>

@@ -12,6 +12,7 @@ export const emptyPreferences: Preferences = {
   careers: [],
   commitment: null,
   experiences: [],
+  greek: null,
   completedAt: "",
 };
 

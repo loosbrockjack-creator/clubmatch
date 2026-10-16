@@ -170,13 +170,27 @@ function keyForClub(club: { college: string; categories: string[] }): PhotoKey {
  */
 export function photoForClub(club: {
   slug: string;
+  name?: string;
   college: string;
   categories: string[];
-}): { key: PhotoKey; variant: number; src: string; alt: string } {
-  const key = keyForClub(club);
+  greek?: { photo: string | null };
+}): { key: PhotoKey; variant: number; src: string; alt: string; own: boolean } {
+  // Greek chapters use the photo they posted on their SFE page. Chapters
+  // without one use the generic pool, never "culture": that pool shows
+  // performers in regalia, which reads wrong for a fraternity or sorority.
+  if (club.greek?.photo) {
+    return {
+      key: "community",
+      variant: 0,
+      src: club.greek.photo,
+      alt: club.name ? `${club.name} at Iowa State` : "Chapter photo",
+      own: true,
+    };
+  }
+  const key = club.greek ? "community" : keyForClub(club);
   const size = POOL_SIZE[key];
   const variant = (hash(club.slug) % size) + 1;
-  return { key, variant, src: photoSrc(key, variant), alt: photoAlt(key) };
+  return { key, variant, src: photoSrc(key, variant), alt: photoAlt(key), own: false };
 }
 
 /**

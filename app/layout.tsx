@@ -11,9 +11,10 @@ const inter = Inter({
 });
 
 // Iowa State sets headlines in a Caslon-family serif. Source Serif 4 is the
-// closest open equivalent, and carries the same institutional weight.
+// closest open equivalent, and carries the same institutional weight. The
+// Greek subset renders chapter letters (ΑΓΡ) in the same face as the names.
 const sourceSerif = Source_Serif_4({
-  subsets: ["latin"],
+  subsets: ["latin", "greek"],
   variable: "--font-source-serif",
   display: "swap",
 });
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | ClubMatch",
   },
   description:
-    "Answer five quick questions and get a ranked shortlist from all of Iowa State's registered student organizations, matched to your major, goals, career interests, and schedule.",
+    "Answer six quick questions and get a ranked shortlist from all of Iowa State's registered student organizations, matched to your major, goals, career interests, and schedule.",
 };
 
 export default function RootLayout({

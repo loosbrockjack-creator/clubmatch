@@ -1,0 +1,3391 @@
+{
+ "chapters": [
+  {
+   "kind": "fraternity",
+   "name": "Adelante",
+   "slug": "adelante",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/adelante",
+   "nickname": "",
+   "description": "In September 1907, six students founded a club \"to break up a political clique that was controlling campus positions.\" The men set up high ideals of scholarship, fellowship, and leadership. The group adopted the Spanish word Adelante, which means \"forward.\" Adelante Club was incorporated as Adelante Fraternity on November 12, 1912. Since that time, Adelante has repeatedly turned down offers to become a chapter of a national social fraternity and has remained Iowa State's only independent local fraternity. Adelante has additionally been recognized as the longest, continuously operating local fraternity in the nation.",
+   "facts": {
+    "Philanthropy": "We host a philanthropy each semester that supports organizations close to our members' hearts, as well as our partner charity Best Buddies.",
+    "Colors": "Royal Blue and Gold",
+    "Symbols": "Open book, Sword, Clasped hands",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "September 1907",
+    "Chapter Website": "https://www.adelante.org/",
+    "National Website": "https://www.adelante.org/"
+   },
+   "quote": "Adelante is the home that I never knew that I needed until I had it. It has help me make connections that I will have for my life.",
+   "quoteAuthor": "Trevor Fitzpatrick, 2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Newly renovated suite style"
+    },
+    {
+     "label": "Room Features",
+     "value": "Large personal L-shaped desk, wardrobe, wifi and ethernet, mini fridge"
+    },
+    {
+     "label": "Dining Features",
+     "value": "We have breakfast options and 10 hot meals catered by Greek House Chefs a week with open availability on all leftovers. The house will also get together for Sunday dinners as a chapter paid for by the house."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have a theater room, common room with game systems, D&D group, board games and card games, as well as the rec room. Lastly, we have the Saloon."
+    },
+    {
+     "label": "Parking",
+     "value": "On site parking free to all members"
+    },
+    {
+     "label": "Address",
+     "value": "318 Welch Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2025-04/IMG_9599.jpeg?itok=nx_G8Eqb",
+     "width": 1600,
+     "height": 537,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/Adelante-min.jpg?itok=rY-71Aj_",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/adelante.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Alpha Gamma Rho",
+   "slug": "alpha-gamma-rho",
+   "council": "Interfraternity Council",
+   "academic": "Agriculture",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-gamma-rho",
+   "nickname": "Aggers",
+   "description": "We are a social professional fraternity focused on pursuing academic and career excellence in the agricultural field. We focus on making better men through a range of membership and career development programs for all our members. All of our members are either ag majors, have an agricultural background, or plan to be in the agriculture industry in the future.",
+   "facts": {
+    "Motto": "To Make Better Men",
+    "Philanthropy": "Bacon Buddies, John Stoddard Cancer Research",
+    "Colors": "Dark Green & Gold",
+    "Symbols": "Sickle, Sheaf, Crescent",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "April 4, 1914",
+    "National Founding Date": "October 10, 1904",
+    "Chapter Website": "http://www.isuagr.org",
+    "National Website": "http://www.alphagammarho.org"
+   },
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "We live in rooms varying in size from 2 to 9. In larger rooms, we have additional storage for clothes and desks for studying. We also sleep in cold air racks."
+    },
+    {
+     "label": "Dining Features",
+     "value": "We have a continental-style breakfast with general items such as bagels, toast, cereal, fruit, juice, and milk. We have lunch provided by our chef Monday-Friday. We have dinner from our chef Monday-Thursday."
+    },
+    {
+     "label": "Parking",
+     "value": "We have roughly 60 parking spots around our house and the old church two doors down the road."
+    },
+    {
+     "label": "Address",
+     "value": "201 Gray Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Limited: Limited alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-03/53910210443_a7dc0d722c_b%20%281%29.jpg",
+     "width": 1024,
+     "height": 683,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-gamma-rho.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Alpha Phi Alpha Fraternity, Inc.",
+   "slug": "alpha-phi-alpha-fraternity-inc",
+   "council": "National Pan-Hellenic Council",
+   "academic": "",
+   "identity": "Black/African American",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-phi-alpha-fraternity-inc",
+   "nickname": "Alphas",
+   "description": "Since its founding on December 4, 1906, Alpha Phi Alpha Fraternity, Inc. has supplied voice and vision to the struggle of African Americans and people of color around the world. Alpha Phi Alpha, the first intercollegiate Greek-letter fraternity established for African American Men, was founded at Cornell University in Ithaca, New York by seven college men who recognized the need for a strong bond of brotherhood among African descendants in this country.",
+   "facts": {
+    "Motto": "First of All, Servants of All, We Shall Transcend All",
+    "Philanthropy": "Go to High School, Go to College, A Voteless People is a Hopeless People, Project Alpha, Brother's Keeper",
+    "Colors": "Old Gold and Black",
+    "Council": "National Pan-Hellenic Council",
+    "Local Founding Date": "May 2, 1982",
+    "Chapter Website": "https://www.instagram.com/iowa_alphas?igsh=MWJ5bW8yN3pvYWxhMQ==",
+    "National Website": "https://apa1906.net/"
+   },
+   "housing": [],
+   "photos": [],
+   "photo": null
+  },
+  {
+   "kind": "fraternity",
+   "name": "Alpha Sigma Phi",
+   "slug": "alpha-sigma-phi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-sigma-phi",
+   "nickname": "Alpha Sig",
+   "description": "Alpha Sigma Phi has a rich history at Iowa State; with over 100 years, we are excited to continue our legacy. We pride ourselves on our fundamental values and principles - Silence, Charity, Purity, Honor, and Patriotism. Each brother lives their life to the fullest while upholding the values of Alpha Sigma Phi and being the best brother he can be. What truly sets us apart is our brotherhood that each brother will carry with them for the rest of their life!",
+   "facts": {
+    "Motto": "To Better the Man",
+    "Philanthropy": "RAINN, Shatterproof, Stop Hazing, Active Minds, Homes for our Troops",
+    "Colors": "Cardinal Red and Stone Grey",
+    "Symbols": "The Phoenix",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "May 8th, 1920",
+    "National Founding Date": "December 6th, 1845",
+    "Chapter Website": "http://www.alphasigmaphi.org/",
+    "National Website": "https://alphasig.org/"
+   },
+   "quote": "Joining this brotherhood has been the most rewarding experience I have had. I have been able to grow many characteristics from leadership to brotherhood. We push our members to continue to grow throughout their time here and graduate the best men they can be.",
+   "quoteAuthor": "Cole Jennings, 2024-2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Dorm-style: Singles, 2 mans, and 3 mans"
+    },
+    {
+     "label": "Room Features",
+     "value": "Each brother will get a dorm-style room that comes furnished and ranges from singles to 3 mans"
+    },
+    {
+     "label": "Dining Features",
+     "value": "We have an in-house chef who cooks us lunch and dinner Monday - Friday and will have 24-hour access to the kitchen"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Deck, turf patio, large movie room, dining room/entertainment game room"
+    },
+    {
+     "label": "Parking",
+     "value": "We have 36 parking spots at the house, available for almost every in house member."
+    },
+    {
+     "label": "Address",
+     "value": "223 Lynn Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-07/ASig.jpeg",
+     "width": 1170,
+     "height": 776,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/AlphaSigmaPhi-min.jpg?itok=QepIx6zG",
+     "width": 1600,
+     "height": 1008,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-sigma-phi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Alpha Tau Omega",
+   "slug": "alpha-tau-omega",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-tau-omega",
+   "nickname": "ATO",
+   "description": "Alpha Tau Omega’s Gamma Upsilon chapter has become an active brotherhood of over 170 members since its founding in 1908. Of the 200+ Alpha Tau Omega chapters nationwide, Gamma Upsilon ranks second for most consecutive True Merit Awards received (11) and has received 29 in total. The True Merit Award is given to any chapter that achieves a level of chapter operation (philanthropy, community service, recruitment, academic performance, and campus involvement) that is worthy of the recognition. Our strength comes from the diversity of interests found within our chapter, and we support each brother in staying involved on campus – from the Rocketry Club to intramural hockey. Gamma Upsilon holds all of them to the same standard and treats brotherhood as something you practice rather than something you join.",
+   "facts": {
+    "Motto": "Pi Epsilon Pi",
+    "Philanthropy": "Our signature event, Stickfest, supports the Play for Paige 33 Foundation in the fall. Our spring event, Cones and Bones, supports The Boys and Girls Club of Ames.",
+    "Colors": "Azure Blue and Old Gold",
+    "Symbols": "Heraldic Cross Pattee",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "March 17, 1908",
+    "National Founding Date": "September 11, 1865",
+    "Chapter Website": "http://atoisu.com",
+    "National Website": "http://www.ato.org",
+    "Social Media": "https://www.instagram.com/ato_iastate/?hl=en"
+   },
+   "quote": "ATO gives Iowa State men the opportunity to become leaders in every aspect of their lives. It is truly a place where members can grow, succeed, and fire on all cylinders",
+   "quoteAuthor": "Matt Abraham, 2026 Vice President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "The second and third floors are the living quarters: each floor contains seven bedroom units and one shared bathroom. Each floor has one single, one double, three four-person rooms (four-man), one five-person room (five-man), and either the Vice President"
+    },
+    {
+     "label": "Room Features",
+     "value": "Single: one bed and wardrobe; Double: two beds and two wardrobes; Four-man: two Doubles separated by a large middle room (living room); Five-man: a Double and a three-person bedroom, which are separated by the biggest middle room available"
+    },
+    {
+     "label": "Dining Features",
+     "value": "Gamma Upsilon's chef provides lunch between 11:30am and 1:00pm Monday through Friday and dinner at 5:30pm Monday through Thursday. If a member is unavailable for meals, the chef prepares plates for absent members to be eaten at their own convenience."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "The front of the house includes a deck facing Lincoln Way, which is where many brothers spend their time playing bags while the weather allows. In the basement, our house features a large common area (chapter room) perfect for building Homecoming projects"
+    },
+    {
+     "label": "Parking",
+     "value": "There is a parking lot with 33 spots in the back of the house, available to any in-house member."
+    },
+    {
+     "label": "Address",
+     "value": "2122 Lincoln Way"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-09/ATO.jpeg",
+     "width": 1164,
+     "height": 623,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/AlphaTauOmega-min.jpg?itok=GA_Gemjm",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-tau-omega.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Beta Sigma Psi",
+   "slug": "beta-sigma-psi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "Lutheran",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/beta-sigma-psi",
+   "nickname": "Beta Sig",
+   "description": "Beta Sigma Psi is an organization of Christian gentlemen who pursue a life rooted in Christ. In this pursuit, we focus on our 3 \"S\"s, which are guides for our members pursuing constant growth. We intend to grow in our Spiritual \"S\" by attending church services and/or Bible studies together, while loving and serving each other along the way. Our Scholastic \"S\" represents our focus on academics. We have many programs in place to help hold each other accountable and focus on success in the classroom and the workplace. Finally, our Social \"S\" is represented by our strong culture of love and brotherhood within the Chapter house. Guided by our Christian values, we promote a culture of respect and service to one another and to others in the community. With these 3 \"S\"s guiding our members, we push each other to become the best versions of ourselves through college and into life.",
+   "facts": {
+    "Motto": "Per Aspera Ad Astra - Through Adversity to the Stars",
+    "Philanthropy": "Habitat for Humanity/Puppy Jake Foundation",
+    "Colors": "Cardinal Red and White",
+    "Symbols": "Luther's Seal (Cross, Heart, and Rose Emblem)",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "October 29, 1949",
+    "National Founding Date": "April 17, 1925",
+    "Chapter Website": "http://epsilon.betasigmapsi.org",
+    "National Website": "http://www.betasigmapsi.org"
+   },
+   "quote": "I have so many different reasons to be thankful for Beta Sig, but 99% of them come down to the people I have met and bonded with here. From my freshman year roommates to my Bible study leaders to the house Chef, I have met so many amazing people who have pushed me to become who I am today. Everyone here is invested in each other and in Christ, and that's what drives this place.",
+   "quoteAuthor": "Hayden Moore, 2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Suite Style - A typical room has 4 members living in a room, 2 on either half. The middle of the room is split by a vanity and bedroom shared by only those 4 members. Each member has a desk and there is a couch shared between the 2 on either half."
+    },
+    {
+     "label": "Room Features",
+     "value": "4-6 twin XL beds in bunks. Blackout curtains provided."
+    },
+    {
+     "label": "Dining Features",
+     "value": "24-hour access to the kitchen, and 10 meals a week from our house chef, Chef Dawn. She cooks for us Monday-Friday for lunch and dinner, and often times there are enough leftovers for weekend meals and late-night snacks."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have a theater room in the basement that consists of a projector screen and has couches and a series of risers to give the best view from any spot. This is a great space for hanging out, having watch parties, or hosting a giant Mario kart tournament/"
+    },
+    {
+     "label": "Parking",
+     "value": "The house offers about 25 parking spots given to members by seniority or positional requirements, but the Chapter reimburses anyone who lives at the house and has to purchase a parking pass elsewhere."
+    },
+    {
+     "label": "Address",
+     "value": "2132 Sunset Drive"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Limited: Limited alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2025-05/IMG_4687_0.jpeg?itok=9k89VFgC",
+     "width": 1600,
+     "height": 800,
+     "where": "feature"
+    },
+    {
+     "src": "/files/images/2026-07/53910412350_3b469650ff_b%20%281%29.jpg",
+     "width": 1024,
+     "height": 683,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/beta-sigma-psi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Beta Theta Pi",
+   "slug": "beta-theta-pi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/beta-theta-pi",
+   "nickname": "Beta",
+   "description": "Beta Theta Pi is dedicated to building men of principle for a principled life. As an international fraternity, Beta Theta Pi is rooted in five core values: mutual assistance, intellectual growth, responsible conduct, trust, and integirty. Established at Iowa State University in 1905, we are an award-winning chapter, distinguished among Beta chapters internationally for campus involvement, leadership development, and excellence in risk management. We are always geared towards progress in what we consider our great tradition at Iowa State University. We are always looking for hardworking men who would like to make their mark at Iowa State. We pride ourselves in the different backgrounds and personalities that allow any Beta brother to succeed with the support of their brothers behind them.",
+   "facts": {
+    "Motto": "Developing Men of Principle for a Principled Life.",
+    "Philanthropy": "Beta BBQ, Beta Theta Pies. Benefitting HeadsUpGuys",
+    "Colors": "Delicate shades of Pink and Blue.",
+    "Symbols": "Dragon, Three Beta Stars",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "1905",
+    "National Founding Date": "August 8, 1839",
+    "Chapter Website": "https://www.betaisu.org/",
+    "National Website": "http://www.beta.org"
+   },
+   "quote": "The Beta experience is unique because of our culture of early involvement in leadership and proven success with our members leading not only our fraternity, but clubs, academic fraternities, honor societies, and much more on campus!",
+   "quoteAuthor": "Nathan Freidhoff, 2024 Vice President of Recruitment",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Suite style, 2 man, 3 man, 4 man."
+    },
+    {
+     "label": "Room Features",
+     "value": "Living room, sleeper, study room. Furnished with desks and wardrobes. Jack & Jill/Communal style bathrooms"
+    },
+    {
+     "label": "Dining Features",
+     "value": "Professional chef, who provides nine meals per week; lunch, dinner Monday-Friday, excludes Friday dinner. Full sized professional kitchen open to all members to use."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Game Room (Poker table, Air Hockey, Pool Table, Darts, Shuffleboard) Movie/Hangout Room (Surround Sound, TVs), Patio (Blackstone, Gas Grill, Basketball Hoop)"
+    },
+    {
+     "label": "Parking",
+     "value": "Thirty-five parking spots are available for members who live in the house. Additional Guest parking is provided."
+    },
+    {
+     "label": "Address",
+     "value": "2120 Lincoln Way"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-06/Beta.jpg",
+     "width": 1170,
+     "height": 780,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/BetaThetaPi-min.jpg?itok=aiwI5Q5M",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/beta-theta-pi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Catalyst",
+   "slug": "catalyst",
+   "council": "",
+   "academic": "",
+   "identity": "Asian/Pacific Islander",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/catalyst",
+   "nickname": "",
+   "description": "",
+   "facts": {},
+   "housing": [],
+   "photos": [],
+   "photo": null
+  },
+  {
+   "kind": "fraternity",
+   "name": "Delta Chi",
+   "slug": "delta-chi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-chi",
+   "nickname": "D-Chi",
+   "description": "The Delta Chi Fraternity here at ISU is one of the only groups that has the chance to shape itself as well as the men who become apart of the Delta Chi experience. Brought back to Iowa State in Fall of 2012, Delta Chi has brought together men from all backgrounds to form the founding fathers. Offering the skills to become a better man in society, but also here on campus by exposing them to the greek community and events they might have missed, allowing them also to grow and learn.",
+   "facts": {
+    "Motto": "\"Leges\" meaning law",
+    "Philanthropy": "The V Foundation For Cancer Research",
+    "Colors": "Red and Buff",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "October 13th 1923",
+    "National Founding Date": "October 13th 1890",
+    "Chapter Website": "http://www.isudx.com",
+    "National Website": "http://www.deltachi.org"
+   },
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Two person suite style living with one shared bathroom between two rooms."
+    },
+    {
+     "label": "Room Features",
+     "value": "Desk, closets, lofted beds, and a sink in every room."
+    },
+    {
+     "label": "Dining Features",
+     "value": "We have an in house chef. Lunch is served from 11 am to 1 pm, Dinner is available from 5 pm to 8 pm Monday to Friday. There is a snack bar available at all times and same with breakfast food."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Two 75 inch TVs, a pool table, and a back fenced in patio."
+    },
+    {
+     "label": "Parking",
+     "value": "Parking is available for everyone that lives in house."
+    },
+    {
+     "label": "Address",
+     "value": "203 Ash Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-11/DeltaChi-min.jpg?itok=2iM9HQto",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/delta-chi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Delta Sigma Phi",
+   "slug": "delta-sigma-phi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-sigma-phi",
+   "nickname": "D-Sig, Delta Sig",
+   "description": "Delta Sigma Phi fraternity, Beta Alpha chapter at Iowa State. Committed to becoming men of action, courage, and excellence. Using our core values of culture, harmony, and friendship we have our eyes set on building better men and better lives.",
+   "facts": {
+    "Motto": "Better Men Better Lives",
+    "Philanthropy": "Delta Sig Dog Days, Delta Sig Donuts, Shake and Bake",
+    "Colors": "Nile Green and Carnation White",
+    "Symbols": "Sphinx",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "1927",
+    "National Founding Date": "December 10, 1899",
+    "Chapter Website": "http://www.deltasigisu.com",
+    "National Website": "http://www.deltasig.org"
+   },
+   "quote": "Delta Sigma Phi has given me more opportunities at Iowa State and experiences I would have never been able to reach. This fraternity has aided me in learning more and encouraging me to seek out more than my own goals.",
+   "quoteAuthor": "Logan Bourgoin, 2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Offer dorm-style living of 1 - 3 men per room and multiple bathrooms on each floor."
+    },
+    {
+     "label": "Room Features",
+     "value": "Bedrooms feature wardrobes, desks, and closet spaces for each member. Control your own AC or heat. Personalize your room anyway you want."
+    },
+    {
+     "label": "Dining Features",
+     "value": "Meal plan for in-house members with access to a kitchen as well."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We offer a sand volleyball court in our front yard, misc outside games, TV room with access to streaming services, patio with a firepit in the backyard, and a pool/ping pong table."
+    },
+    {
+     "label": "Parking",
+     "value": "20 spots for all members."
+    },
+    {
+     "label": "Address",
+     "value": "218 Ash Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2025-05/IMG_8158.JPG?itok=kca6WKL1",
+     "width": 1600,
+     "height": 1200,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/DeltaSigmaPhi-min.jpg?itok=vOhIWznR",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/delta-sigma-phi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Delta Tau Delta",
+   "slug": "delta-tau-delta",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-tau-delta",
+   "nickname": "Delts",
+   "description": "Delta Tau Delta is the oldest fraternity at Iowa State after being established in 1875. In 2015, our old house was knocked down and a new 30,000 sq. ft house was put in its place. Our members major in almost every subject, and we welcome members from all backgrounds. Delta Tau Delta, Gamma Pi and its members are “committed to lives of excellence\".",
+   "facts": {
+    "Motto": "Lives of Excellence",
+    "Philanthropy": "BreakthroughT1D",
+    "Colors": "Royal Purple, White, Yellow Gold",
+    "Symbols": "Square with deeply concave sides, the crescent, an eye rayed in glory, the purple iris, and the shield",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "July 17, 1875",
+    "National Founding Date": "October 1858",
+    "Chapter Website": "http://www.gammapidelts.com",
+    "National Website": "http://www.delts.org"
+   },
+   "quote": "Delta Tau Delta is a place where I feel like I belong. I have had the opportunity to meet friends for life and work on my leadership. It is truly about living a life of excellence",
+   "quoteAuthor": "Panagiotis (Peter) Hutchison, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "2 man and 3 man study rooms with cold airs"
+    },
+    {
+     "label": "Room Features",
+     "value": "Desk, dresser, on-suite bathroom, and file cabinet."
+    },
+    {
+     "label": "Dining Features",
+     "value": "9 meals per week with 24/7 kitchen access."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "TV room and Courtyard"
+    },
+    {
+     "label": "Parking",
+     "value": "32 parking spots"
+    },
+    {
+     "label": "Address",
+     "value": "2121 sunset drive"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-06/DELTS.png",
+     "width": 921,
+     "height": 610,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/DeltaTauDelta-min.jpg?itok=AWLKjUiR",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/delta-tau-delta.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Delta Upsilon",
+   "slug": "delta-upsilon",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-upsilon",
+   "nickname": "DU",
+   "description": "The Delta Upsilon vision is to be the premier men’s fraternity committed to Building Better Men for a global society through service, leadership development, and lifelong personal growth for its membership. Our implementation of the four founding principles of The Promotion of Friendship, The Development of Character, The Diffusion of Liberal Culture, and The Advancement of Justice has allowed us to consistently be ranked among the top Delta Upsilon chapters in the nation.",
+   "facts": {
+    "Motto": "Dikaia Upotheke (Justice, Our Foundation)",
+    "Philanthropy": "Global Service Initiative, the international philanthropy that also serves as the international service project. The money raised sends undergraduate DU's to places like Jamaica, to build beneficial buildings, such as an elementary school, for those in the community. Other options include Washington D.C.",
+    "Colors": "Old Gold and Sapphire Blue",
+    "Symbols": "Coat of Arms: Scales of Justice, Seven Stars, Oak Tree, Five Rings, Five Crowns, Chevron, Scroll and the Duck",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "December 6, 1913",
+    "National Founding Date": "November 4, 1834",
+    "Chapter Website": "http://isudu.org/",
+    "National Website": "http://www.deltau.org"
+   },
+   "quote": "At Delta Upsilon we live our ideals and bring together determined, principled men who push each other to achieve more, lead with honor, and live with integrity.",
+   "quoteAuthor": "Connor Dunne, 2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold airs on second floor, 1 and 2 man suite style on third floor"
+    },
+    {
+     "label": "Room Features",
+     "value": "Newly renovated cold airs with communal bathrooms on second floor, third floor Jack and Jill style bedrooms/bathrooms. Each person has a desk and clothing cabinet."
+    },
+    {
+     "label": "Dining Features",
+     "value": "14 meals per week: breakfast and lunch Monday-Friday, dinner Monday-Thursday; 24 hour access kitchen"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Drop down projector, brotherhood courtyard with fire pit, second floor lounge, second floor balcony"
+    },
+    {
+     "label": "Parking",
+     "value": "Private lot with 27 parking spaces for members living in the chapter house"
+    },
+    {
+     "label": "Address",
+     "value": "117 Ash Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-02/DUgroup.jpg?itok=YSzVcOOE",
+     "width": 1600,
+     "height": 1242,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/DeltaUpsilon-min.jpg?itok=gclV9SeN",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/delta-upsilon.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "FarmHouse",
+   "slug": "farmhouse",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/farmhouse",
+   "nickname": "FarmHousers",
+   "description": "At FarmHouse, we pride ourselves in growing as men mentally, spiritually, socially, and physically throughout our time in this fraternity. FarmHouse has set the standard of academic excellence with our continuous spot in the top of the fraternity academic rankings at Iowa State. Our brothers find pride in not only being involved within our fraternity, but throughout our campus and community. With many brothers from all different walks of life and majors, our fraternity brings a level of accountability and brotherhood that aligns with our motto \"Builder of Men.\" We look forward to welcoming all potential new members.",
+   "facts": {
+    "Motto": "Builder of Men",
+    "Philanthropy": "Leukemia and Lymphoma Society",
+    "Colors": "Green, Gold, White",
+    "Symbols": "Knights Shield, Sickle, and Wheat",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "January 22, 1927",
+    "National Founding Date": "April 15, 1905",
+    "Chapter Website": "https://www.isufarmhouse.org/",
+    "National Website": "http://www.farmhouse.org/"
+   },
+   "quote": "FarmHouse is rooted in a tradition of excellence that goes beyond the ordinary fraternity experience. Membership is a commitment to developing yourself, strengthening your brotherhood, and preparing for lifelong success.",
+   "quoteAuthor": "Ben Bettis, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold-Air Style"
+    },
+    {
+     "label": "Room Features",
+     "value": "Each room contains a desk, closet, and fridge for each member. Rooms vary from 2-5 members."
+    },
+    {
+     "label": "Dining Features",
+     "value": "10 meals a week; 5 lunches and 5 dinners. As well as 24-hour access to the kitchen."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "TV room with streaming and video games, ping pong and pool tables, in-home movie theater, large front lawn"
+    },
+    {
+     "label": "Parking",
+     "value": "Private parking is available for all in-house members"
+    },
+    {
+     "label": "Address",
+     "value": "311 Ash Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-03/_DSC8131%20%281%29.jpg?itok=4I2DQgR0",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/Farmhouse-min.jpg?itok=XztdjQuQ",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/farmhouse.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Kappa Alpha Psi Fraternity, Inc.",
+   "slug": "kappa-alpha-psi-fraternity-inc",
+   "council": "National Pan-Hellenic Council",
+   "academic": "",
+   "identity": "Black/African American",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/kappa-alpha-psi-fraternity-inc",
+   "nickname": "NUPES or Kappas",
+   "description": "The Omega Chapter of Kappa Alpha Psi Fraternity inc. was chartered on the campus of Drake University on November 28th 1925 and became joint with Iowa State in 1956. The Nupes pride themselves on encouraging honorable achievement in every field of human endeavor and inspiring service in the public’s interests.",
+   "facts": {
+    "Motto": "Achievement in Every Field of Human Endeavor",
+    "Philanthropy": "Kappa Alpha Psi Foundation",
+    "Colors": "Crimson and Cream",
+    "Symbols": "Diamond, Kappa Kane",
+    "Council": "National Pan-Hellenic Council",
+    "Local Founding Date": "November 28th, 1925",
+    "National Founding Date": "January 5th, 1911",
+    "Chapter Website": "http://www.stuorg.iastate.edu/kapsi/",
+    "National Website": "https://kappaalphapsi1911.com/"
+   },
+   "quote": "My experience as part of the Omega Chapter of Kappa Alpha Psi fraternity inc. has been a pivotal component of my academic matriculation and leadership development. Being a part of a brotherhood that is unequivocal by all measures has provided me a community that encourages achievement beyond what I originally saw as possible. As I’ve been able to serve this fraternity at the national level, I’ve valued most the altruism and networking that is prevalent all across the country.",
+   "quoteAuthor": "Immanuel Taylor, 2024 Polemarch (chapter president)",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-09/IMG_1669.jpeg?itok=QRen47Yf",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/kappa-alpha-psi-fraternity-inc.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Kappa Sigma",
+   "slug": "kappa-sigma",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/kappa-sigma",
+   "nickname": "Kappa Sig, Ksig",
+   "description": "Kappa Sigma stands unparalleled in shaping well-rounded individuals into passionate and driven men. As the largest and top-rated social fraternity worldwide, we uphold the four pillars of Fellowship, Leadership, Scholarship, and Service. Our brotherhood is a close-knit community where accountability and mutual support are paramount. Kappa Sigma members are leaders not only within our fraternity but also across the broader community. Joining Kappa Sigma offers limitless potential throughout your collegiate journey, providing an engaging and supportive environment. We invite potential new members to discover the exceptional opportunities our fraternity offers.",
+   "facts": {
+    "Motto": "Bononia Docet (\"Bologna Teaches\"); A.E.K.Δ.B.",
+    "Philanthropy": "Military Heroes Campaign",
+    "Colors": "Scarlet, White and Emerald Green",
+    "Symbols": "The Star and Crescent, The Kappa Sigma Fraternity Crest, and The Caduceus",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "January 21st, 1909",
+    "National Founding Date": "December 10th, 1869",
+    "Chapter Website": "https://iowastatekappasigma.org/",
+    "National Website": "https://iowastatekappasigma.org/"
+   },
+   "quote": "Kappa Sigma is every members home away from home. I have had countless opportunities brought upon me from every which way. It has also taught me priceless leadership experience, friends that I will have for life, and an ever growing network with fellow members. Simply put, Kappa Sigma is a brotherhood like no other.",
+   "quoteAuthor": "Luciano Bertagnolli, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "2 man and 3 man room styles with cold air dorms."
+    },
+    {
+     "label": "Room Features",
+     "value": "Desk, dresser and closet per man, 4-6 ethernet ports per room"
+    },
+    {
+     "label": "Dining Features",
+     "value": "9 meals per week, breakfast bar Monday-Friday, 24/7 access to the kitchen"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Movie Room, Second and First floor lounges"
+    },
+    {
+     "label": "Parking",
+     "value": "25 parking spots"
+    },
+    {
+     "label": "Address",
+     "value": "237 Ash Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-07/IMG_0793.jpg?itok=tGxdw-aY",
+     "width": 1600,
+     "height": 1200,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/KappaSigma-min.jpg?itok=x80lx0_Y",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/kappa-sigma.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Lambda Chi Alpha",
+   "slug": "lambda-chi-alpha",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/lambda-chi-alpha",
+   "nickname": "Lambda Chi",
+   "description": "Founded in 1909, Lambda Chi Alpha is a fraternity dedicated to building men of character through brotherhood, leadership, service, and personal growth. The Iowa State chapter was established in 1917 and has a long tradition of developing men who strive to lead, serve, and make a positive impact on their community. We believe that being a Lambda Chi means holding yourself to a higher standard while supporting the brothers around you. Our members come from a variety of backgrounds, interests, and majors, but are united by a commitment to integrity, personal growth, and brotherhood. We are always looking for driven men who want to get involved, build lasting relationships, and make their mark at Iowa State University.",
+   "facts": {
+    "Motto": "Vir Quisque Vir (Every Man a Man)",
+    "Philanthropy": "American Red Cross, Feeding America, and Movember",
+    "Colors": "Royal Purple, Kelly Green, and Old Gold",
+    "Symbols": "Cross & Crescent",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "June 2, 1917",
+    "National Founding Date": "November 2, 1909",
+    "Chapter Website": "http://www.mylambdachi.com",
+    "National Website": "http://www.lambdachi.org/",
+    "Social Media": "https://www.instagram.com/lambdachiiowastate/"
+   },
+   "quote": "Lambda Chi gives you the opportunity to get involved, take on leadership, and become a better version of yourself. Our chapter is a place where you can build lifelong friendships, challenge yourself, and make an impact both within the fraternity and across Iowa State. What makes our brotherhood special is that everyone has the opportunity to find their place, get involved, and succeed with their brothers supporting them along the way.",
+   "quoteAuthor": "Levi Murray, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Address",
+     "value": "2724 Lincoln Way"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-10/LCA.jpg?itok=gEQIEe1C",
+     "width": 1600,
+     "height": 1200,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/lambda-chi-alpha.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Lambda Theta Phi Latin Fraternity Inc.",
+   "slug": "",
+   "council": "Multicultural Greek Council",
+   "academic": "",
+   "identity": "Latina/o/x",
+   "religious": ""
+  },
+  {
+   "kind": "fraternity",
+   "name": "Omega Psi Phi Fraternity Inc.",
+   "slug": "omega-psi-phi-fraternity-inc",
+   "council": "National Pan-Hellenic Council",
+   "academic": "",
+   "identity": "Black/African American",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/omega-psi-phi-fraternity-inc",
+   "nickname": "Omegas or Ques",
+   "description": "The Mu Theta Chapter of Omega Psi Phi Fraternity Inc. was the first historically Black fraternity chartered at Iowa State University. The chapter was established originally in 1970. At a national level, on the evening of November 17, 1911, Omega Psi Phi was founded inside the Science Building (later renamed Thirkield Hall) at Howard University located in Washington, D.C. The founders were three undergraduates â€” Edgar Amos Love, Oscar James Cooper and Frank Coleman. Joining them was their faculty adviser, Ernest Everett Just. From the initials of the Greek phrase meaning, â€œfriendship is essential to the soulâ€œ, the name Omega Psi Phi was derived. That phrase was selected as the motto. Manhood, Scholarship, Perseverance and Uplift were adopted as Cardinal Principles.",
+   "facts": {
+    "Colors": "Royal purple and Old gold",
+    "Symbols": "Lamp",
+    "Council": "National Pan-Hellenic Council",
+    "Local Founding Date": "1970",
+    "National Website": "https://oppf.org/"
+   },
+   "housing": [
+    {
+     "label": "Address",
+     "value": "0355 Memorial Union"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [],
+   "photo": null
+  },
+  {
+   "kind": "fraternity",
+   "name": "Phi Beta Sigma Fraternity, Inc.",
+   "slug": "phi-beta-sigma-fraternity-inc",
+   "council": "National Pan-Hellenic Council",
+   "academic": "",
+   "identity": "Black/African American",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/phi-beta-sigma-fraternity-inc",
+   "nickname": "Sigmas",
+   "description": "Phi Beta Sigma Fraternity, Inc. was founded on January 9, 1914, at Howard University by three visionary African American students—A. Langston Taylor, Leonard F. Morse, and Charles I. Brown. They sought to establish a fraternity rooted in the ideals of brotherhood, scholarship, and service, one that would exist as a part of the community, not apart from it. The Founders emphasized inclusivity, judging members by merit rather than background, and believed in using their talents to uplift their communities. This vision is captured in the Fraternity’s motto: “Culture for Service and Service for Humanity.” Since its founding, Phi Beta Sigma has grown into an international organization and has played a vital role in the civil rights and Black liberation movements. The Fraternity helped establish the Phi Beta Sigma National Foundation, a Federal Credit Union, and the Sigma Beta Club for youth. It also assisted in founding Zeta Phi Beta Sorority, its constitutionally bound sister organization.",
+   "facts": {
+    "Motto": "Culture For Service and Service For Humanity",
+    "Philanthropy": "Adopt-A-School (AAS), Voter Registration, Education & Mobilization, Blue & White Legislative Days, Prostate Health & Sexual Recovery, Sigma Justice Alliance, Adopt-A-Business Initiative, National Association of Real Estate Brokers (NAREB) Homeownership Initiative",
+    "Colors": "Royal Blue and Pure White",
+    "Symbols": "Dove, White Carnation",
+    "Council": "National Pan-Hellenic Council",
+    "Local Founding Date": "September 5th, 1978",
+    "National Founding Date": "January 9th, 1914",
+    "Chapter Website": "https://www.stuorg.iastate.edu/374",
+    "National Website": "https://phibetasigma1914.org"
+   },
+   "quote": "Since its founding, Phi Beta Sigma Fraternity has continuously exceeded the traditional model of Greek-letter organizations. As Chapter President, I’ve witnessed firsthand how deeply rooted our mission of service, brotherhood, and scholarship is. Our legacy—shaped by inclusivity, community uplift, and historical impact—remains unmatched. From supporting the founding of Zeta Phi Beta to leading in civil rights and Black liberation movements, Sigma is more than a fraternity—it’s a movement of purpose. Truly, we are the People’s Fraternity.",
+   "quoteAuthor": "Tyrique Ross, 2024 & 2025 Chapter President",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/images/2025-06/IMG_8246.jpg",
+     "width": 1179,
+     "height": 798,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/phi-beta-sigma-fraternity-inc.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Phi Delta Theta",
+   "slug": "phi-delta-theta",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/phi-delta-theta",
+   "nickname": "Phi Delt",
+   "description": "Phi Delt is a group of brothers who work hard to better each other as well as themselves and the community around them. We strive to make a lasting impact on as many people's lives as possible using our philanthropy, community service, and kindness within the Ames community. Our organization works hard but also lets our hair down when the time is right.",
+   "facts": {
+    "Motto": "One Man is No Man",
+    "Philanthropy": "Live Like Lou (ALS Research)",
+    "Colors": "Argent and Azure (White and Blue)",
+    "Symbols": "The sword, shield, and scroll of our crest.",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "1913",
+    "National Founding Date": "December 26, 1848",
+    "Chapter Website": "http://iastate.phideltatheta.org/",
+    "National Website": "http://www.phideltatheta.org"
+   },
+   "quote": "I love it here at Phi Delt because each member's goal in college is to better themselves, each other, and the community around them. We have each other's backs, but on top of that, we work hard to make a public difference in society. The lifelong bond that I have created amongst my brothers is something that I will never take for granted.",
+   "quoteAuthor": "Ryan Green, 2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "We have cold air style sleeping with curtains for privacy."
+    },
+    {
+     "label": "Room Features",
+     "value": "We have some two-man rooms and well as some three-man rooms. In a typical room you will find desks with three drawers per desk as well as your own individual dresser space with four drawers. We also have some room for mini-fridges. Ethernet ports are avai"
+    },
+    {
+     "label": "Dining Features",
+     "value": "Our dinning plan consists of 9 meals a week (Lunch and dinner Monday through Thursday with only lunch on Friday) and we also have a 24-hour kitchen access for making meals over the weekend or throughout the week."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Our formal room has a pool table in it where on any given day you will find some brothers down there playing pool."
+    },
+    {
+     "label": "Parking",
+     "value": "We have around 40 parking spaced in our parking lot."
+    },
+    {
+     "label": "Address",
+     "value": "2035 Sunset Drive"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2025-04/thumbnail_IMG_6335.jpg",
+     "width": 1118,
+     "height": 1045,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/PhiDeltaTheta-min.jpg?itok=9rIOb37Y",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/phi-delta-theta.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Phi Gamma Delta (FIJI)",
+   "slug": "phi-gamma-delta-fiji",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/phi-gamma-delta-fiji",
+   "nickname": "FIJI",
+   "description": "Phi Gamma Delta is one of the longest-standing fraternities on the Iowa State campus and has a vibrant history. In FIJI, members are held to the highest standards, and personal growth is fostered through our values, which everyone is expected to uphold in their daily lives. The brotherhood of FIJI is unlike any other fraternity, contributing to the college experience that one will never forget. One of our mottos is \"Not for college days alone,\" and we take it very seriously. Once a FIJI, always a FIJI!",
+   "facts": {
+    "Motto": "\"Not for college days alone\"",
+    "Philanthropy": "S'Mores Roast for the USO, Sorority Powderpuff Football Tournament for Garden Gate Ranch, Football Run with Iowa Fiji for USO",
+    "Colors": "Royal Purple",
+    "Symbols": "Diamond",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "September 21, 1907",
+    "National Founding Date": "May 1, 1848",
+    "Chapter Website": "http://www.aifiji.com/",
+    "National Website": "http://www.phigam.org"
+   },
+   "quote": "Fiji has opened doors to opportunities I never would have found on my own — experiences that have challenged me, strengthened my confidence, and shaped me into the leader I am today. It has pushed me to grow in ways I never expected, both personally and professionally. Above all, Fiji has given me a brotherhood rooted in loyalty, support, and unforgettable memories — friendships that will last a lifetime.",
+   "quoteAuthor": "Brody Vierow, 2026 Recruitment Chair",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold-Airs Bunks w/ Apartment Style living"
+    },
+    {
+     "label": "Room Features",
+     "value": "Furnished, air conditioned, exterior view, carpeted"
+    },
+    {
+     "label": "Dining Features",
+     "value": "Private Chef: Lunch Monday Friday; dinner Monday Thursday. Access to industrial kitchen; snack room stocked 24/7."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Man-cave with flat screen TV, poker table, pool table, ping pong table. Courtyard area with grill and basketball hoops."
+    },
+    {
+     "label": "Parking",
+     "value": "50 spots, lot is behind the house"
+    },
+    {
+     "label": "Address",
+     "value": "325 Ash Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-03/IMG_3086.jpeg?itok=B-4NXHtN",
+     "width": 1600,
+     "height": 1055,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-09/PhiGammaDelta-min%20%281%29.jpg?itok=x20GRipQ",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/phi-gamma-delta-fiji.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Phi Kappa Psi",
+   "slug": "phi-kappa-psi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/phi-kappa-psi",
+   "nickname": "Phi Psi",
+   "description": "At Phi Kappa Psi, we strive to improve the lives of our members through our four pillars of Leadership, Scholarship, Brotherhood, and Service. We are heavily involved inside our chapter and on campus, pushing ourselves to achieve excellence in all areas. Our brothers pursue a wide range of majors, offering someone to connect and work with no matter the academic goal. Our chapter recently celebrated the 100-year anniversary of the construction of our Chapter Facility, marking a new chapter for our future and the resources available to its members. With over 130 brothers, there truly is no stereotype for a Phi Psi, and we look forward to welcoming quality candidates from all walks of life.",
+   "facts": {
+    "Motto": "The Great Joy of Serving Others",
+    "Philanthropy": "Make A Wish Foundation",
+    "Colors": "Hunter Green and Cardinal Red",
+    "Symbols": "Jacqueminot Rose",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "September 26, 1913",
+    "National Founding Date": "February 19, 1852",
+    "Chapter Website": "http://www.phipsiisu.com",
+    "National Website": "http://www.phikappapsi.com"
+   },
+   "quote": "Here at Phi Psi, we strive every day to be better men than we were the day before, and it shows with our success. Not only is this a brotherhood where I’ve formed connections I'm forever grateful for, but it’s also helped me grow into a version of myself I am proud to be today.",
+   "quoteAuthor": "Tyler Japel, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold-Air Style"
+    },
+    {
+     "label": "Room Features",
+     "value": "Each room features a desk and dresser for each member. Rooms vary from 1-5 people."
+    },
+    {
+     "label": "Dining Features",
+     "value": "16 meals a week; 7 breakfasts, 5 lunches, 4 dinners"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Sand volleyball court, TV room with streaming included, and the largest front lawn in Ames."
+    },
+    {
+     "label": "Parking",
+     "value": "Private parking is available for all in-house members"
+    },
+    {
+     "label": "Address",
+     "value": "316 Lynn Ave."
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-02/PhIKappaPsi.jpeg",
+     "width": 1024,
+     "height": 768,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/PhiKappaPsi-min.jpg?itok=X14gmDpm",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/phi-kappa-psi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Phi Kappa Theta",
+   "slug": "phi-kappa-theta",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "Catholic",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/phi-kappa-theta",
+   "nickname": "Phi Kaps",
+   "description": "In 1920, a group of Catholics denied membership to traditional fraternities formed a social group called \"The Amician Club\". Amician is Latin for friend. The club gained strength, membership, and financial standing, culminating in a charter with Phi Kappa, The national Catholic fraternity. The fraternity continued to grow and in 1934 the property at 2110 Lincoln Way was secured to house the brothers. In 1959, two Catholic fraternities, Phi Kappa and Theta Kappa Phi, merged to form Phi Kappa Theta. Membership is open to all faiths while still holding on to its rich catholic roots. 2024 marked Phi Kappa Theta's 100th year at Iowa State as the Iowa Xi Chapter. Members of Phi Kappa Theta go by the five pillars fraternal, intellectual, spiritual, social, and leadership. The men of Phi Kappa Theta strive to create servant leaders for the future, and being a member of Phi Kappa Theta is sure to bring a lifelong brotherhood that enables our men to make the most of their time in college and be the best versions of themselves for the future.",
+   "facts": {
+    "Motto": "Give Expecting Nothing Thereof",
+    "Philanthropy": "Phi Kappacinos, Phi Kap Cookout; Proceeds go towards Children's Miracle Network",
+    "Colors": "Cardinal-Purple, Gold, and White",
+    "Symbols": "Chi Rho",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "April 19th, 1924",
+    "National Founding Date": "April 19th, 1889",
+    "Chapter Website": "https://pktalumni.com/",
+    "National Website": "http://www.phikaps.org"
+   },
+   "quote": "At Phi Kappa Theta, we pride ourselves on our tight-knit brotherhood. Our five pillars of development, Fraternal, Intellectual, Spiritual, Social, and Leadership, promote our men to be the best versions of themselves and have something to offer every one of our members. When you become a member of Phi Kappa Theta you are not only becoming a member of our fraternity, you are opening the doors to a lifetime of friendship, opportunity, and brotherhood.",
+   "quoteAuthor": "Caden Adams, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Dorm Style on the Second Floor, Cold-Airs on the Third Floor, Apartments."
+    },
+    {
+     "label": "Room Features",
+     "value": "All of our bedrooms have been refurbished, and every room has a desk, wardrobe, and bed for all of our members."
+    },
+    {
+     "label": "Dining Features",
+     "value": "Breakfast, lunch, and dinner Monday through Thursday, and only breakfast and lunch on Fridays. No chef on the weekends however kitchen is accessible 24 hours a day."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "55-inch flatscreen TV, Pool Table, Dartboard, Piano, outdoor pit with a propane grill."
+    },
+    {
+     "label": "Parking",
+     "value": "Thirty-two parking spots are open to members living on the property."
+    },
+    {
+     "label": "Address",
+     "value": "2110 Lincoln Way"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-07/Phi_Kap_group_photo.jpg?itok=_TbUJMsO",
+     "width": 1600,
+     "height": 2133,
+     "where": "feature"
+    },
+    {
+     "src": "/files/images/2026-07/53955280019_d08f4811f1_b.jpg",
+     "width": 1024,
+     "height": 683,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/phi-kappa-theta.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Pi Kappa Alpha",
+   "slug": "pi-kappa-alpha",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/pi-kappa-alpha",
+   "nickname": "PIKE",
+   "description": "Founded on March 1st, 1868, Pi Kappa Alpha is one of the largest fraternities in the nation. Accumulating over 300,000 lifetime members and 12,000 current undergraduates, the Pike alumni network has supported this chapter in countless ways. Recently, the Alpha Phi chapter at Iowa State was re-established in the fall of 2023 and has hit the ground running. Consistently building our men to be the best versions of themselves and expanding our chapter has become the forefront of our chapter. Our men represent various majors, clubs, and organizations and strive to build community throughout campus. The Pi Kappa Alpha chapter house also anticipates a large-scale renovation over the next two years to enhance our brother's facilities and allow for a better fraternal experience.",
+   "facts": {
+    "Motto": "Phi Phi",
+    "Philanthropy": "Pike Fireman's Challenge",
+    "Colors": "Garnet and Gold",
+    "Symbols": "The Oak Tree, Shield and Diamond, Dagger and Key",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "Founded - Feb. 17, 1913; Rechartered - November 11, 2023",
+    "National Founding Date": "March 1, 1868",
+    "Chapter Website": "https://alphaphi.pikes.org/",
+    "National Website": "http://www.pikes.org"
+   },
+   "quote": "Pi Kappa Alpha's mission is to instill young men with the fraternity's four core values: Scholarship, Leadership, Drive, and Character. This is accomplished through our new member education, leadership summits throughout the year, local philanthropy events to aid those in need, and social events within and outside the fraternity.",
+   "quoteAuthor": "Luca Cano, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "We offer dorm-style rooms for 1-4 men and communal bathrooms on each floor."
+    },
+    {
+     "label": "Room Features",
+     "value": "Bedrooms include wardrobes, desks, and closet space for each member."
+    },
+    {
+     "label": "Dining Features",
+     "value": "We do not currently offer a dining plan. The kitchen is open for the brothers to use."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Our house is on a double-lot. This allows for an impressive backyard, complete with a sand volleyball court, basketball court, and plenty of yard space."
+    },
+    {
+     "label": "Parking",
+     "value": "Parking is available for all brothers living in house."
+    },
+    {
+     "label": "Address",
+     "value": "2112 Lincoln Way"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-03/Pike_Chapter%281%29.jpg?itok=Ffycnq5-",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/PiKappaAlpha-min.jpg?itok=np4QXxPa",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/pi-kappa-alpha.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Pi Kappa Phi",
+   "slug": "pi-kappa-phi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/pi-kappa-phi",
+   "nickname": "Pi Kapps",
+   "description": "Our chapter is one of the strongest and longest-standing chapters of Pi Kappa Phi nationally. For almost 100 years at Iowa State, we have been priding ourselves on building its members into exceptional leaders by providing them with uncommon opportunities. We are blessed to have a great, extensive support system of alumni and advisors, and we strive to enhance all our members’ college experiences through brotherhood, service and philanthropy, and professional, academic, and personal growth.",
+   "facts": {
+    "Motto": "Exceptional Leaders, Uncommon Opportunities",
+    "Philanthropy": "Ability Experience - Pi Kappa Phi's own National Philanthropy. \"Building leaders of tomorrow by serving people with disabilities today.\" Every year, Pi Kapps put on our haunted house, a bike-a-thon and another Philanthropy event with another chapter. We annually raise around $3,000; with all the proceeds going to help benefit children with disabilities.",
+    "Colors": "Gold, White, and Royal Blue",
+    "Symbols": "Bell, Star, Lamp, and Red Rose",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "May 25, 1929",
+    "National Founding Date": "December 10, 1904",
+    "National Website": "http://www.pikapp.org"
+   },
+   "quote": "I have said ever since I joined Pi Kapp that it was the best decision I’ve ever made. It’s the place that I’ve met many of my best friends, learned so much about myself as a man and a leader, and had the most fun I’ve ever had.",
+   "quoteAuthor": "Steve Orsolini, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Single and Double rooms. No cold airs."
+    },
+    {
+     "label": "Room Features",
+     "value": "Bedrooms are sizeable. A wardrobe, desk, and loft for beds are included."
+    },
+    {
+     "label": "Dining Features",
+     "value": "24/7 kitchen access. In house chef cooks 10 meals per week. Bagels, fruit, cereal, and other options always stocked for breakfast and snacks."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Outside we have a sizeable front and back patio. The back patio features a basketball hoop. Indoors we have a pool table, foosball table, multiple TVs, and a projector. One of the largest basements on campus. In house gym."
+    },
+    {
+     "label": "Parking",
+     "value": "Plenty of parking, two lots totaling to over 35 spaces."
+    },
+    {
+     "label": "Address",
+     "value": "407 Welch Ave."
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Limited: Limited alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-06/PiKapp.jpg",
+     "width": 1223,
+     "height": 681,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/PiKappaPhi-min.jpg?itok=dArfczRO",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/pi-kappa-phi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Sigma Alpha Epsilon",
+   "slug": "sigma-alpha-epsilon",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/sigma-alpha-epsilon",
+   "nickname": "SAE",
+   "description": "The Iowa Gamma chapter of the Sigma Alpha Epsilon fraternity boasts a long history at Iowa State. On-campus for over 100 years, SAE is driven to create leaders, academic achievers, and those dedicated to the benefit of their community. We are a group of men who hold ourselves in high regard and we strive to better ourselves, others, and the world around us. The fraternity lives by the creed of the 'True Gentleman'. We aspire to develop as a collective through friendship, scholarship, leadership, and service.",
+   "facts": {
+    "Philanthropy": "Children's Miracle Network Movember Be the Match Sleep in Heavenly Peace",
+    "Colors": "Old Gold & Royal Purple",
+    "Symbols": "Lion, Phoenix, and Minerva",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "1905",
+    "Chapter Website": "http://saeatisu.com",
+    "National Website": "http://www.sae.net"
+   },
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Single occupant traditional room"
+    },
+    {
+     "label": "Address",
+     "value": "140 Lynn Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-07/53909959966_248d704083_b%20%281%29.jpg",
+     "width": 1024,
+     "height": 683,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/sigma-alpha-epsilon.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Sigma Chi",
+   "slug": "sigma-chi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/sigma-chi",
+   "nickname": "Sig Chi",
+   "description": "The Beta Omicron Chapter of Sigma Chi was originally founded at Iowa State University in 1916 and reestablished in 2023. Built on Sigma Chi’s core values of Friendship, Justice, and Learning, Beta Omicron strives to develop transformational leaders through brotherhood, service, academic achievement, and campus involvement. Our chapter is committed to building men of strong character who make a lasting impact at Iowa State and in the lives of those around them.",
+   "facts": {
+    "Motto": "“In Hoc Signo Vinces” (“In this sign, you will conquer.”)",
+    "Philanthropy": "Huntsman Cancer Institute",
+    "Colors": "Blue and Old Gold",
+    "Symbols": "White Cross",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "October 16, 1916",
+    "National Founding Date": "June 28, 1855",
+    "Chapter Website": "https://www.betaomicronsig.org/",
+    "National Website": "http://www.sigmachi.org",
+    "Social Media": "https://www.instagram.com/sigmachiiowastate/"
+   },
+   "quote": "Sigma Chi is built on men who expect more from themselves and from each other. Through brotherhood, leadership, and a commitment to our values, we strive to leave Iowa State better than we found it.",
+   "quoteAuthor": "2026 Chapter President, Nathan Tenney",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Suite-style living on the second and third floors, with rooms housing 1–4 members."
+    },
+    {
+     "label": "Room Features",
+     "value": "Three different bedroom layouts, each with full Ethernet access, high and low electrical outlets, and an attached bathroom with a double vanity; each member has their own desk, closet, and dresser."
+    },
+    {
+     "label": "Dining Features",
+     "value": "14 meals per week, including breakfast and lunch Monday through Friday and dinner Monday through Thursday. Members also have 24-hour access to the main kitchen, as well as additional kitchenettes on the second and third floors."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Theater room, full game room with pool, poker, darts, and other games, plus additional lounge areas on the second and third floors."
+    },
+    {
+     "label": "Parking",
+     "value": "Private lot with 16 parking spaces for members living in the chapter facility."
+    },
+    {
+     "label": "Address",
+     "value": "138 Gray Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-09/Iowa_State_Sigma_Chi_Page.jpg?itok=4wXKdh3e",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/sigma-chi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Sigma Lambda Beta International Fraternity Inc.",
+   "slug": "sigma-lambda-beta-international-fraternity-inc",
+   "council": "Multicultural Greek Council",
+   "academic": "",
+   "identity": "Latina/o/x",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/sigma-lambda-beta-international-fraternity-inc",
+   "nickname": "Betas",
+   "description": "Founded April 12, 1992, First Latino based organization at Iowa State University We believe in the ideals of fairness, opportunity, and equality of all men without regard to their race, culture, or ethnic background. The omicron chapter puts a big emphasis on our responsibility to give back to our communities through service.",
+   "facts": {
+    "Motto": "Opportunity for Wisdom, Wisdom for Culture",
+    "Philanthropy": "Adopt-A-Highway, Charity Bowl, Cancer Awareness",
+    "Colors": "Royal Purple & Pure White",
+    "Symbols": "White Stallion",
+    "Council": "Multicultural Greek Council",
+    "Local Founding Date": "April 12, 1992",
+    "National Founding Date": "April 4, 1986",
+    "Chapter Website": "https://www.instagram.com/iowastatebetas/?hl=en",
+    "National Website": "http://www.sigmalambdabeta.com/"
+   },
+   "quote": "Being a Beta means using who I am to uplift those around me—on campus, in my culture, and in my community.",
+   "quoteAuthor": "Jairo Yepez Mujica, 2025 and 2026 Chapter President",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/images/2025-04/IMG_2306.JPG",
+     "width": 1244,
+     "height": 2208,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/sigma-lambda-beta-international-fraternity-inc.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Sigma Nu",
+   "slug": "sigma-nu",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/sigma-nu",
+   "nickname": "Sig Nu",
+   "description": "Sigma Nu Fraternity has deep roots in Iowa States history being one of the first Fraternities founded on Iowa States Campus in 1904. Re-founded in 2024, Sigma Nu has built a chapter of future leaders and motivated individuals. Offering our renowned LEAD educational program, Sigma Nu offers each brother the skills to grow and learn, not only as a brother, but as an individual.",
+   "facts": {
+    "Motto": "Excelling with Honor",
+    "Philanthropy": "The Helping Hand Initiative",
+    "Colors": "Black, Gold, and White",
+    "Symbols": "The Classic Five-Petaled wild white English Florabunda",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "April 23rd, 1904",
+    "National Founding Date": "January 1st, 1869",
+    "National Website": "https://www.sigmanu.org/home"
+   },
+   "quote": "Joing Sigma Nu has been one of the most beneficial decisions I have made. I have been able to grow into a better leader while also forming a bonded brotherhood. At Sigma Nu we push every brother to lead by example and to be the best version of themselves when they graduate.",
+   "quoteAuthor": "Brendan Kelly, 2025-2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Dorm-style: Singles, 2 mans"
+    },
+    {
+     "label": "Room Features",
+     "value": "Each brother will be guaranteed a single room with the option to have a roommate."
+    },
+    {
+     "label": "Dining Features",
+     "value": "Members will have 24-hour access to the kitchen"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Game room, pool table, entertainment room"
+    },
+    {
+     "label": "Parking",
+     "value": "We have 38 parking spots available for every brother"
+    },
+    {
+     "label": "Address",
+     "value": "2635 Knapp Street"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-07/ISU%20Welcome%20Pic.jpg",
+     "width": 1080,
+     "height": 1080,
+     "where": "feature"
+    }
+   ],
+   "photo": null
+  },
+  {
+   "kind": "fraternity",
+   "name": "Sigma Phi Epsilon",
+   "slug": "sigma-phi-epsilon",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/sigma-phi-epsilon",
+   "nickname": "SigEp",
+   "description": "Sigma Phi Epsilon Fraternity is based on three cardinal principles: Virtue, Diligence, and Brotherly Love. Our Fraternity is nationally recognized for our Balanced Man Program. This program was the first of its kind and focuses on helping members to achieve a sound mind and sound body to ultimately become a balanced man. We were the first recognized Sigma Phi Epsilon Residential Learning Community, a high honor at our National level.",
+   "facts": {
+    "Motto": "Building Balanced Men",
+    "Philanthropy": "JDRF - Type 1 Diabetes with Delta Tau Delta Live Your Oath - Sexual Assault Awareness with Alpha Delta Pi SigEp Paradise - Big Brothers Big Sisters of Iowa",
+    "Colors": "Crimson Red and Royal Purple",
+    "Symbols": "Heart, Skull & Crossbones",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "April 20th, 1916",
+    "National Founding Date": "November 1st, 1901",
+    "Chapter Website": "http://www.iowastate.sigep.org",
+    "National Website": "http://www.sigep.org"
+   },
+   "quote": "SigEp is the pinnacle of fraternity life here at Iowa State, living the true meaning of brotherhood. Our goal is to build balanced men who succeed in all aspects of life, while having fun along the way. The advantages that SigEp alumni have in the professional world is unparalleled with connections all around the nation.",
+   "quoteAuthor": "Connor Norland, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold air and suite style"
+    },
+    {
+     "label": "Room Features",
+     "value": "Built in granite desk, closet and storage space"
+    },
+    {
+     "label": "Dining Features",
+     "value": "9 meals weekly and 24 hour kitchen access"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Regulation half court for basketball, pool table, movie projector, built in outdoor grills and outdoor seating"
+    },
+    {
+     "label": "Parking",
+     "value": "27 Spaces"
+    },
+    {
+     "label": "Address",
+     "value": "228 Gray Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-07/SigEp.png?itok=xie1hr1F",
+     "width": 1600,
+     "height": 1068,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/SigmaPiEpsilon-min.jpg?itok=VRJvLuPE",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/sigma-phi-epsilon.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Tau Kappa Epsilon",
+   "slug": "tau-kappa-epsilon",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/tau-kappa-epsilon",
+   "nickname": "Teke",
+   "description": "Epsilon Chapter of Tau Kappa Epsilon is a social fraternity that prides itself on helping men become the best forms of themselves. We help our men develop socially, academically, and morally. Despite being a large chapter, we are extremely tight knit. The chapter has won 14 consecutive Top TKE awards for being a top-performing chapter and is the longest standing TKE chapter internationally. Our characteristics, Scholarship, Character, Leadership, Teamwork, Service, and Brotherhood are what we live by. Our goal is to not meet expectations but exceed them. If you are wanting to exceed expectations, then Tau Kappa Epsilon is the place for you!",
+   "facts": {
+    "Motto": "Better Men for a Better World",
+    "Philanthropy": "St. Jude Children's Research Hospital",
+    "Colors": "Cherry River Red and Sterling Silver Grey",
+    "Symbols": "Equilateral Triangle",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "May 28, 1915",
+    "National Founding Date": "January 10, 1899",
+    "Chapter Website": "http://www.epsilonisu.com",
+    "National Website": "http://www.tke.org"
+   },
+   "quote": "Joining Tau Kappa Epsilon has truly enhanced my collegiate experience. TKE has allowed me to step outside my comfort zone, grow as a leader, and develop life long friendships. This chapter has transformed me as a person, which is something I am forever grateful for.",
+   "quoteAuthor": "Vasilios Karavitis, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Suite Style"
+    },
+    {
+     "label": "Room Features",
+     "value": "Rooms feature a desk and wardrobe for each person. Rooms range from 1-5 people"
+    },
+    {
+     "label": "Dining Features",
+     "value": "10 prepared meals a week, however the kitchen is open 24/7"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Multiple 85” TVs, pool table, arcade machines"
+    },
+    {
+     "label": "Parking",
+     "value": "27 free spots on property with ample street parking"
+    },
+    {
+     "label": "Address",
+     "value": "224 Ash Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-02/TKE2026.jpg",
+     "width": 1491,
+     "height": 1001,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/TauKappaEpsilon-min.jpg?itok=dF2F_VF8",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/tau-kappa-epsilon.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Theta Chi",
+   "slug": "theta-chi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/theta-chi",
+   "nickname": "",
+   "description": "On April 10, 1856, in Norwich, Vermont, two young men attending Norwich University called to order the first meeting of Theta Chi Fraternity. 66 years later, on December 22, 1922, a group of men known as the Mohawk Club, took the oaths and the Alpha Mu Chapter was founded at Iowa State University. In 1996 the chapter house burnt down from a kitchen fire. With the support from alumni and other chapters, enough money was raised to rebuild the current facility that opened in 1999. The 150-year tradition of extending the helping hand continues to flourish on the Iowa State campus. We value the principle of friendship through the mutual assistance of every member. We have one of the largest scholarship funds of all Greek life.",
+   "facts": {
+    "Motto": "“An Assisting Hand”",
+    "Philanthropy": "United Service Organizations (USO)",
+    "Colors": "Military Red and White",
+    "Symbols": "Rattlesnake and Two Swords",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "December 22nd, 1922",
+    "National Founding Date": "April 10th, 1856",
+    "Chapter Website": "http://isuthetachi.org/",
+    "National Website": "http://www.thetachi.org/"
+   },
+   "quote": "Joining Theta Chi has been by far the best decision I’ve made while in college. I’ve made countless memories and I’m so proud to call the guys in the chapter my brothers. We always have each other’s back, and there’s always someone to hang out with. We have one of the largest scholarship funds of all Greek life and we have numerous opportunities for your future. My favorite part about Theta Chi is the potential for growth that’s always up for grabs, showing that we’re the fastest growing chapter on campus. Two years ago, I joined a brotherhood of 33 active members, and now we’ve tripled our chapter size. You really get out what you put in, and I’m loving every second of it.",
+   "quoteAuthor": "Kyler Pittman, Public Relations Chairman, Chaplain",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold air sleeping"
+    },
+    {
+     "label": "Room Features",
+     "value": "Desks, Hutches, Wardrobes"
+    },
+    {
+     "label": "Dining Features",
+     "value": "We have a chef that cooks meals for lunch and dinner Monday-Friday, excluding dinner on Friday. Full commercial kitchen inside the house."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We are extremely involved in socials with other sororities and fraternities, inviting them to our chapter facility often."
+    },
+    {
+     "label": "Parking",
+     "value": "Parking available on location."
+    },
+    {
+     "label": "Address",
+     "value": "219 Ash Ave."
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-09/Untitled%20design%20%284%29.png",
+     "width": 1080,
+     "height": 1080,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-09/ThetaChi.jpg?itok=2wHiGxZz",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/theta-chi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Theta Delta Chi",
+   "slug": "theta-delta-chi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/theta-delta-chi",
+   "nickname": "Thumpers",
+   "description": "We were founded in 1847 by six men at Union college and brought to Iowa State in 1919. We are the oldest house on campus made for Fraternal living. Our house had renovations completed in spring 2016. Our reputation on campus has been growing and we've been constantly increasing our numbers and improving since 2007. We represent a wide variety of majors and backgrounds, bringing in students from all over the nation. All of our members are very involved in the fraternity and in Iowa State student life. Theta Delta Chi strives to improve all of its members intellectually, morally, and socially to the best of their abilities. We pride ourselves on academic excellence and campus involvement. It's a brotherhood for life.",
+   "facts": {
+    "Motto": "Our Hearts are United",
+    "Philanthropy": "Doug Flutie, Jr. Foundation for Autism",
+    "Colors": "Black, White, and Blue",
+    "Symbols": "Red Carnation, Owl",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "1919",
+    "National Founding Date": "October 31, 1847",
+    "Chapter Website": "https://www.thumpersisu.org",
+    "National Website": "http://www.thetadeltachi.net"
+   },
+   "quote": "As a freshman when I received the opportunity to tour Theta Delta Chi I could tell right away that these men were different. The immediate welcoming atmosphere and personability I was greeted with I knew right way this was the house I belonged in.",
+   "quoteAuthor": "Oscar Andestic, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "The chapter house has cold airs and then common rooms for members where each member has their own desk space along with a lock box for personal items. Common rooms range from 4 people in a room to 7 which is the largest common room for members."
+    },
+    {
+     "label": "Room Features",
+     "value": "The chapter house has cold airs for sleeping which range from 4 - 8 guys in the cold air. Each member in the house also has a wardrobe which depending on the room members chooses could be in their cold air or in their common room space."
+    },
+    {
+     "label": "Dining Features",
+     "value": "We receive five lunches and four dinners a week, Monday through Friday with no dinner on Fridays. We have 24 hour access to our kitchen amenities as our chef cooks all our meals over at Theta Chi and then brings them over."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have a large front yard that members enjoy playing various yard games and sports on. We also have a full access to our balcony from our third floor which provides a great view."
+    },
+    {
+     "label": "Parking",
+     "value": "We have 15 available parking spaces for our members and getting a parking space is determined by overall involvement in the house. We also have 2 guest spots for visitors."
+    },
+    {
+     "label": "Address",
+     "value": "217 Ash Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Permitted: Alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-03/PDad_Front_of_House.jpeg?itok=zhOGpfS9",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/ThetaDeltaChi-min.jpg?itok=o3jMRtsf",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/theta-delta-chi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Theta Xi",
+   "slug": "theta-xi",
+   "council": "Interfraternity Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/theta-xi",
+   "nickname": "The Taxi",
+   "description": "Theta Xi values authenticity, fellowship, and constant, continuous pursuit of self-betterment. We are a group of gentlemen who are focused on academics and extracurriculars that further us as men. Though there is a great focus on becoming better as a whole, we also like to kick back on the weekend and cut loose a little. We play just as hard as we work so no matter what you are looking for, you will find some of it in Theta Xi.",
+   "facts": {
+    "Motto": "\"Juncti Juvant\" - United They Serve",
+    "Philanthropy": "Habitat for Humanity",
+    "Colors": "Azure Blue and Silver",
+    "Symbols": "Unicorn",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "April 2, 1909",
+    "National Founding Date": "April 29, 1864",
+    "Chapter Website": "http://www.iastatetx.org",
+    "National Website": "http://www.thetaxi.org"
+   },
+   "quote": "We are a brotherhood of loyal men practicing fellowship and self-improvement in all aspects of life. While much of the world may stand against you, the brothers of Theta Xi stand beside you.",
+   "quoteAuthor": "Caleb Gehan, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Single Style Rooms"
+    },
+    {
+     "label": "Dining Features",
+     "value": "Two meals, 5 days a week. (Monday-Friday)"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "There is a volleyball sandpit and fire pit in our backyard."
+    },
+    {
+     "label": "Parking",
+     "value": "We have around 25 spots in our parking lot designated strictly for members and guests."
+    },
+    {
+     "label": "Address",
+     "value": "315 Welch Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Limited: Limited alcohol is permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-06/ThetaXi.jpg",
+     "width": 1170,
+     "height": 673,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/ThetaXi-min.jpg?itok=8egBnnln",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/theta-xi.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Triangle",
+   "slug": "triangle",
+   "council": "Interfraternity Council",
+   "academic": "Architecture, STEM",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/triangle",
+   "nickname": "Triangle",
+   "description": "Founded in 1907 at the University of Illinois, Triangle is a social, professional STEM organization of Engineers, Architects, and Scientists. We are the only national social fraternity requiring specific fields of study, and Triangle is one of only three national fraternities that does not have a Greek letter name. The Iowa State Chapter was founded in 1964 and had a strong tradition of recruiting academically focused men. In addition, we strive to find men that live their life with integrity - those who make the choices to be leaders, scholars, professionals, and gentlemen in all aspects of our lives.",
+   "facts": {
+    "Motto": "Veritas Omnia Vincit (\"Truth Conquers All\")",
+    "Philanthropy": "FIRST LEGO League",
+    "Colors": "Old Rose and Gray",
+    "Symbols": "Engineer's Transit",
+    "Council": "Interfraternity Council",
+    "Local Founding Date": "April 25, 1964",
+    "National Founding Date": "April 15th, 1907",
+    "Chapter Website": "http://www.iowastatetriangle.org",
+    "National Website": "http://www.triangle.org/home/"
+   },
+   "quote": "Joining Triangle has enhanced my personal experience at Iowa State by giving me a strong support system found in brotherhood, a home away from home, and many opportunities for personal growth as a student and leader.",
+   "quoteAuthor": "Gabriel Bayse, 2024 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Suite style."
+    },
+    {
+     "label": "Room Features",
+     "value": "Each bedroom has a desk and closet. In the suite is a shared common space and shared bathroom."
+    },
+    {
+     "label": "Dining Features",
+     "value": "We provide lunch and dinner Monday through Thursday, and lunch on Fridays. 24-hour access kitchen."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Back patio with fire pit and grills, theater room with PS5 and Xbox, and a rec room."
+    },
+    {
+     "label": "Parking",
+     "value": "33 parking spots"
+    },
+    {
+     "label": "Address",
+     "value": "2136 Lincoln way"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-06/Triangle.jpeg",
+     "width": 1179,
+     "height": 1159,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/Triangle-min.jpg?itok=C8Nuopab",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/triangle.jpg"
+  },
+  {
+   "kind": "fraternity",
+   "name": "Zeta Psi",
+   "slug": "zeta-psi-0",
+   "council": "",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/zeta-psi-0",
+   "nickname": "",
+   "description": "",
+   "facts": {},
+   "housing": [],
+   "photos": [],
+   "photo": null
+  },
+  {
+   "kind": "sorority",
+   "name": "Alpha Chi Omega",
+   "slug": "alpha-chi-omega",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-chi-omega",
+   "nickname": "AXO, Alpha Chi, or A Chi O",
+   "description": "The Delta Nu Chapter of Alpha Chi Omega was established at Iowa State University in 1961. The sisterhood is founded on the values of academics, character development, leadership, responsibility, and personal growth. We take pride in supporting our philanthropy, sisterhood, and community relations.",
+   "facts": {
+    "Motto": "Together Let Us Seek The Heights",
+    "Philanthropy": "ACCESS (locally), Domestic Violence Awareness (nationally)",
+    "Colors": "Scarlet Red and Olive Green",
+    "Symbols": "Lyre, Pearl, Red Carnation",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "March 18, 1961",
+    "National Founding Date": "October 15, 1885",
+    "National Website": "http://www.alphachiomega.org"
+   },
+   "quote": "Alpha Chi Omega has challenged me to grow into our motto, Real. Strong. Women, throughout my college journey. I have personally had the opportunity take on a couple different leadership experiences, where I have learned so many life skills. My sisters push me to be the best leader, friend, and sister that I could be, and I couldn't be more thankful. Overall, the sisterhood that I have experienced is something that I will take with me far beyond my college years. There is nothing that could compare to being in a room full of supportive women, all full of love and joy.",
+   "quoteAuthor": "Gracie Briney, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold Airs, some rooms with beds. Communal bathrooms on floors 2 and 3. 9 rooms on each floor with a total of 50 beds."
+    },
+    {
+     "label": "Room Features",
+     "value": "Single with bed, 2-man no beds, 2-man with beds, 3-man no beds, 6-man with beds. Each bedroom comes with large wardrobes, desks, and chairs per person, and a futon."
+    },
+    {
+     "label": "Dining Features",
+     "value": "Lunch and Dinner M-T, Lunch on F, Accommodating Chef, Snacks and Salad Bar 24/7"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Large Craft room, multiple study areas, big backyard with patio, and chapter room in house."
+    },
+    {
+     "label": "Parking",
+     "value": "25 spots at facility, more spots at First Baptist Church"
+    },
+    {
+     "label": "Address",
+     "value": "301 Lynn Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-03/20260201_214646_7F25A3.JPEG?itok=z5wre531",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/AlphaChiOmega-min.jpg?itok=tiVuI4m7",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-chi-omega.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Alpha Delta Pi",
+   "slug": "alpha-delta-pi",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-delta-pi",
+   "nickname": "ADPi",
+   "description": "Founded as the first secret society for college aged women, Alpha Delta Pi has served the purpose of fostering a community of genuine friendships, academic excellence, and service to others. The Pi Chapter of Alpha Delta Pi, founded in 1911, welcomes women into a community where they belong and can be their true authentic selves while building character and personal relationships.",
+   "facts": {
+    "Motto": "We Live for Each Other",
+    "Philanthropy": "Ronald McDonald House Charities, ACCESS",
+    "Colors": "Azure Blue, White",
+    "Symbols": "Diamonds, Lion, Violets",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "June 3rd, 1911",
+    "National Founding Date": "May 15th, 1851",
+    "Chapter Website": "https://iastate.alphadeltapi.org/",
+    "National Website": "http://www.alphadeltapi.org"
+   },
+   "quote": "Our sisterhood is rooted in genuine connection, shared purpose, and a deep commitment to helping one another grow. Within Pi Chapter, women find a place where they can lead with confidence, pursue academic excellence, and build friendships that feel both grounding and lifelong. The bonds we form are strengthened by compassion, loyalty, and the simple joy of showing up for each other in every season of life. We live for each other.",
+   "quoteAuthor": "Gabrielle Townsend, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "2-6 person rooms with attached sleepers. We do not offer cold airs."
+    },
+    {
+     "label": "Room Features",
+     "value": "Each room is fully furnished with desks, dressers closet space, and a futon. Additionally, we allow personal mini fridges in rooms."
+    },
+    {
+     "label": "Dining Features",
+     "value": "When living in the chapter facility, we are served lunch and dinner Monday-Thursday and brunch and lunch on Fridays. We have 24-hour access to the kitchen with food and leftovers available on the weekends and a 24/7 salad bar."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have a beautiful courtyard in the front of our house that is perfect for hanging out with our sisters, studying, and eating meals. The basement has a large hang out area with a large tv perfect for sisterhood activities and movie nights."
+    },
+    {
+     "label": "Parking",
+     "value": "We currently have 26 parking spots available for our chapter members."
+    },
+    {
+     "label": "Address",
+     "value": "2125 Greeley Street"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-08/JS309317.jpeg",
+     "width": 1365,
+     "height": 2048,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/AlphaDeltaPi-min.jpg?itok=Cse_kZe_",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-delta-pi.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Alpha Gamma Delta",
+   "slug": "alpha-gamma-delta",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-gamma-delta",
+   "nickname": "Alpha Gam; AGD",
+   "description": "Founded at Iowa State in 1917, Alpha Gamma Delta; Rho Chapter, takes pride in being one of the strongest chapters on campus. We highly value academics, sisterhood, philanthropy, and leadership. Our members include women from every college on campus, and come from a wide variety of backgrounds. They hold leadership positions all over campus with organizations such as Dance Marathon, SALC, Greek Week, Business Council, Engineers Week, Blood Drive, and countless others.",
+   "facts": {
+    "Motto": "Loving, Leading, Lasting",
+    "Philanthropy": "Alpha Gamma Delta Foundation which supports Fighting Hunger by partnering with Meals on Wheels and Feeding America.",
+    "Colors": "Red, Buff, Green",
+    "Symbols": "Gray Squirrel, Red and Buff Roses, Pearls",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "September 8, 1917",
+    "National Founding Date": "May 30, 1904",
+    "Chapter Website": "http://iastate.alphagammadelta.org/",
+    "National Website": "http://www.alphagammadelta.org"
+   },
+   "quote": "Alpha Gamma Delta is filled with motivated, genuine women who strive to live out their values each and every day. Additionally, Alpha Gamma Delta has brought me my best friends, best memories, and countless opportunities.",
+   "quoteAuthor": "Bailey Manderfeld, 2024 Vice President of Chapter Wellness",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Cold Airs"
+    },
+    {
+     "label": "Room Features",
+     "value": "1, 2, and 3 person rooms."
+    },
+    {
+     "label": "Dining Features",
+     "value": "24 hour kitchen and kitchenette with refrigerators/microwave/toaster/hot chocolate machine. Fabulous chef makes lunch M-F, dinner M-TH, with breakfast food available daily (cereal, bagels, toast, eggs, oatmeal, milk, etc.). Our chef is very accommodating"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Back deck with picnic table, wireless internet, free copy machine/printer, rec room with couch and television, multiple study rooms."
+    },
+    {
+     "label": "Parking",
+     "value": "20 parking spots"
+    },
+    {
+     "label": "Address",
+     "value": "2118 Sunset Drive"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-02/alphagammadelta.JPEG",
+     "width": 1512,
+     "height": 2016,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/AlphaGammaDelta-min.jpg?itok=UGhlHZTS",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-gamma-delta.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Alpha Kappa Alpha Sorority, Inc.",
+   "slug": "alpha-kappa-alpha-sorority-inc",
+   "council": "National Pan-Hellenic Council",
+   "academic": "",
+   "identity": "Black/African American",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-kappa-alpha-sorority-inc",
+   "nickname": "AKA",
+   "description": "Alpha Kappa Alpha Sorority, Inc. was founded on the campus of Howard University in Washington, D.C. in 1908. It is the oldest Greek-letter organization established by African American college-educated women. Alpha Kappa Alpha Sorority, Inc. Eta Tau Chapter was chartered on the campuses of Drake University and Iowa State University on June 14, 1973.",
+   "facts": {
+    "Motto": "By Culture & By Merit",
+    "Colors": "Salmon Pink and Apple Green",
+    "Symbols": "Ivy Leaf",
+    "Council": "National Pan-Hellenic Council",
+    "Local Founding Date": "June 14th, 1973",
+    "National Founding Date": "January 15th 1908",
+    "National Website": "http://aka1908.com"
+   },
+   "quote": "As a member and president of the Exquisite Eta Tau chapter of Alpha Kappa Alpha Sorority, Inc., it has been a profound privilege to be part of an organization with such a rich and storied history. Throughout my years in this chapter, I have grown immensely, both as an individual and as a leader. The genuine sisterhood I have found here has been a source of unwavering support and inspiration. Together, we continually seek new ways to serve the student body and our community, upholding the values and mission of our illustrious sorority.",
+   "quoteAuthor": "Kyra Lucas, 2024 Chapter President",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-07/AKA.jpeg?itok=yrpXFqby",
+     "width": 1600,
+     "height": 1200,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/alpha-kappa-alpha-sorority-inc.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Alpha Omicron Pi",
+   "slug": "alpha-omicron-pi",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-omicron-pi",
+   "nickname": "AOII,Alpha O",
+   "description": "Since our founding in 1897 at Barnard College, AOII stands on the values of character, dignity, scholarship, and college loyalty. Symbols include the Jaqueminot Rose, the Ruby, and the Sheaf of Wheat, which represents individuals bound together by friendship. We proudly support The Arthritis Foundation and are known as \"Panda People\" among arthritis circles for donating hundreds of stuffed pandas to children at arthritis camps and conventions every year.",
+   "facts": {
+    "Motto": "Inspire Ambition",
+    "Philanthropy": "The Arthritis Foundation",
+    "Colors": "Cardinal Red",
+    "Symbols": "Jaqueminot Rose, Sheaf of Wheat, Ruby",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "April 20,1968",
+    "National Founding Date": "January 2, 1897",
+    "Chapter Website": "http://iastate.alphaomicronpi.org",
+    "National Website": "http://www.alphaomicronpi.org"
+   },
+   "quote": "Joining AOII was the best decision I have ever made. I have become the best version of myself. The members saw potential in me that I had yet to see in myself. Truly the most amazing and ambitious people on campus!",
+   "quoteAuthor": "Natalia Matamoros, 2026 Director of New Member Experience",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Two-Person Rooms (Dorm Style)"
+    },
+    {
+     "label": "Room Features",
+     "value": "Overhead fans, A/C, built-in closets"
+    },
+    {
+     "label": "Dining Features",
+     "value": "Meals provided by an in-house chef Sunday-Friday, snacks provided in the kitchenette 24/7"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Living room and TV room for group activities, front porch and patio seating, craft and game closets, side yard space for outdoor activities"
+    },
+    {
+     "label": "Parking",
+     "value": "32 parking spaces"
+    },
+    {
+     "label": "Address",
+     "value": "2007 Greeley St"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-09/IMG_6138.jpeg",
+     "width": 1179,
+     "height": 1548,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/AlphaOmicronPi-min.jpg?itok=wlffT009",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-omicron-pi.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Alpha Phi",
+   "slug": "alpha-phi",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-phi",
+   "nickname": "A Phi",
+   "description": "Alpha Phi is a sisterhood of outstanding women supporting one another in lifelong achievement. The sisterhood of Alpha Phi stretches from coast to coast with over 160 collegiate campuses and more than 200,000 members. Sisters share a commitment to excellence and a strong desire to help one another and their communities. Alpha Phis are leaders, scholars, contributors and lifetime members of a sisterhood that values these traits. Alpha Phi assists college women in making informed choices to reach their highest potential. Alpha Phi enhances and promotes each member's development and learning by focusing on sisterhood, service, scholarship, leadership, loyalty and character development.",
+   "facts": {
+    "Motto": "Union Hand in Hand",
+    "Philanthropy": "The Alpha Phi Foundation supporting Women’s Heart Health",
+    "Colors": "Silver & Bordeaux",
+    "Symbols": "Ivy Leaf, Forget-Me-Not flower, Lily of the Valley Flower, Ursa Major Constellation",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "March 8, 2015",
+    "National Founding Date": "October 10, 1872",
+    "Chapter Website": "https://www.iowastatealphaphi.org/",
+    "National Website": "https://www.alphaphi.org/Home",
+    "Social Media": "https://www.instagram.com/iowastatealphaphi/"
+   },
+   "quote": "Alpha Phi has shaped me into the person I am today in more ways than I could have ever imagined. The Zeta Delta chapter has given me countless opportunities to grow, challenge myself, and become the best version of myself. Surrounded by such incredible women, I have learned the true meaning of Character, Innovation, Generosity, and Sisterhood. Alpha Phi has not only given me lifelong friendships and unforgettable memories, but it has also helped me discover more about who I am and the person I strive to be. I could not be more grateful for this chapter and for all of the amazing women in Alpha Phi!",
+   "quoteAuthor": "Krissy Spear, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Apartment style suites- our chapter facility is made up of many suites that come with a full kitchen, multiple bathrooms, and a living room. Desks are in the living rooms while actual beds are their own rooms made up of 1-4 mans."
+    },
+    {
+     "label": "Room Features",
+     "value": "Members can choose to have bunk beds or single beds. Each member has two full dressers and a full closet for the room."
+    },
+    {
+     "label": "Dining Features",
+     "value": "While having the ability to make own meals 24/7, we have 4 meals a week Monday- Thursday made by our wonderful Chef."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Multiple common areas, a living room with a TV, a living room with a projector, a private closed-off formal room for studying/interviews, and a beautiful courtyard."
+    },
+    {
+     "label": "Parking",
+     "value": "28 parking spots"
+    },
+    {
+     "label": "Address",
+     "value": "307 Ash Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-09/Screenshot_23-9-2026_165022_.jpeg",
+     "width": 975,
+     "height": 1067,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/AlphaPhi-min.jpg?itok=hqaA2kIo",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/alpha-phi.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Alpha Sigma Kappa",
+   "slug": "alpha-sigma-kappa",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "STEM",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/alpha-sigma-kappa",
+   "nickname": "ASK",
+   "description": "Alpha Sigma Kappa: Women and Gender Minorities in Technical Studies is a social sorority for women in technical fields to connect, network, and lend support in our academic and professional endeavors. We live by our six core values of Academics, Achievement, Civic Engagement, Commitment, Friendship, Leadership, and Social Justice. We participate in all the events along with all the facility chapters including socials, Homecoming, and Greek Week.",
+   "facts": {
+    "Motto": "A Posse Ad Esse (From Possibility to Reality)",
+    "Philanthropy": "In the spring we host ASKakes, where we raise funds and awareness for the Animal Rescue League of Iowa (ARL). Our National philanthropy is DonorsChoose, which raises money for teachers to buy supplies for their classrooms.",
+    "Colors": "Royal Blue and Silver",
+    "Symbols": "Lioness, Infinity Symbol, White Rose",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "October 23, 2004",
+    "National Founding Date": "May 1, 1989",
+    "Chapter Website": "https://alphasigmakappa-epsilon.weebly.com/",
+    "National Website": "http://ask-wits.com/"
+   },
+   "quote": "Joining ASK has been one of the most influential decisions of my life! I've been able to meet my closest friends and sisters. Being surrounded by other STEM majors has provided so much support throughout my college journey!",
+   "quoteAuthor": "Bethany Danley, 2024 Chapter President",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-03/20251118_130256_4C9975.jpeg?itok=aatmTDnJ",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/alpha-sigma-kappa.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Chi Omega",
+   "slug": "chi-omega",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/chi-omega",
+   "nickname": "Chi O",
+   "description": "The Eta Beta Chapter of Chi Omega was founded in 1922. Since the beginning, our sisters have been devoted to high standards of personnel, academic excellence, lifelong friendships, career and personal development, service to others and both community and campus involvement. Chi Omega has grown to include over 380,000 women from 181 collegiate chapters worldwide since its beginnings at the University of Arkansas in 1895.",
+   "facts": {
+    "Motto": "Sisters on Purpose",
+    "Philanthropy": "Make-A-Wish and The Liz Kirke Foundation",
+    "Colors": "Cardinal and Straw",
+    "Symbols": "Owl, Skull & Cross Bones",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "October of 1922",
+    "National Founding Date": "April 5th, 1895",
+    "Chapter Website": "http://www.chiomegaiowastate.org",
+    "National Website": "http://www.chiomega.com"
+   },
+   "quote": "I came to college wanting to find a community that always valued character and integrity over popularity. I wanted a place where I would grow by being encouraged and challenged. I knew I wanted genuine relationships that were rooted in kindness. What I did not realize was that I would find all of these things and more in the sisterhood of Chi Omega. The outcome of joining Chi Omega has proven to be the most impactful decision I have ever made. I am consistently met with the utmost love and support. I have found such incredible people–full of ambition and depth. Shared values and goals unify us, and we actively encourage one another to uphold the values we all treasure. I cannot express enough gratitude for the opportunities, friendships, and growth I have gained from this chapter; Chi Omega is the cornerstone of my incredible college experience at Iowa State.",
+   "quoteAuthor": "Milan Loutsch, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "We offer 1, 2, 3, 4 and 5 person bedrooms. We do not have any cold airs."
+    },
+    {
+     "label": "Room Features",
+     "value": "All bedrooms have large built-in or walk-in closets, fully furnished with a desk, dresser, and bed."
+    },
+    {
+     "label": "Dining Features",
+     "value": "When living in the chapter facility, you are supplied with lunch and dinner Monday through Thursday, and Friday lunch. We have a 24-hour salad bar, eggs, milk, and other common grocery items always stocked. We also supply weekly weekend groceries with sna"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have a sundeck on the top of our house that is perfect for watching the sunset or laying in the sun! We also have large patio furniture for our front porch! Inside our home, we have two beautiful living rooms on the main floor and two in the basement."
+    },
+    {
+     "label": "Parking",
+     "value": "We currently have 16 parking spaces available for members in our chapter."
+    },
+    {
+     "label": "Address",
+     "value": "227 Gray Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-03/eta_beta_isu_2025_blue_katherine_gallagher_342.jpg?itok=6FO5lqAj",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/ChiOmega-min_0.jpg?itok=c3EmfkcV",
+     "width": 1600,
+     "height": 983,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/chi-omega.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Delta Delta Delta",
+   "slug": "delta-delta-delta",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-delta-delta",
+   "nickname": "Tri Delta",
+   "description": "Delta Delta Delta was established in 1888 by seven women under the values of truth, self-sacrifice, and friendship. These values are actualized here at Iowa State through our dedication to supporting Saint Jude’s Children Research Hospital.",
+   "facts": {
+    "Motto": "Let us steadfastly love one another.",
+    "Philanthropy": "St. Jude Children's Research Hospital",
+    "Colors": "Silver, Gold, & Blue",
+    "Symbols": "Dolphin, Pine Tree, Pearl, & Pansy",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "1912",
+    "National Founding Date": "November 27, 1888",
+    "Chapter Website": "http://iastate.tridelta.org/",
+    "National Website": "http://www.tridelta.org"
+   },
+   "quote": "Delta Delta Delta has brought me some of my best friends and memories so far in my life. It feels so amazing being surrounded by people who want to see you succeed, and you wanted the same for them. Every day I am thankful to be a part of something so special.",
+   "quoteAuthor": "Natalie Mekeland, Vice President of Membership Experience",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "We offer 1, 2, 3, 6, and 8 person bedrooms. We also have cold air dorms."
+    },
+    {
+     "label": "Room Features",
+     "value": "All bedrooms are fully furnished with a dresser, desk, chair, closet, and mattress."
+    },
+    {
+     "label": "Dining Features",
+     "value": "We are served lunch and dinner Monday through Thursday. On Friday's we receive breakfast and lunch. Members also have 24/7 access to our kitchenette which has leftovers, a salad bar, etc."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have multiple large living rooms and study rooms where members can watch tv and play board games. We also have a workout room."
+    },
+    {
+     "label": "Parking",
+     "value": "We have 34 parking spaces available for members at our facility."
+    },
+    {
+     "label": "Address",
+     "value": "302 Ash Ave"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-07/20251124_124616_7B8B08.jpeg",
+     "width": 1536,
+     "height": 2048,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/DeltaDeltaDelta-min.jpg?itok=xkIsUm4s",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/delta-delta-delta.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Delta Gamma",
+   "slug": "delta-gamma",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-gamma",
+   "nickname": "DG, DeeGee",
+   "description": "Welcome to Delta Gamma — where sisterhood is real, hope is powerful, and doing good is simply our way of life. Since our founding over 140 years ago, we've believed in the strength of women coming together to lift each other up and make a difference. Here, friendship runs deep, purpose drives us forward, and every heart is encouraged to shine. We’re more than a sorority, we’re a home, a vision, and a lifelong bond. Welcome to Delta Gamma, where doing good starts with us.",
+   "facts": {
+    "Motto": "Do Good",
+    "Philanthropy": "Service for Sight",
+    "Colors": "Bronze, Pink and Blue",
+    "Symbols": "Anchor",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "January 28, 2017",
+    "National Founding Date": "December 25, 1873",
+    "Chapter Website": "http://www.iastate.deltagamma.org",
+    "National Website": "https://www.deltagamma.org/"
+   },
+   "quote": "Becoming a member of Delta Gamma has been nothing short of the best experience of my collegiate career. Through joining this chapter, I have gained over 100 sisters (and counting) who have taught me the true meaning of sisterhood and the impact of friendship. The women of Delta Gamma are strong, authentic, passionate, supportive, and by far the funniest people you will ever meet! We grow together and continually lift each other up, just as we promised when becoming members. Delta Gammas live by our fraternity’s values, foster meaningful bonds with one another, and continually strive to “Do Good” - and that is incredibly special to me!",
+   "quoteAuthor": "Shayne Manzer, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Everything is new! The house was completely renovated and newly furnished in August 2018. Delta Gamma offers suite style living of 2 to 3 bedroom suites, each with their own bathroom. Double and Triple occupancy is available."
+    },
+    {
+     "label": "Room Features",
+     "value": "All bedrooms are designed for 2 to 3 people with beds, desks, and a dresser included. The rooms have vinyl plank flooring and central air that is available in the entire house. There is also a private cleaning service and free laundry offered on our first"
+    },
+    {
+     "label": "Dining Features",
+     "value": "Lunch and dinner are provided Sunday through Thursday, with lunch on Friday. Additionally, a continental breakfast is offered daily, as well as a milk machine, juice machine, a snack bar and a salad bar. There are also two ice machines for members located"
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Our first floor includes a beautiful foyer, formal living room, the best lounge for hanging out, and our dining room. We also have a meeting/study space that offers a large conference table with countertop deskspace around the room with many chairs. There"
+    },
+    {
+     "label": "Parking",
+     "value": "16 parking spots are available for members."
+    },
+    {
+     "label": "Address",
+     "value": "313 Lynn Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-07/IMG_1102.jpeg",
+     "width": 1206,
+     "height": 895,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/DeltaGamma-min.jpg?itok=04tTTO8L",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/delta-gamma.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Delta Phi Lambda Sorority, Inc.",
+   "slug": "delta-phi-lambda-sorority-inc",
+   "council": "Multicultural Greek Council",
+   "academic": "",
+   "identity": "Asian/Pacific Islander",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-phi-lambda-sorority-inc",
+   "nickname": "DFL, DPhiL, Dedicated Female Leaders®, Ladies in Navy Blue & Silver",
+   "description": "Delta Phi Lambda is an Asian-Interest, but not Asian exclusive, sorority founded to provide sxsters with a home away from home. Delta Phi Lambda strives to develop members professionally and personally throughout their time as an undergraduate and after graduation. The sorority aims to positively impact the Asian community as well as the local community through service, activism, and leadership.",
+   "facts": {
+    "Motto": "Let Our Light Shine Forth",
+    "Philanthropy": "Osteoporosis Awareness and Prevention",
+    "Colors": "Navy Blue and Silver",
+    "Symbols": "Flower: Blue Rose, Stone: Jade, Animal: Butterfly",
+    "Council": "Multicultural Greek Council",
+    "Local Founding Date": "March 1, 2015",
+    "National Founding Date": "December 5, 1998",
+    "Chapter Website": "https://iastatedfl.wixsite.com/website",
+    "National Website": "http://www.deltaphilambda.org/"
+   },
+   "quote": "Delta Phi Lambda has played a significant role in shaping who I am today. As members of Delta Phi Lambda, we are presented with countless opportunities for personal and professional growth. We aim to empower strong, Dedicated Female Leaders®, and we are committed to our goal of making positive contributions and leaving a lasting impact, not only within our chapter and the sorority, but also at Iowa State University and beyond. In joining the Nu Chapter of Delta Phi Lambda, I’ve connected with an amazing group of hardworking, supportive women who together constitute our Everlasting Sisterhood®.",
+   "quoteAuthor": "Mina \"SIFIINA\" Funaba-O’Brien, 2024 Vice President of Finance",
+   "housing": [
+    {
+     "label": "Address",
+     "value": "0355 Memorial Union"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2024-03/DPHIL-min.JPG?itok=bJaPuuZV",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/delta-phi-lambda-sorority-inc.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Delta Sigma Theta Sorority Inc.",
+   "slug": "delta-sigma-theta-sorority-inc",
+   "council": "National Pan-Hellenic Council",
+   "academic": "",
+   "identity": "Black/African American",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-sigma-theta-sorority-inc",
+   "nickname": "",
+   "description": "Delta Sigma Theta Sorority, Inc. was founded January 13,1913 on the campus of Howard University by 22 women. Delta Sigma Theta Sorority, Inc. is an organization of college-educated women committed to the constructive development of its members and to public service with a primary focus on the Black Community. For more information see www.deltasigmatheta.org.",
+   "facts": {
+    "Colors": "Crimson and Cream",
+    "Council": "National Pan-Hellenic Council",
+    "Local Founding Date": "December 29, 1923"
+   },
+   "housing": [
+    {
+     "label": "Address",
+     "value": "0355 Memorial Union"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [],
+   "photo": null
+  },
+  {
+   "kind": "sorority",
+   "name": "Delta Zeta",
+   "slug": "delta-zeta",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/delta-zeta",
+   "nickname": "DZ",
+   "description": "Delta Zeta is a women's membership organization with a vision to truly inspire action and impact lives globally through philanthropy, scholarship, and service. Our 6 shared values of friendship, community, generosity, curiosity, empowerment, and belonging fuel our organization. Built upon true and lasting friendship, our sisterhood empowers and prepares members for their futures with the shared experiences and values we hold dear.",
+   "facts": {
+    "Motto": "Love that is ever steadfast",
+    "Philanthropy": "Starkey Hearing Foundation and SeriousFun Children's network",
+    "Colors": "Pink and Green",
+    "Symbols": "Turtle, killarney rose, roman lamp, diamond",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "September 12, 1931",
+    "National Founding Date": "October 24, 1902",
+    "Chapter Website": "http://dzbetakappa.wix.com/delta-zeta-isu",
+    "National Website": "http://www.deltazeta.org"
+   },
+   "quote": "Being a member of Delta Zeta has motivated me to strive for excellence and be the best version of myself. Being in a sorority has given me many amazing opportunities that I would not have been given otherwise. Serving as DZ’s chapter president has been a great experience for me. Every day I am learning something new. The women of this chapter have been so helpful and supportive every step of the way. Thank you, Delta Zeta for providing me a home away from home!",
+   "quoteAuthor": "2026 Chapter President, Olivia Nicrorata",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Dorm style: 2-4 man rooms"
+    },
+    {
+     "label": "Room Features",
+     "value": "Every woman gets their own desk, dresser, wardrobe/closet. Sleep in rooms only."
+    },
+    {
+     "label": "Dining Features",
+     "value": "24-hour access to kitchen with salad bar, toaster, refrigerator, air fryer, toaster oven, and blender. Receives lunch and dinner made by our wonderful chef M-F."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Access to the TV and movie rooms at all times. A back porch with couches and coffee table, multiple common rooms to hang out in and wireless internet. Free printing, two study rooms, and one interview room."
+    },
+    {
+     "label": "Parking",
+     "value": "17 parking spots"
+    },
+    {
+     "label": "Address",
+     "value": "2138 Sunset Drive"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-07/20250924_190419_50B01C_0.JPEG",
+     "width": 1080,
+     "height": 815,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/DeltaZeta-min.jpg?itok=-jCu5dbi",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/delta-zeta.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Gamma Phi Beta",
+   "slug": "gamma-phi-beta",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/gamma-phi-beta",
+   "nickname": "G Phi",
+   "description": "Gamma Phi Beta is a sisterhood dedicated to building strong girls and empowering women through lifelong friendships, leadership opportunities, and meaningful service. Our chapter is grounded in love, labor, learning, and loyalty, values that guide everything we do. We’re proud to create a supportive and inspiring space where every member can grow, lead, and thrive.",
+   "facts": {
+    "Motto": "Founded on a rock",
+    "Philanthropy": "Girls on the Run",
+    "Colors": "Brown, Mode, and Pink",
+    "Symbols": "Pink Carnation and Crescent Moon",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "December 21, 1918",
+    "National Founding Date": "November 11, 1874",
+    "Chapter Website": "https://omegagammaphibeta.weebly.com/",
+    "National Website": "http://www.gammaphibeta.org"
+   },
+   "quote": "Gamma Phi Beta has truly become the home away from home I never knew I needed. From the moment I joined, I was surrounded by women who not only love fiercely but who inspire me every single day with their drive, ambition, and kindness. Being a part of this chapter has been one of the most rewarding experiences of my life!",
+   "quoteAuthor": "Jillian Mayer, 2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Living arrangements for 60 members. Women must fulfill four consecutive semesters of living in. Room sizes range from double sleepers to 4-women rooms. Sisters have the option of sleeping in the room or in separate quarters, known as cold-airs."
+    },
+    {
+     "label": "Room Features",
+     "value": "All bedrooms are equipped with dressers, closet space, and desks."
+    },
+    {
+     "label": "Dining Features",
+     "value": "In-house members have access to 24-hour salad bar, continental breakfast with fruit, oatmeal, yogurt, and other breakfast essentials, and lunch provided M-F. All members are welcome to 5 pm dinner, prepared Monday through Thursday by our wonderful chef."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "The house has two smart TV’s and a craft room equipped with a printer. Beyond this, we have several social areas including a four-seasoned third-story porch called “the weej”."
+    },
+    {
+     "label": "Parking",
+     "value": "Gamma Phi Beta offers 20 parking spots for its members"
+    },
+    {
+     "label": "Address",
+     "value": "318 Pearson Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-07/3b3e4c65-2cb1-4262-9251-2df574b72b5c.jpg",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/GammaPhiBeta-min.jpg?itok=lo3SUkN8",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/gamma-phi-beta.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Gamma Rho Lambda",
+   "slug": "gamma-rho-lambda",
+   "council": "Multicultural Greek Council",
+   "academic": "",
+   "identity": "LGBTQIA+",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/gamma-rho-lambda",
+   "nickname": "GRL",
+   "description": "Gamma Rho Lambda is a multicultural LGBTQIA+ at Iowa State University. Gamma Rho Lambda works to help members become leaders and upstanding community members. We are here to create a safe space for students of LGBTQIA+ and allies community.",
+   "facts": {
+    "Motto": "\"Truth in tolerance, Knowledge through diversity, Bonds of unity, Strength in trust\"",
+    "Philanthropy": "Annual spring semester Pride Prom for the Trevor Project",
+    "Colors": "Purple and Black",
+    "Symbols": "Wolf and Sunflower",
+    "Council": "Multicultural Greek Council",
+    "Local Founding Date": "April 19, 2014",
+    "National Founding Date": "November 20th, 2003",
+    "Chapter Website": "http://www.facebook.com/grlomicron",
+    "National Website": "http://www.gammarholambda.org/"
+   },
+   "quote": "When I arrived at Iowa State, I felt lost in a new state and had a hard time finding my community. I didn't originally plan to join a Greek organization, but after attending a Gamma Rho Lambda recruitment event, I felt I had found my community. Since then, I have been a proud member of Gamma Rho Lambda. I'm so glad I was able to find a family in Gamma Rho Lambda.",
+   "quoteAuthor": "Theresa Lenberg, 2025 Treasurer and Programming Chair",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2025-04/IMG_4496_edited__2_.jpeg?itok=1eucB0B-",
+     "width": 1600,
+     "height": 1067,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/gamma-rho-lambda.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Kappa Alpha Theta",
+   "slug": "kappa-alpha-theta",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/kappa-alpha-theta",
+   "nickname": "Theta",
+   "description": "Kappa Alpha Theta was founded as the first Greek-letter fraternity known among women. The Gamma Pi chapter at Iowa State University was established on May 8, 1948. The members strive to uphold our values of personal excellence, intellectual curiosity, service, and leadership. These values represent the four points of the kite, the symbol of our sorority.",
+   "facts": {
+    "Motto": "Leading Women",
+    "Philanthropy": "CASA - Court Appointed Special Advocates",
+    "Colors": "Black & Gold",
+    "Symbols": "Kite, twin stars, black and gold pansies",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "May 8, 1948",
+    "National Founding Date": "January 27, 1870",
+    "Chapter Website": "https://www.kappaalphatheta.org/find-a-chapter/college-chapters/gamma-pi",
+    "National Website": "http://www.kappaalphatheta.org/"
+   },
+   "quote": "Kappa Alpha Theta has given me the home away from home that I craved for when entering college. The members are some of the most authentic, kind, funny, and free-spirited people that I have ever met. Since the day I joined, each member has pushed me to be the best possible version of myself, encouraging me to reach for goals I didn't think was possible. Kappa Alpha Theta has helped me grow as a leader, a student, but most importantly helped me grow more confidence in myself. Theta did not only give me the tools needed to succeed at Iowa State, but it also gave me a second family and relationships that I know I will have for a lifetime. I will forever be grateful I thought Theta.",
+   "quoteAuthor": "Lali Montes, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "1, 2, 3, and 4 person rooms"
+    },
+    {
+     "label": "Room Features",
+     "value": "Each room is furnished with a bed, a desk, a chair, dressers, and a closet. There is central air conditioning available throughout the whole house."
+    },
+    {
+     "label": "Dining Features",
+     "value": "24/7 access to kitchen and kitchenette. The kitchen is equipped with an oven, microwave, air fryer, dishwasher, toaster, and multiple coffee machines. Members have the option to have catering services provided through Hy-Vee."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "The facility provides a TV room, a study room with a free printer, a wellness room, a craft room, and multiple social spaces for members."
+    },
+    {
+     "label": "Parking",
+     "value": "Kappa Alpha Theta provides 19 spaces for its members."
+    },
+    {
+     "label": "Address",
+     "value": "2239 Knapp St."
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-07/Screenshot_23-7-2026_83817_www.instagram.com_.jpeg",
+     "width": 878,
+     "height": 848,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2025-02/KappaAlphaTheta-min%20%281%29.jpg?itok=ZQdC0CH2",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/kappa-alpha-theta.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Kappa Delta",
+   "slug": "kappa-delta",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/kappa-delta",
+   "nickname": "KayDee or KD",
+   "description": "Our five core values of Confidence, Sisterhood, Leadership, Academics, and Philanthropy are ingrained in all our campus involvement and sisterhood activities. Kappa Delta women strive to be an active member on campus and throughout our community. Above all else, Kappa Delta strives to inspire confidence in young women, and we do so through our community service work with our local Girl Scout troop.",
+   "facts": {
+    "Motto": "Let us strive for that which is honorable, beautiful, and highest.",
+    "Philanthropy": "ACEs 360",
+    "Colors": "Olive Green and Pearl White",
+    "Symbols": "Nautilus Shell, Dagger, Teddy Bear, White Rose",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "April 11, 1908",
+    "National Founding Date": "October 23, 1987",
+    "Chapter Website": "http://iastate.kappadelta.org/",
+    "National Website": "http://www.kappadelta.org"
+   },
+   "quote": "Friendship between women is a powerful force. Women supporting women has never been more important. It helps us grow, chase our dreams, and excel in college and beyond. Kappa Delta has been a transformative aspect of my life and college career, and I couldn't be more thankful to have joined this chapter. We focus not only on leadership and academic success but also on empowering girls and women to believe in themselves. Our sisterhood is all about lifting each other up and making a positive impact, which truly makes Kappa Delta special!",
+   "quoteAuthor": "Zoey Lohse, 2025 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Three styles of living; live-ins (dorm style), small colds, and large colds. Rooms are assigned based on preference and total points. Kitchenettes and renovated bathrooms are located on every floor."
+    },
+    {
+     "label": "Room Features",
+     "value": "Quads, triples, doubles, or singles. Bedrooms feature private closets, desks, desk chairs, and dressers that come with every room. Some rooms come with couches or private bathrooms, and members are free to decorate their living spaces however they please."
+    },
+    {
+     "label": "Dining Features",
+     "value": "24/7 Continental breakfast, salad/snack bar, and beverages available. Lunch is served Monday-Friday, and Dinner is served Monday-Thursday. Leftovers are stored and available on weekends."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Large basement with TV for watching movies/TV and hanging out, fully stocked craft room, lots of common areas on the first floor for hanging out, big backyard with patio and picnic tables, as well as study rooms in the basement and on the 2nd floor."
+    },
+    {
+     "label": "Parking",
+     "value": "9 spots available for in-house members and a designated spot for temporary parking."
+    },
+    {
+     "label": "Address",
+     "value": "2102 Sunset Drive"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-07/IMG_3139.jpeg",
+     "width": 1179,
+     "height": 1557,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/KappaDelta-min.jpg?itok=Z9mtg5g7",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/kappa-delta.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Kappa Kappa Gamma",
+   "slug": "kappa-kappa-gamma",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/kappa-kappa-gamma",
+   "nickname": "Kappa, KKG",
+   "description": "Delta Omicron Chapter was founded at Iowa State University in Ames, Iowa on May 18, 1946. We are a women’s organization thriving on tradition, leadership, academics and friendship. From participating in philanthropies that hit close to home to fun sisterhood activities, college is an opportunity to flourish and grow. Alone, each Kappa brings unique qualities to campus, but together we make a difference.",
+   "facts": {
+    "Motto": "Dream Boldly. Live Truly.",
+    "Philanthropy": "Kappa Kappa Gamma Foundation and Children's Miracle Network",
+    "Colors": "Light Blue and Dark Blue",
+    "Symbols": "Fleur De Lis, Iris, Owl, Sapphire, and Coat-of-Arms",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "May 18th, 1946",
+    "National Founding Date": "April 1, 1870",
+    "Chapter Website": "https://iastate.kappa.org/",
+    "National Website": "https://www.kappakappagamma.org/"
+   },
+   "quote": "Kappa Kappa Gamma has been shaping me into the type of woman I have always aspired to be since the moment I walked through the doors. Each day comes with learning something new through the connection with my sisters as we grow through college together. Our members bring their own unique talents and personalities to contribute to the continuous growth of this special Chapter. I am honored to be a part of this incredible organization every single day. Kappa Kappa Gamma members strive to form authentic relationships built on true friendship while pushing each other to be the best versions of ourselves. There is truly no place like KKG. It has taught me the most about myself in such a short amount of time and I wish my time here never had to end.",
+   "quoteAuthor": "Ana Jungerman, 2026 Chapter President",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "We have suite style rooms and communal bathrooms on the 2nd and 3rd floor. We have a total of 22 rooms, 11 rooms on each floor. We have a total of 60 beds."
+    },
+    {
+     "label": "Room Features",
+     "value": "We have a President's suite, 2-man rooms, 3-man rooms, and 4-man rooms. Each bedroom comes with a desk, bed, and chair."
+    },
+    {
+     "label": "Dining Features",
+     "value": "Lunch and dinner provided Monday through Thursday. Lunch only provided on Friday."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have a large craft room and a big TV room with large couches. We also have multiple study rooms."
+    },
+    {
+     "label": "Parking",
+     "value": "We have 15 parking spots at our facility along with spots at Saint Aquinas Parking Garage."
+    },
+    {
+     "label": "Address",
+     "value": "120 Lynn Ave, Ames, IA 50014"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2026-09/20260820_163248_860C60.JPEG",
+     "width": 1365,
+     "height": 2048,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/KappaKappaGamma-min.jpg?itok=3RpK9IXD",
+     "width": 1600,
+     "height": 976,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/kappa-kappa-gamma.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Lambda Theta Alpha Latin Sorority Inc.",
+   "slug": "lambda-theta-alpha-latin-sorority-inc",
+   "council": "Multicultural Greek Council",
+   "academic": "",
+   "identity": "Latina/o/x",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/lambda-theta-alpha-latin-sorority-inc",
+   "nickname": "LTA, Lambda Ladies",
+   "description": "The Zeta Gamma Chapter of Lambda Theta Alpha Latin Sorority, Inc., at Iowa State University, embodies the core values and commitments of the organization. With a foundational emphasis on education, our chapter prioritizes the academic success of our sisters, offering a range of resources and support systems to facilitate their growth. We foster personal and professional development, challenging our sisters to think critically about the world and equipping them with essential leadership and interpersonal skills. Committed to community activism, we advocate for social justice and equality. Lambda Theta Alpha promotes and demonstrates female independence through their members. These members represent various races, ethnicities, and backgrounds. Our sorority stands as a beacon of unity, love, and respect, dedicated to nurturing strong leaders who serve as voices for all students and agents of positive transformation in society.",
+   "facts": {
+    "Motto": "Latin By Tradition Not by Definition\", \"Universal Women. Redefining Sisterhood\", \"Women there are Many, Ladies there are Few\"",
+    "Philanthropy": "St. Jude Children's Research Hospital",
+    "Colors": "Burgundy and Grey",
+    "Symbols": "La Perla (pearl), La Concha (shell), La Luna (moon), y La Palma (Palm Tree)",
+    "Council": "Multicultural Greek Council",
+    "Local Founding Date": "April 13, 2014",
+    "National Founding Date": "December 1, 1975",
+    "Chapter Website": "https://ltazgchapter.wixsite.com/zgmade",
+    "National Website": "http://www.lambdalady.org"
+   },
+   "quote": "I am proud to belong to a sisterhood that values education, fosters personal and professional development, and champions community activism. Together, we stand as advocates for equality and positive change, embodying the spirit of unity, love, and respect in all that we do. Through our collective efforts, we strive to empower each other to reach our highest potential and make a lasting impact on our campus and beyond. It is these experiences which foster a lifetime of sisterhood that I am proud to represent!",
+   "quoteAuthor": "Kimberly Inarrito-Rodriguez, 2024 Chapter President",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2025-06/IMG_0334.JPG?itok=4D7pwFkf",
+     "width": 1600,
+     "height": 898,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/lambda-theta-alpha-latin-sorority-inc.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Lambda Theta Nu",
+   "slug": "",
+   "council": "Multicultural Greek Council",
+   "academic": "",
+   "identity": "Latina/o/x",
+   "religious": ""
+  },
+  {
+   "kind": "sorority",
+   "name": "Pi Beta Phi",
+   "slug": "pi-beta-phi",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/pi-beta-phi",
+   "nickname": "Pi Phi & Angels",
+   "description": "The Iowa Gamma Chapter was chartered in 1877 and was the first sorority on Iowa State's campus. Pi Beta Phi's values are integrity, lifelong commitment, honor and respect, philanthropic service to others, personal and intellectual growth, and sincere friendship. Our values are at the core of everything we do as Pi Phis and are part of what brings us together. This chapter is full of members who are passionate, ambitious, and determined to make an impact by being involved in both the Sorority and Fraternity Community as well as the ISU community and Ames community.",
+   "facts": {
+    "Motto": "Friends and Leaders for Life",
+    "Philanthropy": "Read; Lead; Achieve",
+    "Colors": "Wine & Silver Blue",
+    "Symbols": "Golden Arrow and official flower is the Wine Carnation",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "1877",
+    "National Founding Date": "April 28, 1867",
+    "Chapter Website": "https://iastate.pibetaphi.org/",
+    "National Website": "http://www.pibetaphi.org"
+   },
+   "quote": "Pi Beta Phi has given me countless memories, leadership opportunities and friends that will turn into lifelong friendships. Thinking back on the girl that came in as a Freshman to now the women of Pi Beta Phi have shaped me and challenged me to grow into a better woman and leader. Beyond friends within the Iowa Gamma chapter I have had the unique experience to meet Pi Phi’s from across the US and Canada. I am forever proud to wear the golden arrow and belong to the wine and silver blue.",
+   "quoteAuthor": "Isabel Wolf, 2025 Vice President of Recruitment",
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "single, double and triple room options are available for all members. Women also sleep in cold airs beds or can have an option to sleep in their rooms."
+    },
+    {
+     "label": "Room Features",
+     "value": "Each room has a desk, dresser, closet, and an option to have their bed in the room."
+    },
+    {
+     "label": "Dining Features",
+     "value": "Our Chef Linda serves lunch and dinner Monday through Thursday and lunch on Friday's. We also have a kitchenette that offers 24 hour access to leftovers, bread, cereal, and the salad bar."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "We have a movie room in the basement with plenty of room for a large group to hangout and watch a movies. We have a front lawn and patio where many members play yard games, hammock, do homework and hangout with one another!"
+    },
+    {
+     "label": "Parking",
+     "value": "Pi Phi offers 43 parking spots, on the side of the house along with renting spots from the church next door."
+    },
+    {
+     "label": "Address",
+     "value": "208 Ash Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/styles/width_limit/public/images/2026-07/20260426_203045_81CE34.jpeg?itok=eJY0ii6Q",
+     "width": 1600,
+     "height": 1069,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/PiBetaPhi-min.jpg?itok=8ydDkTng",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/pi-beta-phi.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Sigma Kappa",
+   "slug": "sigma-kappa",
+   "council": "Collegiate Panhellenic Council",
+   "academic": "",
+   "identity": "",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/sigma-kappa",
+   "nickname": "SK, Sig Kap",
+   "description": "The Alpha Epsilon chapter was founded in 1921 at Iowa State University. Our sisters make a bold commitment every day: we live with heart. This means committing ourselves to one another, the causes we believe in, and a shared dedication to seeking intellectual, spiritual, and social enlightenment throughout our lives. We are devoted to embodying the values of Sigma Kappa in everything we do. Our promise to exemplify personal growth, service, friendship, and loyalty is what makes Sigma Kappa stand apart. Living with heart makes us more compassionate individuals, leading purposeful lives rooted in a strong sense of character and values, which ultimately makes us who we are.",
+   "facts": {
+    "Motto": "One Heart, One Way",
+    "Philanthropy": "Sigma Kappa Foundation, Inherit the Earth, Gerontology, Maine Seascoast Mission, Alzheimers Association",
+    "Colors": "Maroon and Lavender",
+    "Symbols": "Dove and Heart",
+    "Council": "Collegiate Panhellenic Council",
+    "Local Founding Date": "1921",
+    "National Founding Date": "1854",
+    "Chapter Website": "http://iastate.sigmakappa.org/",
+    "National Website": "http://www.sigmakappa.org"
+   },
+   "housing": [
+    {
+     "label": "Style of living",
+     "value": "Sigma Kappa offers 1-4 person rooms with cold air sleeping arrangements"
+    },
+    {
+     "label": "Room Features",
+     "value": "Each room is unique in its own way. They either have built-in or moveable desks, full-size closets and/or extra storage space, personal heaters, and dressers."
+    },
+    {
+     "label": "Dining Features",
+     "value": "We offer chep prepared meals every week day for Lunch and Dinner. Members also have 24/7 access to a kitchentte which has a micorwave, air fryer, toaster, coffee bar, ice machine, fridges and snacks."
+    },
+    {
+     "label": "Entertainment Features",
+     "value": "Our chapter facility has multiple common spaces with flat screen tvs and comfortable seating. Additonally, we also have a newly furnished study room with a printer. Members can use any of our common spaces to spend time with sisters, study or relax."
+    },
+    {
+     "label": "Parking",
+     "value": "24 parking spots"
+    },
+    {
+     "label": "Address",
+     "value": "233 Gray Avenue"
+    },
+    {
+     "label": "Alcohol Status",
+     "value": "Prohibited: Alcohol is not permitted in the chapter facility"
+    }
+   ],
+   "photos": [
+    {
+     "src": "/files/images/2024-05/SK.jpeg",
+     "width": 1312,
+     "height": 2048,
+     "where": "feature"
+    },
+    {
+     "src": "/files/styles/width_limit/public/images/2024-08/SigmaKappa-min.jpg?itok=vL8RF5bL",
+     "width": 1600,
+     "height": 1067,
+     "where": "full"
+    }
+   ],
+   "photo": "/photos/greek/sigma-kappa.jpg"
+  },
+  {
+   "kind": "sorority",
+   "name": "Zeta Phi Beta Sorority Inc.",
+   "slug": "zeta-phi-beta-sorority-inc",
+   "council": "National Pan-Hellenic Council",
+   "academic": "",
+   "identity": "Black/African American",
+   "religious": "",
+   "sfeUrl": "https://sfe.dso.iastate.edu/chapter/zeta-phi-beta-sorority-inc",
+   "nickname": "Finer Women, Zetas, ZPHIB",
+   "description": "Zeta Phi Beta Sorority, Incorporated Upsilon Nu Chapter was chartered at Iowa State University in the Fall of 1988. Standing on the precepts of encouraging the highest standards of scholarship through scientific, literary, cultural, and educational programs. Zeta has always valued the pursuit of academic excellence, innovation, community progression, and civic change.",
+   "facts": {
+    "Motto": "A Community Conscious - Action Orientated Organization",
+    "Philanthropy": "March of Dimes, St. Jude Children's Research Hospital",
+    "Colors": "Royal Blue & White",
+    "Symbols": "White Dove",
+    "Council": "National Pan-Hellenic Council",
+    "Local Founding Date": "March 19th, 1988",
+    "National Founding Date": "January 16th, 1920",
+    "National Website": "http://zphib1920.org"
+   },
+   "quote": "To be a finer women of Zeta Phi Beta Sorority Inc. You must be willing to grow and change. In different seasons you must be willing to learn and teach. You’ll learn how to navigate who you are and the roles that you will play in this world; because a Zeta lady plays multiple and that’s just our nature. We are excellence striving for greater beyond the limits set.",
+   "quoteAuthor": "Teneill Childers, 2024-2025 Chapter Treasurer",
+   "housing": [],
+   "photos": [
+    {
+     "src": "/files/images/2024-07/ZETA_0.jpg",
+     "width": 1512,
+     "height": 909,
+     "where": "feature"
+    }
+   ],
+   "photo": "/photos/greek/zeta-phi-beta-sorority-inc.jpg"
+  }
+ ],
+ "councils": {
+  "cpc": {
+   "about": "When you join one of the Collegiate Panhellenic Council (CPC) sororities, you not only become a member of that particular chapter, you also become a member of the Panhellenic community. The Collegiate Panhellenic Council governs National Panhellenic Conference chapters and affiliate chapter membership on campus. Iowa State University CPC is a collective representative of 16 sororities on campus. Many of these organizations are inter/nationally governed by the National Panhellenic Conference, which serves as an umbrella organization for these organizations to provide support and advocacy for the advancement of the sorority experience.",
+   "details": "These organizations recruit members through a Primary Recruitment process, which occurs each fall before the start of classes, and through a Secondary Recruitment process, which is ongoing the entire school year. Fifteen of these organizations have a chapter facility located south of the Iowa State University campus. CPC has an executive board elected by their peers. The council acts as the central governing body for these sororities with support from the Office of Sorority and Fraternity Engagement. CPC is actively involved with chapter development, programs, and leadership opportunities for chapters and their members. The council coordinates campus and community resources, facilitates service projects, organizes recruitment and represents the ISU Panhellenic community at university, regional, and national meetings. CPC works with the Interfraternity Council, Multicultural Greek Council and National Pan-Hellenic Council to further the fraternity and sorority mission at Iowa State and collaborates on events and recruiting members to our sorority and fraternity community. There aren’t enough words to describe what Panhellenic means to myself and so many others. The privilege of connecting with and making friendships with so many women across different chapters is only part of what makes the Panhellenic experience so special. The opportunities you’ll have and the ways you will be able to grow and learn are invaluable. As a freshman, you would have never been able to tell me that I would gain so much from just signing up for recruitment and trusting the process. Zoey Lohse, 2026 Collegiate Panhellenic Council President Recruitment Programs Use the links here to register for Collegiate Panhellenic Council recruitment programs Interested in learning more?"
+  },
+  "ifc": {
+   "about": "The Iowa State University Interfraternity Council (IFC) is dedicated to enhancing the benefits of lifelong fraternal membership by supporting chapters and encouraging their members to develop intellectually, socially and professionally at Iowa State University, as alumni and as members of their community. We support chapters by organizing purposeful programming, providing opportunities for balanced growth and facilitating collaboration among IFC chapters, the Sorority and Fraternity community and Iowa State University.",
+   "details": "The Interfraternity Council (IFC) is made up of 30 fraternities on Iowa State's campus. These 30 organizations are home to over 1,900 undergraduate men at ISU. Many of these organizations are a part of the North-American Interfraternity Conference (NIC), a trade association that works to ensure fraternities can operate in an environment conducive to their success through advocacy, collaboration and education. Rich in traditions and history, 26 of the IFC fraternities have homes located south of the ISU campus. Fraternity chapter sizes range from 20-120 members and house capacity ranges from 29-89 beds. IFC organizations participate in informal recruitment 365 days a year. The 30 Interfraternity Council chapters are governed by a peer-elected undergraduate board of 12 officers. These IFC officers serve the community through leadership workshops, chapter development, service projects and recruitment. The Interfraternity Council is supported by the Office of Sorority and Fraternity and collaborates with the Collegiate Panhellenic Council, Multicultural Greek Council and National Pan-Hellenic Council through all-Greek initiatives, strategic planning and support of the fraternity and sorority community."
+  },
+  "mgc": {
+   "about": "The Multicultural Greek Council (MGC) on the Iowa State University campus was created as a vehicle to improve and create dialogue and collaboration between parallel-goaled organizations. Membership includes fraternities and sororities that have an element of cultural identity or awareness as the foundation of their membership.",
+   "details": "The Iowa State University Multicultural Greek Council (MGC) is home to six organizations, including two fraternities and four sororities. The Multicultural Greek Council serves to improve and create dialogue and cooperation between parallel-goaled organizations. Membership includes fraternities and sororities that have an element of cultural identity or awareness as a part of the organization including Latino/a/x, Asian/Pacific-Islander and LGBTQIA+. Membership remains open to people of all identities. Chapters within this council offer many opportunities for interested students. The Multicultural Greek Council is governed by peer-elected leaders who serve the community to create opportunities for collaboration, scholarship, community service events, promotional opportunities and programs for cultural awareness. The Multicultural Greek Council serves as the governing body to these seven organizations. Members collaborate with the Collegiate Panhellenic Council, Interfraternity Council and National Pan-Hellenic Council for all-Greek events and foster Greek unity."
+  },
+  "nphc": {
+   "about": "The National Pan-Hellenic Council (NPHC) is comprised of historically African-American fraternities and sororities on the campus of Iowa State University. Under NPHC, fraternities and sororities unite to participate in community service and philanthropic activities that include: highway clean-up, Boys and Girls Club and Habitat for Humanity. NPHC also participates in leadership programs, formal balls, informational sessions, and socials to both support communication among chapters and improve campus minority relations.",
+   "details": "Iowa State University is home to eight of the nine NPHC Organizations, which are often called the \"Divine Nine.\" This is a collaborative organization of historically African-American international Greek-lettered fraternities and sororities. Each organization was established on the tenets of brotherhood/sisterhood, high scholarship, leadership and service to others. ISU NPHC is home to two fraternities and all four sororities. The National Pan-Hellenic Council elects peers to serve in leadership roles to further the vision and mission of the NPHC organizations. These leaders promote scholarship, leadership and service to others through collaborative events, cultural awareness and promote other organizations and their events in their chapter, along with promoting University events. Collaboration with the Collegiate Panhellenic Council, Interfraternity Council and Multicultural Greek Council is an important way to promote the values and history of NPHC."
+  }
+ }
+}

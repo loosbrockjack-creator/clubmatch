@@ -4,11 +4,12 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import { ClubCard } from "@/components/club-card";
 import { clubs } from "@/lib/clubs";
 import { INTEREST_TILES, photoAlt, photoSrc } from "@/lib/photos";
+import { COUNCILS } from "@/lib/taxonomy";
 
 const steps = [
   {
-    title: "Answer five questions",
-    body: "Major, goals, career interests, time, and the kind of experience you want. Under a minute.",
+    title: "Answer six questions",
+    body: "Major, goals, career interests, time, the kind of experience you want, and whether Greek life is on the table. About a minute.",
   },
   {
     title: "Get a ranked shortlist",
@@ -28,6 +29,16 @@ const steps = [
  */
 const FEATURED_SLUGS = ["solar-car", "investment-group", "dubh"];
 
+/**
+ * One chapter per council style for range: a Panhellenic house, an IFC group
+ * shot, and an NPHC chapter. Missing slugs backfill from other chapters.
+ */
+const FEATURED_CHAPTERS = [
+  "delta-gamma",
+  "sigma-chi",
+  "kappa-alpha-psi-fraternity-inc",
+];
+
 export default function LandingPage() {
   const picked = FEATURED_SLUGS.map((slug) =>
     clubs.find((club) => club.slug === slug),
@@ -42,6 +53,18 @@ export default function LandingPage() {
             .filter((club) => !picked.some((p) => p.id === club.id))
             .slice(0, FEATURED_SLUGS.length - picked.length),
         ];
+
+  const chapters = clubs.filter((club) => club.greek);
+  const pickedChapters = FEATURED_CHAPTERS.map((slug) =>
+    chapters.find((club) => club.slug === slug),
+  ).filter((club) => club !== undefined);
+  const featuredChapters = [
+    ...pickedChapters,
+    ...chapters
+      .filter((club) => club.greek?.photo && !pickedChapters.includes(club))
+      .slice(0, FEATURED_CHAPTERS.length - pickedChapters.length),
+  ];
+  const housedCount = chapters.filter((club) => club.greek?.housed).length;
 
   return (
     <>
@@ -142,10 +165,55 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ---- Greek life ------------------------------------------------ */}
+      <section className="border-y border-line bg-muted">
+        <div className="shell py-16 sm:py-24">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <h2 className="display gold-rule text-[30px] text-ink sm:text-[38px]">
+                Greek life at Iowa State
+              </h2>
+              <p className="mt-4 text-[16px] leading-relaxed text-ink-soft">
+                {chapters.length} fraternities and sororities across four
+                councils. Compare housing, philanthropy, and how each one
+                recruits, in the chapters&apos; own words.
+              </p>
+            </div>
+            <dl className="grid grid-cols-3 gap-6 sm:flex sm:gap-10">
+              {[
+                { value: chapters.length, label: "Chapters" },
+                { value: COUNCILS.length, label: "Councils" },
+                { value: housedCount, label: "Houses" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <dt className="text-[12px] font-semibold uppercase tracking-[0.12em] text-ink-muted">
+                    {stat.label}
+                  </dt>
+                  <dd className="display mt-1 text-[30px] tabular-nums text-ink sm:text-[34px]">
+                    {stat.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredChapters.map((club) => (
+              <ClubCard key={club.id} club={club} />
+            ))}
+          </div>
+
+          <Link href="/greek" className="btn btn-secondary mt-10">
+            See all {chapters.length} chapters
+            <ArrowRight size={16} strokeWidth={2} aria-hidden />
+          </Link>
+        </div>
+      </section>
+
       {/* ---- Cardinal panel over photo --------------------------------- */}
       {/* Iowa State's signature block: a solid cardinal card offset over an  */}
       {/* image, rather than text laid on top of it.                         */}
-      <section className="shell pb-16 sm:pb-24">
+      <section className="shell py-16 sm:py-24">
         <div className="relative lg:grid lg:grid-cols-12 lg:items-center">
           <div className="on-cardinal panel-cardinal relative z-10 p-9 sm:p-12 lg:col-span-5 lg:col-start-1 lg:row-start-1">
             <p className="eyebrow">Not sure where to start?</p>
@@ -154,7 +222,7 @@ export default function LandingPage() {
             </h2>
             <p className="mt-5 text-[15px] leading-relaxed text-white/90">
               Scrolling {clubs.length} names in a directory is how good groups
-              get missed. Five questions gets you a ranked shortlist with the
+              get missed. Six questions get you a ranked shortlist with the
               reasoning shown, so you can tell a real fit from a long list.
             </p>
             <Link href="/match" className="btn btn-on-cardinal mt-8">

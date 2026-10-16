@@ -7,6 +7,7 @@ const columns = [
     links: [
       { href: "/match", label: "Take the quiz" },
       { href: "/explore", label: "Browse all clubs" },
+      { href: "/greek", label: "Greek life" },
       { href: "/saved", label: "Saved clubs" },
     ],
   },
@@ -14,6 +15,7 @@ const columns = [
     heading: "Iowa State",
     links: [
       { href: "https://www.stuorg.iastate.edu/", label: "Student organizations" },
+      { href: "https://sfe.dso.iastate.edu/", label: "Sorority and Fraternity Engagement" },
       { href: "https://www.student.iastate.edu/", label: "Student life" },
       { href: "https://www.iastate.edu/", label: "iastate.edu" },
     ],
@@ -33,10 +35,11 @@ export function SiteFooter() {
 
         <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
           <p className="max-w-sm text-[14px] leading-relaxed text-white/85">
-            A student project, not an official university service. It covers all{" "}
-            {clubs.length} organizations in Iowa State&apos;s student
-            organization directory. Fit scores and category tags are ours, so
-            check a group&apos;s own page before you show up.
+            A student project, not an official university service. It covers{" "}
+            {clubs.length} organizations from Iowa State&apos;s student
+            organization directory and its Sorority and Fraternity Engagement
+            office. Fit scores and category tags are ours, so check a
+            group&apos;s own page before you show up.
           </p>
 
           {columns.map((column) => (
@@ -78,8 +81,8 @@ export function SiteFooter() {
       <div className="bg-cardinal-deep">
         <div className="shell py-5">
           <p className="text-[12.5px] text-white/70">
-            Built for ENTSP 3100 at Iowa State University. Photography from
-            Pexels.
+            Built for ENTSP 3100 at Iowa State University. Club photography
+            from Pexels; chapter photos from each chapter&apos;s SFE page.
           </p>
         </div>
       </div>
