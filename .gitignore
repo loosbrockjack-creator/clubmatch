@@ -46,3 +46,7 @@ __pycache__/
 
 # local design reference captures (large, not needed for build)
 /active/research/references/real/
+
+# contact data (personal info), never commit
+/active/leads/
+/active/research/outreach/
