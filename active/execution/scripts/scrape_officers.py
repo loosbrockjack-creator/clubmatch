@@ -5,27 +5,40 @@ Public data only: the StuOrg officers table embeds each officer's ISU email in
 the directory link href (info.iastate.edu/search?s=<email>). No login, no POSTs,
 no joins, no messages. Read-only GETs with a polite delay.
 
-Out: active/research/outreach/officers_raw.json
+Resumable: each club is appended to a .jsonl checkpoint as it completes, so an
+interrupted run picks up where it stopped instead of refetching everything.
+Logging is aggregate by design: a progress line every N clubs, one line per
+failure, and a summary at the end. At several hundred clubs, per-club success
+logging is thousands of lines nobody reads.
+
+  python3 scrape_officers.py [--input pilot_clubs.json] [--delay 1.0]
+                             [--progress-every 25] [--restart]
 """
-import json, re, html, time, urllib.request, urllib.error, pathlib, sys
+import argparse, json, re, html, time, urllib.request, urllib.error, pathlib, sys, collections
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-PILOT = ROOT / "research/outreach/pilot_clubs.json"
-OUT = ROOT / "research/outreach/officers_raw.json"
+OUTDIR = ROOT / "research/outreach"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/155.0 Safari/537.36")
-DELAY = 1.0
 
 
-def get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return r.read().decode("utf-8", "replace"), r.getcode()
-    except urllib.error.HTTPError as e:
-        return "", e.code
-    except Exception as e:
-        return "", f"ERR {e}"
+def log(msg):
+    print(msg, file=sys.stderr, flush=True)
+
+
+def get(url, retries=2):
+    for attempt in range(retries + 1):
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read().decode("utf-8", "replace"), r.getcode()
+        except urllib.error.HTTPError as e:
+            return "", e.code
+        except Exception as e:
+            if attempt == retries:
+                return "", f"ERR {e}"
+            time.sleep(2 * (attempt + 1))
+    return "", "ERR unreachable"
 
 
 def strip_tags(s):
@@ -36,7 +49,6 @@ def strip_tags(s):
 
 OFFICER_ROW = re.compile(
     r"(?is)<tr(?P<attrs>[^>]*)>\s*<th[^>]*>(?P<role>.*?)</th>\s*<td[^>]*>(?P<cell>.*?)</td>\s*</tr>")
-EMAIL_IN_HREF = re.compile(r"(?i)info\.iastate\.edu/search\?s=([^\"'&>\s]+)")
 ANCHOR = re.compile(r"(?is)<a[^>]*>(.*?)</a>")
 # one directory anchor = one person: captures (email, inner name markup)
 PERSON = re.compile(r'(?is)<a[^>]*href="[^"]*?info\.iastate\.edu/search\?s=([^"&]+)[^"]*"[^>]*>(.*?)</a>')
@@ -100,45 +112,99 @@ def parse_extras(h):
     return out
 
 
+def scrape_club(c, delay):
+    base = c["stuorgUrl"].rstrip("/")
+    rec = dict(c)
+    rec["officers_url"] = base + "/officers"
+
+    oh, ocode = get(rec["officers_url"]); time.sleep(delay)
+    rec["officers_http"] = ocode
+    rec["officers"] = parse_officers(oh) if oh else []
+
+    home, hcode = get(base); time.sleep(delay)
+    rec["home_http"] = hcode
+    rec["description"] = ""
+    if home:
+        rec.update(parse_extras(home))
+        mm = re.search(r"(?is)<main.*?</main>", home)
+        rec["description"] = strip_tags(mm.group(0))[:600] if mm else ""
+        cm = re.search(r"(?is)CONTACT\s*</[^>]+>(.*?)</(?:div|footer|section)>", home)
+        rec["contact_block"] = strip_tags(cm.group(1))[:300] if cm else ""
+
+    info, icode = get(base + "/information"); time.sleep(delay)
+    rec["information_http"] = icode
+    if info:
+        for k, v in parse_extras(info).items():
+            rec[k] = sorted(set(rec.get(k, []) or []) | set(v))[:4]
+    return rec
+
+
 def main():
-    clubs = json.loads(PILOT.read_text())
-    results = []
-    for i, c in enumerate(clubs, 1):
-        base = c["stuorgUrl"].rstrip("/")
-        rec = dict(c)
-        rec["officers_url"] = base + "/officers"
-        print(f"[{i}/{len(clubs)}] {c['name']}", file=sys.stderr)
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--input", default=str(OUTDIR / "pilot_clubs.json"))
+    ap.add_argument("--out", default=str(OUTDIR / "officers_raw.json"))
+    ap.add_argument("--delay", type=float, default=1.0)
+    ap.add_argument("--progress-every", type=int, default=25)
+    ap.add_argument("--restart", action="store_true", help="ignore the checkpoint and refetch everything")
+    a = ap.parse_args()
 
-        oh, ocode = get(rec["officers_url"]); time.sleep(DELAY)
-        rec["officers_http"] = ocode
-        rec["officers"] = parse_officers(oh) if oh else []
+    out = pathlib.Path(a.out)
+    ckpt = out.with_suffix(".partial.jsonl")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if a.restart and ckpt.exists():
+        ckpt.unlink()
 
-        home, hcode = get(base); time.sleep(DELAY)
-        rec["home_http"] = hcode
-        rec["description"] = ""
-        if home:
-            rec.update(parse_extras(home))
-            # club description = first long paragraph of visible text
-            txt = strip_tags(re.search(r"(?is)<main.*?</main>", home).group(0)) if re.search(r"(?is)<main.*?</main>", home) else ""
-            rec["description"] = txt[:600]
-            # the StuOrg "CONTACT" footer block
-            cm = re.search(r"(?is)CONTACT\s*</[^>]+>(.*?)</(?:div|footer|section)>", home)
-            rec["contact_block"] = strip_tags(cm.group(1))[:300] if cm else ""
+    clubs = json.loads(pathlib.Path(a.input).read_text())
 
-        info, icode = get(base + "/information"); time.sleep(DELAY)
-        if info:
-            ex = parse_extras(info)
-            for k, v in ex.items():
-                rec[k] = sorted(set(rec.get(k, []) or []) | set(v))[:4]
-        rec["information_http"] = icode
-        results.append(rec)
+    done = {}
+    if ckpt.exists():
+        for line in ckpt.read_text().splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+                done[r.get("slug") or r.get("stuorgUrl")] = r
+            except json.JSONDecodeError:
+                continue          # a torn last line from a hard kill
+        log(f"resuming: {len(done)} of {len(clubs)} clubs already scraped")
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(results, indent=1))
-    tot = sum(len(r["officers"]) for r in results)
+    todo = [c for c in clubs if (c.get("slug") or c.get("stuorgUrl")) not in done]
+    log(f"scraping {len(todo)} clubs (delay {a.delay}s, ~{len(todo)*3*a.delay/60:.0f} min)")
+
+    failures = []
+    t0 = time.time()
+    with ckpt.open("a") as fh:
+        for i, c in enumerate(clubs, 1):
+            key = c.get("slug") or c.get("stuorgUrl")
+            if key in done:
+                continue
+            rec = scrape_club(c, a.delay)
+            fh.write(json.dumps(rec) + "\n"); fh.flush()
+            done[key] = rec
+            if rec["officers_http"] != 200 or not rec["officers"]:
+                failures.append((c["name"], rec["officers_http"], len(rec["officers"])))
+                log(f"  FAIL {c['name'][:46]}: officers_http={rec['officers_http']} rows={len(rec['officers'])}")
+            if len(done) % a.progress_every == 0:
+                rate = (time.time() - t0) / max(1, len(done) - (len(clubs) - len(todo)))
+                left = (len(clubs) - len(done)) * rate
+                log(f"  [{len(done)}/{len(clubs)}] {len(failures)} failures, ~{left/60:.0f} min left")
+
+    results = [done[c.get("slug") or c.get("stuorgUrl")] for c in clubs
+               if (c.get("slug") or c.get("stuorgUrl")) in done]
+    out.write_text(json.dumps(results, indent=1))
+
+    rows = sum(len(r["officers"]) for r in results)
     withem = sum(1 for r in results for o in r["officers"] if o["email"] and not o["vacant"])
-    print(f"\nclubs={len(results)} officer_rows={tot} rows_with_email={withem}", file=sys.stderr)
-    print(f"wrote {OUT}", file=sys.stderr)
+    codes = collections.Counter(str(r["officers_http"]) for r in results)
+    log("")
+    log(f"clubs={len(results)} officer_rows={rows} rows_with_email={withem}")
+    log(f"officers_http: {dict(codes)}")
+    log(f"clubs with zero officers listed: {sum(1 for r in results if not r['officers'])}")
+    log(f"failures: {len(failures)}")
+    log(f"elapsed: {(time.time()-t0)/60:.1f} min")
+    log(f"wrote {out}")
+    log(f"checkpoint kept at {ckpt} (delete it to force a clean refetch)")
 
 
 if __name__ == "__main__":
