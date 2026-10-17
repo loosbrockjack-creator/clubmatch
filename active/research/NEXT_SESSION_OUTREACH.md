@@ -78,11 +78,27 @@ build_workbook.py     ->  ../../leads/clubmatch_exec_contacts.xlsx
 `run_pipeline.sh <scope>` runs all five and logs to `active/research/outreach/logs/`.
 
 ## The remaining task: sharded reviewer loop
-The pilot used one reviewer over 215 rows. At roughly 2,850 rows, **shard by college**:
-7 reviewers, about 50 clubs each, each returning a short verdict. Reasons: a single
-reviewer reading everything gives a vaguer verdict, and the reading cost should stay in
-the subagent's context rather than the main one. Maximum 3 rounds, same as the pilot.
-Anything still failing after round 3 goes to the `Needs Review` tab, never the main sheet.
+The pilot used one reviewer over 215 rows. The main sheet now holds **2,259 rows**, so
+**shard by college**: 7 reviewers, one per college, each returning a short verdict. A
+single reviewer reading everything gives a vaguer verdict, and the reading cost should
+stay in the subagent's context rather than the main one. Maximum 3 rounds, same as the
+pilot. Anything still failing after round 3 goes to the `Needs Review` tab, never the
+main sheet.
+
+The slices are uneven, so Engineering and Agriculture are the heavy ones:
+
+| College | Clubs | Contacts |
+|---|---|---|
+| College of Agriculture and Life Sciences | 72 | 513 |
+| College of Design | 26 | 161 |
+| College of Engineering | 84 | 602 |
+| College of Health and Human Sciences | 30 | 182 |
+| College of Liberal Arts and Sciences | 60 | 322 |
+| College of Veterinary Medicine | 29 | 273 |
+| Ivy College of Business | 31 | 206 |
+
+The 215 pilot rows inside these slices already passed two reviewer rounds. Everything
+else is unreviewed.
 
 Each reviewer must check, for its slice:
 1. Iowa State only. Any non ISU contact or any link to another university's domain is a
