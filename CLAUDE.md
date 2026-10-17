@@ -18,6 +18,13 @@ Read these files in order:
 
 Also inspect all files in `active/research/references/visuals/` before finalizing major UI surfaces.
 
+## Outreach workstream (separate from the app build)
+There is a second workstream building an Iowa State club exec board contact list for
+outreach. If the task involves contacts, leads, outreach, or the exec board spreadsheet,
+read `active/research/NEXT_SESSION_OUTREACH.md` first, then `OUTREACH.md` at the repo
+root for the rules. Its hard rule is Iowa State only. Do not commit contact data: the
+repo is public and `active/leads/` is gitignored.
+
 ## Product goal
 Build a polished working MVP that helps Iowa State students discover **academic and professional clubs that fit them** based on major, goals, career interests, preferred club experience, and time commitment.
 
