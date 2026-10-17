@@ -166,7 +166,11 @@ def main():
     r = 1
     ws4.cell(row=r, column=1, value="ClubMatch | Iowa State Exec Board Contact List").font = TITLE_F
     r += 1
-    ws4.cell(row=r, column=1, value=f"Built {today}  |  Pilot set: 25 academic and professional clubs").font = MUTED_F
+    colleges = sorted({c["college"] for c in clubs if c.get("college")})
+    scope = (f"{len(clubs)} academic and professional clubs across "
+             f"{len(colleges)} colleges" if len(clubs) > 40
+             else f"Pilot set: {len(clubs)} academic and professional clubs")
+    ws4.cell(row=r, column=1, value=f"Built {today}  |  {scope}").font = MUTED_F
     r += 2
 
     def section(label):
@@ -184,7 +188,7 @@ def main():
         r += 1
 
     section("Summary")
-    kv("Clubs in this pilot", f"=COUNTA(Clubs!$A$2:$A${1+len(clubs)})")
+    kv("Clubs covered", f"=COUNTA(Clubs!$A$2:$A${1+len(clubs)})")
     kv("Verified contacts", f"=COUNTA(Contacts!$D$2:$D${1+len(contacts)})")
     kv("Rows needing review", f"=COUNTA('Needs Review'!$D$3:$D${2+len(review)})")
     kv("Clubs with at least one verified contact",
@@ -229,7 +233,7 @@ def main():
 
     section("Limits and cautions")
     kv("Officer turnover", "Exec boards turn over every spring. Student rows go stale within a semester or two. "
-                           "Re-run the scripts in active/execution/scripts/ to refresh.")
+                           "Re-run active/execution/scripts/run_pipeline.sh to refresh.")
     kv("Staleness is already visible", "The Needs Review tab holds people a club still lists who no longer appear in "
                                        "the ISU directory. That is the clearest signal a club's page is out of date.")
     kv("Student privacy", "These are student email addresses. Keep this file inside the group, do not republish it, "

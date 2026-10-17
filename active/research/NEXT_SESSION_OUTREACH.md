@@ -20,24 +20,38 @@ and get clubs onto ClubMatch.
 context reviewer rounds both returned PASS. Backup of the pilot output is in
 `active/research/outreach/pilot_backup/`.
 
-**Full run: launched 2026-10-17 around 18:03, scope `core` (332 clubs, the 7 colleges).**
-It was started detached, so it kept running after that session ended.
+**Full run: COMPLETE.** Finished 2026-10-17 at 18:36, scope `core` (332 clubs, the 7
+colleges). You do not need to re-run anything. Results:
 
-### First thing to do: check whether it finished
-```bash
-cd "$HOME/Desktop/School/Academic Club App (CC)"
-tail -16 active/research/outreach/logs/latest.log
-```
-- A line `=== HH:MM:SS DONE` means all five steps completed.
-- A line `=== HH:MM:SS FAILED at <step> (exit N)` means it stopped there.
-- Neither, and a `scrape_officers.py` or `verify_directory.py` process still in `ps`,
-  means it is still working. Expect about 1 hour end to end.
+| Metric | Full run | Pilot |
+|---|---|---|
+| Clubs | 332 | 25 |
+| Verified contacts | **2,259** | 215 |
+| Needs Review | 94 | 12 |
+| Verification rate | **96.0%** | 94.7% |
+| Clubs with a verified contact | 327 / 332 | 25 / 25 |
+| Clubs with a president | 324 / 332 | 25 / 25 |
+| Clubs with an advisor | 327 / 332 | 25 / 25 |
+| Advisors (durable) | 433 | 37 |
+| Role-based club inboxes | 124 / 332 | 10 / 25 |
+| Non Iowa State contacts | **0** | 0 |
 
-If it died partway, just run it again. **Every step is resumable** and will skip
-completed work:
-```bash
-nohup bash active/execution/scripts/run_pipeline.sh core > /dev/null 2>&1 &
-```
+An aggregate audit of the output came back clean: all 2,353 addresses are `@iastate.edu`,
+zero malformed, zero blank required fields, zero duplicate (club, email) pairs, zero rows
+on the main sheet that are not directory verified, and no non-ISU `.edu` link anywhere in
+the Clubs tab. Workbook structure verified: 2,260 / 333 / 96 rows per tab, all 2,259
+mailto links present, formula ranges scaled correctly, no club name contains a COUNTIF
+wildcard character. 349 KB.
+
+**5 clubs have no contacts** because their StuOrg officers page lists no officers at all
+(two of them return 403 and 404). They appear on the Clubs tab with no verified contact,
+which is correct behavior, not a bug:
+Cardinal Key Honor Society, History Club, State Sideline Collective, Economics Club,
+Medical Sales Club.
+
+**What has NOT been done: the reviewer loop.** That is the remaining task, described below.
+The pilot's 215 rows passed two reviewer rounds, but the 2,044 rows added by the full run
+have had only the automated aggregate audit above, not an independent review.
 
 ## How the data is obtained (do not re-derive this)
 StuOrg officer pages are **public**, no login needed. Each officer's name links to the
