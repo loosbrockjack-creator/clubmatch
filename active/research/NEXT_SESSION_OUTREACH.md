@@ -25,7 +25,7 @@ It was started detached, so it kept running after that session ended.
 
 ### First thing to do: check whether it finished
 ```bash
-cd "~/Desktop/School/Academic Club App (CC)"
+cd "$HOME/Desktop/School/Academic Club App (CC)"
 tail -16 active/research/outreach/logs/latest.log
 ```
 - A line `=== HH:MM:SS DONE` means all five steps completed.
