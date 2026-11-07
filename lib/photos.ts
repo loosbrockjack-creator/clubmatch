@@ -12,6 +12,8 @@
  * Files live in public/photos and are hand-picked Pexels images, free license.
  */
 
+import { approvedCoverForClub } from './approved-covers';
+
 export type PhotoKey =
   | "hero"
   | "academics"
@@ -169,12 +171,17 @@ function keyForClub(club: { college: string; categories: string[] }): PhotoKey {
  * while different clubs sharing a pool spread across its variants.
  */
 export function photoForClub(club: {
+  id?: string;
   slug: string;
   name?: string;
   college: string;
   categories: string[];
   greek?: { photo: string | null };
-}): { key: PhotoKey; variant: number; src: string; alt: string; own: boolean } {
+}): { key: PhotoKey; variant: number; src: string; alt: string; own: boolean; credit?: string } {
+  const approved = approvedCoverForClub(club);
+  if (approved) {
+    return { key: 'community', variant: 0, src: approved.src, alt: approved.alt, own: approved.type === 'official_photo', credit: approved.attributions?.join(' · ') };
+  }
   // Greek chapters use the photo they posted on their SFE page. Chapters
   // without one use the generic pool, never "culture": that pool shows
   // performers in regalia, which reads wrong for a fraternity or sorority.

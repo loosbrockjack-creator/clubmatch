@@ -350,3 +350,21 @@ shown at all. Instagram links SFE lists are captured. `transform.py` repairs
 double-encoded text (em dashes showing as "â€”") and fails the build if any
 mangled characters or dashes remain. `/match?step=greek` opens the Greek
 question directly for students whose saved answers predate it.
+
+### 2026-11-07 — Local cover-production pilot
+
+Added `tools/covers/` inside the existing repository. It ingests real club IDs, plans grounded recipes, checks batch diversity, stores versioned candidates, gates campus references on scoped rights evidence, and serves a local human-review studio. `data/cover-manifest.json` is empty; `NEXT_PUBLIC_APPROVED_COVERS` defaults off. Existing production imagery and Greek mappings remain unchanged. Staging export is separate from publishing.
+
+The 20-club development run uses deterministic recipes and labeled diagnostic graphics. Real model adapters have contract tests but have not made paid calls. No API credentials/budget are configured; the photo permission terms and individual approved Greek originals still need to be provided. See `active/research/covers/Visual_Decisions.md`, `Pilot_Evaluation.md`, and `tools/covers/README.md`. The team’s open subscription/upload/disclosure decisions are preserved.
+
+### 2026-11-07 — Continuation audit and readiness reporting
+
+Recovered draft PR #1 at `3001dd3` and its matching clean local checkout. The original ignored pilot state survived (20 briefs, 20 diagnostic candidates, 59 frozen chapters, 20 local photo records, zero approvals/paid ledger entries). Added a read-only `covers:preflight` operator report and ignored alternate `.cover-work-*` homes so the documented real-run path does not expose private work to Git. Existing art direction, production integration, club sources, Greek mappings and approvals remain unchanged. See `active/research/covers/history/Continuation_Audit.md` for fresh verification limits and the proposed three-image test before 20.
+
+### 2026-11-07 — User-approved Studio retirement
+
+The preceding Studio setup/checkpoint entries are historical. The user approved cleanup after a dependency audit. Removed the retired local dashboard/server and generation CLI, mock fixtures, paid-provider adapters and pipeline tests from `tools/covers/`; removed all six `covers:*` package commands. The original implementation is archived on `archive/cover-studio-2026-11-07` at `10783bdacb5ae0bfaa9c81ea77dd3ac1f2a49f2c`. Former setup handoff, pilot briefs and evaluations now live in `active/research/covers/history/`.
+
+Kept the website resolver, manifest, attribution rendering, default-off feature flag, Greek exclusions, photo fallbacks, `sharp`, and private-work ignore rules. Moved the website resolver test to `tests/approved-covers.test.mjs` and replaced its old Studio import with a module-relative repository path. Run it via `npm run test:cover-manifest`.
+
+Current cover status is in `active/research/covers/README.md`. The ChatGPT-only revision policy remains separate from Claude's website instructions. Private images, club register, full stock-photo collection and Claude import folder are not deleted or published by cleanup. No production deployment or new 700-image automation is authorized by this change; automation design is a later workstream.

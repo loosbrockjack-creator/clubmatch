@@ -54,3 +54,7 @@ __pycache__/
 # scrape checkpoints and run logs
 *.partial.jsonl
 /active/research/outreach/logs/
+
+# Local cover jobs, permission evidence, source photos and unpublished artwork.
+/.cover-work/
+/.cover-work-*/
