@@ -350,3 +350,9 @@ shown at all. Instagram links SFE lists are captured. `transform.py` repairs
 double-encoded text (em dashes showing as "â€”") and fails the build if any
 mangled characters or dashes remain. `/match?step=greek` opens the Greek
 question directly for students whose saved answers predate it.
+
+### 2026-11-07 — Local cover-production pilot
+
+Added `tools/covers/` inside the existing repository. It ingests real club IDs, plans grounded recipes, checks batch diversity, stores versioned candidates, gates campus references on scoped rights evidence, and serves a local human-review studio. `data/cover-manifest.json` is empty; `NEXT_PUBLIC_APPROVED_COVERS` defaults off. Existing production imagery and Greek mappings remain unchanged. Staging export is separate from publishing.
+
+The 20-club development run uses deterministic recipes and labeled diagnostic graphics. Real model adapters have contract tests but have not made paid calls. No API credentials/budget are configured; the photo permission terms and individual approved Greek originals still need to be provided. See `active/research/covers/Visual_Decisions.md`, `Pilot_Evaluation.md`, and `tools/covers/README.md`. The team’s open subscription/upload/disclosure decisions are preserved.

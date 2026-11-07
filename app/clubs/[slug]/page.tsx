@@ -245,6 +245,7 @@ export default async function ClubDetailPage({
           className={`object-cover ${photo.own ? "object-[50%_30%]" : "object-[50%_40%]"}`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-black/10" />
+        {photo.credit ? <p className="absolute right-3 top-3 max-w-[80%] rounded bg-white/95 px-2 py-1 text-[11px] text-ink">{photo.credit}</p> : null}
       </div>
 
       <div className="shell pb-8">

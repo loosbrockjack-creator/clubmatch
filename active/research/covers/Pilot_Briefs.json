@@ -1,0 +1,759 @@
+{
+  "mode": "deterministic development recipes, not AI-generated",
+  "briefs": [
+    {
+      "clubId": "2541",
+      "name": "3D Printing and Design",
+      "description": "Designing 3D models on the computer is one thing, but turning those models into real objects can be a whole other world! 3D printers are becoming more and more practical, and can be very useful for engineers, designers, and entrepreneurs. This club will learn about and practice using 3D printers, while meeting others with the same interests.",
+      "categories": [
+        "Design",
+        "Engineering",
+        "Intercollegiate",
+        "Special Interest"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/2541",
+      "sourceHash": "23488f4d0a687dbf974edd81c72e27d7008b8ea14c12f9edb05b048f9da5a54e",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "object_closeup",
+        "subject": "A desktop 3D printer forming a simple geometric object",
+        "setting": "open university makerspace",
+        "framing": "low close-up",
+        "people_count": 0,
+        "palette_accent": "terracotta",
+        "anchor": "equipment",
+        "grounded_evidence": [
+          "3D printers"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative equipment theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "3015",
+      "name": "Algorithmic Trading Club",
+      "description": "The purpose of the Algorithmic Trading Club (ATC) at Iowa State University is to provide a collaborative environment where students can explore, develop, and apply algorithmic trading strategies. The club aims to: 1. Foster an understanding of algorithmic trading concepts, financial markets, and quantitative methods. 2. Offer hands-on opportunities for members to develop trading algorithms and conduct simulated trading activities. 3. Facilitate learning through workshops, guest lectures, and collaborative projects. 4. Promote ethical practices in algorithmic trading and compliance with relevant regulations. 5. Build a community of like-minded individuals interested in financial technology, data analytics, and trading systems.",
+      "categories": [
+        "Business",
+        "Engineering",
+        "Liberal Arts & Sciences",
+        "Special Interest"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/3015",
+      "sourceHash": "4117f3474d0b5d8fc4e303fb98630fb9a7b1be3e56adac5c7231d27164c866e2",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "people_action",
+        "subject": "One student testing an abstract trading simulation on a laptop",
+        "setting": "quiet computing workspace",
+        "framing": "over-the-shoulder",
+        "people_count": 1,
+        "palette_accent": "slate blue",
+        "anchor": "simulation",
+        "grounded_evidence": [
+          "simulated trading activities"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative simulation theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "isuinvestmentgroup",
+      "name": "Investment Group",
+      "description": "To provide an opportunity for students from all areas of the university to learn first-hand the investment process. Through the managing of a real portfolio, members will have an educational opportunity to explore the field of finance and investments. Members will have an opportunity to strengthen research, leadership, and public speaking skills through active participation in this student-run organization.",
+      "categories": [
+        "Business",
+        "Intercollegiate"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/isuinvestmentgroup",
+      "sourceHash": "d0d51205b7811acef03767c65fb3fb7562d0188b11d3e9cc6d24a38c2c9ab9ea",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "object_closeup",
+        "subject": "Unlabeled portfolio research notes with abstract allocation shapes",
+        "setting": "sunlit study desk",
+        "framing": "top-down flat lay",
+        "people_count": 0,
+        "palette_accent": "forest green",
+        "anchor": "portfolio",
+        "grounded_evidence": [
+          "managing of a real portfolio"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative portfolio theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "isuagbus",
+      "name": "Agricultural Business Club",
+      "description": "The Agricultural Business represents students in the department of economics with a major in Ag Business.",
+      "categories": [
+        "Agriculture & Life Sciences"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/isuagbus",
+      "sourceHash": "f432fd475fc563c68238aa9e779bf32d535bc5b83b245694a6f95ed5b76c779d",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "symbolic",
+        "subject": "Grain forms paired with abstract economic balance shapes",
+        "setting": "cream paper field",
+        "framing": "asymmetric cutaway",
+        "people_count": 0,
+        "palette_accent": "ochre",
+        "anchor": "economics",
+        "grounded_evidence": [
+          "major in Ag Business"
+        ],
+        "grounding_confidence": "low",
+        "why_this_image": "A representative economics theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "isupac",
+      "name": "Physics and Astronomy Club",
+      "description": "We provide undergraduate and graduate students interested in physics and astronomy with reference materials, work stations, support, and just plain old fun. We also organize events to teach K-12 students, and the wider community about physics, astronomy, science literacy, and the college experience.",
+      "categories": [
+        "Liberal Arts & Sciences"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/isupac",
+      "sourceHash": "be4b16fd426b3efd2a2dbebfef05604bc15dabe6ddb4b15f2e5db466a62faef1",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "symbolic",
+        "subject": "A planetary orbit and refracted spectrum as a broad science motif",
+        "setting": "layered night-blue paper",
+        "framing": "wide diagonal",
+        "people_count": 0,
+        "palette_accent": "indigo",
+        "anchor": "orbits",
+        "grounded_evidence": [
+          "physics and astronomy"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative orbits theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "253",
+      "name": "Horticulture Club",
+      "description": "The Horticulture Club at ISU serves the student body of the Department of Horticulture and any other interested students from other majors. Join us!",
+      "categories": [
+        "Agriculture & Life Sciences"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/253",
+      "sourceHash": "16e5e0871f148d35f512bfd805e44f14518fcca831934f117742536a499bc53d",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "environment",
+        "subject": "A quiet arrangement of leaves, seedlings and garden forms as a thematic scene",
+        "setting": "imagined garden corner",
+        "framing": "ground-level wide view",
+        "people_count": 0,
+        "palette_accent": "sage green",
+        "anchor": "plants",
+        "grounded_evidence": [
+          "Department of Horticulture"
+        ],
+        "grounding_confidence": "low",
+        "why_this_image": "A representative plants theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "prisum",
+      "name": "Solar Car",
+      "description": "Team PrISUm is a multidisciplinary student organization that designs, builds, and races solar powered electric vehicles. We encourage students from all majors and backgrounds to join and help us build and race this innovative vehicle. The team is divided into three main divisions, Electrical, Mechanical and Business that each carry out a core function of the team.",
+      "categories": [
+        "Agriculture & Life Sciences",
+        "Business",
+        "Design",
+        "Health & Human Sciences",
+        "Engineering",
+        "Intercollegiate",
+        "Liberal Arts & Sciences",
+        "Pre-Professional",
+        "Media Production",
+        "Culture & Identity",
+        "Political & Activism",
+        "Service & Volunteering",
+        "Special Interest",
+        "Programming",
+        "Graduate & Professional",
+        "Leadership"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/prisum",
+      "sourceHash": "ff94306d9bb481e471391d758abaa8cc1264211ed049a508e0d288063578ff55",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "people_action",
+        "subject": "Two students inspecting an unbranded solar vehicle in a workshop",
+        "setting": "university vehicle workshop",
+        "framing": "three-quarter wide view",
+        "people_count": 2,
+        "palette_accent": "cardinal",
+        "anchor": "solar vehicle",
+        "grounded_evidence": [
+          "designs, builds, and races solar powered electric vehicles"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative solar vehicle theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "kendoisu",
+      "name": "Kendo Club",
+      "description": "The Kendo Club practices under the guidelines of the All United States Kendo Federation and is a member of the Midwest Kendo Federation. We practice to improve our knowledge in Kendo, cultivate discipline in our lives, and create lasting friendships through training and competition.",
+      "categories": [
+        "Special Interest",
+        "Sports & Recreation",
+        "Sports Club"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/kendoisu",
+      "sourceHash": "11084c0379653ea013133a15c37cfc027106aed1ff127ad97e9c8868a6c3671b",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "people_action",
+        "subject": "Two protected practitioners using bamboo practice swords in a calm training exchange",
+        "setting": "plain university practice hall",
+        "framing": "side-on full-body view",
+        "people_count": 2,
+        "palette_accent": "ink blue",
+        "anchor": "kendo",
+        "grounded_evidence": [
+          "training and competition"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative kendo theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "kure885",
+      "name": "KURE 88.5 FM Ames Alternative",
+      "description": "88.5 KURE is a student-produced and student-managed radio station, broadcast at 88.5MHz to Iowa State University, the Ames community, and online. We provide our community with a wide range of musical genres alongside live broadcasts of Cyclone sporting events, news programs, talk shows, and in-studio musical performances. KURE offers killer opportunities for experience in radio broadcasting and business operation to its all-volunteer student staff.",
+      "categories": [
+        "Media Production"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/kure885",
+      "sourceHash": "f382c92026b77ad6adde5f874563c0324408784e9bd0958c0a125af892f157e7",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "object_closeup",
+        "subject": "A broadcast microphone, headphones and mixing controls",
+        "setting": "small radio booth",
+        "framing": "macro diagonal",
+        "people_count": 0,
+        "palette_accent": "burnt orange",
+        "anchor": "radio",
+        "grounded_evidence": [
+          "radio broadcasting"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative radio theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "psa",
+      "name": "Pakistan Student Association",
+      "description": "As a student organization we seek to bring together all Pakistani/domestic students and faculty on campus and within the greater of Ames community. Through our various events each semester we hope to raise public awareness and promote an understanding of Pakistan, its culture, its heritage, and its politics. We also aim to serve and provide an avenue for students to come together to learn about Pakistan and comfortably adjust to the Iowa State campus.",
+      "categories": [
+        "Agriculture & Life Sciences",
+        "Business",
+        "Design",
+        "Health & Human Sciences",
+        "Engineering",
+        "Intercollegiate",
+        "Liberal Arts & Sciences",
+        "Pre-Professional",
+        "Culture & Identity",
+        "Music & Performing Arts",
+        "Political & Activism",
+        "Religious & Spiritual",
+        "Service & Volunteering",
+        "Special Interest",
+        "Sports & Recreation",
+        "Veterinary Medicine",
+        "Programming",
+        "Residence"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/psa",
+      "sourceHash": "4c1667e6c6e78a06ebefe54f6c4aa61d70bf55eade771c54eca5d337e80cad50",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "community",
+        "subject": "Four students getting acquainted on a campus walkway; no implied ethnic appearance or costume",
+        "setting": "open campus walkway",
+        "framing": "eye-level loose group",
+        "people_count": 4,
+        "palette_accent": "muted teal",
+        "anchor": "conversation",
+        "grounded_evidence": [
+          "come together to learn about Pakistan"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative conversation theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "h4h",
+      "name": "Habitat for Humanity Student Chapter",
+      "description": "We work with Habitat for Humanity of Central Iowa and Greater Des Moines Habitat for Humanity to help with the construction of \"simple, decent, and affordable\" homes for families in need of housing. We also have fundraising events throughout the semester to raise money and advocate our student chapter. For spring break, we take students on Collegiate Challenge trips which involve going to another state and helping them build homes.",
+      "categories": [
+        "Service & Volunteering",
+        "Leadership"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/h4h",
+      "sourceHash": "fed878398359931b529f18edb08726a8ff957a310fb8597073d55693b2daaaf7",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "people_action",
+        "subject": "Three volunteers working on a simple unbranded home frame with appropriate protective equipment",
+        "setting": "ordinary residential worksite",
+        "framing": "wide view from below",
+        "people_count": 3,
+        "palette_accent": "wood brown",
+        "anchor": "home building",
+        "grounded_evidence": [
+          "help with the construction"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative home building theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "argentine-tango",
+      "name": "Tango Social Club",
+      "description": "Tango Social Club promotes community and the opportunity to learn and practice Argentine Tango through introduction, guided practice, and social dancing. The Tango Social Club is composed of students and members of the ISU community who wish to share their enthusiasm for the art and culture of Argentine Tango.",
+      "categories": [
+        "Culture & Identity",
+        "Music & Performing Arts",
+        "Special Interest",
+        "Sports & Recreation"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/argentine-tango",
+      "sourceHash": "2dccab7f6743062d5ee14beddafdeb0fe69f90d01146fcb6c321d29220431f57",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "people_action",
+        "subject": "Two students practicing Argentine tango in casual clothes",
+        "setting": "simple dance studio",
+        "framing": "full-body diagonal",
+        "people_count": 2,
+        "palette_accent": "warm burgundy",
+        "anchor": "dance",
+        "grounded_evidence": [
+          "learn and practice Argentine Tango"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative dance theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "voice",
+      "name": "Veterinarians as One Inclusive Community for Empowerment (VOICE)",
+      "description": "VOICE is a student-run organization that seeks to increase awareness, respect, and sensitivity to differences among all individuals and communities in the field of veterinary medicine. VOICE also aims to celebrate diversity within our profession, to encourage campus environments that embrace diversity and promote the success of all students, and to emphasize the importance of cross-cultural awareness in veterinary medicine in order to meet the needs of our diversifying clientele. Lastly, in order to ensure a more diverse future for veterinary medicine, VOICE chapters provide leadership and mentorship to youth, particularly those from underrepresented backgrounds, who are interested in careers as veterinarians. In each of these regards, we feel that there is a gap in the curriculum of American veterinary colleges, and that it is therefore the duty of VOICE to partner with the colleges to...",
+      "categories": [
+        "Culture & Identity",
+        "Special Interest",
+        "Veterinary Medicine"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/voice",
+      "sourceHash": "a1de01b5f0acf5e84ab08b3ed7a3da03ab0da8ff42b5fc23cd8d8080b0f90732",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "community",
+        "subject": "A small mentorship conversation about belonging in veterinary education",
+        "setting": "bright campus alcove",
+        "framing": "seated semicircle from side",
+        "people_count": 3,
+        "palette_accent": "olive green",
+        "anchor": "mentorship",
+        "grounded_evidence": [
+          "leadership and mentorship to youth"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative mentorship theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference",
+          "clinical animal treatment: the source focuses on inclusion and mentorship"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "epde",
+      "name": "Entrepreneurial Product Development Club",
+      "description": "The Entrepreneurial Product Development (EPD) Club is multidisciplinary, project based, educational, and experiential. Our focus is on taking ideas and turning them into successful products. Students gain hands-on experience in idea generation, creativity, market research, marketing, copywriting, competitive analysis, developing concepts, patent writing, law, finance, manufacturing, prototyping, product design, and execution. Whether you are looking to get help on an existing project or looking to join our team of product development consultants, the EPD Club is like no other resource on campus.",
+      "categories": [
+        "Business",
+        "Design",
+        "Engineering"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/epde",
+      "sourceHash": "23126c60c022a12e43c36e6a004351df7d6e0923304ad0c3ca473928991f0884",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "object_closeup",
+        "subject": "Paper forms and an unbranded rough product prototype",
+        "setting": "maker workspace shelf",
+        "framing": "oblique detail",
+        "people_count": 0,
+        "palette_accent": "clay red",
+        "anchor": "prototype",
+        "grounded_evidence": [
+          "prototyping, product design"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative prototype theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "2540",
+      "name": "A Novel Idea Book Club",
+      "description": "A Novel Idea Book Club is open to anyone who reads! Whether you haven't read since middle school or you read multiple books a week, you are welcome to join this on-campus, social book club. Our book club \"meetings\" are laid-back, weekly gatherings where you can visit with the other members and take a break from your studies. We read approximately 2-3 books per genre each semester, so you have plenty to participate in. We hope you'll join us. :-)",
+      "categories": [
+        "Special Interest"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/2540",
+      "sourceHash": "f12d93fa04527f88d10ddf2e9f9f5844dad6ad2bd4af94e0359b6c60dc2c16b1",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "community",
+        "subject": "Three students discussing open books in a relaxed lounge",
+        "setting": "campus reading lounge",
+        "framing": "wide corner view",
+        "people_count": 3,
+        "palette_accent": "amber",
+        "anchor": "books",
+        "grounded_evidence": [
+          "laid-back, weekly gatherings"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative books theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "birdingclub",
+      "name": "Birding Club",
+      "description": "Birding Club provides students with an opportunity to bond over a common interest in birds, their conservation, and in nature as a whole. The meetings include various bird-related presentations, games, or videos and the environment is very casual. Birding Club takes a handful of trips every year to locations such as Duluth in order to observe and learn about birds in their natural habitat.",
+      "categories": [
+        "Agriculture & Life Sciences",
+        "Special Interest",
+        "Sports & Recreation"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/birdingclub",
+      "sourceHash": "31285ad79743790141ad985fa104c8e476f2c16196aa59f5b9f99be6f63655f1",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "environment",
+        "subject": "A small bird in a natural branch setting; a broad conservation theme",
+        "setting": "quiet leafy habitat",
+        "framing": "bird-level telephoto framing",
+        "people_count": 0,
+        "palette_accent": "moss green",
+        "anchor": "birds",
+        "grounded_evidence": [
+          "birds, their conservation"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative birds theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "149",
+      "name": "College of Design Art Club",
+      "description": "Art exhibition tours, field trips, guest speakers and workshops, clay sales.",
+      "categories": [
+        "Design"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/149",
+      "sourceHash": "6b1976f1ba6dab8362468d9a5feb10002b284546fc0c45445cfbcdc52ca10684",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "environment",
+        "subject": "Small clay forms resting on a studio shelf as a thematic reference",
+        "setting": "imagined art studio",
+        "framing": "frontal layered view",
+        "people_count": 0,
+        "palette_accent": "dusty rose",
+        "anchor": "clay",
+        "grounded_evidence": [
+          "clay sales"
+        ],
+        "grounding_confidence": "low",
+        "why_this_image": "A representative clay theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "3537",
+      "name": "Film Enthusiasts Club",
+      "description": "Film Enthusiasts is a student organization created to provide a community for film lovers interested in analyzing and discussing film. Our meetings consist of weekly screenings and open discussions about the movie shown each week.",
+      "categories": [
+        "Special Interest",
+        "Programming"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/3537",
+      "sourceHash": "183a583827dfa83056a0792df90ecbba862fc3f1b1e780c04440f8981d3bc1be",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "environment",
+        "subject": "An empty screening room with an abstract, unrecognizable film frame",
+        "setting": "campus screening room",
+        "framing": "back-row wide view",
+        "people_count": 0,
+        "palette_accent": "dusk violet",
+        "anchor": "cinema",
+        "grounded_evidence": [
+          "weekly screenings"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative cinema theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "1461",
+      "name": "Running Club",
+      "description": "The Running Club at Iowa State is a group dedicated for students to pursue all types of running, casual or competitive. From Cross Country distance running, to sprints and field events in Track and Field, the Running Club is the place to be! We provide a fun and relaxed atmosphere for casual runners, and we also compete across the nation with the National Intercollegiate Running Club Association (NIRCA) for those looking for a more competitive experience. We meet up daily to run and compete in events such as cross country races, road races, marathons, and track and field meets! We hope to see you join us soon!",
+      "categories": [
+        "Sports & Recreation",
+        "Sports Club"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/1461",
+      "sourceHash": "fdaf955641021385403bebda09db1d9b478b60675e48ee53bafa1e56189445ce",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "people_action",
+        "subject": "Three students running at a relaxed pace without uniforms or race numbers",
+        "setting": "leafy campus path",
+        "framing": "trailing dynamic view",
+        "people_count": 3,
+        "palette_accent": "gold",
+        "anchor": "running",
+        "grounded_evidence": [
+          "fun and relaxed atmosphere for casual runners"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative running theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    },
+    {
+      "clubId": "thewritersguildofisu",
+      "name": "Writers' Guild",
+      "description": "A gathering place for aspiring authors, where they can spread new ideas and uplift each other. This group is dedicated to writing, regardless of its utility. Online, there is a small database of information to help authors attempting to write about any sort of subject.",
+      "categories": [
+        "Special Interest"
+      ],
+      "sourceUrl": "https://www.stuorg.iastate.edu/thewritersguildofisu",
+      "sourceHash": "a58c9eee9a0ca907aa5f2ebfbdf10074f3b102d3e4db805ff4a574d45ad73a06",
+      "provider": "deterministic",
+      "promptVersion": "clubmatch-watercolor-v2.1",
+      "recipe": {
+        "shot_type": "object_closeup",
+        "subject": "A pen and loose manuscript pages without readable writing",
+        "setting": "window-side writing nook",
+        "framing": "tight eye-level detail",
+        "people_count": 0,
+        "palette_accent": "warm plum",
+        "anchor": "manuscript",
+        "grounded_evidence": [
+          "dedicated to writing"
+        ],
+        "grounding_confidence": "medium",
+        "why_this_image": "A representative manuscript theme grounded in the source; not a documented club event.",
+        "avoid": [
+          "readable text",
+          "logos",
+          "specific events or real member identities",
+          "unsupported equipment",
+          "stereotyped cultural symbols",
+          "recurring cast from the style reference"
+        ]
+      },
+      "referenceIds": []
+    }
+  ]
+}

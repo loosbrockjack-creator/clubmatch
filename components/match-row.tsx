@@ -27,6 +27,7 @@ export function MatchRow({
       </div>
 
       <div className="min-w-0 flex-1">
+        {photo.credit ? <p className="mb-2 text-[11px] text-ink-muted">{photo.credit}</p> : null}
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-3">
             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[5px] sm:hidden">

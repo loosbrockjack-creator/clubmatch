@@ -55,6 +55,7 @@ export function ClubCard({
       </div>
 
       <div className="flex flex-1 flex-col p-5">
+        {photo.credit ? <p className="mb-2 text-[11px] text-ink-muted">{photo.credit}</p> : null}
         <h3 className="text-[16.5px] font-bold leading-snug tracking-[-0.01em] text-ink">
           <Link
             href={`/clubs/${club.slug}`}
