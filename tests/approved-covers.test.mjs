@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { REPO } from "../core.mjs";
+import { fileURLToPath } from "node:url";
+
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 test("actual app resolver requires staging flag, stable ID, genuine approval and safe local URL", async () => {
   const entry = {

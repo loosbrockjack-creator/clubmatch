@@ -1,5 +1,7 @@
 # ClubMatch — Visual Direction & Decision Log
 
+**Current operating status (November 7, 2026):** Cover Studio is retired. Read [README.md](README.md) for the current website integration and [ChatGPT_Image_Revision_Policy.md](ChatGPT_Image_Revision_Policy.md) for ChatGPT-only revision rules. Earlier implementation checkpoints below are historical.
+
 **Living source of truth** · Version 0.1 · Updated November 4, 2026  
 **Owner:** ClubMatch team (ENTSP 3100)  
 **Scope:** Cover artwork and official photos for the Explore grid and club profiles.
@@ -135,3 +137,4 @@ Grounding correction for VOICE: illustrate inclusion/mentorship from its actual 
 | --- | --- | --- | --- |
 | 2026-11-07 | 0.2 implementation checkpoint | Added local pilot findings, explicit mock/live boundary, preserved open decisions, and recorded missing originals/credentials/permission evidence. | Version 2 handoff and repository audit |
 | 2026-11-07 | 0.3 continuation audit | Recovered PR #1 and existing local pilot state; added read-only render readiness reporting and private alternate-home ignores. Three-image test remains proposed and unapproved. No artistic or production decisions changed. | Continuation request and code/state inspection |
+| 2026-11-07 | 0.4 approved cleanup | Retired Studio dashboard, server and generation tooling after user approval. Preserved lightweight website resolver, manifest, attribution, Greek protection, private work and standalone resolver test; archived former setup/evaluation docs and the original code branch. Current art direction uses natural watercolor, actual campus references and plausible college-aged participants. Minor imperfections do not warrant ChatGPT regeneration. | User feedback and explicit cleanup approval |
