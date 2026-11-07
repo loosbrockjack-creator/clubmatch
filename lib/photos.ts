@@ -200,7 +200,14 @@ export function photoForClub(club: {
   college: string;
   categories: string[];
   greek?: { photo: string | null };
-}): { key: PhotoKey; variant: number; src: string; alt: string; own: boolean } {
+}): {
+  key: PhotoKey;
+  variant: number;
+  src: string;
+  alt: string;
+  own: boolean;
+  quality: number;
+} {
   if (CLUB_COVER_SET.has(club.slug)) {
     return {
       key: keyForClub(club),
@@ -208,6 +215,9 @@ export function photoForClub(club: {
       src: `/photos/clubs/${club.slug}.jpg`,
       alt: club.name ? `Watercolor illustration for ${club.name}` : "Club illustration",
       own: true,
+      // Watercolor wash and paper grain break up badly at Next's default 75,
+      // so covers are served at 90 (allowed in next.config.ts images.qualities).
+      quality: 90,
     };
   }
   // Greek chapters use the photo they posted on their SFE page. Chapters
@@ -220,12 +230,20 @@ export function photoForClub(club: {
       src: club.greek.photo,
       alt: club.name ? `${club.name} at Iowa State` : "Chapter photo",
       own: true,
+      quality: 75,
     };
   }
   const key = club.greek ? "community" : keyForClub(club);
   const size = POOL_SIZE[key];
   const variant = (hash(club.slug) % size) + 1;
-  return { key, variant, src: photoSrc(key, variant), alt: photoAlt(key), own: false };
+  return {
+    key,
+    variant,
+    src: photoSrc(key, variant),
+    alt: photoAlt(key),
+    own: false,
+    quality: 75,
+  };
 }
 
 /**

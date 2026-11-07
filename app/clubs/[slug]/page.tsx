@@ -239,6 +239,7 @@ export default async function ClubDetailPage({
         <Image
           src={photo.src}
           alt={photo.alt}
+          quality={photo.quality}
           fill
           priority
           sizes="100vw"

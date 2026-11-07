@@ -54,3 +54,6 @@ __pycache__/
 # scrape checkpoints and run logs
 *.partial.jsonl
 /active/research/outreach/logs/
+
+# Raw cover image drops (large PNGs; web copies live in public/photos/clubs)
+/active/research/image-imports/
