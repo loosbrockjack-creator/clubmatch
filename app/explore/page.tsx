@@ -8,6 +8,7 @@ import { ClubCard } from "@/components/club-card";
 import { FilterRow } from "@/components/filter-row";
 import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
+import { CLUB_COVERS } from "@/lib/photos";
 import { scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
@@ -148,14 +149,24 @@ function ExploreView() {
     // Chapters are not ranked against clubs (see matchChapters): the quiz
     // barely tells them apart, and the opt-in bonus would float them above
     // every club. In fit order they follow the clubs, alphabetically.
-    if (activeSort === "fit" && hasPrefs) {
-      return matches
-        .map((club) => ({ club, score: club.greek ? -1 : scoreClub(prefs, club).score }))
-        .sort((a, b) => b.score - a.score || a.club.name.localeCompare(b.club.name))
-        .map((entry) => entry.club);
-    }
+    const sorted =
+      activeSort === "fit" && hasPrefs
+        ? matches
+            .map((club) => ({ club, score: club.greek ? -1 : scoreClub(prefs, club).score }))
+            .sort((a, b) => b.score - a.score || a.club.name.localeCompare(b.club.name))
+            .map((entry) => entry.club)
+        : matches.sort((a, b) => a.name.localeCompare(b.name));
 
-    return matches.sort((a, b) => a.name.localeCompare(b.name));
+    // Cover review: with no search or filters, the clubs that have new
+    // watercolor covers lead the grid so they can be judged side by side.
+    const unfiltered =
+      !needle &&
+      areas.length + categories.length + commitments.length + experiences.length === 0;
+    if (!unfiltered) return sorted;
+    const pinned = CLUB_COVERS.map((slug) => sorted.find((c) => c.slug === slug)).filter(
+      (c): c is (typeof sorted)[number] => c !== undefined,
+    );
+    return [...pinned, ...sorted.filter((c) => !CLUB_COVERS.includes(c.slug))];
   }, [query, areas, categories, commitments, experiences, activeSort, hasPrefs, prefs]);
 
   const filterCount =

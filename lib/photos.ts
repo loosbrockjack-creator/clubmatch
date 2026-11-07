@@ -127,6 +127,32 @@ const CATEGORY_PHOTO: Record<string, PhotoKey> = {
   "Veterinary Medicine": "veterinary",
 };
 
+/**
+ * Clubs with their own commissioned watercolor cover, in public/photos/clubs.
+ * These win over the category pools. The order here is the display order used
+ * to pin them at the top of Explore while the new covers are under review,
+ * deliberately mixed so similar subjects don't sit next to each other.
+ */
+export const CLUB_COVERS: string[] = [
+  "horticulture-club",
+  "gaming-and-esports-club",
+  "running-club",
+  "college-of-design-art-club",
+  "cyber-robotics",
+  "birding-club",
+  "dance-marathon",
+  "astrophotography-club",
+  "entrepreneurial-product-development-club",
+  "mountaineering-and-climbing-club",
+  "baking-club",
+  "environmental-science-club",
+  "juggling-and-unicycling-club",
+  "photo-club",
+  "ultimate-frisbee-club-women",
+];
+
+const CLUB_COVER_SET = new Set(CLUB_COVERS);
+
 /** Small deterministic string hash (djb2), used to pick a stable pool index. */
 function hash(input: string): number {
   let h = 5381;
@@ -175,6 +201,15 @@ export function photoForClub(club: {
   categories: string[];
   greek?: { photo: string | null };
 }): { key: PhotoKey; variant: number; src: string; alt: string; own: boolean } {
+  if (CLUB_COVER_SET.has(club.slug)) {
+    return {
+      key: keyForClub(club),
+      variant: 0,
+      src: `/photos/clubs/${club.slug}.jpg`,
+      alt: club.name ? `Watercolor illustration for ${club.name}` : "Club illustration",
+      own: true,
+    };
+  }
   // Greek chapters use the photo they posted on their SFE page. Chapters
   // without one use the generic pool, never "culture": that pool shows
   // performers in regalia, which reads wrong for a fraternity or sorority.
