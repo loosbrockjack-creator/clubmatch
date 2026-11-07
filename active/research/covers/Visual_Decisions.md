@@ -134,3 +134,4 @@ Grounding correction for VOICE: illustrate inclusion/mentorship from its actual 
 | Date | Version | Change | Decision source |
 | --- | --- | --- | --- |
 | 2026-11-07 | 0.2 implementation checkpoint | Added local pilot findings, explicit mock/live boundary, preserved open decisions, and recorded missing originals/credentials/permission evidence. | Version 2 handoff and repository audit |
+| 2026-11-07 | 0.3 continuation audit | Recovered PR #1 and existing local pilot state; added read-only render readiness reporting and private alternate-home ignores. Three-image test remains proposed and unapproved. No artistic or production decisions changed. | Continuation request and code/state inspection |

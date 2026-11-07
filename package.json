@@ -12,6 +12,7 @@
     "covers:studio": "node tools/covers/cli.mjs serve",
     "covers:test": "node --test tools/covers/test/*.test.mjs",
     "covers:status": "node tools/covers/cli.mjs status",
+    "covers:preflight": "node tools/covers/cli.mjs preflight",
     "scrape:clubs": "python3 active/execution/scripts/scrape.py",
     "scrape:greek": "python3 active/execution/scripts/scrape_greek.py",
     "build:clubs": "python3 active/execution/scripts/transform.py"

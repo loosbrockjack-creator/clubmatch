@@ -29,6 +29,7 @@ import {
 } from "./providers.mjs";
 import { indexPhotos, applyRights, captionPhotos } from "./photos.mjs";
 import { serve } from "./server.mjs";
+import { preflight } from "./preflight.mjs";
 
 const {
   values: v,
@@ -83,12 +84,20 @@ async function main() {
     throw new Error(`--limit must be 1–${maxLimit} for ${command}`);
   if (command === "help") {
     console.log(
-      "Cover Studio (local, no production writes)\nCommands: plan, render, qa, index, rights, caption, search, status, recover, export, serve\nDefault: deterministic briefs and diagnostic test images, no paid calls. Read tools/covers/README.md before real generation.",
+      "Cover Studio (local, no production writes)\nCommands: plan, preflight, render, qa, index, rights, caption, search, status, recover, export, serve\nDefault: deterministic briefs and diagnostic test images, no paid calls. Read tools/covers/README.md before real generation.",
     );
     return;
   }
   if (command === "serve") {
     serve(home, Number(v.port || 4317));
+    return;
+  }
+  if (command === "preflight") {
+    const result = await preflight(await readState(home), await clubs(), {
+      batchId: v.batch, limit, policy,
+    });
+    log(result);
+    if (!result.readyForPaidRender) process.exitCode = 1;
     return;
   }
   if (command === "status") {

@@ -21,7 +21,7 @@ The dashboard supports source/recipe review, manual recipe edits, brief approval
 
 Mock graphics say **PIPELINE TEST · NO ARTWORK GENERATED**. They cannot be approved or exported, even by calling the review API directly. The operator must not mark synthetic fixtures as genuine artwork.
 
-State is in ignored `.cover-work/state.json`, assets in `.cover-work/assets/`. Writes use an exclusive lock and atomic JSON rename. Back up this directory before moving to another machine. The public Git repository contains code and sample briefs, not local permission evidence, source photos, private keys or unpublished candidate images. Use `--home /absolute/folder` on any command for another working directory.
+State is in ignored `.cover-work/state.json`, assets in `.cover-work/assets/`. Writes use an exclusive lock and atomic JSON rename. Back up this directory before moving to another machine. The public Git repository contains code and sample briefs, not local permission evidence, source photos, private keys or unpublished candidate images. Use `--home /absolute/folder` on any command for another working directory. Alternate repo-root homes named `.cover-work-*` (including `.cover-work-real`) are also ignored. Other custom paths require their own private storage/ignore rule.
 
 ## Inputs, state and provenance
 
@@ -38,6 +38,16 @@ Source changes invalidate current brief approval and block stale-source exports.
 All 59 recognized Greek chapters are protected as `keep_existing`. The three named Prototype 1 Greek subjects are also protected by slug. **Original individual Prototype 1 Greek paintings were not included**; only the review board was supplied. The studio cannot recover those originals from the collage. Existing app Greek photo mappings are untouched.
 
 ## Real AI setup — optional and disabled until authorized
+
+Run a **read-only** readiness report before real rendering:
+
+```bash
+npm run covers:preflight -- --limit 3
+```
+
+It prints model/configuration presence without secret values, style-reference integrity, the selected pending jobs, brief approvals, source freshness, revision/retry blockers, reference permissions/file hashes, batch diversity, and required image-request reservations. Exit code 1 means not ready. It never creates a working directory, changes state, approves a brief, reserves funds or calls an API. Use the same `--home`, `--batch`, `--limit` and proposed budget/call flags as the intended render; supplying budget flags to preflight itself does **not** authorize spending. A readiness result does not prove live account/model access, actual image quality, or billing cost. Render retains its own runtime gates; preflight is an operator diagnostic.
+
+The recovered mock pilot requires human brief approval and a revision request before replacing its diagnostic candidates. Alternatively use an isolated `.cover-work-real` home to keep all mock history intact. `plan` without an OpenAI provider can reuse the existing curated pilot recipes at no API cost; paid text planning is optional for the first image-adapter test.
 
 The proposed adapter uses OpenAI directly: Responses API for structured briefs/vision; Image API `images/edits` for one independent reference-guided cover. The team-owned original watercolor is image 1 for style inspiration. Up to three permission-cleared campus references can follow. Default image model is `gpt-image-2.5-flare`, medium quality, requested 1536 × 1152, compressed/cropped to 1200 × 900 WebP. Provider interfaces can be replaced without changing state/review logic.
 
