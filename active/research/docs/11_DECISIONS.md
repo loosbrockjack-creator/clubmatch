@@ -4,7 +4,7 @@ Use this file to preserve decisions across long Claude sessions.
 
 ## Locked decisions
 - Product is a personalized academic/professional club discovery MVP, not merely a complete directory.
-- P0 does not require auth.
+- P0 does not require auth. (Superseded 2026-11-07: student accounts are now in scope, see below.)
 - Recommendations use explainable weighted scoring, not ML.
 - Design is consumer-product oriented, not university-portal oriented.
 - Cardinal is an accent, not the dominant background color.
@@ -350,3 +350,42 @@ shown at all. Instagram links SFE lists are captured. `transform.py` repairs
 double-encoded text (em dashes showing as "â€”") and fails the build if any
 mangled characters or dashes remain. `/match?step=greek` opens the Greek
 question directly for students whose saved answers predate it.
+
+### 2026-11-07 - Student accounts
+
+**Accounts reverse the original no-auth decision, at Jack's explicit request,
+for a real launch.** Students get saves synced across devices, "I'm a member"
+on clubs, and a profile. Everything still works signed out exactly as before.
+
+**Backend: Supabase** (project `clubmatch`, us-east-2). Auth, Postgres with
+row-level security, and Storage for avatars. Schema lives in
+`active/config/supabase/migrations/` and is applied by pasting into the
+dashboard SQL editor (the MCP connector's write approvals don't surface in
+this environment).
+
+**Sign-in is @iastate.edu only, by emailed 6-digit code, no passwords.** A
+`before insert` trigger on `auth.users` rejects any other domain, so the rule
+holds even against direct API calls.
+
+**No server rendering for account features.** The browser Supabase client
+plus RLS does the protecting; club, explore, and landing pages stay fully
+static, and there is no `proxy.ts`. Account deletion is a `security definer`
+RPC (`delete_my_account`), so no service-role key exists anywhere.
+
+**localStorage stays the working copy.** `lib/preferences.ts` keeps its API;
+signed in, `lib/account.ts` registers a remote that mirrors every change to
+the account. The first sign-in on a device merges local saves and quiz
+answers into the account; after that the account is the source of truth.
+Sign-out clears local saves and answers so shared computers start clean.
+
+**Profiles are visible to signed-in students only**, never logged-out
+visitors or search engines (`noindex`), with a hide switch in Settings.
+Saves and email are always private. Avatar presets stay in the site palette.
+
+**Events and promotions are a future premium feature.** Clubs will "claim"
+their page; for now each club page shows a claim teaser that emails the
+contact address. `memberships.role` already allows `officer` for later.
+
+**Branding:** borrows the iastate.edu / Admissions feel (cardinal panel over
+a photo, big serif title, gold rules, outlined buttons) without ISU marks,
+and the footer states ClubMatch is not affiliated with Iowa State.

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { clubs } from "@/lib/clubs";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 const columns = [
   {
@@ -9,6 +10,15 @@ const columns = [
       { href: "/explore", label: "Browse all clubs" },
       { href: "/greek", label: "Greek life" },
       { href: "/saved", label: "Saved clubs" },
+    ],
+  },
+  {
+    heading: "Your account",
+    links: [
+      { href: "/login", label: "Sign in" },
+      { href: "/account", label: "My account" },
+      { href: "/privacy", label: "Privacy" },
+      { href: "/terms", label: "Terms" },
     ],
   },
   {
@@ -33,9 +43,10 @@ export function SiteFooter() {
 
         <div className="mt-10 h-px bg-white/25" />
 
-        <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
+        <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <p className="max-w-sm text-[14px] leading-relaxed text-white/85">
-            A student project, not an official university service. It covers{" "}
+            An independent student project, not affiliated with or endorsed
+            by Iowa State University. It covers{" "}
             {clubs.length} organizations from Iowa State&apos;s student
             organization directory and its Sorority and Fraternity Engagement
             office. Fit scores and category tags are ours, so check a
@@ -80,10 +91,16 @@ export function SiteFooter() {
 
       <div className="bg-cardinal-deep">
         <div className="shell py-5">
-          <p className="text-[12.5px] text-white/70">
-            Built for ENTSP 3100 at Iowa State University. Club photography
-            from Pexels; chapter photos from each chapter&apos;s SFE page.
-          </p>
+          <div className="flex flex-col gap-2 text-[12.5px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Built for ENTSP 3100 at Iowa State University. Club images are
+              original watercolors or Pexels photos; chapter photos come from
+              each chapter&apos;s SFE page.
+            </p>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="link-on-cardinal font-medium">
+              Contact
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -17,7 +17,7 @@ export default function SavedPage() {
     <>
       <PageHeader
         title="Saved clubs"
-        intro="Your shortlist, kept on this device. Nothing is sent anywhere."
+        intro="Your shortlist. Sign in and it follows you to every device."
       />
 
       <div className="shell pb-8 pt-10">

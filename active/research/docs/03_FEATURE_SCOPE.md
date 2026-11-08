@@ -58,14 +58,18 @@ Requirements:
 - no obvious broken routes or console errors
 
 ## P1 - Add only if P0 is excellent
-- save/favorite clubs (local storage is fine)
+- save/favorite clubs (local storage signed out, synced to the account signed in)
 - `I'm Interested` action
 - share club
 - involvement stack / recommended combination of clubs
 - subtle animation polish
 
+## Added 2026-11-07
+- student accounts: @iastate.edu email-code sign-in, synced saves, self-declared memberships, profiles
+- future premium: clubs claim their page to post events and promotions
+
 ## Explicitly out of scope
-- authentication
+- password or social sign-in
 - messaging
 - club admin console
 - payments

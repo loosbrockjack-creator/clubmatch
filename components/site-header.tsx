@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { AccountMenu, MobileAccountLinks } from "./account-menu";
 
 const links = [
   { href: "/explore", label: "Explore" },
@@ -62,6 +63,7 @@ export function SiteHeader() {
                 >
                   Find my clubs
                 </Link>
+                <AccountMenu />
               </nav>
 
               <button
@@ -104,6 +106,7 @@ export function SiteHeader() {
                 {link.label}
               </Link>
             ))}
+            <MobileAccountLinks onNavigate={() => setOpen(false)} />
             <Link
               href="/match"
               onClick={() => setOpen(false)}

@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { ClubMark } from "@/components/club-mark";
 import { InterestedButton } from "@/components/interested-button";
+import { MemberButton } from "@/components/member-button";
+import { ClubCommunity } from "@/components/club-community";
 import { WhyItFits } from "@/components/why-it-fits";
 import { ClubCard } from "@/components/club-card";
 import { ChapterFacts } from "@/components/chapter-facts";
@@ -325,8 +327,9 @@ export default async function ClubDetailPage({
                   )}
                 </div>
               </div>
-              <div className="shrink-0">
+              <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
                 <InterestedButton slug={club.slug} clubName={club.name} />
+                <MemberButton slug={club.slug} clubName={club.name} />
               </div>
             </div>
 
@@ -544,6 +547,8 @@ export default async function ClubDetailPage({
             </p>
           </section>
           )}
+
+          <ClubCommunity slug={club.slug} clubName={club.name} />
 
           {similar.length > 0 && (
             <section className="mt-16">

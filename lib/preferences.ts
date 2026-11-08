@@ -18,6 +18,23 @@ export const emptyPreferences: Preferences = {
 
 const EMPTY_SAVED: string[] = [];
 
+/**
+ * localStorage is always the working copy, signed in or not. When a student is
+ * signed in, lib/account.ts registers a remote here and every change is also
+ * written to their account; on sign-in it replaces the local copy with the
+ * account's. Kept as a registration (not an import) so this module stays free
+ * of Supabase.
+ */
+type Remote = {
+  save: (slug: string, saved: boolean) => void;
+  preferences: (prefs: Preferences) => void;
+};
+let remote: Remote | null = null;
+
+export function registerRemote(next: Remote | null) {
+  remote = next;
+}
+
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -114,6 +131,36 @@ function useIsHydrated() {
 
 export function savePreferences(prefs: Preferences) {
   write(PREFS_KEY, JSON.stringify(prefs));
+  remote?.preferences(prefs);
+}
+
+/* ---- Used by lib/account.ts to sync with the signed-in account ---- */
+
+export function readLocalSaved(): string[] {
+  return getSavedSnapshot();
+}
+
+export function readLocalPreferences(): Preferences | null {
+  return getPreferencesSnapshot();
+}
+
+export function replaceLocalSaved(slugs: string[]) {
+  write(SAVED_KEY, JSON.stringify(slugs));
+}
+
+export function replaceLocalPreferences(prefs: unknown) {
+  if (isPreferences(prefs)) write(PREFS_KEY, JSON.stringify(prefs));
+}
+
+/** On sign-out, so the next person on a shared computer starts clean. */
+export function clearLocalAccountData() {
+  try {
+    window.localStorage.removeItem(SAVED_KEY);
+    window.localStorage.removeItem(PREFS_KEY);
+  } catch {
+    // Nothing stored to clear.
+  }
+  emit();
 }
 
 /** null while hydrating, false when nothing is stored, otherwise the answers. */
@@ -138,10 +185,12 @@ export function useSavedClubs() {
 
   const toggle = useCallback((slug: string) => {
     const current = getSavedSnapshot();
-    const next = current.includes(slug)
+    const removing = current.includes(slug);
+    const next = removing
       ? current.filter((value) => value !== slug)
       : [...current, slug];
     write(SAVED_KEY, JSON.stringify(next));
+    remote?.save(slug, !removing);
   }, []);
 
   return { saved, toggle, ready: hydrated };
