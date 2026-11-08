@@ -9,7 +9,9 @@
     "lint": "eslint",
     "scrape:clubs": "python3 active/execution/scripts/scrape.py",
     "scrape:greek": "python3 active/execution/scripts/scrape_greek.py",
-    "build:clubs": "python3 active/execution/scripts/transform.py"
+    "build:clubs": "python3 active/execution/scripts/transform.py",
+    "covers:sync": "node active/execution/scripts/sync-covers.mjs",
+    "covers:watch": "node active/execution/scripts/sync-covers.mjs --watch"
   },
   "dependencies": {
     "lucide-react": "^1.46.0",

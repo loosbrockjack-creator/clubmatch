@@ -57,3 +57,4 @@ __pycache__/
 
 # Raw cover image drops (large PNGs; web copies live in public/photos/clubs)
 /active/research/image-imports/
+/active/execution/logs/
