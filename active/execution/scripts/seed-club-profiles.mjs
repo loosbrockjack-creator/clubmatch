@@ -50,7 +50,15 @@ if (process.argv.includes("--reset")) {
     await must(admin.from("club_profiles").delete().eq("club_slug", slug), "profiles");
     await must(admin.from("club_accounts").delete().eq("club_slug", slug), "accounts");
     await must(admin.from("club_activity").delete().eq("club_slug", slug), "activity");
+    const { data: files } = await admin.storage.from("club-photos").list(slug);
+    if (files?.length) {
+      await admin.storage.from("club-photos").remove(files.map((file) => `${slug}/${file.name}`));
+    }
   }
+  await must(admin.from("club_claims").delete().eq("user_id", hiddenId), "claims");
+  await must(admin.from("club_claims").delete().eq("user_id", financeId), "claims");
+  await must(admin.from("club_interests").delete().eq("user_id", financeId), "interests");
+  await must(admin.from("club_interests").delete().eq("user_id", hiddenId), "interests");
   await must(admin.from("club_mutes").delete().eq("user_id", financeId), "mutes");
   await must(admin.from("club_mutes").delete().eq("user_id", hiddenId), "mutes");
   // Back to the state seed-dev leaves: the officer is on Data Science Club only.
