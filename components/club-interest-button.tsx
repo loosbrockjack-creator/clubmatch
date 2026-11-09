@@ -48,7 +48,7 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
         data-interest-button
       >
         <BellRing size={16} strokeWidth={2} aria-hidden />
-        I&'apos;m interested
+        I&apos;m interested
         <span className="sr-only"> in {clubName} (sign in first)</span>
       </Link>
     );

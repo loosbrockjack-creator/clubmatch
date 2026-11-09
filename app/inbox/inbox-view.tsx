@@ -200,7 +200,7 @@ function Messages({ userId }: { userId: string }) {
                           </Link>
                         )}
                         <Link
-                          href={`/clubs/${message.club_slug}`}
+                          href={`/clubs/${message.club_slug}#club-actions`}
                           className="link-isu inline-flex min-h-11 items-center sm:min-h-8"
                         >
                           View {clubName}

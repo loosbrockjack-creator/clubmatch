@@ -416,13 +416,7 @@ export default async function ClubDetailPage({
               </div>
             </div>
 
-            <div className="mt-7 h-1 w-[54px] bg-gold" />
-
-            <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-ink sm:text-[18px]">
-              {club.tagline}
-            </p>
-
-            <div className="mt-7" data-club-actions>
+            <div id="club-actions" className="mt-7 scroll-mt-[96px]" data-club-actions>
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start">
                 {verified && <ClubInterestButton slug={club.slug} clubName={club.name} />}
                 <InterestedButton slug={club.slug} clubName={club.name} quiet={verified} />
@@ -430,6 +424,12 @@ export default async function ClubDetailPage({
               </div>
               {verified && <ClubInterestNote slug={club.slug} />}
             </div>
+            <div className="mt-7 h-1 w-[54px] bg-gold" />
+
+            <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-ink sm:text-[18px]">
+              {club.tagline}
+            </p>
+
           </header>
 
           <WhyItFits club={club} />
