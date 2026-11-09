@@ -69,6 +69,19 @@ export function AnalyticsTab({ slug }: { slug: string }) {
         </>
       )}
 
+      {data.invites.sent > 0 && (
+        <section className="card flex flex-wrap items-baseline gap-x-8 gap-y-2 px-5 py-5 sm:px-7" data-invite-stats>
+          <h2 className="w-full text-[15.5px] font-semibold text-ink">Invites to good-fit students</h2>
+          <p className="text-[14.5px] text-ink-soft">
+            <span className="font-bold tabular-nums text-ink">{data.invites.sent}</span> sent
+          </p>
+          <p className="text-[14.5px] text-ink-soft">
+            <span className="font-bold tabular-nums text-ink">{data.invites.interested}</span> then told you they&apos;re
+            interested
+          </p>
+        </section>
+      )}
+
       {hasAnonymous && (
         <section className="card px-5 py-5 sm:px-7" data-anonymous-visits>
           <h2 className="text-[15.5px] font-semibold text-ink">Signed-out visits</h2>

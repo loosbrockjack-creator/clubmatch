@@ -15,6 +15,7 @@ export const LIMITS = {
   campaignBody: 2000,
   claimRole: 80,
   claimNote: 500,
+  inviteNote: 200,
 } as const;
 
 /** Trimmed text or null. Reports `false` when it's over the limit. */

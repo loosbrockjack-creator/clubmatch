@@ -21,6 +21,7 @@ export async function GET(request: Request, { params }: Ctx) {
         .from("club_campaigns")
         .select("id, subject, body, audience, recipient_count, created_at")
         .eq("club_slug", slug)
+        .in("audience", CAMPAIGN_AUDIENCES)
         .order("created_at", { ascending: false })
         .limit(50),
       admin.from("memberships").select("user_id").eq("club_slug", slug),

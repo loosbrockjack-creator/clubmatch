@@ -64,7 +64,7 @@ export interface LeadStudent {
   links: { url: string; label?: string }[];
 }
 
-export type GoodFitLead = LeadStudent & { match: number; fit: string[] };
+export type GoodFitLead = LeadStudent & { match: number; fit: string[]; invited: boolean };
 export type InterestedLead = LeadStudent & { since: string; fit: string[] };
 
 export interface RosterMember {
@@ -92,6 +92,7 @@ export const CAMPAIGN_AUDIENCE_LABEL: Record<CampaignAudience, string> = {
   interested: "Interested students",
   both: "Members and interested students",
 };
+export const INVITE_DAILY_LIMIT = 20;
 export const CAMPAIGN_DAILY_LIMIT = 2;
 export const CAMPAIGN_WEEKLY_LIMIT = 5;
 
@@ -140,4 +141,6 @@ export interface ClubAnalytics {
   /** Students left out of the per-major table because their group is too small to show. */
   smallGroupStudents: number;
   completeness: { score: number; items: CompletenessItem[] };
+  /** All time. How many students were invited, and how many of them then said they're interested. */
+  invites: { sent: number; interested: number };
 }

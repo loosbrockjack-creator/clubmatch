@@ -26,7 +26,7 @@ const RULES: { title: string; body: string }[] = [
   },
   {
     title: "Good-fit students and messages",
-    body: "Officers of a paid club can see students who fit it: public profile details and a match percentage, never quiz answers. Turning off Let clubs find me, or hiding your profile, keeps you off that list. Officers can send in-app messages to members and to students who told them they're interested. You can mute any club from your inbox.",
+    body: "Officers of a paid club can see students who fit it: public profile details and a match percentage, never quiz answers. Turning off Let clubs find me, or hiding your profile, keeps you off that list. If you leave Let clubs find me on, officers of a club you fit can send you one in-app invite. Officers can also send in-app messages to members and to students who told them they're interested. You can mute any club from your inbox.",
   },
   {
     title: "Not an official service",

@@ -176,7 +176,7 @@ export function buildAnalytics(
   today: string,
   completeness: ClubAnalytics["completeness"],
   hasDescription: boolean,
-): ClubAnalytics {
+): Omit<ClubAnalytics, "invites"> {
   // Everything clubs pay for comes from verified, signed-in students only.
   const verified = rows.filter((row) => !row.anonymous);
   const anonymous = rows.filter((row) => row.anonymous);

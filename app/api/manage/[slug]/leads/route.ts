@@ -7,7 +7,7 @@ import {
   requireOfficer,
   toLead,
 } from "@/lib/club-server";
-import type { GoodFitLead, InterestedLead, LeadStudent } from "@/lib/club-types";
+import { INVITE_DAILY_LIMIT, type GoodFitLead, type InterestedLead, type LeadStudent } from "@/lib/club-types";
 import type { Preferences } from "@/lib/types";
 
 type Ctx = { params: Promise<{ slug: string }> };
@@ -28,6 +28,11 @@ export async function GET(request: Request, { params }: Ctx) {
 
   const { data: memberRows } = await admin.from("memberships").select("user_id").eq("club_slug", slug);
   const members = new Set((memberRows ?? []).map((row) => row.user_id as string));
+
+  const { data: inviteRows } = await admin.from("club_invites").select("user_id, created_at").eq("club_slug", slug);
+  const invited = new Set((inviteRows ?? []).map((row) => row.user_id as string));
+  const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+  const sentToday = (inviteRows ?? []).filter((row) => new Date(row.created_at as string).getTime() > dayAgo).length;
 
   const goodFit: GoodFitLead[] = [];
   for (let from = 0; ; from += PAGE) {
@@ -54,7 +59,14 @@ export async function GET(request: Request, { params }: Ctx) {
         const answers = prefs.get(student.id);
         if (!answers?.academicArea || !allowedForPrefs(answers, club)) continue;
         const match = scoreClub(answers, club).score;
-        if (match >= MATCH_THRESHOLD) goodFit.push({ ...toLead(student), match, fit: whyFit(student.interests, club) });
+        if (match >= MATCH_THRESHOLD) {
+          goodFit.push({
+            ...toLead(student),
+            match,
+            fit: whyFit(student.interests, club),
+            invited: invited.has(student.id),
+          });
+        }
       }
     }
     if (page.length < PAGE) break;
@@ -89,6 +101,7 @@ export async function GET(request: Request, { params }: Ctx) {
   return Response.json({
     goodFit: goodFit.slice(0, MAX_LEADS),
     goodFitTotal: goodFit.length,
+    invitesLeftToday: Math.max(0, INVITE_DAILY_LIMIT - sentToday),
     interested,
     hiddenInterested,
   });
