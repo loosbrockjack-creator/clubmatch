@@ -3,8 +3,44 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { Inbox } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { signOut, useAccount } from "@/lib/account";
+import { refreshUnread, useOfficerClubs, useUnreadCount } from "@/lib/club-client";
+import { getClubSummary } from "@/lib/clubs";
+
+/** Header inbox icon with an unread dot. Renders nothing when signed out. */
+export function InboxLink({ className = "" }: { className?: string }) {
+  const account = useAccount();
+  const pathname = usePathname();
+  const unread = useUnreadCount();
+  const userId = account.userId;
+
+  useEffect(() => {
+    void refreshUnread(userId);
+    const onFocus = () => void refreshUnread(userId);
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [userId, pathname]);
+
+  if (account.status !== "signed-in") return null;
+  return (
+    <Link
+      href="/inbox"
+      aria-label={unread > 0 ? `Inbox, ${unread} unread` : "Inbox"}
+      className={`relative inline-flex h-10 w-10 items-center justify-center rounded-[4px] text-ink-soft transition-colors hover:bg-muted hover:text-cardinal ${className}`}
+    >
+      <Inbox size={20} strokeWidth={1.75} aria-hidden />
+      {unread > 0 && (
+        <span
+          aria-hidden
+          data-unread-dot
+          className="absolute right-[7px] top-[7px] h-2.5 w-2.5 rounded-full border-2 border-white bg-cardinal"
+        />
+      )}
+    </Link>
+  );
+}
 
 /** Desktop header control: "Sign in", or the student's avatar with a menu. */
 export function AccountMenu() {
@@ -18,6 +54,7 @@ export function AccountMenu() {
   const setOpen = (next: boolean | ((v: boolean) => boolean)) =>
     setOpenOn((typeof next === "function" ? next(open) : next) ? pathname : null);
   const ref = useRef<HTMLDivElement>(null);
+  const officerClubs = useOfficerClubs();
 
   useEffect(() => {
     if (!open) return;
@@ -53,6 +90,10 @@ export function AccountMenu() {
 
   const profile = account.profile;
   const name = profile?.display_name || account.email;
+  const manageItems = officerClubs.map((slug) => ({
+    href: `/manage/${slug}`,
+    label: `Manage ${getClubSummary(slug)?.name ?? "club"}`,
+  }));
 
   return (
     <div ref={ref} className="relative ml-2">
@@ -79,6 +120,8 @@ export function AccountMenu() {
             { href: "/account", label: "My account" },
             { href: "/account#clubs", label: "My clubs" },
             ...(profile ? [{ href: `/students/${profile.id}`, label: "View my profile" }] : []),
+            { href: "/inbox", label: "Inbox" },
+            ...manageItems,
           ].map((item) => (
             <Link
               key={item.href}
@@ -111,6 +154,7 @@ export function AccountMenu() {
 export function MobileAccountLinks({ onNavigate }: { onNavigate: () => void }) {
   const account = useAccount();
   const router = useRouter();
+  const officerClubs = useOfficerClubs();
 
   if (account.status !== "signed-in") {
     return (
@@ -124,6 +168,19 @@ export function MobileAccountLinks({ onNavigate }: { onNavigate: () => void }) {
       <Link href="/account" onClick={onNavigate} className="border-b border-line py-3.5 text-[16px] font-semibold text-ink">
         My account
       </Link>
+      <Link href="/inbox" onClick={onNavigate} className="border-b border-line py-3.5 text-[16px] font-semibold text-ink">
+        Inbox
+      </Link>
+      {officerClubs.map((slug) => (
+        <Link
+          key={slug}
+          href={`/manage/${slug}`}
+          onClick={onNavigate}
+          className="border-b border-line py-3.5 text-[16px] font-semibold text-ink"
+        >
+          Manage {getClubSummary(slug)?.name ?? "club"}
+        </Link>
+      ))}
       <button
         type="button"
         onClick={async () => {

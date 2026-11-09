@@ -21,6 +21,14 @@ const RULES: { title: string; body: string }[] = [
     body: "Club details come from Iowa State's public directories and our own summaries. They can be out of date, so check a club's own page before you show up. Fit scores are suggestions, not guarantees.",
   },
   {
+    title: "Club plans and payments",
+    body: "Officers can claim a club's page for $49 per semester. The plan renews automatically every 6 months at $49 until you cancel, and payments are handled by Stripe. Cancel any time from Billing in your club's admin panel: the page stays active until the end of the period you paid for. If a plan ends, the page goes back to its directory listing and we keep what you added, so renewing brings it back. Featured spots are always labeled, and paying never changes a student's match scores. Questions about a charge or a refund? Email us.",
+  },
+  {
+    title: "Good-fit students and messages",
+    body: "Officers of a paid club can see students who fit it: public profile details and a match percentage, never quiz answers. Turning off Let clubs find me, or hiding your profile, keeps you off that list. Officers can send in-app messages to members and to students who told them they're interested. You can mute any club from your inbox.",
+  },
+  {
     title: "Not an official service",
     body: "ClubMatch is an independent student project. It is not affiliated with or endorsed by Iowa State University, and it's provided as is.",
   },

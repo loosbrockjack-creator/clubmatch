@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { AccountMenu, MobileAccountLinks } from "./account-menu";
+import { AccountMenu, InboxLink, MobileAccountLinks } from "./account-menu";
+import { SaveTracker } from "./club-trackers";
 
 const links = [
   { href: "/explore", label: "Explore" },
@@ -19,6 +20,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 bg-white">
+      <SaveTracker />
       {/* Gold hairline over cardinal, the ISU masthead signature. */}
       <div className="h-[3px] bg-gold" />
 
@@ -63,19 +65,23 @@ export function SiteHeader() {
                 >
                   Find my clubs
                 </Link>
+                <InboxLink className="ml-2" />
                 <AccountMenu />
               </nav>
 
-              <button
-                type="button"
-                onClick={() => setOpen((v) => !v)}
-                aria-expanded={open}
-                aria-controls="mobile-nav"
-                aria-label={open ? "Close menu" : "Open menu"}
-                className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-[4px] text-cardinal transition-colors hover:bg-muted sm:hidden"
-              >
-                {open ? <X size={22} /> : <Menu size={22} />}
-              </button>
+              <div className="-mr-2 flex items-center gap-1 sm:hidden">
+                <InboxLink className="h-11 w-11" />
+                <button
+                  type="button"
+                  onClick={() => setOpen((v) => !v)}
+                  aria-expanded={open}
+                  aria-controls="mobile-nav"
+                  aria-label={open ? "Close menu" : "Open menu"}
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] text-cardinal transition-colors hover:bg-muted"
+                >
+                  {open ? <X size={22} /> : <Menu size={22} />}
+                </button>
+              </div>
             </>
           )}
 

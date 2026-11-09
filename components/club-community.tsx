@@ -5,47 +5,57 @@ import Link from "next/link";
 import { CalendarDays } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { PUBLIC_PROFILE_COLUMNS, useAccount, type PublicProfile } from "@/lib/account";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { ClubEvents } from "@/components/club-events";
 import { getSupabase } from "@/lib/supabase";
 
 const SHOWN = 12;
 
 /**
  * Two account-era sections on a club page: the students on ClubMatch who say
- * they're members, and the events slot that unlocks once a club claims its
- * page (the future premium feature).
+ * they're members, and either the club's events (claimed) or the invitation
+ * for its officers to claim the page (not claimed, or a plan that lapsed).
  */
-export function ClubCommunity({ slug, clubName }: { slug: string; clubName: string }) {
+export function ClubCommunity({
+  slug,
+  clubName,
+  claimed,
+}: {
+  slug: string;
+  clubName: string;
+  claimed: boolean;
+}) {
   return (
     <>
       <Members slug={slug} />
-      <section className="mt-14">
-        <h2 className="display gold-rule text-[26px] text-ink">Events and news</h2>
-        <div className="card flex flex-col gap-5 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <div className="flex gap-4">
-            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-tint text-gold-deep">
-              <CalendarDays size={20} strokeWidth={1.75} aria-hidden />
-            </span>
-            <div>
-              <p className="text-[15.5px] font-semibold text-ink">
-                {clubName} hasn&apos;t claimed its ClubMatch page yet.
-              </p>
-              <p className="mt-1 text-[14.5px] leading-relaxed text-ink-soft">
-                Officers can claim it to post events and news for members and interested
-                students.
-              </p>
+      {claimed ? (
+        <ClubEvents slug={slug} clubName={clubName} />
+      ) : (
+        <section className="mt-14">
+          <h2 className="display gold-rule text-[26px] text-ink">Events and news</h2>
+          <div className="card flex flex-col gap-5 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+            <div className="flex gap-4">
+              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-tint text-gold-deep">
+                <CalendarDays size={20} strokeWidth={1.75} aria-hidden />
+              </span>
+              <div>
+                <p className="text-[15.5px] font-semibold text-ink">
+                  {clubName} hasn&apos;t claimed its ClubMatch page yet.
+                </p>
+                <p className="mt-1 text-[14.5px] leading-relaxed text-ink-soft">
+                  Officers can claim it to post events and news for members and interested
+                  students.
+                </p>
+              </div>
             </div>
+            <Link
+              href={`/clubs/${slug}/claim`}
+              className="btn btn-outline-cardinal shrink-0 rounded-full"
+            >
+              Claim this club
+            </Link>
           </div>
-          <a
-            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Claim ${clubName} on ClubMatch`)}&body=${encodeURIComponent(
-              `Club: ${clubName}\nClubMatch page: https://clubmatch-puce.vercel.app/clubs/${slug}\nYour name and officer role:\n`,
-            )}`}
-            className="btn btn-outline-cardinal shrink-0 rounded-full"
-          >
-            Claim this club
-          </a>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

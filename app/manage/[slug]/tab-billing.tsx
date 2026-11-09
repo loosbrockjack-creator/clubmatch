@@ -1,0 +1,65 @@
+"use client";
+
+import { useState } from "react";
+import { CreditCard } from "lucide-react";
+import { apiFetch } from "@/lib/club-client";
+import { CLAIM_RENEWAL_TEXT, type ManageAccess } from "@/lib/club-types";
+import { FormStatus, SectionTitle } from "./shared";
+
+export function BillingTab({ slug, access }: { slug: string; access: ManageAccess }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function openPortal() {
+    setBusy(true);
+    setError(null);
+    const { data, error: failure } = await apiFetch<{ url: string }>(`/api/manage/${slug}/billing`, { method: "POST" });
+    if (data?.url) {
+      window.location.assign(data.url);
+      return;
+    }
+    setError(failure);
+    setBusy(false);
+  }
+
+  const until = access.currentPeriodEnd
+    ? new Date(access.currentPeriodEnd).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })
+    : null;
+
+  return (
+    <div className="max-w-2xl">
+      <SectionTitle title="Your plan" />
+      <div className="card px-5 py-6 sm:px-7">
+        {access.status === "past_due" && (
+          <p role="alert" className="mb-5 rounded-[4px] bg-gold-tint px-4 py-3 text-[14px] leading-relaxed text-ink">
+            Your last payment didn&apos;t go through. Update your card so your page stays on.
+          </p>
+        )}
+        <dl className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <dt className="text-[13px] text-ink-muted">Plan</dt>
+            <dd className="mt-0.5 text-[15.5px] font-semibold text-ink">{CLAIM_RENEWAL_TEXT}</dd>
+          </div>
+          <div>
+            <dt className="text-[13px] text-ink-muted">{access.cancelAtPeriodEnd ? "Ends on" : "Renews on"}</dt>
+            <dd className="mt-0.5 text-[15.5px] font-semibold text-ink">{until ?? "Not available"}</dd>
+          </div>
+        </dl>
+        {access.cancelAtPeriodEnd && (
+          <p className="mt-5 text-[14px] leading-relaxed text-ink-soft">
+            Your plan won&apos;t renew. Your page stays on until then, then goes back to the directory listing. Your
+            content is saved if you come back.
+          </p>
+        )}
+        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-line pt-5">
+          <button type="button" onClick={() => void openPortal()} disabled={busy} className="btn btn-secondary">
+            <CreditCard size={16} strokeWidth={1.75} aria-hidden />
+            {busy ? "Opening Stripe..." : "Manage billing"}
+          </button>
+          <FormStatus error={error} />
+        </div>
+        <p className="mt-3 text-[13px] text-ink-muted">Change your card, see receipts, or cancel on Stripe.</p>
+      </div>
+    </div>
+  );
+}

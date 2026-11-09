@@ -7,6 +7,7 @@ import { MatchRow } from "@/components/match-row";
 import { ClubCard } from "@/components/club-card";
 import { ClubMark } from "@/components/club-mark";
 import { buildInvolvementStack, matchChapters, matchClubs } from "@/lib/matching";
+import { logActivity } from "@/lib/club-client";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
   ACADEMIC_AREA_BY_ID,
@@ -95,6 +96,13 @@ export default function ResultsPage() {
   );
   const stack = useMemo(() => buildInvolvementStack(results), [results]);
   const chapters = useMemo(() => (prefs ? matchChapters(prefs) : []), [prefs]);
+
+  // A club's "You showed up in N students' matches" counts what's on screen here.
+  useEffect(() => {
+    if (!settled || !prefs) return;
+    const shown = [...results.slice(0, RESULT_LIMIT), ...chapters].map((r) => r.club.slug);
+    if (shown.length > 0) logActivity("impression", shown);
+  }, [settled, prefs, results, chapters]);
 
   if (prefs === null || !settled) {
     return <ResultsSkeleton />;

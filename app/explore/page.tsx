@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 import Link from "next/link";
 import { ClubCard } from "@/components/club-card";
+import { ExploreHighlights } from "@/components/explore-highlights";
 import { FilterRow } from "@/components/filter-row";
 import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
@@ -293,6 +294,8 @@ function ExploreView() {
             </Link>
           </p>
         )}
+
+        {filterCount === 0 && !query && <ExploreHighlights />}
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         <div className="flex items-center gap-3">

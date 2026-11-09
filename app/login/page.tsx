@@ -15,8 +15,8 @@ const PERKS = [
   { icon: UserRound, title: "Your own profile", body: "Photo, major, class year, and a line about you." },
   {
     icon: CalendarDays,
-    title: "Coming soon: club events",
-    body: "News and events from the clubs you've joined, once they claim their page.",
+    title: "Club events and news",
+    body: "See what's coming up, and get messages from the clubs you care about in your inbox.",
   },
 ];
 

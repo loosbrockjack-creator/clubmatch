@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   ArrowUpRight,
+  BadgeCheck,
   CalendarDays,
   ChevronRight,
   Clock,
@@ -17,12 +18,15 @@ import { ClubMark } from "@/components/club-mark";
 import { InterestedButton } from "@/components/interested-button";
 import { MemberButton } from "@/components/member-button";
 import { ClubCommunity } from "@/components/club-community";
+import { ClubInterestButton } from "@/components/club-interest-button";
+import { TrackedLink, ViewTracker } from "@/components/club-trackers";
 import { WhyItFits } from "@/components/why-it-fits";
 import { ClubCard } from "@/components/club-card";
 import { ChapterFacts } from "@/components/chapter-facts";
 import { ChapterQuote } from "@/components/chapter-quote";
 import { clubs } from "@/lib/clubs";
 import { getClub } from "@/lib/clubs-detail";
+import { getClubOverlay } from "@/lib/club-overlay";
 import { photoForClub } from "@/lib/photos";
 import {
   CAREER_BY_ID,
@@ -33,9 +37,18 @@ import {
   majorsForAreas,
 } from "@/lib/taxonomy";
 
+/**
+ * Pages stay statically generated (ISR). Officer edits come from club_profiles
+ * through getClubOverlay: a save revalidates this page right away, and this
+ * window is the backstop for anything else, like a plan lapsing by date.
+ */
+export const revalidate = 300;
+
 export function generateStaticParams() {
   return clubs.map((club) => ({ slug: club.slug }));
 }
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clubmatch-puce.vercel.app";
 
 /** How many clubs carry each category, used to weight overlap by rarity. */
 const CATEGORY_COUNTS = clubs.reduce((counts, club) => {
@@ -53,7 +66,25 @@ export async function generateMetadata({
   const { slug } = await params;
   const club = getClub(slug);
   if (!club) return { title: "Club not found" };
-  return { title: club.name, description: club.tagline };
+  const overlay = await getClubOverlay(slug);
+  const description = overlay?.tagline || club.tagline;
+  const image = overlay?.photos[0] ?? photoForClub(club).src;
+  const title = `${club.name} at Iowa State`;
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: club.name,
+    description,
+    alternates: { canonical: `/clubs/${slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `/clubs/${slug}`,
+      siteName: "ClubMatch",
+      type: "website",
+      images: [{ url: image, alt: `${club.name} on ClubMatch` }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
+  };
 }
 
 export default async function ClubDetailPage({
@@ -62,8 +93,17 @@ export default async function ClubDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const club = getClub(slug);
-  if (!club) notFound();
+  const directoryClub = getClub(slug);
+  if (!directoryClub) notFound();
+
+  // A row exists only while the club is active, so this is also the claim check.
+  const overlay = await getClubOverlay(slug);
+  const verified = Boolean(overlay);
+  const club = overlay?.tagline ? { ...directoryClub, tagline: overlay.tagline } : directoryClub;
+  const officerDescription = overlay?.description ?? null;
+  const officerMeeting = overlay?.meeting_info ?? null;
+  const officerLinks = overlay?.links ?? [];
+  const officerPhotos = overlay?.photos ?? [];
 
   const majors = majorsForAreas(club.academicAreas);
   const greek = club.greek;
@@ -75,16 +115,17 @@ export default async function ClubDetailPage({
   const taglineStem = club.tagline.replace(/\.\.\.$/, "").trim();
   const summaryIsOneSentence = !/[.!?]\s+\S/.test(club.summary);
   const summaryAddsNothing =
-    club.summary.startsWith(taglineStem) && summaryIsOneSentence;
+    !officerDescription && club.summary.startsWith(taglineStem) && summaryIsOneSentence;
   // A chapter's tagline is the first sentence of its own description, so the
   // About section picks up where the header left off instead of repeating it.
-  const aboutText =
-    greek && !club.tagline.endsWith("...") && club.summary.startsWith(club.tagline)
+  const aboutText = officerDescription
+    ? officerDescription
+    : greek && !club.tagline.endsWith("...") && club.summary.startsWith(club.tagline)
       ? club.summary.slice(club.tagline.length).trim()
       : club.summary;
 
   // "Biweekly" on its own reads like a stray word under a how-to heading.
-  const meetingNote = club.meetingDetail.length >= 40 ? club.meetingDetail : "";
+  const meetingNote = officerMeeting || (club.meetingDetail.length >= 40 ? club.meetingDetail : "");
 
   // Chapter tiles show only what SFE states. SFE publishes no time
   // commitment, so there is no Time tile, and a fact SFE leaves out is
@@ -228,10 +269,21 @@ export default async function ClubDetailPage({
   // Clubs have no photos of their own, so the banner is keyed to category.
   // Only one is ever on screen at a time, so the reuse is invisible. Greek
   // chapters show the photo from their own SFE page.
-  const photo = photoForClub(club);
+  const directoryPhoto = photoForClub(club);
+  // Officer uploads are already sized and live on Supabase, so they skip the optimizer.
+  const photo = officerPhotos[0]
+    ? {
+        src: officerPhotos[0],
+        alt: `${club.name}, photo from the club's officers`,
+        quality: undefined,
+        own: true,
+        unoptimized: true,
+      }
+    : { ...directoryPhoto, unoptimized: false };
 
   return (
     <>
+      <ViewTracker slug={club.slug} />
       {/* Category banner, or the chapter's own photo */}
       {/* A chapter's own photo is often a group shot, so it gets a taller
           frame anchored higher to keep faces clear of the header card. */}
@@ -242,6 +294,7 @@ export default async function ClubDetailPage({
           src={photo.src}
           alt={photo.alt}
           quality={photo.quality}
+          unoptimized={photo.unoptimized}
           fill
           priority
           sizes="100vw"
@@ -292,6 +345,15 @@ export default async function ClubDetailPage({
                   <h1 className="display text-[30px] text-ink sm:text-[40px]">
                     {club.name}
                   </h1>
+                  {verified && (
+                    <p
+                      data-verified-badge
+                      className="mt-2.5 inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-ink"
+                    >
+                      <BadgeCheck size={16} strokeWidth={2} aria-hidden className="text-cardinal" />
+                      Verified by officers
+                    </p>
+                  )}
                   {greek ? (
                     <>
                       <p className="mt-2.5 text-[14px] font-semibold text-cardinal">
@@ -366,9 +428,49 @@ export default async function ClubDetailPage({
               <h2 className="display gold-rule text-[26px] text-ink">
                 {greek ? "About the chapter" : "About the club"}
               </h2>
-              <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-ink-soft">
+              <p className="mt-4 max-w-2xl whitespace-pre-line text-[16px] leading-relaxed text-ink-soft">
                 {aboutText}
               </p>
+            </section>
+          )}
+
+          {officerPhotos.length > 1 && (
+            <section className="mt-10">
+              <h2 className="sr-only">Club photos</h2>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {officerPhotos.slice(1).map((src) => (
+                  <div key={src} className="relative aspect-[4/3] overflow-hidden rounded-[12px] bg-muted">
+                    <Image
+                      src={src}
+                      alt={`${club.name}, photo from the club's officers`}
+                      fill
+                      unoptimized
+                      sizes="(min-width: 640px) 280px, 45vw"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {officerLinks.length > 0 && (
+            <section className="mt-10">
+              <h2 className="eyebrow">Find the club online</h2>
+              <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2.5 text-[15px]">
+                {officerLinks.map((link) => (
+                  <li key={link.url}>
+                    <TrackedLink
+                      slug={club.slug}
+                      href={link.url}
+                      className="link-isu inline-flex items-center gap-1"
+                    >
+                      {link.label}
+                      <ArrowUpRight size={13} strokeWidth={2} aria-hidden />
+                    </TrackedLink>
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
 
@@ -487,6 +589,7 @@ export default async function ClubDetailPage({
                   <ArrowUpRight size={15} strokeWidth={2} aria-hidden />
                 </a>
               </div>
+              {verified && <ClubInterestButton slug={club.slug} clubName={club.name} />}
 
               {chapterLinks.length > 0 && (
                 <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2.5 border-t border-white/20 pt-6 text-[14px]">
@@ -528,18 +631,22 @@ export default async function ClubDetailPage({
             )}
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <InterestedButton slug={club.slug} clubName={club.name} onCardinal />
-              <a
+              <TrackedLink
+                slug={club.slug}
                 href={club.stuorgUrl}
-                target="_blank"
-                rel="noreferrer"
                 className="btn btn-ghost-on-cardinal w-full sm:w-auto"
               >
                 Visit club on stuorg
                 <ArrowUpRight size={15} strokeWidth={2} aria-hidden />
-              </a>
+              </TrackedLink>
             </div>
+            {verified && <ClubInterestButton slug={club.slug} clubName={club.name} />}
             <p className="mt-5 text-[13px] text-white/70">
-              {`Details come from Iowa State's student organization directory${
+              {`${
+                verified
+                  ? "Officers keep this page up to date; other details"
+                  : "Details"
+              } come from Iowa State's student organization directory${
                 club.memberCount
                   ? ` · ${club.memberCount} student members listed`
                   : ""
@@ -548,7 +655,7 @@ export default async function ClubDetailPage({
           </section>
           )}
 
-          <ClubCommunity slug={club.slug} clubName={club.name} />
+          <ClubCommunity slug={club.slug} clubName={club.name} claimed={verified} />
 
           {similar.length > 0 && (
             <section className="mt-16">

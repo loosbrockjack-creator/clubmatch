@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, UserPlus } from "lucide-react";
+import { BadgeCheck, Check, UserPlus } from "lucide-react";
+import { logActivity, useOfficerClubs } from "@/lib/club-client";
 import { toggleMembership, useAccount } from "@/lib/account";
 
 /** "I'm a member": self-declared, no approval. Signed out, it leads to sign-in. */
@@ -10,6 +11,7 @@ export function MemberButton({ slug, clubName }: { slug: string; clubName: strin
   const account = useAccount();
   const [error, setError] = useState<string | null>(null);
   const isMember = account.memberships.includes(slug);
+  const isOfficer = useOfficerClubs().includes(slug);
 
   if (account.status !== "signed-in") {
     return (
@@ -25,12 +27,27 @@ export function MemberButton({ slug, clubName }: { slug: string; clubName: strin
     );
   }
 
+  // Officers manage their role in the panel, so a stray tap here can't drop it.
+  if (isOfficer) {
+    return (
+      <Link href={`/manage/${slug}`} className="btn btn-secondary w-full sm:w-auto">
+        <BadgeCheck size={16} strokeWidth={2} aria-hidden />
+        Manage club
+        <span className="sr-only"> {clubName}</span>
+      </Link>
+    );
+  }
+
   return (
     <div>
       <button
         type="button"
         aria-pressed={isMember}
-        onClick={async () => setError(await toggleMembership(slug))}
+        onClick={async () => {
+          const problem = await toggleMembership(slug);
+          setError(problem);
+          if (!problem && !isMember) logActivity("join", [slug]);
+        }}
         className={`btn w-full sm:w-auto ${isMember ? "btn-outline-cardinal" : "btn-secondary"}`}
       >
         {isMember ? (
