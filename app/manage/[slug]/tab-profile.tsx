@@ -6,6 +6,7 @@ import { CheckCircle2, Circle, ImagePlus, Plus, Trash2 } from "lucide-react";
 import { apiFetch } from "@/lib/club-client";
 import type { ClubAnalytics, ClubLink, ClubOverlay, ManageAccess } from "@/lib/club-types";
 import { LIMITS } from "@/lib/club-validate";
+import { ShareCard } from "./share-card";
 import { CharCount, FormStatus, PanelError, PanelSkeleton, SectionTitle, usePanelData } from "./shared";
 
 type ProfileData = {
@@ -27,22 +28,50 @@ export function ProfileTab({
   const { data, error, reload } = usePanelData<ProfileData>(`/api/manage/${slug}/profile`);
   // Bumped after every save or photo change, so the checklist re-reads the page.
   const [version, setVersion] = useState(0);
-  const onSaved = () => setVersion((v) => v + 1);
+  const [savedNote, setSavedNote] = useState(false);
+  const onSaved = () => {
+    setVersion((v) => v + 1);
+    void reload();
+  };
   if (error) return <PanelError message={error} onRetry={() => void reload()} />;
   if (!data) return <PanelSkeleton />;
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
       <div className="min-w-0 space-y-10">
-        <ProfileForm slug={slug} data={data} onSaved={onSaved} />
-        <Photos slug={slug} clubName={clubName} initial={data.overlay?.photos ?? []} onSaved={onSaved} />
+        <ProfileForm slug={slug} data={data} onSaved={onSaved} saved={savedNote} setSaved={setSavedNote} />
+        <Photos
+          slug={slug}
+          clubName={clubName}
+          initial={data.overlay?.photos ?? []}
+          onSaved={onSaved}
+          onStart={() => setSavedNote(false)}
+        />
         <FeaturedToggle slug={slug} access={access} onAccess={onAccess} />
+        <ShareCard
+          slug={slug}
+          clubName={clubName}
+          overlay={data.overlay}
+          directoryTagline={data.directory.tagline}
+        />
       </div>
       <Completeness slug={slug} version={version} />
     </div>
   );
 }
 
-function ProfileForm({ slug, data, onSaved }: { slug: string; data: ProfileData; onSaved: () => void }) {
+function ProfileForm({
+  slug,
+  data,
+  onSaved,
+  saved,
+  setSaved,
+}: {
+  slug: string;
+  data: ProfileData;
+  onSaved: () => void;
+  saved: boolean;
+  setSaved: (next: boolean) => void;
+}) {
   const overlay = data.overlay;
   const [tagline, setTagline] = useState(overlay?.tagline ?? "");
   const [description, setDescription] = useState(overlay?.description ?? "");
@@ -50,7 +79,6 @@ function ProfileForm({ slug, data, onSaved }: { slug: string; data: ProfileData;
   const [links, setLinks] = useState<ClubLink[]>(overlay?.links ?? []);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
 
   const setLink = (index: number, patch: Partial<ClubLink>) => {
     setSaved(false);
@@ -184,7 +212,7 @@ function ProfileForm({ slug, data, onSaved }: { slug: string; data: ProfileData;
             <button
               type="button"
               onClick={() => setLinks((list) => [...list, { label: "", url: "" }])}
-              className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-cardinal hover:text-cardinal-dark"
+              className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-cardinal hover:text-cardinal-dark sm:min-h-0"
             >
               <Plus size={15} strokeWidth={2} aria-hidden />
               Add a link
@@ -207,11 +235,13 @@ function Photos({
   clubName,
   initial,
   onSaved,
+  onStart,
 }: {
   slug: string;
   clubName: string;
   initial: string[];
   onSaved: () => void;
+  onStart: () => void;
 }) {
   const [photos, setPhotos] = useState(initial);
   const [busy, setBusy] = useState(false);
@@ -219,6 +249,7 @@ function Photos({
   const input = useRef<HTMLInputElement>(null);
 
   async function upload(file: File) {
+    onStart();
     setBusy(true);
     setError(null);
     const form = new FormData();
@@ -233,6 +264,7 @@ function Photos({
   }
 
   async function remove(url: string) {
+    onStart();
     setError(null);
     const res = await apiFetch<{ photos: string[] }>(`/api/manage/${slug}/photos`, {
       method: "DELETE",
@@ -321,7 +353,7 @@ function FeaturedToggle({
       <div>
         <h2 className="text-[15.5px] font-semibold text-ink">Featured on Explore</h2>
         <p className="mt-1 max-w-md text-[14px] leading-relaxed text-ink-soft">
-          Take turns in the labeled Featured row on Explore. Included in your plan. It doesn&apos;t change anyone&apos;s match scores.
+          Take turns in the labeled Featured row on Explore. Included in your $49 plan. It doesn&apos;t change anyone&apos;s match scores.
         </p>
         <FormStatus error={error} />
       </div>

@@ -27,6 +27,7 @@ import { ChapterQuote } from "@/components/chapter-quote";
 import { clubs } from "@/lib/clubs";
 import { getClub } from "@/lib/clubs-detail";
 import { getClubOverlay } from "@/lib/club-overlay";
+import { clubUrl, shareDescription, shareTitle, SITE_URL } from "@/lib/club-seo";
 import { photoForClub } from "@/lib/photos";
 import {
   CAREER_BY_ID,
@@ -48,8 +49,6 @@ export function generateStaticParams() {
   return clubs.map((club) => ({ slug: club.slug }));
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clubmatch-puce.vercel.app";
-
 /** How many clubs carry each category, used to weight overlap by rarity. */
 const CATEGORY_COUNTS = clubs.reduce((counts, club) => {
   for (const category of club.categories) {
@@ -67,9 +66,9 @@ export async function generateMetadata({
   const club = getClub(slug);
   if (!club) return { title: "Club not found" };
   const overlay = await getClubOverlay(slug);
-  const description = overlay?.tagline || club.tagline;
+  const description = shareDescription(overlay?.tagline, overlay?.description, club.tagline);
   const image = overlay?.photos[0] ?? photoForClub(club).src;
-  const title = `${club.name} at Iowa State`;
+  const title = shareTitle(club.name);
   return {
     metadataBase: new URL(SITE_URL),
     title: club.name,
@@ -281,8 +280,32 @@ export default async function ClubDetailPage({
       }
     : { ...directoryPhoto, unoptimized: false };
 
+  // Only what's on record about this club. A stock banner isn't its image, and
+  // anything an officer typed is escaped below, because it lands inside a script tag.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: club.name,
+    url: clubUrl(club.slug),
+    description: officerDescription || club.tagline || undefined,
+    alternateName: chapter?.nickname || undefined,
+    image: photo.own ? new URL(photo.src, SITE_URL).toString() : undefined,
+    memberOf: { "@type": "CollegeOrUniversity", name: "Iowa State University" },
+    sameAs: [
+      ...officerLinks.map((link) => link.url),
+      club.stuorgUrl,
+      chapter?.chapterWebsite,
+      chapter?.nationalWebsite,
+      chapter?.socialUrl,
+    ].filter(Boolean),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <ViewTracker slug={club.slug} />
       {/* Category banner, or the chapter's own photo */}
       {/* A chapter's own photo is often a group shot, so it gets a taller
@@ -463,7 +486,7 @@ export default async function ClubDetailPage({
                     <TrackedLink
                       slug={club.slug}
                       href={link.url}
-                      className="link-isu inline-flex items-center gap-1"
+                      className="link-isu inline-flex min-h-11 items-center gap-1 sm:min-h-0"
                     >
                       {link.label}
                       <ArrowUpRight size={13} strokeWidth={2} aria-hidden />
