@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BellRing, Check } from "lucide-react";
 import { useAccount } from "@/lib/account";
-import { logActivity } from "@/lib/club-client";
+import { logActivity, useOfficerClubs } from "@/lib/club-client";
 import { getSupabase } from "@/lib/supabase";
 
 /**
@@ -19,6 +19,7 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const hidden = account.profile?.visible === false;
+  const isOfficer = useOfficerClubs().includes(slug);
 
   useEffect(() => {
     const sb = getSupabase();
@@ -54,6 +55,8 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
     );
   }
 
+  if (isOfficer) return null;
+
   const interested = state?.userId === userId && state.interested;
   const loaded = state?.userId === userId;
 
@@ -82,7 +85,7 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
           onClick={toggle}
           disabled={!loaded || busy}
           aria-pressed={interested}
-          className={`btn w-full sm:w-auto ${interested ? "btn-ghost-on-cardinal" : "btn-on-cardinal"} disabled:opacity-70`}
+          className={`btn h-auto min-h-12 w-full py-3 leading-snug sm:w-auto ${interested ? "btn-ghost-on-cardinal" : "btn-on-cardinal"} disabled:opacity-70`}
         >
           {interested ? (
             <Check size={16} strokeWidth={2.25} aria-hidden />

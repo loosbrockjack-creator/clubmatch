@@ -42,7 +42,7 @@ import {
  * through getClubOverlay: a save revalidates this page right away, and this
  * window is the backstop for anything else, like a plan lapsing by date.
  */
-export const revalidate = 300;
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return clubs.map((club) => ({ slug: club.slug }));

@@ -60,9 +60,10 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
   useEffect(() => {
     if (account.status !== "signed-in" || !userId) return;
     let cancelled = false;
-    void apiFetch<ManageAccess>(`/api/manage/${slug}/access`).then((res) => {
+    void apiFetch<ManageAccess | { allowed: false }>(`/api/manage/${slug}/access`).then((res) => {
       if (cancelled) return;
-      if (res.data) setAccess({ userId, value: res.data });
+      if (res.data?.allowed) setAccess({ userId, value: res.data });
+      else if (res.data) setDenied({ userId, value: { status: 403, message: "" } });
       else setDenied({ userId, value: { status: res.status, message: res.error ?? "" } });
     });
     return () => {

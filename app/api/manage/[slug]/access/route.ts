@@ -7,8 +7,11 @@ type Ctx = { params: Promise<{ slug: string }> };
 export async function GET(request: Request, { params }: Ctx) {
   const { slug } = await params;
   const ctx = await requireOfficer(request, slug, { allowLapsed: true });
+  // A student opening this page is an expected case, not an error. No club data here.
+  if (ctx instanceof Response && ctx.status === 403) return Response.json({ allowed: false });
   if (ctx instanceof Response) return ctx;
   const access: ManageAccess = {
+    allowed: true,
     slug,
     status: ctx.status,
     role: "officer",

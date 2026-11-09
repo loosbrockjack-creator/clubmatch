@@ -11,7 +11,7 @@ import type { ClubOverlay } from "./club-types";
  * officer's save revalidates its page straight away (see revalidateClub).
  * Never throws, because a Supabase outage must not fail a build or blank a page.
  */
-export const REVALIDATE_SECONDS = 300;
+export const REVALIDATE_SECONDS = 60;
 
 export const overlayTag = (slug: string) => `club-overlay:${slug}`;
 

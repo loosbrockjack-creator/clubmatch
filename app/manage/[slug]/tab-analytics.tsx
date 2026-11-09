@@ -190,15 +190,15 @@ function Gaps({ data }: { data: ClubAnalytics }) {
           We show a major once at least 3 students from it have matched with you, so no one can be singled out.
         </EmptyState>
       ) : (
-        <div className="card overflow-x-auto px-5 py-2 sm:px-7">
-          <table className="w-full min-w-[420px] text-left text-[14px]" data-gaps>
+        <div className="card px-4 py-2 sm:px-7">
+          <table className="w-full text-left text-[13.5px] sm:text-[14px]" data-gaps>
             <caption className="sr-only">Matches and saves by major</caption>
             <thead>
               <tr className="border-b border-line text-[12.5px] text-ink-muted">
                 <th scope="col" className="py-3 font-semibold">Major</th>
-                <th scope="col" className="py-3 text-right font-semibold">In matches</th>
-                <th scope="col" className="py-3 text-right font-semibold">Saved</th>
-                <th scope="col" className="py-3 text-right font-semibold">Save rate</th>
+                <th scope="col" className="py-3 pl-2 text-right font-semibold">Matches</th>
+                <th scope="col" className="py-3 pl-2 text-right font-semibold">Saves</th>
+                <th scope="col" className="py-3 pl-2 text-right font-semibold">Rate</th>
               </tr>
             </thead>
             <tbody>

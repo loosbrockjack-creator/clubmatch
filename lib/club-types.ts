@@ -40,6 +40,7 @@ export interface ClaimState {
 }
 
 export interface ManageAccess {
+  allowed: true;
   slug: string;
   status: ClubStatus;
   role: "officer";

@@ -101,21 +101,21 @@ function Members({ slug }: { slug: string }) {
     <section className="mt-14">
       <h2 className="display gold-rule text-[26px] text-ink">Members on ClubMatch</h2>
       {!signedIn ? (
-        <p className="text-[15px] leading-relaxed text-ink-soft">
+        <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
           <Link href={`/login?next=${encodeURIComponent(`/clubs/${slug}`)}`} className="link-isu">
             Sign in
           </Link>{" "}
           with your Iowa State email to see which students are in this club.
         </p>
       ) : members === null ? (
-        <div className="skeleton h-14 w-72 rounded-[4px]" />
+        <div className="skeleton mt-5 h-14 w-72 rounded-[4px]" />
       ) : members.length === 0 ? (
-        <p className="text-[15px] text-ink-soft">
+        <p className="mt-4 text-[15px] text-ink-soft">
           No one has added this club yet. In it? Tap I&apos;m a member at the top of the page.
         </p>
       ) : (
         <>
-          <ul className="flex flex-wrap gap-x-5 gap-y-4">
+          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-4">
             {members.map((member) => (
               <li key={member.id}>
                 <Link

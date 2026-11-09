@@ -25,21 +25,24 @@ export function ProfileTab({
   onAccess: (next: ManageAccess) => void;
 }) {
   const { data, error, reload } = usePanelData<ProfileData>(`/api/manage/${slug}/profile`);
+  // Bumped after every save or photo change, so the checklist re-reads the page.
+  const [version, setVersion] = useState(0);
+  const onSaved = () => setVersion((v) => v + 1);
   if (error) return <PanelError message={error} onRetry={() => void reload()} />;
   if (!data) return <PanelSkeleton />;
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
       <div className="min-w-0 space-y-10">
-        <ProfileForm key={data.overlay?.updated_at ?? "new"} slug={slug} data={data} />
-        <Photos slug={slug} clubName={clubName} initial={data.overlay?.photos ?? []} />
+        <ProfileForm slug={slug} data={data} onSaved={onSaved} />
+        <Photos slug={slug} clubName={clubName} initial={data.overlay?.photos ?? []} onSaved={onSaved} />
         <FeaturedToggle slug={slug} access={access} onAccess={onAccess} />
       </div>
-      <Completeness slug={slug} version={data.overlay?.updated_at ?? ""} />
+      <Completeness slug={slug} version={version} />
     </div>
   );
 }
 
-function ProfileForm({ slug, data }: { slug: string; data: ProfileData }) {
+function ProfileForm({ slug, data, onSaved }: { slug: string; data: ProfileData; onSaved: () => void }) {
   const overlay = data.overlay;
   const [tagline, setTagline] = useState(overlay?.tagline ?? "");
   const [description, setDescription] = useState(overlay?.description ?? "");
@@ -72,6 +75,7 @@ function ProfileForm({ slug, data }: { slug: string; data: ProfileData }) {
     if (res.data) {
       setLinks(res.data.overlay.links);
       setSaved(true);
+      onSaved();
     } else setError(res.error);
   }
 
@@ -156,7 +160,7 @@ function ProfileForm({ slug, data }: { slug: string; data: ProfileData }) {
                 />
                 <input
                   aria-label={`Link ${index + 1} address`}
-                  className="field min-w-0 flex-1"
+                  className="field min-w-0 sm:flex-1"
                   value={link.url}
                   inputMode="url"
                   onChange={(e) => setLink(index, { url: e.target.value })}
@@ -198,7 +202,17 @@ function ProfileForm({ slug, data }: { slug: string; data: ProfileData }) {
   );
 }
 
-function Photos({ slug, clubName, initial }: { slug: string; clubName: string; initial: string[] }) {
+function Photos({
+  slug,
+  clubName,
+  initial,
+  onSaved,
+}: {
+  slug: string;
+  clubName: string;
+  initial: string[];
+  onSaved: () => void;
+}) {
   const [photos, setPhotos] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -211,8 +225,10 @@ function Photos({ slug, clubName, initial }: { slug: string; clubName: string; i
     form.append("photo", file);
     const res = await apiFetch<{ photos: string[] }>(`/api/manage/${slug}/photos`, { method: "POST", body: form });
     setBusy(false);
-    if (res.data) setPhotos(res.data.photos);
-    else setError(res.error);
+    if (res.data) {
+      setPhotos(res.data.photos);
+      onSaved();
+    } else setError(res.error);
     if (input.current) input.current.value = "";
   }
 
@@ -222,8 +238,10 @@ function Photos({ slug, clubName, initial }: { slug: string; clubName: string; i
       method: "DELETE",
       body: JSON.stringify({ url }),
     });
-    if (res.data) setPhotos(res.data.photos);
-    else setError(res.error);
+    if (res.data) {
+      setPhotos(res.data.photos);
+      onSaved();
+    } else setError(res.error);
   }
 
   return (
@@ -325,8 +343,8 @@ function FeaturedToggle({
   );
 }
 
-function Completeness({ slug, version }: { slug: string; version: string }) {
-  const { data } = usePanelData<ClubAnalytics>(`/api/manage/${slug}/analytics?days=7&v=${encodeURIComponent(version)}`);
+function Completeness({ slug, version }: { slug: string; version: number }) {
+  const { data } = usePanelData<ClubAnalytics>(`/api/manage/${slug}/analytics?days=7&v=${version}`);
   if (!data) return <div className="skeleton h-72 rounded-[14px]" />;
   const { score, items } = data.completeness;
   return (
