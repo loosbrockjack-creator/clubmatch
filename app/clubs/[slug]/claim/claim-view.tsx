@@ -11,6 +11,8 @@ import {
   Clock,
   Megaphone,
   PencilLine,
+  Share2,
+  Sparkles,
   Users,
 } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
@@ -23,7 +25,9 @@ const PERKS = [
   { icon: PencilLine, title: "Your own page", body: "Your words, photos, links, and meeting info, with a Verified by officers badge." },
   { icon: BarChart3, title: "Recruitment analytics", body: "How many students matched with you, viewed your page, saved you, and asked about you." },
   { icon: Users, title: "Good-fit students", body: "A list of students who fit your club and said clubs can find them." },
-  { icon: CalendarDays, title: "Events and Featured spots", body: "Post events to your page and Explore, and opt in to the Featured row." },
+  { icon: CalendarDays, title: "Events", body: "Post events to your page and to Explore's This week row." },
+  { icon: Sparkles, title: "Featured spots", body: "Opt in to take turns in the labeled Featured row on Explore. Included in the plan." },
+  { icon: Share2, title: "Search and share", body: "A public page with its own search listing, plus a link and share preview to post anywhere." },
   { icon: Megaphone, title: "Campaigns", body: "Message your members and interested students in their ClubMatch inbox." },
   { icon: BadgeCheck, title: "A real roster", body: "Confirm who's actually a member, and add other officers." },
 ];
@@ -36,6 +40,7 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
   const account = useAccount();
   const params = useSearchParams();
   const returned = params.get("status");
+  const session = params.get("session");
   const signedIn = account.status === "signed-in";
 
   const [state, setState] = useState<ClaimState | null>(null);
@@ -43,13 +48,14 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
   const [activating, setActivating] = useState(returned === "success");
 
   const load = useCallback(async () => {
-    const { data, error } = await apiFetch<ClaimState>(`/api/clubs/${slug}/claim`);
+    const query = session ? `?session=${encodeURIComponent(session)}` : "";
+    const { data, error } = await apiFetch<ClaimState>(`/api/clubs/${slug}/claim${query}`);
     if (data) {
       setState(data);
       setLoadError(null);
     } else setLoadError(error);
     return data;
-  }, [slug]);
+  }, [slug, session]);
 
   useEffect(() => {
     if (!signedIn) return;
@@ -58,7 +64,7 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
       let current = await load();
       if (returned !== "success") return;
       for (let i = 0; i < POLL_TRIES && !cancelled; i++) {
-        if (current?.status === "active" && current.isOfficer) break;
+        if (current?.duplicatePayment || (current?.status === "active" && current.isOfficer)) break;
         await new Promise((resolve) => setTimeout(resolve, POLL_MS));
         current = await load();
       }
@@ -173,6 +179,31 @@ function Step({
   onChange: (next: ClaimState) => void;
 }) {
   const paidUp = state.status === "active" || state.status === "past_due";
+
+  if (state.duplicatePayment) {
+    return (
+      <div data-refund-notice>
+        <p className="text-[15px] font-semibold text-ink">{clubName} was claimed just before you paid.</p>
+        <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
+          Another officer got there first, so we cancelled your subscription and refunded your{" "}
+          {CLAIM_PRICE_LABEL}. It can take a few days to show on your card.
+        </p>
+        {state.isOfficer ? (
+          <Link href={`/manage/${slug}`} className="btn btn-primary mt-4 w-full">
+            Open the admin panel
+          </Link>
+        ) : (
+          <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
+            Ask whoever runs the page to add you as an officer. First tap I&apos;m a member on the club&apos;s page
+            so they can promote you.
+          </p>
+        )}
+        <Link href={`/clubs/${slug}`} className="btn btn-secondary mt-3 w-full">
+          Back to the club
+        </Link>
+      </div>
+    );
+  }
 
   if (paidUp && state.isOfficer) {
     return (
