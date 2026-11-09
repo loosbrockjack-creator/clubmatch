@@ -78,6 +78,18 @@ await blocked("insert a recipient", student.client.from("campaign_recipients").i
 }
 await blocked("write analytics", student.client.from("club_activity").insert({ club_slug: CLUB, kind: "view", viewer_hash: "x" }));
 
+// Can't create invites or read who was invited.
+await blocked("insert an invite", student.client.from("club_invites").insert({ club_slug: CLUB, user_id: student.id }));
+await unreadable("read invites", student.client.from("club_invites").select("*"));
+{
+  const { error } = await student.client.rpc("send_club_invite", { p_slug: CLUB, p_sender: student.id, p_student: student.id, p_subject: "x", p_body: "x" });
+  check("rpc send_club_invite refused", Boolean(error));
+}
+{
+  const res = await fetch(`${BASE}/api/manage/${CLUB}/invites`, { method: "POST", headers: { Authorization: `Bearer ${student.token}`, "Content-Type": "application/json" }, body: JSON.stringify({ studentId: student.id }) });
+  check("invite route: student is 403", res.status === 403, `got ${res.status}`);
+}
+
 // Can't read other people's data.
 await unreadable("read club accounts", student.client.from("club_accounts").select("*"));
 await unreadable("read allowlist", student.client.from("officer_allowlist").select("*"));
@@ -158,6 +170,20 @@ for (const headers of [{}, { "stripe-signature": "t=1,v1=forged" }]) {
     body: JSON.stringify({ kind: "interested", slugs: [CLUB], visitor: crypto.randomUUID() }),
   });
   check("anon can't log interest", res.status === 401, `got ${res.status}`);
+  const save = await fetch(`${BASE}/api/activity`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kind: "save", slugs: [CLUB], visitor: crypto.randomUUID() }),
+  });
+  check("anon can't log a save", save.status === 401, `got ${save.status}`);
+  const signedIn = await fetch(`${BASE}/api/activity`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${student.token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ kind: "save", slugs: ["investment-group"] }),
+  });
+  const { data: savedRow } = await admin.from("saved_clubs").select("club_slug").eq("user_id", student.id).eq("club_slug", "investment-group").maybeSingle();
+  const logged = (await signedIn.json()).logged;
+  check("a save with no saved_clubs row logs nothing", savedRow ? true : logged === 0, `logged ${logged}`);
 }
 
 console.log(`\n${passed} passed, ${failed} failed.`);
