@@ -8,10 +8,10 @@ import { AccountGate } from "@/components/account-gate";
 import { Avatar } from "@/components/avatar";
 import { ClubCard } from "@/components/club-card";
 import { ProfileForm } from "@/components/profile-form";
+import { LetClubsFindMe, ProfileVisibility } from "@/components/profile-settings";
 import {
   deleteAccount,
   signOut,
-  updateProfile,
   useAccount,
   type Profile,
 } from "@/lib/account";
@@ -43,9 +43,30 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
     if (!profile.onboarded) router.replace("/account/welcome");
   }, [profile.onboarded, router]);
 
+  // On a client-side navigation the first render still sees the previous URL, so
+  // the hash is read again after mount. The listener covers hash-only changes.
+  useEffect(() => {
+    function onHashChange() {
+      const fromHash = window.location.hash.slice(1);
+      if (TABS.some((t) => t.id === fromHash)) setTab(fromHash as TabId);
+    }
+    onHashChange();
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
   function choose(id: TabId) {
     setTab(id);
     window.history.replaceState(null, "", `#${id}`);
+  }
+
+  function onTabKey(event: React.KeyboardEvent, index: number) {
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (!step) return;
+    event.preventDefault();
+    const next = TABS[(index + step + TABS.length) % TABS.length].id;
+    choose(next);
+    document.getElementById(`tab-${next}`)?.focus();
   }
 
   const meta = [profile.major, profile.class_year].filter(Boolean).join(" · ");
@@ -54,7 +75,7 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
     <>
       <div className="border-b border-line bg-muted">
         <div className="shell flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:py-14">
-          <div className="flex items-center gap-5">
+          <div className="flex min-w-0 items-center gap-5">
             <Avatar
               name={profile.display_name ?? email}
               url={profile.avatar_url}
@@ -62,10 +83,10 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
               size={84}
             />
             <div className="min-w-0">
-              <h1 className="display truncate text-[32px] leading-tight text-cardinal sm:text-[42px]">
+              <h1 className="display line-clamp-2 [overflow-wrap:anywhere] text-[32px] leading-tight text-cardinal sm:text-[42px]">
                 {profile.display_name || "Your account"}
               </h1>
-              <p className="mt-1 text-[14.5px] text-ink-soft">{meta || email}</p>
+              <p className="mt-1 text-[14.5px] text-ink-soft [overflow-wrap:anywhere]">{meta || email}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -89,14 +110,16 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
 
         <div className="shell">
           <div role="tablist" aria-label="Account sections" className="-mb-px flex gap-1 overflow-x-auto">
-            {TABS.map((t) => (
+            {TABS.map((t, index) => (
               <button
                 key={t.id}
                 role="tab"
                 id={`tab-${t.id}`}
                 aria-selected={tab === t.id}
                 aria-controls={`panel-${t.id}`}
+                tabIndex={tab === t.id ? 0 : -1}
                 onClick={() => choose(t.id)}
+                onKeyDown={(event) => onTabKey(event, index)}
                 className={`whitespace-nowrap border-b-2 px-4 py-3 text-[15px] font-semibold transition-colors ${
                   tab === t.id
                     ? "border-cardinal text-ink"
@@ -186,8 +209,6 @@ function ClubsTab() {
 
 function SettingsTab({ profile, email }: { profile: Profile; email: string | null }) {
   const router = useRouter();
-  const [visible, setVisible] = useState(profile.visible);
-  const [visError, setVisError] = useState<string | null>(null);
   const [confirm, setConfirm] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -195,47 +216,30 @@ function SettingsTab({ profile, email }: { profile: Profile; email: string | nul
   return (
     <div className="max-w-2xl space-y-12">
       <section>
-        <h2 className="display gold-rule text-[24px] text-ink">Profile visibility</h2>
-        <label className="flex cursor-pointer items-start gap-4">
-          <input
-            type="checkbox"
-            checked={visible}
-            onChange={async (event) => {
-              const next = event.target.checked;
-              setVisible(next);
-              const problem = await updateProfile({ visible: next });
-              if (problem) {
-                setVisible(!next);
-                setVisError(problem);
-              } else setVisError(null);
-            }}
-            className="mt-1 h-5 w-5 shrink-0 accent-cardinal"
-          />
-          <span>
-            <span className="block text-[15.5px] font-semibold text-ink">
-              Show my profile to other students
-            </span>
-            <span className="mt-1 block text-[14px] leading-relaxed text-ink-soft">
-              Signed-in Iowa State students can see your name, photo, major, bio, and the clubs
-              you&apos;re in. Turn this off and you disappear from club member lists. Your saves
-              are always private.
-            </span>
-          </span>
-        </label>
-        {visError && <p role="alert" className="mt-3 text-[14px] font-medium text-cardinal">{visError}</p>}
+        <h2 className="display gold-rule mb-4 text-[24px] text-ink">Privacy</h2>
+        <div className="space-y-8">
+          <ProfileVisibility profile={profile} />
+          <LetClubsFindMe profile={profile} />
+        </div>
+        <p className="mt-6 text-[14px] leading-relaxed text-ink-soft">
+          Your email, quiz answers, and saves are always private.{" "}
+          <Link href="/privacy" className="link-isu">
+            How privacy works
+          </Link>
+        </p>
       </section>
 
       <section>
-        <h2 className="display gold-rule text-[24px] text-ink">Sign-in</h2>
+        <h2 className="display gold-rule mb-4 text-[24px] text-ink">Sign-in</h2>
         <p className="text-[15px] text-ink-soft">
           You sign in with a one-time code sent to <span className="font-semibold text-ink">{email}</span>.
         </p>
       </section>
 
       <section>
-        <h2 className="display gold-rule text-[24px] text-ink">Delete account</h2>
+        <h2 className="display gold-rule mb-4 text-[24px] text-ink">Delete account</h2>
         <p className="text-[15px] leading-relaxed text-ink-soft">
-          This permanently removes your profile, photo, saved clubs, and memberships. It can&apos;t
+          This permanently removes your profile, photo, quiz answers, saved clubs, and memberships. It can&apos;t
           be undone. Type <span className="font-semibold text-ink">DELETE</span> to confirm.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">

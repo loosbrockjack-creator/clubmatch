@@ -29,6 +29,15 @@ export const MAX_PROFILE_LINKS = 5;
 export const LOOKING_FOR = ["club", "teammates", "study_group", "friends", "browsing"] as const;
 export type LookingFor = (typeof LOOKING_FOR)[number];
 
+/** `option` is the form choice; `status` is how it reads on the profile. */
+export const LOOKING_FOR_COPY: Record<LookingFor, { option: string; status: string }> = {
+  club: { option: "A club to join", status: "Looking for a club" },
+  teammates: { option: "Teammates", status: "Looking for teammates" },
+  study_group: { option: "A study group", status: "Looking for a study group" },
+  friends: { option: "Friends", status: "Looking for friends" },
+  browsing: { option: "Just browsing", status: "Just browsing" },
+};
+
 export interface Profile {
   id: string;
   display_name: string | null;
@@ -43,6 +52,8 @@ export interface Profile {
    * repeat across lists: "area:<AcademicAreaId>", "career:<CareerId>", "goal:<GoalId>".
    */
   interests: string[];
+  /** True once the student has saved chips, so an empty list means "none", not "not yet". */
+  interests_chosen?: boolean;
   looking_for: LookingFor | null;
   /** "Let clubs find me": officers can see this student in good-fit leads. */
   discoverable: boolean;
@@ -72,30 +83,6 @@ export const PUBLIC_PROFILE_COLUMNS =
 
 /** Columns that live on the `profiles` table (everything but `preferences`). */
 type ProfileRow = Omit<Profile, "preferences">;
-
-/**
- * Temporary bridge for the old LinkedIn / Instagram / website form fields.
- * The personal-profiles build replaces the form and removes these.
- */
-export type LegacyLinks = { linkedin?: string; instagram?: string; website?: string };
-
-export function toLegacyLinks(links: ProfileLink[] | null | undefined): LegacyLinks {
-  const out: LegacyLinks = {};
-  for (const { url } of links ?? []) {
-    if (/linkedin\.com/i.test(url)) out.linkedin ??= url;
-    else if (/instagram\.com\//i.test(url)) out.instagram ??= url.replace(/^.*instagram\.com\//i, "").replace(/\/$/, "");
-    else out.website ??= url;
-  }
-  return out;
-}
-
-export function fromLegacyLinks(legacy: LegacyLinks): ProfileLink[] {
-  const links: ProfileLink[] = [];
-  if (legacy.linkedin) links.push({ url: legacy.linkedin });
-  if (legacy.instagram) links.push({ url: `https://instagram.com/${legacy.instagram}` });
-  if (legacy.website) links.push({ url: legacy.website });
-  return links;
-}
 
 type AccountState = {
   status: "loading" | "signed-out" | "signed-in";

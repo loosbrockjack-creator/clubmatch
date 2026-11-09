@@ -1,21 +1,32 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { Check, Loader2, Upload } from "lucide-react";
 import { AVATAR_PRESETS, Avatar } from "@/components/avatar";
+import { InterestPicker } from "@/components/interest-picker";
+import {
+  LinkEditor,
+  newLinkRow,
+  validateLinkRows,
+  type LinkRow,
+} from "@/components/profile-link-editor";
+import { LetClubsFindMe } from "@/components/profile-settings";
 import {
   CLASS_YEARS,
-  fromLegacyLinks,
+  LOOKING_FOR,
+  LOOKING_FOR_COPY,
   removeAvatar,
-  toLegacyLinks,
   updateProfile,
   uploadAvatar,
   type ClassYear,
-  type LegacyLinks as ProfileLinks,
+  type LookingFor,
   type Profile,
+  type ProfileLink,
 } from "@/lib/account";
-import { ACADEMIC_AREAS, ACADEMIC_AREA_BY_ID, majorsForAreas } from "@/lib/taxonomy";
+import { effectiveInterests, interestsFromPreferences } from "@/lib/profile-interests";
+import { safeLinkUrl } from "@/lib/profile-links";
+import { ACADEMIC_AREAS, majorsForAreas } from "@/lib/taxonomy";
 
 const BIO_MAX = 280;
 
@@ -23,34 +34,22 @@ const ALL_MAJORS = Array.from(
   new Set(majorsForAreas(ACADEMIC_AREAS.map((area) => area.id))),
 ).sort((a, b) => a.localeCompare(b));
 
-function cleanLinks(raw: ProfileLinks): { links: ProfileLinks; error: string | null } {
-  const links: ProfileLinks = {};
-  const linkedin = raw.linkedin?.trim();
-  if (linkedin) {
-    const url = /^https?:\/\//i.test(linkedin) ? linkedin : `https://${linkedin}`;
-    if (!/^https:\/\/([a-z]+\.)?linkedin\.com\/.+/i.test(url.replace(/^http:/i, "https:"))) {
-      return { links, error: "LinkedIn should be a linkedin.com link." };
-    }
-    links.linkedin = url.replace(/^http:/i, "https:");
-  }
-  const instagram = raw.instagram?.trim().replace(/^@/, "");
-  if (instagram) {
-    if (!/^[A-Za-z0-9._]{1,30}$/.test(instagram)) {
-      return { links, error: "Instagram should be just your handle, like @cyclone." };
-    }
-    links.instagram = instagram;
-  }
-  const website = raw.website?.trim();
-  if (website) {
-    const url = /^https?:\/\//i.test(website) ? website : `https://${website}`;
-    try {
-      new URL(url);
-    } catch {
-      return { links, error: "That website link doesn't look right." };
-    }
-    links.website = url;
-  }
-  return { links, error: null };
+function rowsFromProfile(profile: Profile): LinkRow[] {
+  const stored: unknown = profile.links;
+  if (!Array.isArray(stored)) return [];
+  return (stored as ProfileLink[]).flatMap((link) => {
+    const url = safeLinkUrl(link?.url);
+    return url ? [newLinkRow(url, typeof link.label === "string" ? link.label : "")] : [];
+  });
+}
+
+function SectionHeading({ title, hint }: { title: string; hint?: React.ReactNode }) {
+  return (
+    <div className="mb-4">
+      <h2 className="display text-[22px] text-ink">{title}</h2>
+      {hint && <p className="mt-1.5 text-[14px] leading-relaxed text-ink-soft">{hint}</p>}
+    </div>
+  );
 }
 
 export function ProfileForm({
@@ -68,7 +67,10 @@ export function ProfileForm({
   const [major, setMajor] = useState(profile.major ?? "");
   const [year, setYear] = useState<ClassYear | "">(profile.class_year ?? "");
   const [bio, setBio] = useState(profile.bio ?? "");
-  const [links, setLinks] = useState<ProfileLinks>(() => toLegacyLinks(profile.links));
+  const [rows, setRows] = useState<LinkRow[]>(() => rowsFromProfile(profile));
+  const [interests, setInterests] = useState<string[]>(() => effectiveInterests(profile));
+  const [interestsTouched, setInterestsTouched] = useState(false);
+  const [lookingFor, setLookingFor] = useState<LookingFor | null>(profile.looking_for);
   const [preset, setPreset] = useState(profile.avatar_preset ?? 0);
   const [error, setError] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
@@ -77,13 +79,14 @@ export function ProfileForm({
   const [saved, setSaved] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const quizArea = profile.preferences?.academicArea;
-  const quizSummary = useMemo(() => {
-    if (!profile.preferences) return null;
-    const area =
-      quizArea && quizArea !== "undecided" ? ACADEMIC_AREA_BY_ID[quizArea]?.label : null;
-    return area ? `Matched on ${area.toLowerCase()} and your goals.` : "Your quiz answers are saved.";
-  }, [profile.preferences, quizArea]);
+  const quizInterests = interestsFromPreferences(profile.preferences);
+  const prefilled =
+    !profile.interests_chosen && profile.interests.length === 0 && quizInterests.length > 0;
+
+  function pickInterests(next: string[]) {
+    setInterests(next);
+    setInterestsTouched(true);
+  }
 
   async function onPhoto(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -96,11 +99,19 @@ export function ProfileForm({
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const { links: clean, error: linkError } = cleanLinks(links);
-    if (linkError) {
-      setError(linkError);
+    const checked = validateLinkRows(rows);
+    setRows(checked);
+    const invalid = checked.find((row) => row.error);
+    if (invalid) {
+      setError("Fix the highlighted link, then save again.");
+      document.getElementById(`link-url-${invalid.id}`)?.focus();
       return;
     }
+    const kept = checked.filter((row) => row.url.trim());
+    const links: ProfileLink[] = kept.map((row) => {
+      const label = row.label.trim();
+      return label ? { url: row.url, label } : { url: row.url };
+    });
     setSaving(true);
     setError(null);
     const problem = await updateProfile({
@@ -108,15 +119,23 @@ export function ProfileForm({
       major: major.trim() || null,
       class_year: year || null,
       bio: bio.trim() || null,
-      links: fromLegacyLinks(clean),
+      links,
+      interests,
+      // Saving an untouched, empty picker isn't a choice: quiz answers taken
+      // later should still prefill it.
+      interests_chosen: Boolean(profile.interests_chosen) || interestsTouched || interests.length > 0,
+      looking_for: lookingFor,
       avatar_preset: preset,
-      ...(markOnboarded ? { onboarded: true } : {}),
+      // New students read the clubs explanation during onboarding, so they
+      // never need the notice shown to students who signed up before it.
+      ...(markOnboarded ? { onboarded: true, policy_notice_seen: true } : {}),
     });
     setSaving(false);
     if (problem) {
       setError(problem);
       return;
     }
+    setRows(kept);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
     onSaved?.();
@@ -147,7 +166,7 @@ export function ProfileForm({
               <button
                 type="button"
                 onClick={async () => setPhotoError(await removeAvatar())}
-                className="text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+                className="inline-flex min-h-10 items-center text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
               >
                 Remove photo
               </button>
@@ -253,49 +272,94 @@ export function ProfileForm({
           maxLength={BIO_MAX}
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          placeholder="A sentence or two. What you study, what you're into, what you're looking for."
+          placeholder="A sentence or two about you."
         />
         <p className="mt-1.5 text-right text-[12.5px] tabular-nums text-ink-muted">
           {bio.length}/{BIO_MAX}
         </p>
       </div>
 
+      <section aria-labelledby="pf-interests-title">
+        <div id="pf-interests-title">
+          <SectionHeading
+            title="Interests"
+            hint={
+              prefilled ? (
+                "We started these from your quiz. Only what's selected shows on your profile, once you save."
+              ) : profile.preferences ? (
+                "Pick what you want other students to see. Your quiz answers themselves stay private."
+              ) : (
+                <>
+                  Pick what you want other students to see, or{" "}
+                  <Link href="/match" className="link-isu">
+                    take the quiz
+                  </Link>{" "}
+                  and we&apos;ll suggest some.
+                </>
+              )
+            }
+          />
+        </div>
+        <InterestPicker value={interests} onChange={pickInterests} />
+        {profile.preferences && !prefilled && (
+          <button
+            type="button"
+            onClick={() => pickInterests(quizInterests)}
+            className="mt-1 inline-flex min-h-10 items-center text-[13.5px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+          >
+            Start over from my quiz answers
+          </button>
+        )}
+      </section>
+
       <fieldset>
-        <legend className="field-label">Links (optional)</legend>
-        <div className="mt-1 grid gap-4 sm:grid-cols-3">
-          <input
-            aria-label="LinkedIn URL"
-            className="field"
-            value={links.linkedin ?? ""}
-            onChange={(e) => setLinks({ ...links, linkedin: e.target.value })}
-            placeholder="linkedin.com/in/you"
-          />
-          <input
-            aria-label="Instagram handle"
-            className="field"
-            value={links.instagram ?? ""}
-            onChange={(e) => setLinks({ ...links, instagram: e.target.value })}
-            placeholder="@instagram"
-          />
-          <input
-            aria-label="Website"
-            className="field"
-            value={links.website ?? ""}
-            onChange={(e) => setLinks({ ...links, website: e.target.value })}
-            placeholder="yoursite.com"
-          />
+        <legend className="contents">
+          <span className="block">
+            <SectionHeading title="Looking for" hint="Shows at the top of your profile. Change it whenever." />
+          </span>
+        </legend>
+        <div className="flex flex-wrap items-center gap-2">
+          {LOOKING_FOR.map((option) => (
+            <label key={option} className="cursor-pointer">
+              <input
+                type="radio"
+                name="pf-looking-for"
+                value={option}
+                checked={lookingFor === option}
+                onChange={() => setLookingFor(option)}
+                className="peer sr-only"
+              />
+              <span className="inline-flex min-h-10 items-center rounded-[6px] border border-line-strong bg-white px-3 py-1.5 text-[14px] font-medium text-ink-soft transition-colors duration-150 hover:border-ink-muted hover:text-ink peer-checked:border-cardinal peer-checked:bg-cardinal-tint peer-checked:text-cardinal-dark peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-cardinal">
+                {LOOKING_FOR_COPY[option].option}
+              </span>
+            </label>
+          ))}
+          {lookingFor && (
+            <button
+              type="button"
+              onClick={() => setLookingFor(null)}
+              className="ml-1 inline-flex min-h-10 items-center px-1 text-[13.5px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </fieldset>
 
-      <div className="rounded-[4px] border border-line bg-muted px-5 py-4">
-        <p className="text-[14.5px] font-semibold text-ink">Interests</p>
-        <p className="mt-1 text-[14px] leading-relaxed text-ink-soft">
-          {quizSummary ?? "Take the quiz and your answers are saved here to shape your matches."}{" "}
-          <Link href="/match" className="link-isu font-semibold">
-            {profile.preferences ? "Retake the quiz" : "Take the quiz"}
-          </Link>
-        </p>
-      </div>
+      <section aria-labelledby="pf-links-title">
+        <div id="pf-links-title">
+          <SectionHeading title="Links" hint="Anywhere you want people to find you. Put your favorite first." />
+        </div>
+        <LinkEditor rows={rows} onChange={setRows} />
+      </section>
+
+      <section aria-labelledby="pf-clubs-title" className="border-t border-line pt-8">
+        <div id="pf-clubs-title" className="sr-only">
+          Club visibility
+        </div>
+        <LetClubsFindMe profile={profile} id="pf-let-clubs-find-me" />
+        <p className="mt-2 text-[13px] text-ink-muted">This switch saves right away.</p>
+      </section>
 
       {error && (
         <p role="alert" className="text-[14px] font-medium text-cardinal">
@@ -308,11 +372,13 @@ export function ProfileForm({
           {saving && <Loader2 size={16} className="animate-spin" aria-hidden />}
           {submitLabel}
         </button>
-        {saved && (
-          <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-ink-soft">
-            <Check size={16} aria-hidden /> Saved
-          </span>
-        )}
+        <span aria-live="polite">
+          {saved && (
+            <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-ink-soft">
+              <Check size={16} aria-hidden /> Saved
+            </span>
+          )}
+        </span>
       </div>
     </form>
   );

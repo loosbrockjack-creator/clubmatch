@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
+import { PolicyNotice } from "@/components/policy-notice";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
@@ -41,6 +42,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <SiteHeader />
+        <PolicyNotice />
         <main id="main" className="flex-1">
           {children}
         </main>
