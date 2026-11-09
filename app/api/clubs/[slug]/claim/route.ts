@@ -1,4 +1,6 @@
+import { after } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { sendClaimAlert } from "@/lib/club-alerts";
 import { getClubSummary } from "@/lib/clubs";
 import { getStripe } from "@/lib/club-stripe";
 import {
@@ -75,7 +77,8 @@ export async function GET(request: Request, { params }: Ctx) {
 /** No allowlist match: file a request Jack reviews in the Supabase dashboard. */
 export async function POST(request: Request, { params }: Ctx) {
   const { slug } = await params;
-  if (!getClubSummary(slug)) return fail(404, "That club doesn't exist.");
+  const club = getClubSummary(slug);
+  if (!club) return fail(404, "That club doesn't exist.");
   const auth = await requireUser(request);
   if (auth instanceof Response) return auth;
   const { admin, user } = auth;
@@ -103,5 +106,11 @@ export async function POST(request: Request, { params }: Ctx) {
   });
   // 23505: a second tab beat this one to it, and the request is already on file.
   if (error && error.code !== "23505") return fail(500, "Couldn't send your request. Try again.");
+  if (!error) {
+    // After the response, so a slow or failing email can't touch the request.
+    after(() =>
+      sendClaimAlert({ slug, clubName: club.name, email: (user.email ?? "").toLowerCase(), role, note }),
+    );
+  }
   return Response.json(await claimState(admin, user, slug));
 }

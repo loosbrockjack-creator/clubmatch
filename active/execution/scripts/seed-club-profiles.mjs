@@ -44,6 +44,7 @@ async function must(promise, label) {
 if (process.argv.includes("--reset")) {
   for (const slug of [DS_CLUB, FINANCE_CLUB]) {
     await must(admin.from("club_campaigns").delete().eq("club_slug", slug), "campaigns");
+    await must(admin.from("club_invites").delete().eq("club_slug", slug), "invites");
     await must(admin.from("club_events").delete().eq("club_slug", slug), "events");
     await must(admin.from("club_interests").delete().eq("club_slug", slug), "interests");
     await must(admin.from("club_claims").delete().eq("club_slug", slug), "claims");
@@ -55,8 +56,16 @@ if (process.argv.includes("--reset")) {
       await admin.storage.from("club-photos").remove(files.map((file) => `${slug}/${file.name}`));
     }
   }
-  await must(admin.from("club_claims").delete().eq("user_id", hiddenId), "claims");
-  await must(admin.from("club_claims").delete().eq("user_id", financeId), "claims");
+  // Decision messages for test claims on other clubs, then the claims themselves.
+  for (const userId of [hiddenId, financeId]) {
+    const { data: claims } = await admin.from("club_claims").select("club_slug").eq("user_id", userId);
+    const claimed = (claims ?? []).map((row) => row.club_slug);
+    if (claimed.length) {
+      await must(admin.from("club_campaigns").delete().eq("audience", "system").in("club_slug", claimed), "messages");
+    }
+    await must(admin.from("club_claims").delete().eq("user_id", userId), "claims");
+    await must(admin.from("club_invites").delete().eq("user_id", userId), "invites");
+  }
   await must(admin.from("club_interests").delete().eq("user_id", financeId), "interests");
   await must(admin.from("club_interests").delete().eq("user_id", hiddenId), "interests");
   await must(admin.from("club_mutes").delete().eq("user_id", financeId), "mutes");

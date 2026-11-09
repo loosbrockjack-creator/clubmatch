@@ -16,6 +16,7 @@ type Message = {
   body: string;
   created_at: string;
   read_at: string | null;
+  link_path: string | null;
 };
 
 type Row = {
@@ -49,7 +50,7 @@ function Messages({ userId }: { userId: string }) {
     const [inbox, mutes] = await Promise.all([
       sb
         .from("campaign_recipients")
-        .select("campaign_id, read_at, club_campaigns(id, club_slug, subject, body, created_at)")
+        .select("campaign_id, read_at, club_campaigns(id, club_slug, subject, body, created_at, link_path)")
         .eq("user_id", userId)
         .limit(200),
       sb.from("club_mutes").select("club_slug").eq("user_id", userId),
@@ -146,7 +147,7 @@ function Messages({ userId }: { userId: string }) {
               <button
                 type="button"
                 onClick={() => void markRead(unread.map((m) => m.id))}
-                className="link-isu text-[13.5px]"
+                className="link-isu inline-flex min-h-11 items-center text-[13.5px] sm:min-h-8"
               >
                 Mark all as read
               </button>
@@ -193,14 +194,22 @@ function Messages({ userId }: { userId: string }) {
                     <div id={`message-${message.id}`} className="border-t border-line px-5 py-5 sm:pl-10">
                       <p className="whitespace-pre-line text-[15px] leading-relaxed text-ink-soft">{message.body}</p>
                       <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13.5px]">
-                        <Link href={`/clubs/${message.club_slug}`} className="link-isu">
+                        {message.link_path?.startsWith("/") && (
+                          <Link href={message.link_path} className="btn btn-primary h-11">
+                            Go to the claim page
+                          </Link>
+                        )}
+                        <Link
+                          href={`/clubs/${message.club_slug}`}
+                          className="link-isu inline-flex min-h-11 items-center sm:min-h-8"
+                        >
                           View {clubName}
                         </Link>
                         <button
                           type="button"
                           onClick={() => void toggleMute(message.club_slug)}
                           aria-pressed={isMuted}
-                          className="inline-flex items-center gap-1.5 font-medium text-ink-muted transition-colors hover:text-ink"
+                          className="inline-flex min-h-11 items-center gap-1.5 font-medium text-ink-muted transition-colors hover:text-ink sm:min-h-8"
                         >
                           <BellOff size={14} strokeWidth={1.75} aria-hidden />
                           {isMuted ? `Unmute ${clubName}` : `Mute ${clubName}`}

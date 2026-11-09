@@ -248,8 +248,13 @@ function Step({
             We&apos;re checking your request
           </p>
           <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
-            We&apos;ll confirm you&apos;re an officer of {clubName}. Once you&apos;re approved, you&apos;ll see
-            the payment step right here. You won&apos;t be charged before then.
+            We check each request by hand to confirm you&apos;re an officer of {clubName}. You&apos;ll get a message
+            in your{" "}
+            <Link href="/inbox" className="link-isu">
+              ClubMatch inbox
+            </Link>{" "}
+            with the answer. If you&apos;re approved, the payment step appears right here. You won&apos;t be charged
+            before then.
           </p>
           <p className="mt-3 text-[13px] text-ink-muted">
             Sent {new Date(state.claim.created_at).toLocaleDateString()} from {email}
