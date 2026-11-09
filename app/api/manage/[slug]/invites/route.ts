@@ -47,7 +47,7 @@ export async function POST(request: Request, { params }: Ctx) {
   const message = [
     `An officer of ${club.name} thinks you'd be a good fit and invited you to check out the club.`,
     note ? `They wrote: "${note}"` : null,
-    "If you want to hear more, open the club's page and tap I'm interested, let the officers know. They don't see whether you read this.",
+    "If you want to hear more, open the club's page and tap I'm interested. That shares your profile with the officers. They don't see whether you read this.",
   ]
     .filter(Boolean)
     .join("\n\n");

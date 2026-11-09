@@ -8,9 +8,9 @@ import { logActivity, useOfficerClubs } from "@/lib/club-client";
 import { getSupabase } from "@/lib/supabase";
 
 /**
- * "Tell the officers": a student opting in for this one club. It works even with
- * Let clubs find me off, because it's their own request. A hidden profile is
- * shown to officers only as a count, and the note here says so.
+ * "I'm interested": the one action that tells a claimed club's officers, unlike
+ * Save, which is private. It works even with Let clubs find me off, because it's
+ * the student's own request for this one club.
  */
 export function ClubInterestButton({ slug, clubName }: { slug: string; clubName: string }) {
   const account = useAccount();
@@ -18,7 +18,6 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
   const [state, setState] = useState<{ userId: string; interested: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const hidden = account.profile?.visible === false;
   const isOfficer = useOfficerClubs().includes(slug);
 
   useEffect(() => {
@@ -43,15 +42,15 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
 
   if (account.status !== "signed-in") {
     return (
-      <div className="mt-6 border-t border-white/20 pt-6">
-        <Link
-          href={`/login?next=${encodeURIComponent(`/clubs/${slug}`)}`}
-          className="link-on-cardinal inline-flex items-center gap-2 text-[14.5px] font-semibold"
-        >
-          <BellRing size={15} strokeWidth={2} aria-hidden />
-          Sign in to tell the officers you&apos;re interested
-        </Link>
-      </div>
+      <Link
+        href={`/login?next=${encodeURIComponent(`/clubs/${slug}`)}`}
+        className="btn btn-primary w-full sm:w-auto"
+        data-interest-button
+      >
+        <BellRing size={16} strokeWidth={2} aria-hidden />
+        I&'apos;m interested
+        <span className="sr-only"> in {clubName} (sign in first)</span>
+      </Link>
     );
   }
 
@@ -78,44 +77,53 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
   }
 
   return (
-    <div className="mt-6 border-t border-white/20 pt-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div className="w-full sm:w-auto">
+      <button
+        type="button"
+        onClick={toggle}
+        disabled={!loaded || busy}
+        aria-pressed={interested}
+        data-interest-button
+        className={`btn h-auto min-h-12 w-full py-3 leading-snug sm:w-auto ${interested ? "btn-outline-cardinal" : "btn-primary"} disabled:opacity-70`}
+      >
+        {interested ? (
+          <Check size={16} strokeWidth={2.25} aria-hidden />
+        ) : (
+          <BellRing size={16} strokeWidth={2} aria-hidden />
+        )}
+        {interested ? "Officers know you're interested" : "I'm interested"}
+        <span className="sr-only"> in {clubName}</span>
+      </button>
+      {interested && (
         <button
           type="button"
           onClick={toggle}
-          disabled={!loaded || busy}
-          aria-pressed={interested}
-          className={`btn h-auto min-h-12 w-full py-3 leading-snug sm:w-auto ${interested ? "btn-ghost-on-cardinal" : "btn-on-cardinal"} disabled:opacity-70`}
+          disabled={busy}
+          className="link-isu mt-1 inline-flex min-h-11 items-center text-[13.5px] font-medium sm:min-h-8"
         >
-          {interested ? (
-            <Check size={16} strokeWidth={2.25} aria-hidden />
-          ) : (
-            <BellRing size={16} strokeWidth={2} aria-hidden />
-          )}
-          {interested ? "Officers know you're interested" : "I'm interested, let the officers know"}
-          <span className="sr-only"> ({clubName})</span>
+          Take it back
         </button>
-        {interested && (
-          <button
-            type="button"
-            onClick={toggle}
-            disabled={busy}
-            className="link-on-cardinal inline-flex min-h-11 items-center self-start text-[13.5px] font-medium sm:min-h-0 sm:self-center"
-          >
-            Take it back
-          </button>
-        )}
-      </div>
-      <p className="mt-3 max-w-xl text-[13px] leading-relaxed text-white/80">
-        {hidden
-          ? "Your profile is hidden, so officers only see that one more student is interested, not who. They can send you messages in your inbox."
-          : "Officers see your public profile and can send you messages in your inbox. They never see your quiz answers."}
-      </p>
+      )}
       {error && (
-        <p role="alert" className="mt-2 text-[13px] font-medium text-gold">
+        <p role="alert" className="mt-2 text-[13px] font-medium text-cardinal">
           {error}
         </p>
       )}
     </div>
+  );
+}
+
+/** Says plainly what the two buttons do. Officers don't need it on their own club. */
+export function ClubInterestNote({ slug }: { slug: string }) {
+  const account = useAccount();
+  const isOfficer = useOfficerClubs().includes(slug);
+  if (isOfficer) return null;
+  const hidden = account.profile?.visible === false;
+  return (
+    <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-ink-muted" data-interest-note>
+      {hidden
+        ? "I'm interested tells the officers. Your profile is hidden, so they only see that one more student is interested, not who. They can message you in your inbox. Save is private."
+        : "I'm interested tells the officers: they'll see your profile and can message you in your inbox, but never your quiz answers. Save is private."}
+    </p>
   );
 }

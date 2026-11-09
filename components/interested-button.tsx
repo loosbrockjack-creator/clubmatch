@@ -7,11 +7,14 @@ export function InterestedButton({
   slug,
   clubName,
   onCardinal = false,
+  quiet = false,
 }: {
   slug: string;
   clubName: string;
   /** Inverts the color pair for use inside a solid cardinal panel. */
   onCardinal?: boolean;
+  /** Second to "I'm interested" on claimed clubs, so it must not look like the main action. */
+  quiet?: boolean;
 }) {
   const { saved, toggle, ready } = useSavedClubs();
   const isSaved = saved.includes(slug);
@@ -20,7 +23,7 @@ export function InterestedButton({
     ? isSaved
       ? "btn-ghost-on-cardinal"
       : "btn-on-cardinal"
-    : isSaved
+    : isSaved || quiet
       ? "btn-secondary"
       : "btn-primary";
 
@@ -34,15 +37,15 @@ export function InterestedButton({
       {isSaved ? (
         <>
           <Check size={16} strokeWidth={2.25} aria-hidden />
-          Saved to your list
+          Saved
         </>
       ) : (
         <>
           <Heart size={16} strokeWidth={2} aria-hidden />
-          I&apos;m interested
+          Save
         </>
       )}
-      <span className="sr-only"> in {clubName}</span>
+      <span className="sr-only"> {clubName} to your private list</span>
     </button>
   );
 }

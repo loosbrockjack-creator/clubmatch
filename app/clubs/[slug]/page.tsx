@@ -18,7 +18,7 @@ import { ClubMark } from "@/components/club-mark";
 import { InterestedButton } from "@/components/interested-button";
 import { MemberButton } from "@/components/member-button";
 import { ClubCommunity } from "@/components/club-community";
-import { ClubInterestButton } from "@/components/club-interest-button";
+import { ClubInterestButton, ClubInterestNote } from "@/components/club-interest-button";
 import { TrackedLink, ViewTracker } from "@/components/club-trackers";
 import { WhyItFits } from "@/components/why-it-fits";
 import { ClubCard } from "@/components/club-card";
@@ -414,10 +414,6 @@ export default async function ClubDetailPage({
                   )}
                 </div>
               </div>
-              <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-                <InterestedButton slug={club.slug} clubName={club.name} />
-                <MemberButton slug={club.slug} clubName={club.name} />
-              </div>
             </div>
 
             <div className="mt-7 h-1 w-[54px] bg-gold" />
@@ -425,6 +421,15 @@ export default async function ClubDetailPage({
             <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-ink sm:text-[18px]">
               {club.tagline}
             </p>
+
+            <div className="mt-7" data-club-actions>
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start">
+                {verified && <ClubInterestButton slug={club.slug} clubName={club.name} />}
+                <InterestedButton slug={club.slug} clubName={club.name} quiet={verified} />
+                <MemberButton slug={club.slug} clubName={club.name} />
+              </div>
+              {verified && <ClubInterestNote slug={club.slug} />}
+            </div>
           </header>
 
           <WhyItFits club={club} />
@@ -614,7 +619,6 @@ export default async function ClubDetailPage({
                   <ArrowUpRight size={15} strokeWidth={2} aria-hidden />
                 </a>
               </div>
-              {verified && <ClubInterestButton slug={club.slug} clubName={club.name} />}
 
               {chapterLinks.length > 0 && (
                 <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2.5 border-t border-white/20 pt-6 text-[14px]">
@@ -665,7 +669,6 @@ export default async function ClubDetailPage({
                 <ArrowUpRight size={15} strokeWidth={2} aria-hidden />
               </TrackedLink>
             </div>
-            {verified && <ClubInterestButton slug={club.slug} clubName={club.name} />}
             <p className="mt-5 text-[13px] text-white/70">
               {`${
                 verified

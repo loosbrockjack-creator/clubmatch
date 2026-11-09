@@ -211,7 +211,7 @@ export function LeadsTab({ slug, clubName }: { slug: string; clubName: string })
         />
         {data.interested.length === 0 && data.hiddenInterested === 0 ? (
           <EmptyState title="No one has asked yet">
-            Students can tap I&apos;m interested, let the officers know on your page. A full page and an upcoming
+            Students can tap I&apos;m interested on your page. A full page and an upcoming
             event give them a reason to.
           </EmptyState>
         ) : (
