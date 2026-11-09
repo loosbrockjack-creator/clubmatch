@@ -128,7 +128,7 @@ for (const route of routes) {
   const nonOfficer = await fetch(url, { headers: { Authorization: `Bearer ${student.token}` } });
   if (route === "access") {
     const answer = await nonOfficer.json();
-    check("access: student is told no, with no club data", answer.allowed === false && Object.keys(answer).length === 1, JSON.stringify(answer));
+    check("access: student is told no, with no club data", answer.allowed === false && answer.isPayer === false && Object.keys(answer).length === 2, JSON.stringify(answer));
   } else {
     check(`${route}: student is 403`, nonOfficer.status === 403, `got ${nonOfficer.status}`);
   }
