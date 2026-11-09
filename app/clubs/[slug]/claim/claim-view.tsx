@@ -24,7 +24,7 @@ import { LIMITS } from "@/lib/club-validate";
 const PERKS = [
   { icon: PencilLine, title: "Your own page", body: "Your words, photos, links, and meeting info, with a Verified by officers badge." },
   { icon: BarChart3, title: "Recruitment analytics", body: "How many students matched with you, viewed your page, saved you, and asked about you." },
-  { icon: Users, title: "Good-fit students", body: "A list of students who fit your club and said clubs can find them." },
+  { icon: Users, title: "Good-fit students", body: "See students who fit your club and said clubs can find them, and invite the ones you'd like to meet." },
   { icon: CalendarDays, title: "Events", body: "Post events to your page and to Explore's This week row." },
   { icon: Sparkles, title: "Featured spots", body: "Opt in to take turns in the labeled Featured row on Explore. Included in the plan." },
   { icon: Share2, title: "Search and share", body: "A public page with its own search listing, plus a link and share preview to post anywhere." },
