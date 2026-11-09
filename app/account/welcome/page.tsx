@@ -28,8 +28,7 @@ function Welcome({ profile }: { profile: Profile }) {
       </p>
       <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-soft">
         Club officers on ClubMatch can also see your profile and a match %, even if you&apos;ve never
-        contacted their club, unless you turn off Let clubs find me below. Your quiz answers stay private, and nothing is shared outside
-        ClubMatch.{" "}
+        contacted their club, unless you turn off Let clubs find me below. Your quiz answers stay private, and we never sell your information.{" "}
         <Link href="/privacy" className="link-isu">
           How privacy works
         </Link>

@@ -33,7 +33,7 @@ export function PolicyNotice() {
           <p className="mt-0.5 text-[14px] leading-relaxed text-ink-soft">
             Club officers on ClubMatch can now see your public profile and a match %, even if
             you&apos;ve never contacted their club, unless you turn off Let clubs find me. Your quiz
-            answers stay private, and nothing is shared outside ClubMatch.
+            answers stay private, and we never sell your information.
           </p>
           {error && (
             <p role="alert" className="mt-1 text-[14px] font-medium text-cardinal">
