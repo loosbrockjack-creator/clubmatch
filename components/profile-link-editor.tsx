@@ -93,7 +93,7 @@ export function LinkEditor({
                     aria-label={`Link ${index + 1} address`}
                     aria-invalid={row.error ? true : undefined}
                     aria-describedby={row.error ? errorId : undefined}
-                    className="field h-11 min-w-0 flex-1 text-[15px]"
+                    className="field h-11 min-w-[calc(100%-56px)] flex-1 text-[15px] sm:min-w-0"
                     inputMode="url"
                     autoCapitalize="none"
                     autoCorrect="off"
@@ -109,7 +109,7 @@ export function LinkEditor({
                   />
                   <input
                     aria-label={`Link ${index + 1} label, optional`}
-                    className="field order-last h-11 w-full text-[15px] sm:order-none sm:w-40"
+                    className="field h-11 w-auto min-w-0 flex-1 text-[15px] sm:w-40 sm:flex-none"
                     maxLength={LINK_LABEL_MAX}
                     value={row.label}
                     onChange={(e) => patch(row.id, { label: e.target.value })}

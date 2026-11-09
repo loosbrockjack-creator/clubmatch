@@ -225,8 +225,8 @@ function ProfileView({ me, profile, clubs }: { me: Profile; profile: PublicProfi
         <Section title="My clubs">
           {clubs.length > 0 ? (
             <ul className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4">
-              {clubs.map((entry) => (
-                <ClubPoster key={entry.club.slug} {...entry} />
+              {clubs.map((entry, index) => (
+                <ClubPoster key={entry.club.slug} {...entry} eager={index < 4} />
               ))}
             </ul>
           ) : (
@@ -261,7 +261,7 @@ function ProfileView({ me, profile, clubs }: { me: Profile; profile: PublicProfi
             <Nudge
               title="Pick what you're into."
               body={
-                me.preferences
+                me.preferences && !me.interests_chosen
                   ? "We'll start you off from your quiz answers. You choose what shows."
                   : "Chips like Data & AI or Lead something help people see what you're about."
               }

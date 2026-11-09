@@ -63,6 +63,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
         </p>
         <p>
           Officers never see your raw quiz answers, your email, or the clubs you&apos;ve saved.
+          They can see totals, like how many students saved their club or viewed its page, and
+          which majors those students are in, but not who they are.
         </p>
       </>
     ),
@@ -114,14 +116,13 @@ export default function PrivacyPage() {
   return (
     <>
       <PageHeader
-        crumbs={[{ href: "/privacy", label: "Privacy" }]}
         title="Privacy"
         intro="The short version: your info stays inside ClubMatch, you control who sees your profile, and you can delete it any time."
       />
       <div className="shell max-w-3xl space-y-12 pb-12 pt-12">
         {SECTIONS.map((section) => (
           <section key={section.title}>
-            <h2 className="display gold-rule text-[24px] text-ink">{section.title}</h2>
+            <h2 className="display gold-rule mb-4 text-[24px] text-ink">{section.title}</h2>
             <div className="space-y-4 text-[15.5px] leading-relaxed text-ink-soft">
               {section.body}
             </div>

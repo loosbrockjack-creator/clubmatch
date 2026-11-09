@@ -19,12 +19,15 @@ export function ClubPoster({
   club,
   role,
   verified,
+  eager = false,
 }: {
   club: ClubSummary;
   role: ClubRole;
   verified: boolean;
+  /** The first row is above the fold. */
+  eager?: boolean;
 }) {
-  const photo = photoForClub({ ...club, name: club.name });
+  const photo = photoForClub(club);
   const [failed, setFailed] = useState(false);
   const showPhoto = photo.own && !failed;
 
@@ -38,6 +41,7 @@ export function ClubPoster({
               alt=""
               quality={photo.quality}
               fill
+              loading={eager ? "eager" : undefined}
               sizes="(min-width: 1024px) 220px, (min-width: 640px) 30vw, 46vw"
               onError={() => setFailed(true)}
               className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"

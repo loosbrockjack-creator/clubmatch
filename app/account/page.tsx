@@ -218,7 +218,7 @@ function SettingsTab({ profile, email }: { profile: Profile; email: string | nul
   return (
     <div className="max-w-2xl space-y-12">
       <section>
-        <h2 className="display gold-rule text-[24px] text-ink">Privacy</h2>
+        <h2 className="display gold-rule mb-4 text-[24px] text-ink">Privacy</h2>
         <div className="space-y-8">
           <ProfileVisibility profile={profile} />
           <LetClubsFindMe profile={profile} />
@@ -232,16 +232,16 @@ function SettingsTab({ profile, email }: { profile: Profile; email: string | nul
       </section>
 
       <section>
-        <h2 className="display gold-rule text-[24px] text-ink">Sign-in</h2>
+        <h2 className="display gold-rule mb-4 text-[24px] text-ink">Sign-in</h2>
         <p className="text-[15px] text-ink-soft">
           You sign in with a one-time code sent to <span className="font-semibold text-ink">{email}</span>.
         </p>
       </section>
 
       <section>
-        <h2 className="display gold-rule text-[24px] text-ink">Delete account</h2>
+        <h2 className="display gold-rule mb-4 text-[24px] text-ink">Delete account</h2>
         <p className="text-[15px] leading-relaxed text-ink-soft">
-          This permanently removes your profile, photo, saved clubs, and memberships. It can&apos;t
+          This permanently removes your profile, photo, quiz answers, saved clubs, and memberships. It can&apos;t
           be undone. Type <span className="font-semibold text-ink">DELETE</span> to confirm.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
