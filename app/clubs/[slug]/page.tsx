@@ -280,8 +280,10 @@ export default async function ClubDetailPage({
       }
     : { ...directoryPhoto, unoptimized: false };
 
-  // Only what's on record about this club. A stock banner isn't its image, and
-  // anything an officer typed is escaped below, because it lands inside a script tag.
+  // Only what's on record about this club. A stock photo or watercolor isn't its
+  // image, and anything an officer typed is escaped below, because it lands inside
+  // a script tag.
+  const realPhoto = officerPhotos[0] ?? (greek?.photo ? directoryPhoto.src : undefined);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -289,7 +291,7 @@ export default async function ClubDetailPage({
     url: clubUrl(club.slug),
     description: officerDescription || club.tagline || undefined,
     alternateName: chapter?.nickname || undefined,
-    image: photo.own ? new URL(photo.src, SITE_URL).toString() : undefined,
+    image: realPhoto ? new URL(realPhoto, SITE_URL).toString() : undefined,
     memberOf: { "@type": "CollegeOrUniversity", name: "Iowa State University" },
     sameAs: [
       ...officerLinks.map((link) => link.url),
