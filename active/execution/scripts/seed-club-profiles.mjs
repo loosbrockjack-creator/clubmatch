@@ -131,7 +131,7 @@ GROUPS.forEach(({ major, area, students, save }, g) => {
   for (let i = 0; i < students; i++) {
     const viewer_hash = `seed-${randomBytes(12).toString("hex")}`;
     const seenAgo = (i * 3 + g * 5) % 28;
-    const base = { club_slug: DS_CLUB, major, academic_area: area, viewer_hash };
+    const base = { club_slug: DS_CLUB, major, academic_area: area, viewer_hash, anonymous: false };
     rows.push({ ...base, kind: "impression", day: chicagoDay(seenAgo) });
     if (i % 2 === 0) rows.push({ ...base, kind: "view", day: chicagoDay(Math.max(0, seenAgo - 1)) });
     if (i < Math.round(students * save)) rows.push({ ...base, kind: "save", day: chicagoDay(Math.max(0, seenAgo - 1)) });
