@@ -6,12 +6,14 @@ import { Check, Loader2, Upload } from "lucide-react";
 import { AVATAR_PRESETS, Avatar } from "@/components/avatar";
 import {
   CLASS_YEARS,
+  fromLegacyLinks,
   removeAvatar,
+  toLegacyLinks,
   updateProfile,
   uploadAvatar,
   type ClassYear,
+  type LegacyLinks as ProfileLinks,
   type Profile,
-  type ProfileLinks,
 } from "@/lib/account";
 import { ACADEMIC_AREAS, ACADEMIC_AREA_BY_ID, majorsForAreas } from "@/lib/taxonomy";
 
@@ -66,7 +68,7 @@ export function ProfileForm({
   const [major, setMajor] = useState(profile.major ?? "");
   const [year, setYear] = useState<ClassYear | "">(profile.class_year ?? "");
   const [bio, setBio] = useState(profile.bio ?? "");
-  const [links, setLinks] = useState<ProfileLinks>(profile.links ?? {});
+  const [links, setLinks] = useState<ProfileLinks>(() => toLegacyLinks(profile.links));
   const [preset, setPreset] = useState(profile.avatar_preset ?? 0);
   const [error, setError] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
@@ -106,7 +108,7 @@ export function ProfileForm({
       major: major.trim() || null,
       class_year: year || null,
       bio: bio.trim() || null,
-      links: clean,
+      links: fromLegacyLinks(clean),
       avatar_preset: preset,
       ...(markOnboarded ? { onboarded: true } : {}),
     });

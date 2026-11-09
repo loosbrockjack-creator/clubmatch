@@ -22,11 +22,12 @@ export const CLASS_YEARS = [
 ] as const;
 export type ClassYear = (typeof CLASS_YEARS)[number];
 
-export type ProfileLinks = {
-  linkedin?: string;
-  instagram?: string;
-  website?: string;
-};
+/** One profile link, in display order. Max 5 (enforced in the database). */
+export type ProfileLink = { url: string; label?: string };
+export const MAX_PROFILE_LINKS = 5;
+
+export const LOOKING_FOR = ["club", "teammates", "study_group", "friends", "browsing"] as const;
+export type LookingFor = (typeof LOOKING_FOR)[number];
 
 export interface Profile {
   id: string;
@@ -34,23 +35,67 @@ export interface Profile {
   major: string | null;
   class_year: ClassYear | null;
   bio: string | null;
-  links: ProfileLinks;
+  links: ProfileLink[];
   avatar_url: string | null;
   avatar_preset: number | null;
+  /**
+   * Public interest chips from the quiz taxonomy, namespaced because some ids
+   * repeat across lists: "area:<AcademicAreaId>", "career:<CareerId>", "goal:<GoalId>".
+   */
+  interests: string[];
+  looking_for: LookingFor | null;
+  /** "Let clubs find me": officers can see this student in good-fit leads. */
+  discoverable: boolean;
+  policy_notice_seen: boolean;
+  /** Quiz answers. Lives in the private `profile_private` table, merged in client-side. */
   preferences: Preferences | null;
   visible: boolean;
   onboarded: boolean;
 }
 
-/** The fields other students can see. */
+/** The fields other students (and club officers) can see. */
 export type PublicProfile = Pick<
   Profile,
-  "id" | "display_name" | "major" | "class_year" | "avatar_url" | "avatar_preset"
+  | "id"
+  | "display_name"
+  | "major"
+  | "class_year"
+  | "avatar_url"
+  | "avatar_preset"
+  | "interests"
+  | "looking_for"
 > &
   Partial<Pick<Profile, "bio" | "links">>;
 
 export const PUBLIC_PROFILE_COLUMNS =
-  "id, display_name, major, class_year, avatar_url, avatar_preset";
+  "id, display_name, major, class_year, avatar_url, avatar_preset, interests, looking_for";
+
+/** Columns that live on the `profiles` table (everything but `preferences`). */
+type ProfileRow = Omit<Profile, "preferences">;
+
+/**
+ * Temporary bridge for the old LinkedIn / Instagram / website form fields.
+ * The personal-profiles build replaces the form and removes these.
+ */
+export type LegacyLinks = { linkedin?: string; instagram?: string; website?: string };
+
+export function toLegacyLinks(links: ProfileLink[] | null | undefined): LegacyLinks {
+  const out: LegacyLinks = {};
+  for (const { url } of links ?? []) {
+    if (/linkedin\.com/i.test(url)) out.linkedin ??= url;
+    else if (/instagram\.com\//i.test(url)) out.instagram ??= url.replace(/^.*instagram\.com\//i, "").replace(/\/$/, "");
+    else out.website ??= url;
+  }
+  return out;
+}
+
+export function fromLegacyLinks(legacy: LegacyLinks): ProfileLink[] {
+  const links: ProfileLink[] = [];
+  if (legacy.linkedin) links.push({ url: legacy.linkedin });
+  if (legacy.instagram) links.push({ url: `https://instagram.com/${legacy.instagram}` });
+  if (legacy.website) links.push({ url: legacy.website });
+  return links;
+}
 
 type AccountState = {
   status: "loading" | "signed-out" | "signed-in";
@@ -142,14 +187,18 @@ async function loadAccount(userId: string) {
   const sb = getSupabase();
   if (!sb) return;
 
-  const [profileRes, savedRes, memberRes] = await Promise.all([
+  const [profileRes, privateRes, savedRes, memberRes] = await Promise.all([
     sb.from("profiles").select("*").eq("id", userId).single(),
+    sb.from("profile_private").select("preferences").eq("user_id", userId).maybeSingle(),
     sb.from("saved_clubs").select("club_slug").eq("user_id", userId),
     sb.from("memberships").select("club_slug").eq("user_id", userId),
   ]);
   if (state.userId !== userId) return; // signed out meanwhile
 
-  let profile = (profileRes.data as Profile | null) ?? null;
+  const row = (profileRes.data as ProfileRow | null) ?? null;
+  let profile: Profile | null = row
+    ? { ...row, preferences: (privateRes.data?.preferences as Preferences | null) ?? null }
+    : null;
   const remoteSaved = (savedRes.data ?? []).map((row) => row.club_slug as string);
   const firstMerge = !readFlag(mergedKey(userId));
 
@@ -167,13 +216,10 @@ async function loadAccount(userId: string) {
     }
     const localPrefs = readLocalPreferences();
     if (profile && !profile.preferences && localPrefs) {
-      const { data } = await sb
-        .from("profiles")
-        .update({ preferences: localPrefs })
-        .eq("id", userId)
-        .select("*")
-        .single();
-      if (data) profile = data as Profile;
+      const { error } = await sb
+        .from("profile_private")
+        .upsert({ user_id: userId, preferences: localPrefs });
+      if (!error) profile = { ...profile, preferences: localPrefs };
     }
     if (!savedRes.error) writeFlag(mergedKey(userId), true);
   }
@@ -191,10 +237,10 @@ async function loadAccount(userId: string) {
       });
     },
     preferences: (prefs) => {
+      if (state.profile) set({ profile: { ...state.profile, preferences: prefs } });
       void sb
-        .from("profiles")
-        .update({ preferences: prefs })
-        .eq("id", userId)
+        .from("profile_private")
+        .upsert({ user_id: userId, preferences: prefs })
         .then(({ error }) => {
           if (error) console.error("Couldn't sync quiz answers", error.message);
         });
@@ -283,7 +329,8 @@ export async function signOut() {
   await sb?.auth.signOut();
 }
 
-export async function updateProfile(patch: Partial<Profile>): Promise<string | null> {
+/** Updates `profiles` columns. Quiz answers sync separately (see registerRemote). */
+export async function updateProfile(patch: Partial<ProfileRow>): Promise<string | null> {
   const sb = getSupabase();
   const userId = state.userId;
   if (!sb || !userId) return "You're signed out. Sign in and try again.";
@@ -294,7 +341,9 @@ export async function updateProfile(patch: Partial<Profile>): Promise<string | n
     .select("*")
     .single();
   if (error) return "Couldn't save your profile. Try again.";
-  set({ profile: data as Profile });
+  set({
+    profile: { ...(data as ProfileRow), preferences: state.profile?.preferences ?? null },
+  });
   return null;
 }
 

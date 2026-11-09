@@ -11,7 +11,9 @@
     "scrape:greek": "python3 active/execution/scripts/scrape_greek.py",
     "build:clubs": "python3 active/execution/scripts/transform.py",
     "covers:sync": "node active/execution/scripts/sync-covers.mjs",
-    "covers:watch": "node active/execution/scripts/sync-covers.mjs --watch"
+    "covers:watch": "node active/execution/scripts/sync-covers.mjs --watch",
+    "db:dev": "node active/execution/scripts/db-dev.mjs",
+    "seed:dev": "node active/execution/scripts/seed-dev.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
@@ -27,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "pg": "^8.23.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

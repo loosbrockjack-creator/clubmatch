@@ -7,7 +7,7 @@ import { AtSign, Flag, Globe, Link2 } from "lucide-react";
 import { AccountGate } from "@/components/account-gate";
 import { Avatar } from "@/components/avatar";
 import { ClubCard } from "@/components/club-card";
-import { reportProfile, type Profile, type PublicProfile } from "@/lib/account";
+import { PUBLIC_PROFILE_COLUMNS, reportProfile, toLegacyLinks, type Profile, type PublicProfile } from "@/lib/account";
 import { clubBySlug } from "@/lib/clubs";
 import { getSupabase } from "@/lib/supabase";
 
@@ -31,7 +31,7 @@ function StudentProfile({ me }: { me: Profile }) {
     void Promise.all([
       sb
         .from("profiles")
-        .select("id, display_name, major, class_year, bio, links, avatar_url, avatar_preset")
+        .select(`${PUBLIC_PROFILE_COLUMNS}, bio, links`)
         .eq("id", id)
         .maybeSingle(),
       sb.from("memberships").select("club_slug").eq("user_id", id),
@@ -77,7 +77,7 @@ function StudentProfile({ me }: { me: Profile }) {
   const { profile, clubs } = data;
   const isMe = profile.id === me.id;
   const meta = [profile.major, profile.class_year].filter(Boolean).join(" · ");
-  const links = profile.links ?? {};
+  const links = toLegacyLinks(profile.links);
   const clubList = clubs.map((slug) => clubBySlug.get(slug)).filter((c) => c !== undefined);
 
   return (
