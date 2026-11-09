@@ -187,7 +187,7 @@ function IconButton({
       type="button"
       aria-label={label}
       title={label}
-      className="flex h-11 w-9 items-center justify-center rounded-[4px] text-ink-soft transition-colors duration-150 hover:bg-muted hover:text-ink disabled:cursor-default disabled:text-line-strong disabled:hover:bg-transparent"
+      className="flex h-11 w-10 items-center justify-center rounded-[4px] text-ink-soft transition-colors duration-150 hover:bg-muted hover:text-ink disabled:cursor-default disabled:text-line-strong disabled:hover:bg-transparent"
       {...props}
     >
       {children}

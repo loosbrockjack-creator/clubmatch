@@ -7,7 +7,6 @@ import { ArrowRight, ExternalLink, Loader2, LogOut } from "lucide-react";
 import { AccountGate } from "@/components/account-gate";
 import { Avatar } from "@/components/avatar";
 import { ClubCard } from "@/components/club-card";
-import { PolicyNotice } from "@/components/policy-notice";
 import { ProfileForm } from "@/components/profile-form";
 import { LetClubsFindMe, ProfileVisibility } from "@/components/profile-settings";
 import {
@@ -44,12 +43,14 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
     if (!profile.onboarded) router.replace("/account/welcome");
   }, [profile.onboarded, router]);
 
-  // Links to /account#settings from inside the account area change only the hash.
+  // On a client-side navigation the first render still sees the previous URL, so
+  // the hash is read again after mount. The listener covers hash-only changes.
   useEffect(() => {
     function onHashChange() {
       const fromHash = window.location.hash.slice(1);
       if (TABS.some((t) => t.id === fromHash)) setTab(fromHash as TabId);
     }
+    onHashChange();
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
@@ -74,7 +75,7 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
     <>
       <div className="border-b border-line bg-muted">
         <div className="shell flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:py-14">
-          <div className="flex items-center gap-5">
+          <div className="flex min-w-0 items-center gap-5">
             <Avatar
               name={profile.display_name ?? email}
               url={profile.avatar_url}
@@ -82,10 +83,10 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
               size={84}
             />
             <div className="min-w-0">
-              <h1 className="display truncate text-[32px] leading-tight text-cardinal sm:text-[42px]">
+              <h1 className="display line-clamp-2 [overflow-wrap:anywhere] text-[32px] leading-tight text-cardinal sm:text-[42px]">
                 {profile.display_name || "Your account"}
               </h1>
-              <p className="mt-1 text-[14.5px] text-ink-soft">{meta || email}</p>
+              <p className="mt-1 text-[14.5px] text-ink-soft [overflow-wrap:anywhere]">{meta || email}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -138,9 +139,6 @@ function Dashboard({ profile, email }: { profile: Profile; email: string | null 
         aria-labelledby={`tab-${tab}`}
         className="shell pb-20 pt-10"
       >
-        {profile.onboarded && !profile.policy_notice_seen && (
-          <PolicyNotice onOpenSetting={() => choose("settings")} />
-        )}
         {tab === "saved" && <SavedTab />}
         {tab === "clubs" && <ClubsTab />}
         {tab === "profile" && (

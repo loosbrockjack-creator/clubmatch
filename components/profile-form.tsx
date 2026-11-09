@@ -69,6 +69,7 @@ export function ProfileForm({
   const [bio, setBio] = useState(profile.bio ?? "");
   const [rows, setRows] = useState<LinkRow[]>(() => rowsFromProfile(profile));
   const [interests, setInterests] = useState<string[]>(() => effectiveInterests(profile));
+  const [interestsTouched, setInterestsTouched] = useState(false);
   const [lookingFor, setLookingFor] = useState<LookingFor | null>(profile.looking_for);
   const [preset, setPreset] = useState(profile.avatar_preset ?? 0);
   const [error, setError] = useState<string | null>(null);
@@ -81,6 +82,11 @@ export function ProfileForm({
   const quizInterests = interestsFromPreferences(profile.preferences);
   const prefilled =
     !profile.interests_chosen && profile.interests.length === 0 && quizInterests.length > 0;
+
+  function pickInterests(next: string[]) {
+    setInterests(next);
+    setInterestsTouched(true);
+  }
 
   async function onPhoto(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -115,7 +121,9 @@ export function ProfileForm({
       bio: bio.trim() || null,
       links,
       interests,
-      interests_chosen: true,
+      // Saving an untouched, empty picker isn't a choice: quiz answers taken
+      // later should still prefill it.
+      interests_chosen: Boolean(profile.interests_chosen) || interestsTouched || interests.length > 0,
       looking_for: lookingFor,
       avatar_preset: preset,
       // New students read the clubs explanation during onboarding, so they
@@ -158,7 +166,7 @@ export function ProfileForm({
               <button
                 type="button"
                 onClick={async () => setPhotoError(await removeAvatar())}
-                className="text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+                className="inline-flex min-h-10 items-center text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
               >
                 Remove photo
               </button>
@@ -292,12 +300,12 @@ export function ProfileForm({
             }
           />
         </div>
-        <InterestPicker value={interests} onChange={setInterests} />
+        <InterestPicker value={interests} onChange={pickInterests} />
         {profile.preferences && !prefilled && (
           <button
             type="button"
-            onClick={() => setInterests(quizInterests)}
-            className="mt-2 text-[13.5px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+            onClick={() => pickInterests(quizInterests)}
+            className="mt-1 inline-flex min-h-10 items-center text-[13.5px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
           >
             Start over from my quiz answers
           </button>
@@ -330,7 +338,7 @@ export function ProfileForm({
             <button
               type="button"
               onClick={() => setLookingFor(null)}
-              className="ml-1 text-[13.5px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+              className="ml-1 inline-flex min-h-10 items-center px-1 text-[13.5px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
             >
               Clear
             </button>

@@ -27,8 +27,8 @@ function Welcome({ profile }: { profile: Profile }) {
         change it any time.
       </p>
       <p className="mt-3 max-w-2xl text-[16px] leading-relaxed text-ink-soft">
-        Club officers on ClubMatch can also see your profile and a match %, unless you turn off Let
-        clubs find me below. Your quiz answers stay private, and nothing is shared outside
+        Club officers on ClubMatch can also see your profile and a match %, even if you&apos;ve never
+        contacted their club, unless you turn off Let clubs find me below. Your quiz answers stay private, and nothing is shared outside
         ClubMatch.{" "}
         <Link href="/privacy" className="link-isu">
           How privacy works
@@ -51,7 +51,7 @@ function Welcome({ profile }: { profile: Profile }) {
           if (problem) setSkipError(problem);
           else router.replace("/account");
         }}
-        className="mt-6 text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+        className="mt-4 inline-flex min-h-10 items-center text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
       >
         Skip for now
       </button>

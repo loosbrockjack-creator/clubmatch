@@ -177,20 +177,20 @@ function ProfileView({ me, profile, clubs }: { me: Profile; profile: PublicProfi
         </p>
       )}
 
-      <header className="flex flex-col gap-6 sm:flex-row sm:items-start">
+      <header className="flex min-w-0 flex-col gap-6 sm:flex-row sm:items-start">
         <Avatar
           name={profile.display_name}
           url={profile.avatar_url}
           preset={profile.avatar_preset}
           size={104}
         />
-        <div className="min-w-0 flex-1">
-          <h1 className="display break-words text-[34px] leading-tight text-cardinal sm:text-[44px]">
+        <div className="w-full min-w-0 flex-1">
+          <h1 className="display text-[34px] [overflow-wrap:anywhere] leading-tight text-cardinal sm:text-[44px]">
             {profile.display_name || "Iowa State student"}
           </h1>
-          {meta && <p className="mt-1.5 break-words text-[15px] font-semibold text-ink-soft">{meta}</p>}
+          {meta && <p className="mt-1.5 text-[15px] font-semibold text-ink-soft [overflow-wrap:anywhere]">{meta}</p>}
           {profile.bio && (
-            <p className="mt-4 max-w-2xl whitespace-pre-line break-words text-[16px] leading-relaxed text-ink">
+            <p className="mt-4 max-w-2xl whitespace-pre-line text-[16px] [overflow-wrap:anywhere] leading-relaxed text-ink">
               {profile.bio}
             </p>
           )}
@@ -201,8 +201,8 @@ function ProfileView({ me, profile, clubs }: { me: Profile; profile: PublicProfi
             </p>
           )}
           {isMe && (!profile.bio || !status) && (
-            <p className="mt-4 text-[14px] text-ink-soft">
-              <Link href="/account#profile" className="link-isu">
+            <p className="mt-2 text-[14px] text-ink-soft">
+              <Link href="/account#profile" className="link-isu inline-flex min-h-10 items-center">
                 {!profile.bio && !status
                   ? "Add a bio and what you're looking for"
                   : !profile.bio
@@ -245,7 +245,7 @@ function ProfileView({ me, profile, clubs }: { me: Profile; profile: PublicProfi
           {interestGroups.length > 0 ? (
             <dl className="space-y-4">
               {interestGroups.map((group) => (
-                <div key={group.key} className="grid gap-2 sm:grid-cols-[96px_1fr] sm:gap-4">
+                <div key={group.key} className="grid grid-cols-1 gap-2 sm:grid-cols-[96px_minmax(0,1fr)] sm:gap-4">
                   <dt className="pt-1 text-[13.5px] font-semibold text-ink-muted">{group.heading}</dt>
                   <dd className="flex flex-wrap gap-2">
                     {group.items.map((item) => (
@@ -400,7 +400,7 @@ function ReportLink({ target }: { target: string }) {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-ink-muted hover:text-cardinal"
+          className="inline-flex min-h-10 items-center gap-1.5 text-[13.5px] font-semibold text-ink-muted hover:text-cardinal"
         >
           <Flag size={14} aria-hidden /> Report this profile
         </button>

@@ -50,16 +50,16 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
       <>
         <p>
           Club officers on ClubMatch can see your public profile and a match %, which is how well
-          you fit their club, unless you turn off{" "}
+          you fit their club, even if you&apos;ve never contacted that club, unless you turn off{" "}
           <Link href="/account#settings" className="link-isu">
             Let clubs find me
           </Link>
           . It&apos;s on by default. Hiding your profile also takes you out of these lists.
         </p>
         <p>
-          If you mark yourself a member of a club, or tell a club you&apos;re interested, that
-          club&apos;s officers can see your public profile, because you told them. This works
-          club by club, and you can undo it.
+          Separately, if you mark yourself a member of a club, or tell a club you&apos;re
+          interested, that club&apos;s officers can see your public profile even with Let clubs
+          find me off. This works club by club, and you can undo it.
         </p>
         <p>
           Officers never see your raw quiz answers, your email, or the clubs you&apos;ve saved.

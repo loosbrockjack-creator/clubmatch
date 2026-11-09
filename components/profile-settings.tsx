@@ -41,16 +41,20 @@ export function SwitchRow({
           aria-describedby={`${id}-body`}
           aria-busy={busy || undefined}
           onClick={onToggle}
-          className={`relative mt-0.5 inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-200 ease-out ${
-            checked ? "bg-cardinal" : "bg-line-strong"
-          }`}
+          className="-mt-2 flex h-11 w-12 shrink-0 items-center rounded-full"
         >
           <span
             aria-hidden
-            className={`inline-block h-[22px] w-[22px] rounded-full bg-white shadow-sm transition-transform duration-200 ease-out ${
-              checked ? "translate-x-[23px]" : "translate-x-[3px]"
+            className={`inline-flex h-7 w-12 items-center rounded-full transition-colors duration-200 ease-out ${
+              checked ? "bg-cardinal" : "bg-line-strong"
             }`}
-          />
+          >
+            <span
+              className={`inline-block h-[22px] w-[22px] rounded-full bg-white shadow-sm transition-transform duration-200 ease-out ${
+                checked ? "translate-x-[23px]" : "translate-x-[3px]"
+              }`}
+            />
+          </span>
         </button>
       </div>
       {error && (
@@ -91,7 +95,7 @@ export function LetClubsFindMe({ profile, id = "let-clubs-find-me" }: { profile:
     <SwitchRow
       id={id}
       title="Let clubs find me"
-      body="Club officers on ClubMatch can see your public profile and how well you match their club, shown as a match %. They never see your quiz answers or your email. Turn this off and you won't show up in their lists of good-fit students."
+      body="Club officers on ClubMatch can see your public profile and how well you match their club, shown as a match %, even if you've never contacted that club. They never see your quiz answers or your email. Turn this off and you won't show up in their lists of good-fit students."
       {...control}
     />
   );
