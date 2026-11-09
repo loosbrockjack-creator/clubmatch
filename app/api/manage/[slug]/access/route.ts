@@ -21,6 +21,7 @@ export async function GET(request: Request, { params }: Ctx) {
     status: ctx.status,
     role: "officer",
     isPayer: ctx.account?.claimed_by === ctx.user.id,
+    payerLeft: Boolean(ctx.account && ctx.account.claimed_by === null),
     currentPeriodEnd: ctx.account?.current_period_end ?? null,
     cancelAtPeriodEnd: ctx.account?.cancel_at_period_end ?? false,
     featuredOptIn: ctx.account?.featured_opt_in ?? false,

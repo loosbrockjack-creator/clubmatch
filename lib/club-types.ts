@@ -48,6 +48,8 @@ export interface ManageAccess {
   role: "officer";
   /** Only the student who pays can open Stripe's portal, which shows their card. */
   isPayer: boolean;
+  /** The paying officer deleted their account, so the plan ends and nobody pays. */
+  payerLeft: boolean;
   currentPeriodEnd: string | null;
   cancelAtPeriodEnd: boolean;
   featuredOptIn: boolean;

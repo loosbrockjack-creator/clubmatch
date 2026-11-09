@@ -66,6 +66,11 @@ export function BillingTab({ slug, access }: { slug: string; access: ManageAcces
             </div>
             <p className="mt-3 text-[13px] text-ink-muted">Change your card, see receipts, or cancel on Stripe.</p>
           </>
+        ) : access.payerLeft ? (
+          <p className="mt-6 border-t border-line pt-5 text-[14px] leading-relaxed text-ink-soft" data-payer-left>
+            The officer who paid for this plan has left ClubMatch, so it won&apos;t renew. Your page stays on until
+            then. When it ends, any officer can renew it from the club page with their own card.
+          </p>
         ) : (
           <p className="mt-6 border-t border-line pt-5 text-[14px] leading-relaxed text-ink-soft" data-not-payer>
             Another officer pays for this plan, so its card and receipts stay private to them. Ask them to make
