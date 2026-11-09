@@ -3,7 +3,6 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import Stripe from "stripe";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { overlayTag } from "./club-overlay";
-import { getAccountRow } from "./club-server";
 
 export function getStripe(): Stripe | null {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -74,9 +73,36 @@ async function refundDuplicate(stripe: Stripe, sub: Stripe.Subscription) {
   });
 }
 
+const isDead = (sub: Stripe.Subscription) => mapStatus(sub) === "lapsed";
+
+/** Stops a replaced subscription billing. No refund: it was a real, earlier period. */
+async function stopIfLive(stripe: Stripe, subscriptionId: string) {
+  const old = await stripe.subscriptions.retrieve(subscriptionId);
+  if (old.status === "canceled" || old.status === "incomplete_expired") return;
+  await stripe.subscriptions.cancel(old.id).catch((err: Stripe.errors.StripeError) => {
+    if (err.code !== "resource_missing") throw err;
+  });
+}
+
+/** Lapses a club only while this subscription is still the one on record. */
+async function lapseIfCurrent(admin: SupabaseClient, slug: string, subscriptionId: string) {
+  const { error, data } = await admin
+    .from("club_accounts")
+    .update({ status: "lapsed", cancel_at_period_end: false, needs_stripe_cancel: false })
+    .eq("club_slug", slug)
+    .eq("stripe_subscription_id", subscriptionId)
+    .select("club_slug");
+  if (error) throw new Error(`club_accounts: ${error.message}`);
+  if (data?.length) revalidateClub(slug);
+}
+
+type Decision = { outcome: "current" | "adopted" | "cancel_self" | "duplicate"; other_sub: string | null };
+
 /**
  * Brings a club in line with one subscription. Always re-reads the subscription
- * from Stripe, so duplicate and out-of-order webhooks all land on the same state.
+ * from Stripe, and the decision itself is made under a lock in the database
+ * (apply_club_subscription), so duplicate, parallel, and out-of-order webhooks
+ * all land on the same state.
  */
 export async function applySubscription(
   stripe: Stripe,
@@ -85,70 +111,59 @@ export async function applySubscription(
 ) {
   const sub = await stripe.subscriptions.retrieve(subscriptionId);
   const slug = sub.metadata.club_slug;
-  const userId = sub.metadata.user_id;
   if (!slug) return;
   const status = mapStatus(sub);
   if (!status) return;
 
-  const account = await getAccountRow(admin, slug);
-  const isCurrent = account?.stripe_subscription_id === sub.id;
-
   if (status === "lapsed") {
-    // An old subscription ending must not lapse a club that has since renewed.
-    if (!isCurrent) return;
-    await admin
-      .from("club_accounts")
-      .update({ status: "lapsed", cancel_at_period_end: false, needs_stripe_cancel: false })
-      .eq("club_slug", slug);
-    revalidateClub(slug);
+    // An old subscription ending can't lapse a club that has since renewed.
+    await lapseIfCurrent(admin, slug, sub.id);
     return;
   }
 
-  // The last officer deleted their account and the cancel is queued. A renewal
-  // event landing first must not bring the club back to life.
-  if (isCurrent && account?.needs_stripe_cancel) {
-    await stripe.subscriptions.cancel(sub.id);
-    return;
-  }
+  const decide = async (replaceDead: string | null) => {
+    const { data, error } = await admin.rpc("apply_club_subscription", {
+      p_slug: slug,
+      p_sub: sub.id,
+      p_user: sub.metadata.user_id || null,
+      p_customer: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
+      p_status: status,
+      p_period_end: periodEnd(sub),
+      p_ending: isEnding(sub),
+      p_replace_dead: replaceDead,
+    });
+    if (error) throw new Error(`apply_club_subscription: ${error.message}`);
+    return (data as Decision[])[0];
+  };
 
-  if (!isCurrent) {
-    const { data: stillActive } = await admin.rpc("club_is_active", { p_slug: slug });
-    if (account && stillActive && account.stripe_subscription_id) {
+  let decision = await decide(null);
+
+  if (decision.outcome === "duplicate" && decision.other_sub) {
+    // A duplicate means a different subscription that's really still live. If
+    // Stripe says the one on record has ended, this payment takes its place.
+    const recorded = await stripe.subscriptions.retrieve(decision.other_sub);
+    if (isDead(recorded)) {
+      decision = await decide(decision.other_sub);
+    } else {
       await refundDuplicate(stripe, sub);
       return;
     }
   }
 
-  // A new claim replaces a subscription still waiting to be cancelled, so cancel it now.
-  if (!isCurrent && account?.needs_stripe_cancel && account.stripe_subscription_id) {
-    await stripe.subscriptions.cancel(account.stripe_subscription_id);
+  if (decision.outcome === "duplicate") return; // Replaced again meanwhile; a retry settles it.
+
+  if (decision.outcome === "cancel_self") {
+    // The last officer deleted their account and the cancel is queued.
+    await stopIfLive(stripe, sub.id);
+    return;
   }
 
-  const { error } = await admin.from("club_accounts").upsert({
-    club_slug: slug,
-    status,
-    claimed_by: isCurrent ? account?.claimed_by : userId || null,
-    stripe_customer_id: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
-    stripe_subscription_id: sub.id,
-    current_period_end: periodEnd(sub),
-    cancel_at_period_end: isEnding(sub),
-    needs_stripe_cancel: false,
-    featured_opt_in: account?.featured_opt_in ?? false,
-  });
-  if (error) throw new Error(`club_accounts: ${error.message}`);
-
-  // Runs once per subscription, so renewals can't re-promote a demoted officer.
-  if (!isCurrent) {
-    if (userId) {
-      const { error: roleError } = await admin
-        .from("memberships")
-        .upsert({ user_id: userId, club_slug: slug, role: "officer", verified: true });
-      if (roleError) throw new Error(`memberships: ${roleError.message}`);
-    }
-    const { error: profileError } = await admin
-      .from("club_profiles")
-      .upsert({ club_slug: slug }, { onConflict: "club_slug", ignoreDuplicates: true });
-    if (profileError) throw new Error(`club_profiles: ${profileError.message}`);
+  if (decision.outcome === "adopted" && decision.other_sub && decision.other_sub !== sub.id) {
+    await stopIfLive(stripe, decision.other_sub);
   }
+
+  // A cancel can land while this runs, and parallel events can finish in any order.
+  const latest = await stripe.subscriptions.retrieve(sub.id);
+  if (isDead(latest)) await lapseIfCurrent(admin, slug, sub.id);
   revalidateClub(slug);
 }

@@ -5,6 +5,7 @@
 //
 // Prints one line per failed check and a summary. Exits 1 on any failure.
 import { createClient } from "@supabase/supabase-js";
+import Stripe from "stripe";
 import { loadDevEnv } from "./dev-env.mjs";
 
 const env = loadDevEnv();
@@ -184,6 +185,67 @@ for (const headers of [{}, { "stripe-signature": "t=1,v1=forged" }]) {
   const { data: savedRow } = await admin.from("saved_clubs").select("club_slug").eq("user_id", student.id).eq("club_slug", "investment-group").maybeSingle();
   const logged = (await signedIn.json()).logged;
   check("a save with no saved_clubs row logs nothing", savedRow ? true : logged === 0, `logged ${logged}`);
+}
+
+// Parallel webhooks must never refund the subscription on record. Real sandbox
+// money flows, so this needs STRIPE_WEBHOOK_SECRET and the server's webhook.
+{
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+  const RACE_CLUB = "solar-car";
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const { data: temp } = await admin.auth.admin.createUser({ email: `cm-dev-race-${Date.now()}@iastate.edu`, email_confirm: true });
+  const customer = await stripe.customers.create({ email: temp.user.email, payment_method: "pm_card_visa", invoice_settings: { default_payment_method: "pm_card_visa" } });
+  const price = await stripe.prices.create({ currency: "usd", unit_amount: 4900, recurring: { interval: "month", interval_count: 6 }, product_data: { name: "race test" } });
+  const newSub = () => stripe.subscriptions.create({ customer: customer.id, items: [{ price: price.id }], metadata: { club_slug: RACE_CLUB, user_id: temp.user.id } });
+  const fire = (sub) => {
+    const payload = JSON.stringify({ id: `evt_${sub.id}`, object: "event", type: "customer.subscription.updated", data: { object: { id: sub.id } } });
+    const header = stripe.webhooks.generateTestHeaderString({ payload, secret: env.STRIPE_WEBHOOK_SECRET });
+    return fetch(`${BASE}/api/stripe/webhook`, { method: "POST", headers: { "stripe-signature": header }, body: payload });
+  };
+  const refunded = async (sub) => {
+    const invoice = await stripe.invoices.retrieve(sub.latest_invoice, { expand: ["payments"] });
+    const intent = invoice.payments?.data?.[0]?.payment?.payment_intent;
+    return (await stripe.refunds.list({ payment_intent: typeof intent === "string" ? intent : intent.id })).data.length > 0;
+  };
+  const recorded = async () => (await admin.from("club_accounts").select("status, stripe_subscription_id").eq("club_slug", RACE_CLUB).maybeSingle()).data;
+  const rounds = Number(process.env.RACE_ROUNDS ?? 3);
+  await admin.from("club_accounts").delete().eq("club_slug", RACE_CLUB);
+  const made = [];
+  for (let round = 0; round < rounds; round++) {
+    const sub = await newSub();
+    made.push(sub.id);
+    const codes = await Promise.all(Array.from({ length: 6 }, () => fire(sub).then((res) => res.status)));
+    await sleep(1500);
+    const live = await stripe.subscriptions.retrieve(sub.id);
+    const row = await recorded();
+    check(`renewal ${round}: parallel webhooks all succeed`, codes.every((code) => code === 200), codes.join(","));
+    check(`renewal ${round}: subscription stays live`, live.status === "active", live.status);
+    check(`renewal ${round}: club is on it`, row?.stripe_subscription_id === sub.id && row.status === "active", JSON.stringify(row));
+    check(`renewal ${round}: not refunded`, !(await refunded(sub)));
+    // Lapse for the next round, as an ended plan would.
+    await stripe.subscriptions.cancel(sub.id);
+    await fire(sub);
+    await sleep(500);
+    check(`renewal ${round}: cancel lapses the club`, (await recorded())?.status === "lapsed");
+  }
+  // A real duplicate is still refunded, and the original stays.
+  const first = await newSub();
+  const second = await newSub();
+  made.push(first.id, second.id);
+  await Promise.all([fire(first), fire(first), fire(second), fire(second), fire(first), fire(second)]);
+  await sleep(4000);
+  const [a, b] = await Promise.all([stripe.subscriptions.retrieve(first.id), stripe.subscriptions.retrieve(second.id)]);
+  const row = await recorded();
+  const winner = [a, b].find((sub) => sub.id === row?.stripe_subscription_id);
+  const loser = [a, b].find((sub) => sub.id !== row?.stripe_subscription_id);
+  check("two live payments: the one on record stays live", winner?.status === "active", `${a.status}/${b.status}`);
+  check("two live payments: the one on record isn't refunded", winner ? !(await refunded(winner)) : false);
+  check("two live payments: the other is cancelled", loser?.status === "canceled", loser?.status);
+  check("two live payments: the other is refunded", loser ? await refunded(loser) : false);
+  for (const id of made) await stripe.subscriptions.cancel(id).catch(() => {});
+  await admin.from("club_accounts").delete().eq("club_slug", RACE_CLUB);
+  await admin.from("club_profiles").delete().eq("club_slug", RACE_CLUB);
+  await admin.auth.admin.deleteUser(temp.user.id);
 }
 
 console.log(`\n${passed} passed, ${failed} failed.`);
