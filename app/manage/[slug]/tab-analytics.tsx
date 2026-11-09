@@ -24,6 +24,8 @@ export function AnalyticsTab({ slug }: { slug: string }) {
   if (!data) return <PanelSkeleton />;
 
   const empty = data.funnel.every((stage) => stage.students === 0);
+  const { impressions, views, clicks } = data.anonymous;
+  const hasAnonymous = impressions + views + clicks > 0;
 
   return (
     <div className="space-y-12">
@@ -33,7 +35,9 @@ export function AnalyticsTab({ slug }: { slug: string }) {
             You showed up in {data.matchedStudents.toLocaleString()}{" "}
             {data.matchedStudents === 1 ? "student's" : "students'"} matches
           </p>
-          <p className="mt-2 text-[14.5px] text-ink-soft">In the last {data.days} days.</p>
+          <p className="mt-2 text-[14.5px] text-ink-soft">
+            Signed-in students, each counted once, in the last {data.days} days.
+          </p>
         </div>
         <div role="group" aria-label="Date range" className="flex shrink-0 gap-1.5">
           {RANGES.map((range) => (
@@ -53,9 +57,9 @@ export function AnalyticsTab({ slug }: { slug: string }) {
       </section>
 
       {empty ? (
-        <EmptyState title="No activity yet in this window">
-          Numbers start when students see your club in their quiz results or open your page. We only show real
-          activity, so this stays at zero until that happens.
+        <EmptyState title="No signed-in students yet in this window">
+          Numbers start when signed-in students see your club in their quiz results or open your page. We only count
+          what we can verify, so this stays at zero until that happens.
         </EmptyState>
       ) : (
         <>
@@ -63,6 +67,28 @@ export function AnalyticsTab({ slug }: { slug: string }) {
           <Trend data={data} />
           <Gaps data={data} />
         </>
+      )}
+
+      {hasAnonymous && (
+        <section className="card px-5 py-5 sm:px-7" data-anonymous-visits>
+          <h2 className="text-[15.5px] font-semibold text-ink">Signed-out visits</h2>
+          <p className="mt-1 max-w-2xl text-[14px] leading-relaxed text-ink-soft">
+            Separate from everything above. Anyone can browse without an account, so we can&apos;t verify these or tell
+            whether they&apos;re students. Treat them as a rough sign of interest.
+          </p>
+          <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-3">
+            {[
+              ["In quiz results", impressions],
+              ["Page visits", views],
+              ["Link clicks", clicks],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <dt className="text-[13px] text-ink-muted">{label}</dt>
+                <dd className="mt-0.5 text-[17px] font-semibold tabular-nums text-ink">{Number(value).toLocaleString()}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
       )}
     </div>
   );

@@ -131,6 +131,13 @@ GROUPS.forEach(({ major, area, students, save }, g) => {
     if (i % 17 === 0) rows.push({ ...base, kind: "join", day: chicagoDay(Math.max(0, seenAgo - 2)) });
   }
 });
+// A few signed-out visits, which the dashboard keeps apart from verified students.
+for (let i = 0; i < 24; i++) {
+  const viewer_hash = `seed-${randomBytes(12).toString("hex")}`;
+  const base = { club_slug: DS_CLUB, viewer_hash, anonymous: true, day: chicagoDay(i) };
+  rows.push({ ...base, kind: "impression", major: null, academic_area: null });
+  if (i % 3 === 0) rows.push({ ...base, kind: "view", major: null, academic_area: null });
+}
 await must(admin.from("club_activity").insert(rows), "activity");
 
 console.log(`Seeded 2 allowlist rows, 1 test member, ${rows.length} sample activity rows.`);
