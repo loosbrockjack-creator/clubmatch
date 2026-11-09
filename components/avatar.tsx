@@ -21,6 +21,23 @@ export function initials(name: string | null | undefined): string {
   return (first + last).toUpperCase();
 }
 
+/**
+ * avatar_url is student-writable, so only photos in this project's avatars
+ * bucket are ever rendered. Anything else falls back to initials, instead of
+ * making other students' browsers load an arbitrary address.
+ */
+function safeAvatarUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    const project = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
+    const inBucket = parsed.pathname.startsWith("/storage/v1/object/public/avatars/");
+    return parsed.protocol === "https:" && parsed.host === project.host && inBucket ? url : null;
+  } catch {
+    return null;
+  }
+}
+
 export function Avatar({
   name,
   url,
@@ -35,11 +52,15 @@ export function Avatar({
   className?: string;
 }) {
   const style = { width: size, height: size };
-  if (url) {
+  const src = safeAvatarUrl(url);
+  if (src) {
     return (
       <Image
-        src={url}
+        src={src}
         alt=""
+        // next.config.ts only allows the production bucket; the dev project's
+        // photos skip the optimizer so uploads still work on localhost.
+        unoptimized={process.env.NODE_ENV !== "production"}
         width={size}
         height={size}
         style={style}

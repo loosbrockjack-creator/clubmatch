@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { CONTACT_EMAIL } from "@/lib/site";
 
@@ -18,34 +19,70 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
         </p>
         <p>
           With an account we store your Iowa State email, the profile details you choose to add
-          (name, photo, major, class year, bio, links), your quiz answers, the clubs you save,
-          and the clubs you say you&apos;re in.
+          (name, photo, major, class year, bio, interests, what you&apos;re looking for, and
+          links), your quiz answers, the clubs you save, and the clubs you say you&apos;re in.
         </p>
       </>
     ),
   },
   {
-    title: "Who can see it",
+    title: "Other students",
     body: (
       <>
         <p>
-          Your profile and the clubs you&apos;re in are visible to other signed-in Iowa State
-          students. Never to search engines or people who aren&apos;t signed in.
+          Your public profile is your name, photo, major, class year, bio, interests, what
+          you&apos;re looking for, links, and the clubs you&apos;re in. Signed-in Iowa State
+          students can see it. People who aren&apos;t signed in and search engines can&apos;t.
         </p>
         <p>
-          Your email, quiz answers, and saved clubs are private to you. You can hide your
-          profile entirely in Account settings.
+          You choose which interests show. You can hide your whole profile in{" "}
+          <Link href="/account#settings" className="link-isu">
+            Account settings
+          </Link>
+          .
         </p>
       </>
+    ),
+  },
+  {
+    title: "Club officers",
+    body: (
+      <>
+        <p>
+          Club officers on ClubMatch can see your public profile and a match %, which is how well
+          you fit their club, unless you turn off{" "}
+          <Link href="/account#settings" className="link-isu">
+            Let clubs find me
+          </Link>
+          . It&apos;s on by default. Hiding your profile also takes you out of these lists.
+        </p>
+        <p>
+          If you mark yourself a member of a club, or tell a club you&apos;re interested, that
+          club&apos;s officers can see your public profile, because you told them. This works
+          club by club, and you can undo it.
+        </p>
+        <p>
+          Officers never see your raw quiz answers, your email, or the clubs you&apos;ve saved.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "Always private",
+    body: (
+      <p>
+        Your email, your quiz answers, and your saved clubs are for you only. Nobody else on
+        ClubMatch can see them.
+      </p>
     ),
   },
   {
     title: "What we don't do",
     body: (
       <p>
-        We don&apos;t sell your data, show ads, or share your information with clubs or the
-        university. ClubMatch is an independent student project and is not affiliated with
-        Iowa State University.
+        Your information is never shared outside ClubMatch. We don&apos;t sell your data, show ads,
+        or give your information to the university or anyone else. ClubMatch is an independent
+        student project and is not affiliated with Iowa State University.
       </p>
     ),
   },
@@ -63,7 +100,7 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     body: (
       <p>
         Delete your account any time from Account, then Settings. That permanently removes
-        your profile, photo, saved clubs, and memberships. Questions or requests:{" "}
+        your profile, photo, quiz answers, saved clubs, and memberships. Questions or requests:{" "}
         <a href={`mailto:${CONTACT_EMAIL}`} className="link-isu">
           {CONTACT_EMAIL}
         </a>
@@ -79,7 +116,7 @@ export default function PrivacyPage() {
       <PageHeader
         crumbs={[{ href: "/privacy", label: "Privacy" }]}
         title="Privacy"
-        intro="The short version: we keep only what makes your account work, and you can delete it any time."
+        intro="The short version: your info stays inside ClubMatch, you control who sees your profile, and you can delete it any time."
       />
       <div className="shell max-w-3xl space-y-12 pb-12 pt-12">
         {SECTIONS.map((section) => (
