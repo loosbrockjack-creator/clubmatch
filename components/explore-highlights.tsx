@@ -53,7 +53,7 @@ export function ExploreHighlights() {
           <h2 id="this-week-heading" className="display gold-rule text-[24px] text-ink">
             This week on campus
           </h2>
-          <ul className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0">
+          <ul className="-mx-5 mt-5 flex gap-3 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0">
             {eventRows.map((event) => (
               <li key={event.id} className="w-[270px] shrink-0">
                 <Link
@@ -88,7 +88,7 @@ export function ExploreHighlights() {
           <h2 id="featured-heading" className="display gold-rule text-[24px] text-ink">
             Featured
           </h2>
-          <p className="-mt-2 mb-5 text-[13.5px] text-ink-muted">
+          <p className="mb-5 mt-2 text-[13.5px] text-ink-muted">
             Clubs that pay for a spot here, in rotation. It never changes your match scores.
           </p>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

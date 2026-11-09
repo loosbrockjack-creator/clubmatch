@@ -79,7 +79,7 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
       <div className="shell grid gap-10 pb-12 pt-10 lg:grid-cols-[1fr_400px] lg:items-start">
         <section aria-label="What you get">
           <h2 className="display gold-rule text-[26px] text-ink">What you get</h2>
-          <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          <ul className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2">
             {PERKS.map(({ icon: Icon, title, body }) => (
               <li key={title} className="flex gap-3.5">
                 <Icon size={20} strokeWidth={1.75} aria-hidden className="mt-0.5 shrink-0 text-cardinal" />

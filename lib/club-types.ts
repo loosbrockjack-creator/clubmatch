@@ -3,7 +3,7 @@
 export const CLAIM_PRICE_LABEL = "$49";
 export const CLAIM_PRICE_CENTS = 4900;
 export const CLAIM_INTERVAL_MONTHS = 6;
-export const CLAIM_RENEWAL_TEXT = "$49 per semester, billed every 6 months until you cancel.";
+export const CLAIM_RENEWAL_TEXT = "Renews at $49 every 6 months until you cancel.";
 
 export type ClubStatus = "unclaimed" | "active" | "past_due" | "lapsed";
 

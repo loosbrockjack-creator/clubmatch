@@ -33,13 +33,13 @@ export function ClubEvents({ slug, clubName }: { slug: string; clubName: string 
         Upcoming events
       </h2>
       {failed ? (
-        <p className="text-[15px] text-ink-soft">Couldn&apos;t load events. Refresh to try again.</p>
+        <p className="mt-4 text-[15px] text-ink-soft">Couldn&apos;t load events. Refresh to try again.</p>
       ) : events === null ? (
-        <div className="skeleton h-24 rounded-[14px]" />
+        <div className="skeleton mt-5 h-24 rounded-[14px]" />
       ) : events.length === 0 ? (
-        <p className="text-[15px] text-ink-soft">{clubName} doesn&apos;t have anything on the calendar right now.</p>
+        <p className="mt-4 text-[15px] text-ink-soft">{clubName} doesn&apos;t have anything on the calendar right now.</p>
       ) : (
-        <ul className="space-y-3">
+        <ul className="mt-5 space-y-3">
           {events.map((event) => (
             <li key={event.id} className="card px-5 py-5 sm:px-6">
               <p className="flex items-center gap-1.5 text-[13px] font-semibold text-cardinal">

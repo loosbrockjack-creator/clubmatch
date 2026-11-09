@@ -38,7 +38,8 @@ export function BillingTab({ slug, access }: { slug: string; access: ManageAcces
         <dl className="grid gap-4 sm:grid-cols-2">
           <div>
             <dt className="text-[13px] text-ink-muted">Plan</dt>
-            <dd className="mt-0.5 text-[15.5px] font-semibold text-ink">{CLAIM_RENEWAL_TEXT}</dd>
+            <dd className="mt-0.5 text-[15.5px] font-semibold text-ink">$49 per semester</dd>
+            <dd className="mt-0.5 text-[13.5px] text-ink-muted">{CLAIM_RENEWAL_TEXT}</dd>
           </div>
           <div>
             <dt className="text-[13px] text-ink-muted">{access.cancelAtPeriodEnd ? "Ends on" : "Renews on"}</dt>

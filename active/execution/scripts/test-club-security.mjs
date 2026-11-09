@@ -99,9 +99,9 @@ for (const table of ["club_accounts", "officer_allowlist", "club_activity", "clu
 
 // Interest on an unclaimed club is refused by the database.
 {
-  await admin.from("club_interests").delete().eq("user_id", student.id).eq("club_slug", "chess-club");
-  const { data: active } = await admin.rpc("club_is_active", { p_slug: "chess-club" });
-  if (!active) await blocked("interest on an unclaimed club", student.client.from("club_interests").insert({ user_id: student.id, club_slug: "chess-club" }));
+  await admin.from("club_interests").delete().eq("user_id", student.id).eq("club_slug", "investment-group");
+  const { data: active } = await admin.rpc("club_is_active", { p_slug: "investment-group" });
+  if (!active) await blocked("interest on an unclaimed club", student.client.from("club_interests").insert({ user_id: student.id, club_slug: "investment-group" }));
 }
 
 // HTTP: every manage route refuses no token, a bad token, and a non-officer.
@@ -129,7 +129,7 @@ for (const [method, route, body] of writes) {
   check(`${method} ${route}: student is 403`, res.status === 403, `got ${res.status}`);
 }
 {
-  const res = await fetch(`${BASE}/api/clubs/chess-club/checkout`, { method: "POST", headers: auth });
+  const res = await fetch(`${BASE}/api/clubs/investment-group/checkout`, { method: "POST", headers: auth });
   check("checkout for a club you don't run is 403", res.status === 403, `got ${res.status}`);
   const fake = await fetch(`${BASE}/api/manage/not-a-club/leads`, { headers: auth });
   check("unknown club is 404", fake.status === 404, `got ${fake.status}`);
