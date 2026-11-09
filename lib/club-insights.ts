@@ -17,6 +17,7 @@ export type ActivityRow = {
   academic_area: string | null;
   viewer_hash: string;
   day: string;
+  anonymous: boolean;
 };
 
 const FUNNEL: { kind: ActivityKind; label: string }[] = [
@@ -176,13 +177,19 @@ export function buildAnalytics(
   completeness: ClubAnalytics["completeness"],
   hasDescription: boolean,
 ): ClubAnalytics {
-  const funnel = buildFunnel(rows);
-  const { gaps, smallGroupStudents } = buildGaps(rows, hasDescription);
+  // Everything clubs pay for comes from verified, signed-in students only.
+  const verified = rows.filter((row) => !row.anonymous);
+  const anonymous = rows.filter((row) => row.anonymous);
+  const distinct = (kind: ActivityKind) =>
+    new Set(anonymous.filter((row) => row.kind === kind).map((row) => row.viewer_hash)).size;
+  const funnel = buildFunnel(verified);
+  const { gaps, smallGroupStudents } = buildGaps(verified, hasDescription);
   return {
     days,
     matchedStudents: funnel[0].students,
+    anonymous: { impressions: distinct("impression"), views: distinct("view"), clicks: distinct("lead") },
     funnel,
-    weeks: buildWeeks(rows, days, today),
+    weeks: buildWeeks(verified, days, today),
     gaps,
     smallGroupStudents,
     completeness,

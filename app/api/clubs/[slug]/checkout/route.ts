@@ -47,6 +47,10 @@ export async function POST(request: Request, { params }: Ctx) {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
+      // Cards settle at once. Bank debits and pay-later can fail after the page
+      // has already told the officer they're active. Stripe SDK 23's name for
+      // what older versions called payment_method_types.
+      allowed_payment_method_types: ["card"],
       client_reference_id: user.id,
       ...(account?.stripe_customer_id
         ? { customer: account.stripe_customer_id }
@@ -67,7 +71,7 @@ export async function POST(request: Request, { params }: Ctx) {
       ],
       metadata,
       subscription_data: { metadata },
-      success_url: `${claimUrl}?status=success`,
+      success_url: `${claimUrl}?status=success&session={CHECKOUT_SESSION_ID}`,
       cancel_url: `${claimUrl}?status=cancelled`,
     });
     if (!session.url) return fail(502, "Stripe didn't return a checkout page. Try again.");

@@ -1,4 +1,5 @@
 import { getClubSummary } from "@/lib/clubs";
+import { whyFit } from "@/lib/club-leads";
 import { allowedForPrefs, MATCH_THRESHOLD, scoreClub } from "@/lib/matching";
 import {
   LEAD_COLUMNS,
@@ -53,7 +54,7 @@ export async function GET(request: Request, { params }: Ctx) {
         const answers = prefs.get(student.id);
         if (!answers?.academicArea || !allowedForPrefs(answers, club)) continue;
         const match = scoreClub(answers, club).score;
-        if (match >= MATCH_THRESHOLD) goodFit.push({ ...toLead(student), match });
+        if (match >= MATCH_THRESHOLD) goodFit.push({ ...toLead(student), match, fit: whyFit(student.interests, club) });
       }
     }
     if (page.length < PAGE) break;
@@ -75,7 +76,13 @@ export async function GET(request: Request, { params }: Ctx) {
   for (const row of interestRows ?? []) {
     const profile = interestProfiles.get(row.user_id as string);
     // A hidden profile is counted, so the officer knows, but never named.
-    if (profile?.visible) interested.push({ ...toLead(profile), since: row.created_at as string });
+    if (profile?.visible) {
+      interested.push({
+        ...toLead(profile),
+        since: row.created_at as string,
+        fit: whyFit(profile.interests, club),
+      });
+    }
     else hiddenInterested += 1;
   }
 

@@ -5,11 +5,12 @@ import { getSupabaseAdmin } from "./supabase-admin";
 import type { ClubStatus, LeadStudent } from "./club-types";
 
 /**
- * Keep in sync with PUBLIC_PROFILE_COLUMNS in lib/account.ts. That module is a
- * client module ("use client"), so a route handler can't import a value from it.
+ * PUBLIC_PROFILE_COLUMNS from lib/account.ts, plus links, which every signed-in
+ * student can already read on the profile page. That module is a client module
+ * ("use client"), so a route handler can't import a value from it. Keep in sync.
  */
 export const LEAD_COLUMNS =
-  "id, display_name, major, class_year, avatar_url, avatar_preset, interests, looking_for";
+  "id, display_name, major, class_year, avatar_url, avatar_preset, interests, looking_for, links";
 
 export function fail(status: number, error: string) {
   return Response.json({ error }, { status });
@@ -48,6 +49,7 @@ export type ClubAccountRow = {
   current_period_end: string | null;
   cancel_at_period_end: boolean;
   featured_opt_in: boolean;
+  needs_stripe_cancel: boolean;
 };
 
 export async function getAccountRow(admin: SupabaseClient, slug: string) {
@@ -143,5 +145,8 @@ export function toLead(row: LeadStudent & { visible?: boolean }): LeadStudent {
     avatar_preset: row.avatar_preset,
     interests: row.interests,
     looking_for: row.looking_for,
+    links: (Array.isArray(row.links) ? row.links : [])
+      .filter((link) => typeof link?.url === "string" && /^https?:\/\//i.test(link.url))
+      .slice(0, 5),
   };
 }

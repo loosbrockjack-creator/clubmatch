@@ -13,7 +13,13 @@ export function getStripe(): Stripe | null {
 /** Newer Stripe API versions report the period on the subscription item. */
 export function periodEnd(sub: Stripe.Subscription): string | null {
   const unix = sub.items.data[0]?.current_period_end;
-  return unix ? new Date(unix * 1000).toISOString() : null;
+  const end = unix && sub.cancel_at ? Math.min(unix, sub.cancel_at) : (unix ?? sub.cancel_at);
+  return end ? new Date(end * 1000).toISOString() : null;
+}
+
+/** The portal can schedule a cancel through cancel_at and leave the older flag false. */
+export function isEnding(sub: Stripe.Subscription): boolean {
+  return sub.cancel_at_period_end || sub.cancel_at !== null;
 }
 
 function mapStatus(sub: Stripe.Subscription): "active" | "past_due" | "lapsed" | null {
@@ -77,9 +83,16 @@ export async function applySubscription(
     if (!isCurrent) return;
     await admin
       .from("club_accounts")
-      .update({ status: "lapsed", cancel_at_period_end: false })
+      .update({ status: "lapsed", cancel_at_period_end: false, needs_stripe_cancel: false })
       .eq("club_slug", slug);
     revalidateClub(slug);
+    return;
+  }
+
+  // The last officer deleted their account and the cancel is queued. A renewal
+  // event landing first must not bring the club back to life.
+  if (isCurrent && account?.needs_stripe_cancel) {
+    await stripe.subscriptions.cancel(sub.id);
     return;
   }
 
@@ -91,6 +104,11 @@ export async function applySubscription(
     }
   }
 
+  // A new claim replaces a subscription still waiting to be cancelled, so cancel it now.
+  if (!isCurrent && account?.needs_stripe_cancel && account.stripe_subscription_id) {
+    await stripe.subscriptions.cancel(account.stripe_subscription_id);
+  }
+
   const { error } = await admin.from("club_accounts").upsert({
     club_slug: slug,
     status,
@@ -98,7 +116,8 @@ export async function applySubscription(
     stripe_customer_id: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
     stripe_subscription_id: sub.id,
     current_period_end: periodEnd(sub),
-    cancel_at_period_end: sub.cancel_at_period_end,
+    cancel_at_period_end: isEnding(sub),
+    needs_stripe_cancel: false,
     featured_opt_in: account?.featured_opt_in ?? false,
   });
   if (error) throw new Error(`club_accounts: ${error.message}`);

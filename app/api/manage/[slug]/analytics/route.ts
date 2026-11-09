@@ -25,7 +25,7 @@ export async function GET(request: Request, { params }: Ctx) {
   for (let from = 0; from < 100_000; from += PAGE) {
     const { data, error } = await admin
       .from("club_activity")
-      .select("kind, major, academic_area, viewer_hash, day")
+      .select("kind, major, academic_area, viewer_hash, day, anonymous")
       .eq("club_slug", slug)
       .gte("day", since)
       .order("id")

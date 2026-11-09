@@ -37,6 +37,8 @@ export interface ClaimState {
   /** Allowed to go straight to checkout: allowlisted, approved, or a lapsed officer. */
   canCheckout: boolean;
   claim: { status: "pending" | "approved" | "rejected"; created_at: string } | null;
+  /** This student's checkout lost a race for the club, so Stripe refunded it. */
+  duplicatePayment: boolean;
 }
 
 export interface ManageAccess {
@@ -59,10 +61,11 @@ export interface LeadStudent {
   avatar_preset: number | null;
   interests: string[];
   looking_for: string | null;
+  links: { url: string; label?: string }[];
 }
 
-export type GoodFitLead = LeadStudent & { match: number };
-export type InterestedLead = LeadStudent & { since: string };
+export type GoodFitLead = LeadStudent & { match: number; fit: string[] };
+export type InterestedLead = LeadStudent & { since: string; fit: string[] };
 
 export interface RosterMember {
   id: string;
@@ -91,6 +94,9 @@ export const CAMPAIGN_AUDIENCE_LABEL: Record<CampaignAudience, string> = {
 };
 export const CAMPAIGN_DAILY_LIMIT = 2;
 export const CAMPAIGN_WEEKLY_LIMIT = 5;
+
+/** How many ranked matches Results shows, and so what counts as showing up in them. */
+export const RESULT_LIMIT = 9;
 
 export const ACTIVITY_KINDS = ["impression", "view", "save", "interested", "lead", "join"] as const;
 export type ActivityKind = (typeof ACTIVITY_KINDS)[number];
@@ -124,7 +130,10 @@ export interface CompletenessItem {
 
 export interface ClubAnalytics {
   days: number;
+  /** Signed-in students only: token verified and counted once each. */
   matchedStudents: number;
+  /** Signed-out visitors. Can't be verified, so never part of the numbers above. */
+  anonymous: { impressions: number; views: number; clicks: number };
   funnel: FunnelStage[];
   weeks: WeekPoint[];
   gaps: MajorGap[];
