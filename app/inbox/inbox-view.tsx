@@ -31,7 +31,7 @@ export function InboxView() {
       <PageHeader
         crumbs={[]}
         title="Inbox"
-        intro="Messages from officers of clubs you're in, or told you're interested in."
+        intro="Messages and invites from club officers, and answers to your requests to claim a club."
       />
       <AccountGate>{(profile) => <Messages userId={profile.id} />}</AccountGate>
     </>
@@ -205,6 +205,7 @@ function Messages({ userId }: { userId: string }) {
                         >
                           View {clubName}
                         </Link>
+                        {!message.link_path && (
                         <button
                           type="button"
                           onClick={() => void toggleMute(message.club_slug)}
@@ -214,8 +215,9 @@ function Messages({ userId }: { userId: string }) {
                           <BellOff size={14} strokeWidth={1.75} aria-hidden />
                           {isMuted ? `Unmute ${clubName}` : `Mute ${clubName}`}
                         </button>
+                        )}
                       </div>
-                      {isMuted && (
+                      {isMuted && !message.link_path && (
                         <p className="mt-2 text-[13px] text-ink-muted">
                           Muted. You won&apos;t get new messages from this club.
                         </p>
