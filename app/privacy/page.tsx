@@ -57,6 +57,11 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
           . It&apos;s on by default. Hiding your profile also takes you out of these lists.
         </p>
         <p>
+          Officers of a paid club you fit can also send you one in-app invite per club. They
+          can&apos;t see whether you read it or muted their club. Mute a club or turn off Let clubs
+          find me to stop invites.
+        </p>
+        <p>
           Separately, if you mark yourself a member of a club, or tell a club you&apos;re
           interested, that club&apos;s officers can see your public profile even with Let clubs
           find me off. This works club by club, and you can undo it.
