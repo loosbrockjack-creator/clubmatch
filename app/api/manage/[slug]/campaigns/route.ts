@@ -15,7 +15,7 @@ export async function GET(request: Request, { params }: Ctx) {
   if (ctx instanceof Response) return ctx;
   const { admin, user } = ctx;
 
-  const [{ data: campaigns, error }, { data: members }, { data: interested }, { data: mutes }] =
+  const [{ data: campaigns, error }, { data: members }, { data: interested }] =
     await Promise.all([
       admin
         .from("club_campaigns")
@@ -26,17 +26,12 @@ export async function GET(request: Request, { params }: Ctx) {
         .limit(50),
       admin.from("memberships").select("user_id").eq("club_slug", slug),
       admin.from("club_interests").select("user_id").eq("club_slug", slug),
-      admin.from("club_mutes").select("user_id").eq("club_slug", slug),
     ]);
   if (error) return fail(500, "Couldn't load campaigns.");
 
-  const muted = new Set((mutes ?? []).map((row) => row.user_id as string));
+  // Mutes are left out on purpose: a club must not be able to tell who muted it.
   const reachable = (rows: { user_id: unknown }[] | null) =>
-    new Set(
-      (rows ?? [])
-        .map((row) => row.user_id as string)
-        .filter((id) => id !== user.id && !muted.has(id)),
-    );
+    new Set((rows ?? []).map((row) => row.user_id as string).filter((id) => id !== user.id));
   const memberSet = reachable(members);
   const interestedSet = reachable(interested);
 

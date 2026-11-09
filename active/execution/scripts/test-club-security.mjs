@@ -187,6 +187,40 @@ for (const headers of [{}, { "stripe-signature": "t=1,v1=forged" }]) {
   check("a save with no saved_clubs row logs nothing", savedRow ? true : logged === 0, `logged ${logged}`);
 }
 
+// A club can't tell who muted it: same count and a normal send when everyone did.
+{
+  const MUTE_CLUB = "solar-car";
+  await admin.from("memberships").upsert({ user_id: student.id, club_slug: MUTE_CLUB, role: "member" });
+  await admin.from("club_mutes").upsert({ user_id: student.id, club_slug: MUTE_CLUB });
+  const { data, error } = await admin.rpc("send_club_campaign", { p_slug: MUTE_CLUB, p_sender: null, p_subject: "Mute test", p_body: "x", p_audience: "members" });
+  const row = data?.[0];
+  check("all-muted audience sends normally", !error && row?.recipients === 1, error?.message ?? JSON.stringify(row));
+  const { data: campaign } = await admin.from("club_campaigns").select("recipient_count").eq("id", row?.campaign_id).maybeSingle();
+  check("recipient count ignores mutes", campaign?.recipient_count === 1, JSON.stringify(campaign));
+  const { count } = await admin.from("campaign_recipients").select("user_id", { count: "exact", head: true }).eq("campaign_id", row?.campaign_id);
+  check("the muted student gets nothing", count === 0, `delivered ${count}`);
+  await admin.from("club_campaigns").delete().eq("club_slug", MUTE_CLUB);
+  await admin.from("club_mutes").delete().eq("user_id", student.id).eq("club_slug", MUTE_CLUB);
+  await admin.from("memberships").delete().eq("user_id", student.id).eq("club_slug", MUTE_CLUB);
+  const { data: empty, error: emptyError } = await admin.rpc("send_club_campaign", { p_slug: MUTE_CLUB, p_sender: null, p_subject: "x", p_body: "x", p_audience: "members" });
+  check("a truly empty audience is still refused", emptyError?.message.includes("no_recipients"), JSON.stringify(empty));
+}
+
+// Only http and https links can be saved on a profile.
+{
+  const { data: mine } = await student.client.from("profiles").select("links").eq("id", student.id).single();
+  for (const url of ["javascript:alert(1)", "data:text/html,x", "  javascript:alert(1)", "https://bad link.com"]) {
+    const { error } = await student.client.from("profiles").update({ links: [{ url }] }).eq("id", student.id);
+    check(`profile link refused: ${url}`, Boolean(error));
+  }
+  const { error: good } = await student.client.from("profiles").update({ links: [{ url: "https://example.org/a", label: "Site" }] }).eq("id", student.id);
+  check("a normal https link saves", !good, good?.message);
+  const six = Array.from({ length: 6 }, (_, i) => ({ url: `https://example.org/${i}` }));
+  const { error: tooMany } = await student.client.from("profiles").update({ links: six }).eq("id", student.id);
+  check("the five link limit still holds", Boolean(tooMany));
+  await student.client.from("profiles").update({ links: mine.links }).eq("id", student.id);
+}
+
 // Parallel webhooks must never refund the subscription on record. Real sandbox
 // money flows, so this needs STRIPE_WEBHOOK_SECRET and the server's webhook.
 {
