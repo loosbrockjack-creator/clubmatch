@@ -51,6 +51,8 @@ export async function POST(request: Request, { params }: Ctx) {
       // has already told the officer they're active. Stripe SDK 23's name for
       // what older versions called payment_method_types.
       allowed_payment_method_types: ["card"],
+      // Link's wallet adds its own bank option even on a card-only session.
+      wallet_options: { link: { display: "never" } },
       client_reference_id: user.id,
       ...(account?.stripe_customer_id
         ? { customer: account.stripe_customer_id }

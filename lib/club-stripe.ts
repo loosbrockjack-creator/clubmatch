@@ -45,18 +45,33 @@ export function revalidateClub(slug: string) {
   revalidatePath(`/clubs/${slug}`);
 }
 
-/** Refunds and cancels a second subscription when two officers pay for one club. */
+const ALREADY_DONE = new Set(["charge_already_refunded", "idempotency_key_in_use"]);
+
+/**
+ * Refunds and cancels a second subscription when two officers pay for one club.
+ * Refund first: once it's cancelled, a retry sees a dead subscription and stops,
+ * so a failed refund after a cancel would never be tried again. Several events
+ * arrive for one payment, so every step has to be safe to repeat.
+ */
 async function refundDuplicate(stripe: Stripe, sub: Stripe.Subscription) {
-  await stripe.subscriptions.cancel(sub.id);
   const invoiceId = typeof sub.latest_invoice === "string" ? sub.latest_invoice : sub.latest_invoice?.id;
-  if (!invoiceId) return;
-  const invoice = await stripe.invoices.retrieve(invoiceId, { expand: ["payments"] });
-  for (const entry of invoice.payments?.data ?? []) {
-    const intent = entry.payment.payment_intent;
-    if (intent) {
-      await stripe.refunds.create({ payment_intent: typeof intent === "string" ? intent : intent.id });
+  if (invoiceId) {
+    const invoice = await stripe.invoices.retrieve(invoiceId, { expand: ["payments"] });
+    for (const entry of invoice.payments?.data ?? []) {
+      const intent = entry.payment.payment_intent;
+      if (!intent) continue;
+      const id = typeof intent === "string" ? intent : intent.id;
+      await stripe.refunds
+        .create({ payment_intent: id }, { idempotencyKey: `duplicate-club-refund-${id}` })
+        .catch((err: Stripe.errors.StripeError) => {
+          if (!ALREADY_DONE.has(err.code ?? "") && err.type !== "StripeIdempotencyError") throw err;
+        });
     }
   }
+  // Stripe answers "No such subscription" when one is cancelled twice.
+  await stripe.subscriptions.cancel(sub.id).catch((err: Stripe.errors.StripeError) => {
+    if (err.code !== "resource_missing") throw err;
+  });
 }
 
 /**
