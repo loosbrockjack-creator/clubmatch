@@ -43,5 +43,27 @@ export async function GET(request: Request) {
       console.error("Couldn't cancel a club subscription:", err instanceof Error ? err.message : "unknown");
     }
   }
-  return Response.json({ cancelled, failed });
+
+  // The payer left but other officers remain: let the paid period run out, then stop.
+  const { data: ending } = await admin
+    .from("club_accounts")
+    .select("club_slug, stripe_subscription_id")
+    .eq("needs_period_end_cancel", true);
+  let ended = 0;
+  for (const row of ending ?? []) {
+    try {
+      if (row.stripe_subscription_id) {
+        const sub = await stripe.subscriptions.retrieve(row.stripe_subscription_id);
+        if (sub.status !== "canceled") {
+          await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
+        }
+      }
+      await admin.from("club_accounts").update({ needs_period_end_cancel: false }).eq("club_slug", row.club_slug);
+      ended += 1;
+    } catch (err) {
+      failed += 1;
+      console.error("Couldn't end a club subscription:", err instanceof Error ? err.message : "unknown");
+    }
+  }
+  return Response.json({ cancelled, ended, failed });
 }

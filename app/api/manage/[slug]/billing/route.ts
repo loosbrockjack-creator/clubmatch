@@ -1,17 +1,25 @@
 import { getStripe } from "@/lib/club-stripe";
-import { fail, requireOfficer } from "@/lib/club-server";
+import { fail, getAccountRow, requireUser } from "@/lib/club-server";
 
 type Ctx = { params: Promise<{ slug: string }> };
 
-/** Opens Stripe's customer portal. Lapsed officers can reach it too. */
+/**
+ * Opens Stripe's customer portal, which shows a card and invoices, so only for the
+ * student who paid. Other officers see the plan's status in the panel, not this. A
+ * payer who's no longer an officer can still get in, to cancel what they pay for.
+ */
 export async function POST(request: Request, { params }: Ctx) {
   const { slug } = await params;
-  const ctx = await requireOfficer(request, slug, { allowLapsed: true });
-  if (ctx instanceof Response) return ctx;
+  const auth = await requireUser(request);
+  if (auth instanceof Response) return auth;
+  const account = await getAccountRow(auth.admin, slug);
+  if (!account || account.claimed_by !== auth.user.id) {
+    return fail(403, "Only the officer who pays for this club can open billing.");
+  }
 
   const stripe = getStripe();
   if (!stripe) return fail(503, "Billing isn't available right now.");
-  const customer = ctx.account?.stripe_customer_id;
+  const customer = account.stripe_customer_id;
   if (!customer) return fail(404, "There's no billing account for this club yet.");
 
   const origin =

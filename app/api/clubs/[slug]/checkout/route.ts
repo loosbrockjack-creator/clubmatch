@@ -54,7 +54,9 @@ export async function POST(request: Request, { params }: Ctx) {
       // Link's wallet adds its own bank option even on a card-only session.
       wallet_options: { link: { display: "never" } },
       client_reference_id: user.id,
-      ...(account?.stripe_customer_id
+      // Reuse a Stripe customer only for the student who paid before. A new payer
+      // must never inherit a former officer's email, card, or invoices.
+      ...(account?.stripe_customer_id && account.claimed_by === user.id
         ? { customer: account.stripe_customer_id }
         : { customer_email: user.email }),
       line_items: [

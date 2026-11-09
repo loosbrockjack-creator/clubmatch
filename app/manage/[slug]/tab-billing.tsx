@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CreditCard } from "lucide-react";
 import { apiFetch } from "@/lib/club-client";
 import { CLAIM_RENEWAL_TEXT, type ManageAccess } from "@/lib/club-types";
+import { CONTACT_EMAIL } from "@/lib/site";
 import { FormStatus, SectionTitle } from "./shared";
 
 export function BillingTab({ slug, access }: { slug: string; access: ManageAccess }) {
@@ -54,14 +55,27 @@ export function BillingTab({ slug, access }: { slug: string; access: ManageAcces
             content is saved if you come back.
           </p>
         )}
-        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-line pt-5">
-          <button type="button" onClick={() => void openPortal()} disabled={busy} className="btn btn-secondary">
-            <CreditCard size={16} strokeWidth={1.75} aria-hidden />
-            {busy ? "Opening Stripe..." : "Manage billing"}
-          </button>
-          <FormStatus error={error} />
-        </div>
-        <p className="mt-3 text-[13px] text-ink-muted">Change your card, see receipts, or cancel on Stripe.</p>
+        {access.isPayer ? (
+          <>
+            <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-line pt-5">
+              <button type="button" onClick={() => void openPortal()} disabled={busy} className="btn btn-secondary">
+                <CreditCard size={16} strokeWidth={1.75} aria-hidden />
+                {busy ? "Opening Stripe..." : "Manage billing"}
+              </button>
+              <FormStatus error={error} />
+            </div>
+            <p className="mt-3 text-[13px] text-ink-muted">Change your card, see receipts, or cancel on Stripe.</p>
+          </>
+        ) : (
+          <p className="mt-6 border-t border-line pt-5 text-[14px] leading-relaxed text-ink-soft" data-not-payer>
+            Another officer pays for this plan, so its card and receipts stay private to them. Ask them to make
+            changes. If they&apos;ve left the club, email{" "}
+            <a href={`mailto:${CONTACT_EMAIL}`} className="link-isu">
+              {CONTACT_EMAIL}
+            </a>
+            .
+          </p>
+        )}
       </div>
     </div>
   );

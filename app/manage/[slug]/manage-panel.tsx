@@ -38,7 +38,7 @@ const TABS = [
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
 
-type Denied = { status: number; message: string };
+type Denied = { status: number; message: string; isPayer?: boolean };
 
 export function ManagePanel({ slug, clubName }: { slug: string; clubName: string }) {
   const account = useAccount();
@@ -60,10 +60,10 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
   useEffect(() => {
     if (account.status !== "signed-in" || !userId) return;
     let cancelled = false;
-    void apiFetch<ManageAccess | { allowed: false }>(`/api/manage/${slug}/access`).then((res) => {
+    void apiFetch<ManageAccess | { allowed: false; isPayer: boolean }>(`/api/manage/${slug}/access`).then((res) => {
       if (cancelled) return;
       if (res.data?.allowed) setAccess({ userId, value: res.data });
-      else if (res.data) setDenied({ userId, value: { status: 403, message: "" } });
+      else if (res.data) setDenied({ userId, value: { status: 403, message: "", isPayer: res.data.isPayer } });
       else setDenied({ userId, value: { status: res.status, message: res.error ?? "" } });
     });
     return () => {
@@ -198,6 +198,7 @@ function Denial({ slug, clubName, refusal }: { slug: string; clubName: string; r
           Your account isn&apos;t an officer of this club. If you run it, claim the page. If it&apos;s
           already claimed, ask another officer to add you.
         </p>
+        {refusal.isPayer && <PayerBilling slug={slug} />}
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <Link href={`/clubs/${slug}/claim`} className="btn btn-primary">
             Claim this club
@@ -215,6 +216,31 @@ function Denial({ slug, clubName, refusal }: { slug: string; clubName: string; r
       <Link href={`/clubs/${slug}`} className="btn btn-secondary mt-5">
         Back to the club
       </Link>
+    </div>
+  );
+}
+
+/** Someone no longer an officer still has to be able to stop paying. */
+function PayerBilling({ slug }: { slug: string }) {
+  const [error, setError] = useState<string | null>(null);
+  async function open() {
+    setError(null);
+    const { data, error: failure } = await apiFetch<{ url: string }>(`/api/manage/${slug}/billing`, { method: "POST" });
+    if (data?.url) window.location.assign(data.url);
+    else setError(failure);
+  }
+  return (
+    <div className="mx-auto mt-6 max-w-md rounded-[8px] bg-muted px-4 py-4">
+      <p className="text-[14px] leading-relaxed text-ink-soft">You still pay for this club&apos;s plan.</p>
+      <button type="button" onClick={() => void open()} className="btn btn-secondary mt-3">
+        <CreditCard size={16} strokeWidth={1.75} aria-hidden />
+        Manage billing
+      </button>
+      {error && (
+        <p role="alert" className="mt-2 text-[14px] font-medium text-cardinal">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

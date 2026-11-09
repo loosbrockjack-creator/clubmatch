@@ -46,6 +46,8 @@ export interface ManageAccess {
   slug: string;
   status: ClubStatus;
   role: "officer";
+  /** Only the student who pays can open Stripe's portal, which shows their card. */
+  isPayer: boolean;
   currentPeriodEnd: string | null;
   cancelAtPeriodEnd: boolean;
   featuredOptIn: boolean;
