@@ -8,6 +8,7 @@ import { ClubCard } from "@/components/club-card";
 import { ClubMark } from "@/components/club-mark";
 import { buildInvolvementStack, matchChapters, matchClubs } from "@/lib/matching";
 import { logActivity } from "@/lib/club-client";
+import { RESULT_LIMIT } from "@/lib/club-types";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
   ACADEMIC_AREA_BY_ID,
@@ -16,8 +17,6 @@ import {
   GREEK_OPTION_BY_ID,
 } from "@/lib/taxonomy";
 import type { Preferences } from "@/lib/types";
-
-const RESULT_LIMIT = 9;
 
 function answerChips(prefs: Preferences) {
   const chips: string[] = [];
