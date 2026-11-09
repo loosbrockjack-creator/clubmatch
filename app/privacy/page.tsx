@@ -14,8 +14,11 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     body: (
       <>
         <p>
-          Without an account, your quiz answers and saved clubs stay in your browser. Nothing
-          is sent to us.
+          Without an account, your quiz answers and saved clubs stay in your browser. The one
+          exception is what we record to give clubs totals: which clubs appeared in your results,
+          which club pages you open and links you click, and your general academic area, with a
+          random device ID and not your name. It&apos;s used only for totals clubs can see. Your
+          other answers stay on your device.
         </p>
         <p>
           With an account we store your Iowa State email, the profile details you choose to add
@@ -87,32 +90,47 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     title: "What we don't do",
     body: (
       <p>
-        Your information is never shared outside ClubMatch. We don&apos;t sell your data, show ads,
-        or give your information to the university or anyone else. ClubMatch is an independent
-        student project and is not affiliated with Iowa State University.
+        We never sell your information or share it outside ClubMatch, except with the service
+        providers listed below that we need to run the site. We don&apos;t show ads or give your
+        information to the university. ClubMatch is an independent student project and is not
+        affiliated with Iowa State University.
       </p>
     ),
   },
   {
     title: "Where it lives",
     body: (
-      <p>
-        Accounts and data are stored with Supabase (database and file storage) and the site
-        is hosted on Vercel, both in the United States. Sign-in codes are sent by email.
-      </p>
+      <>
+        <p>
+          Accounts and data are stored with Supabase (database and file storage) and the site
+          is hosted on Vercel, both in the United States. Sign-in codes are sent by email.
+        </p>
+        <p>
+          If you&apos;re an officer who pays for a club, Stripe handles the payment and receives
+          your email and card details. If you ask to claim a club, your email, role, and note are
+          sent to us by email through Resend so we can review it.
+        </p>
+      </>
     ),
   },
   {
     title: "Deleting your data",
     body: (
-      <p>
-        Delete your account any time from Account, then Settings. That permanently removes
-        your profile, photo, quiz answers, saved clubs, and memberships. Questions or requests:{" "}
-        <a href={`mailto:${CONTACT_EMAIL}`} className="link-isu">
-          {CONTACT_EMAIL}
-        </a>
-        .
-      </p>
+      <>
+        <p>
+          Delete your account any time from Account, then Settings. That permanently removes
+          your profile, photo, quiz answers, saved clubs, and memberships. Questions or requests:{" "}
+          <a href={`mailto:${CONTACT_EMAIL}`} className="link-isu">
+            {CONTACT_EMAIL}
+          </a>
+          .
+        </p>
+        <p>
+          If you paid for a club, we stop your subscription: at the end of the paid period, or right
+          away if you were its last officer. Stripe keeps its own billing records, such as receipts,
+          as payment rules require. Email us to ask about those.
+        </p>
+      </>
     ),
   },
 ];
@@ -122,7 +140,7 @@ export default function PrivacyPage() {
     <>
       <PageHeader
         title="Privacy"
-        intro="The short version: your info stays inside ClubMatch, you control who sees your profile, and you can delete it any time."
+        intro="The short version: we never sell your info, you control who sees your profile, and you can delete it any time."
       />
       <div className="shell max-w-3xl space-y-12 pb-12 pt-12">
         {SECTIONS.map((section) => (
