@@ -132,12 +132,13 @@ export async function fetchUpcomingEvents(options: { slug?: string; withinDays?:
   const sb = getSupabase();
   if (!sb) return [];
   const now = new Date();
-  // An event with no end time counts as over 3 hours after it starts.
+  // An event with no end time counts as over 3 hours after it starts. Ended
+  // events are filtered in the query, so they can't use up the limit.
   const openStart = new Date(now.getTime() - 3 * 60 * 60 * 1000).toISOString();
   let query = sb
     .from("club_events")
     .select("id, club_slug, title, description, location, link, starts_at, ends_at")
-    .gte("starts_at", new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000).toISOString())
+    .or(`ends_at.gte."${now.toISOString()}",and(ends_at.is.null,starts_at.gte."${openStart}")`)
     .order("starts_at", { ascending: true })
     .limit(options.limit ?? 40);
   if (options.slug) query = query.eq("club_slug", options.slug);
@@ -149,9 +150,7 @@ export async function fetchUpcomingEvents(options: { slug?: string; withinDays?:
   }
   const { data, error } = await query;
   if (error) throw new Error(error.message);
-  return ((data ?? []) as ClubEvent[]).filter((event) =>
-    event.ends_at ? event.ends_at >= now.toISOString() : event.starts_at >= openStart,
-  );
+  return (data ?? []) as ClubEvent[];
 }
 
 export function formatEventTime(event: Pick<ClubEvent, "starts_at" | "ends_at">) {
