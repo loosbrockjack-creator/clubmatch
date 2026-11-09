@@ -364,7 +364,7 @@ function FeaturedToggle({
         aria-label="Featured on Explore"
         disabled={busy}
         onClick={() => void toggle()}
-        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors duration-200 ${access.featuredOptIn ? "bg-cardinal" : "bg-line-strong"}`}
+        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors duration-200 before:absolute before:-inset-2 before:content-[''] ${access.featuredOptIn ? "bg-cardinal" : "bg-line-strong"}`}
       >
         <span
           aria-hidden
