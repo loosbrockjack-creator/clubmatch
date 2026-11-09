@@ -160,7 +160,7 @@ function Trend({ data }: { data: ClubAnalytics }) {
           type="button"
           aria-pressed={asTable}
           onClick={() => setAsTable((v) => !v)}
-          className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-ink-soft hover:text-ink"
+          className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] font-semibold text-ink-soft hover:text-ink sm:min-h-0"
         >
           <Table2 size={14} strokeWidth={1.75} aria-hidden />
           {asTable ? "Show chart" : "Show table"}

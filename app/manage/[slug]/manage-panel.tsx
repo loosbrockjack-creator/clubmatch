@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -71,12 +71,22 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
     };
   }, [account.status, userId, slug]);
 
+  const current = access?.userId === userId ? access.value : null;
+  const refusal = denied?.userId === userId ? denied.value : null;
+  const tabList = useRef<HTMLUListElement>(null);
+  const panelOpen = current?.status === "active" || current?.status === "past_due";
+
+  // On a phone the tab row scrolls sideways, so bring the current tab into view.
+  useEffect(() => {
+    const list = tabList.current;
+    const active = list?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!list || !active) return;
+    list.scrollTo({ left: active.offsetLeft - (list.clientWidth - active.offsetWidth) / 2 });
+  }, [tab, panelOpen]);
+
   const header = (
     <PageHeader crumbs={[{ href: `/clubs/${slug}`, label: clubName }]} title={`Manage ${clubName}`} />
   );
-
-  const current = access?.userId === userId ? access.value : null;
-  const refusal = denied?.userId === userId ? denied.value : null;
 
   if (refusal) {
     return (
@@ -128,7 +138,7 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
     <>
       <PageHeader crumbs={[{ href: `/clubs/${slug}`, label: clubName }]} title={`Manage ${clubName}`}>
         <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px]">
-          <Link href={`/clubs/${slug}`} className="link-isu inline-flex items-center gap-1.5">
+          <Link href={`/clubs/${slug}`} className="link-isu inline-flex min-h-11 items-center gap-1.5 sm:min-h-0">
             View your public page
             <ExternalLink size={13} strokeWidth={2} aria-hidden />
           </Link>
@@ -142,7 +152,7 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
 
       <nav aria-label="Admin sections" className="sticky top-[71px] z-30 border-b border-line bg-white">
         <div className="shell">
-          <ul className="-mx-5 flex gap-1 overflow-x-auto px-5 md:mx-0 md:px-0">
+          <ul ref={tabList} className="relative -mx-5 flex gap-1 overflow-x-auto px-5 md:mx-0 md:px-0">
             {TABS.map(({ id, label, icon: Icon }) => {
               const active = id === tab;
               return (

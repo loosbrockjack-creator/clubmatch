@@ -100,7 +100,7 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
             type="button"
             onClick={toggle}
             disabled={busy}
-            className="link-on-cardinal self-start text-[13.5px] font-medium sm:self-center"
+            className="link-on-cardinal inline-flex min-h-11 items-center self-start text-[13.5px] font-medium sm:min-h-0 sm:self-center"
           >
             Take it back
           </button>
