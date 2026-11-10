@@ -34,27 +34,26 @@ const columns = [
 
 export function SiteFooter() {
   return (
-    <footer className="on-cardinal mt-16 bg-cardinal text-white">
-      <div className="shell py-14">
-        <p className="wordmark text-[30px] leading-none">ClubMatch</p>
-        <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white/70">
-          Iowa State University
-        </p>
-
-        <div className="mt-10 h-px bg-white/25" />
-
-        <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
-          <p className="max-w-sm text-[14px] leading-relaxed text-white/85">
-            An independent student project, not affiliated with or endorsed
-            by Iowa State University. It covers{" "}
-            {clubs.length} organizations from Iowa State&apos;s student
-            organization directory and its Sorority and Fraternity Engagement
-            office. Fit scores and category tags are ours, so check a
-            group&apos;s own page before you show up.
-          </p>
+    <footer className="site-footer on-cardinal overflow-hidden bg-cardinal text-white">
+      <div className="shell pt-14 sm:pt-16">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <p className="wordmark text-[30px] leading-none">ClubMatch</p>
+            <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white/70">
+              Iowa State University
+            </p>
+            <p className="mt-6 max-w-sm text-[14px] leading-relaxed text-white/85">
+              An independent student project, not affiliated with or endorsed
+              by Iowa State University. It covers{" "}
+              {clubs.length} organizations from Iowa State&apos;s student
+              organization directory and its Sorority and Fraternity Engagement
+              office. Fit scores and category tags are ours, so check a
+              group&apos;s own page before you show up.
+            </p>
+          </div>
 
           {columns.map((column) => (
-            <nav key={column.heading}>
+            <nav key={column.heading} aria-label={column.heading}>
               <h2 className="text-[13px] font-bold uppercase tracking-[0.12em] text-gold">
                 {column.heading}
               </h2>
@@ -87,21 +86,22 @@ export function SiteFooter() {
             </nav>
           ))}
         </div>
+
+        <div className="mt-12 flex flex-col gap-2 border-t border-white/25 pt-6 text-[12.5px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            Built for ENTSP 3100 at Iowa State University. Club images are
+            original watercolors or Pexels photos; chapter photos come from
+            each chapter&apos;s SFE page.
+          </p>
+          <a href={`mailto:${CONTACT_EMAIL}`} className="link-on-cardinal font-medium">
+            Contact
+          </a>
+        </div>
       </div>
 
-      <div className="bg-cardinal-deep">
-        <div className="shell py-5">
-          <div className="flex flex-col gap-2 text-[12.5px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
-            <p>
-              Built for ENTSP 3100 at Iowa State University. Club images are
-              original watercolors or Pexels photos; chapter photos come from
-              each chapter&apos;s SFE page.
-            </p>
-            <a href={`mailto:${CONTACT_EMAIL}`} className="link-on-cardinal font-medium">
-              Contact
-            </a>
-          </div>
-        </div>
+      {/* Decorative: the wordmark at full width, cropped by the footer edge. */}
+      <div aria-hidden className="footer-bigword-wrap">
+        <p className="wordmark footer-bigword">ClubMatch</p>
       </div>
     </footer>
   );

@@ -43,7 +43,7 @@ export default function RootLayout({
         </a>
         <SiteHeader />
         <PolicyNotice />
-        <main id="main" className="flex-1">
+        <main id="main" className="site-main flex-1 pb-16">
           {children}
         </main>
         <SiteFooter />

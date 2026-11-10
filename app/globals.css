@@ -395,6 +395,24 @@
     transform: scaleX(1);
   }
 
+  /* ---- Footer: big cropped wordmark + desktop reveal ----------------- */
+
+  .footer-bigword-wrap {
+    overflow: hidden;
+    height: clamp(44px, 11.5vw, 150px);
+    margin-top: 8px;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .footer-bigword {
+    font-size: clamp(64px, 17vw, 224px);
+    line-height: 0.8;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--color-cardinal-dark);
+  }
+
   /* ---- Eyebrow ------------------------------------------------------- */
 
   .eyebrow {
@@ -464,5 +482,21 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* The page lifts off a pinned footer. Desktop only, and only when the footer
+   fits the screen; otherwise its top would never be reachable. */
+@media (min-width: 1024px) and (min-height: 760px) {
+  .site-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 0;
+  }
+
+  .site-main {
+    position: relative;
+    z-index: 1;
+    background: var(--color-canvas);
   }
 }
