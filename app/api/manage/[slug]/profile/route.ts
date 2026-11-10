@@ -1,4 +1,5 @@
 import { getClub } from "@/lib/clubs-detail";
+import { withDemoProfile } from "@/lib/demo-club";
 import { revalidateClub } from "@/lib/club-stripe";
 import { fail, readJson, requireOfficer } from "@/lib/club-server";
 import { cleanLinks, cleanText, LIMITS } from "@/lib/club-validate";
@@ -13,7 +14,7 @@ export async function GET(request: Request, { params }: Ctx) {
   const { data } = await ctx.admin.from("club_profiles").select(COLUMNS).eq("club_slug", slug).maybeSingle();
   const club = getClub(slug);
   return Response.json({
-    overlay: data ?? null,
+    overlay: withDemoProfile(slug, data ?? null),
     directory: {
       tagline: club?.tagline ?? "",
       description: club?.summary ?? "",

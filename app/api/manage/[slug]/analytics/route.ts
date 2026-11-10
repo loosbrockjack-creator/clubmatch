@@ -1,6 +1,7 @@
 import { buildAnalytics, buildCompleteness, type ActivityRow } from "@/lib/club-insights";
 import { fail, requireOfficer } from "@/lib/club-server";
 import type { ClubOverlay } from "@/lib/club-types";
+import { DEMO_INVITES, demoActivity, isDemoClub, withDemoProfile } from "@/lib/demo-club";
 
 type Ctx = { params: Promise<{ slug: string }> };
 const PAGE = 1000;
@@ -45,6 +46,7 @@ export async function GET(request: Request, { params }: Ctx) {
     admin.from("club_invites").select("user_id, created_at").eq("club_slug", slug),
     admin.from("club_interests").select("user_id, created_at").eq("club_slug", slug),
   ]);
+  if (isDemoClub(slug)) rows.push(...demoActivity(days, chicagoDay));
   const saidInterested = new Map((interests ?? []).map((row) => [row.user_id as string, row.created_at as string]));
   const inviteStats = {
     sent: invites?.length ?? 0,
@@ -53,7 +55,7 @@ export async function GET(request: Request, { params }: Ctx) {
       return at !== undefined && at >= (row.created_at as string);
     }).length,
   };
-  const profile = overlay as Pick<
+  const profile = withDemoProfile(slug, overlay as { description?: string | null } | null) as Pick<
     ClubOverlay,
     "tagline" | "description" | "meeting_info" | "photos" | "links"
   > | null;
@@ -63,9 +65,11 @@ export async function GET(request: Request, { params }: Ctx) {
       rows,
       days,
       chicagoDay(now),
-      buildCompleteness(profile, upcoming ?? []),
+      buildCompleteness(profile, isDemoClub(slug) ? [{ id: "demo" }] : (upcoming ?? [])),
       Boolean(profile?.description),
     ),
-    invites: inviteStats,
+    invites: isDemoClub(slug)
+      ? { sent: inviteStats.sent + DEMO_INVITES.sent, interested: inviteStats.interested + DEMO_INVITES.interested }
+      : inviteStats,
   });
 }

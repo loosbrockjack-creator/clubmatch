@@ -6,6 +6,7 @@ import {
   type CampaignAudience,
 } from "@/lib/club-types";
 import { cleanText, LIMITS } from "@/lib/club-validate";
+import { DEMO_AUDIENCE, demoCampaigns, isDemoClub } from "@/lib/demo-club";
 
 type Ctx = { params: Promise<{ slug: string }> };
 
@@ -40,12 +41,18 @@ export async function GET(request: Request, { params }: Ctx) {
   const inWeek = (campaigns ?? []).filter((c) => new Date(c.created_at as string).getTime() > weekAgo);
   const inDay = inWeek.filter((c) => new Date(c.created_at as string).getTime() > dayAgo);
 
+  const demo = isDemoClub(slug);
+  const both = new Set([...memberSet, ...interestedSet]).size;
   return Response.json({
-    campaigns: campaigns ?? [],
+    campaigns: demo
+      ? [...(campaigns ?? []), ...demoCampaigns()].sort((a, b) =>
+          String(b.created_at).localeCompare(String(a.created_at)),
+        )
+      : (campaigns ?? []),
     audienceCounts: {
-      members: memberSet.size,
-      interested: interestedSet.size,
-      both: new Set([...memberSet, ...interestedSet]).size,
+      members: memberSet.size + (demo ? DEMO_AUDIENCE.members : 0),
+      interested: interestedSet.size + (demo ? DEMO_AUDIENCE.interested : 0),
+      both: both + (demo ? DEMO_AUDIENCE.members + DEMO_AUDIENCE.interested : 0),
     },
     remaining: {
       day: Math.max(0, CAMPAIGN_DAILY_LIMIT - inDay.length),

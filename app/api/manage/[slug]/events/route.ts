@@ -1,3 +1,4 @@
+import { demoEvents, isDemoClub, isDemoId } from "@/lib/demo-club";
 import { fail, readJson, requireOfficer } from "@/lib/club-server";
 import { cleanText, cleanUrl, LIMITS } from "@/lib/club-validate";
 
@@ -16,7 +17,10 @@ export async function GET(request: Request, { params }: Ctx) {
     .order("starts_at", { ascending: false })
     .limit(100);
   if (error) return fail(500, "Couldn't load events.");
-  return Response.json({ events: data ?? [] });
+  const events = [...(data ?? []), ...(isDemoClub(slug) ? demoEvents(slug) : [])].sort((a, b) =>
+    b.starts_at.localeCompare(a.starts_at),
+  );
+  return Response.json({ events });
 }
 
 type Body = {
@@ -87,6 +91,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
   if (ctx instanceof Response) return ctx;
   const body = await readJson<Body>(request);
   if (typeof body?.id !== "string") return fail(400, "Which event?");
+  if (isDemoId(body.id)) return fail(409, "This is a sample from the demo, so it can't be changed.");
   const event = parseEvent(body, false);
   if (typeof event === "string") return fail(400, event);
   // Scoped to this club, so an id from another club's event matches nothing.
@@ -108,6 +113,7 @@ export async function DELETE(request: Request, { params }: Ctx) {
   if (ctx instanceof Response) return ctx;
   const body = await readJson<{ id: unknown }>(request);
   if (typeof body?.id !== "string") return fail(400, "Which event?");
+  if (isDemoId(body.id)) return fail(409, "This is a sample from the demo, so it can't be changed.");
   const { data, error } = await ctx.admin
     .from("club_events")
     .delete()

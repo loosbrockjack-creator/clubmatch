@@ -4,6 +4,7 @@ import { fail, readJson, requireOfficer } from "@/lib/club-server";
 import { INVITE_DAILY_LIMIT } from "@/lib/club-types";
 import { cleanText, LIMITS } from "@/lib/club-validate";
 import type { Preferences } from "@/lib/types";
+import { isDemoId } from "@/lib/demo-club";
 
 type Ctx = { params: Promise<{ slug: string }> };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -24,6 +25,7 @@ export async function POST(request: Request, { params }: Ctx) {
 
   const body = await readJson<{ studentId: unknown; note: unknown }>(request);
   const studentId = body?.studentId;
+  if (isDemoId(studentId)) return fail(409, "This is a sample student from the demo, so no invite was sent.");
   if (typeof studentId !== "string" || !UUID.test(studentId)) return fail(400, NOT_ELIGIBLE);
   const note = cleanText(body?.note, LIMITS.inviteNote);
   if (note === false) return fail(400, `Keep the note to ${LIMITS.inviteNote} characters.`);

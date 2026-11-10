@@ -504,3 +504,13 @@ turns the club on with no period end and makes the claimant an officer
 and billing routes stay in the repo unused for when a price is set. The
 claim-decision inbox message in the database trigger still mentions $49 until
 that function is updated.
+
+## 2026-11-10: Demo mode for the admin panel
+
+For client demos, `lib/demo-club.ts` mixes sample data into the admin panel's
+read routes for the clubs in `DEMO_CLUBS` (currently Entrepreneurial Product
+Development Club): 14 members, 10 good-fit and 6 interested students, 5 events,
+3 campaigns, 90 days of activity, and a profile shown until officers save a
+description. Nothing is written to the database, so the public site and other
+clubs never see it. Edits to a sample row are refused with a plain message.
+Remove the slug from `DEMO_CLUBS` to turn it off.

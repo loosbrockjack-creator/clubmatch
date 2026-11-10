@@ -1,5 +1,6 @@
 import { fail, publicProfiles, readJson, requireOfficer, toLead } from "@/lib/club-server";
 import type { RosterMember } from "@/lib/club-types";
+import { demoMembers, isDemoClub, isDemoId } from "@/lib/demo-club";
 
 type Ctx = { params: Promise<{ slug: string }> };
 
@@ -29,6 +30,7 @@ export async function GET(request: Request, { params }: Ctx) {
       since: row.created_at as string,
     };
   });
+  if (isDemoClub(slug)) members.push(...demoMembers());
   return Response.json({ members, you: ctx.user.id });
 }
 
@@ -45,6 +47,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
   const action = body?.action as Action;
   const userId = body?.userId;
   if (typeof userId !== "string" || !ACTIONS.includes(action)) return fail(400, "That didn't look right.");
+  if (isDemoId(userId)) return fail(409, "This is a sample from the demo, so it can't be changed.");
 
   const { data: target } = await admin
     .from("memberships")

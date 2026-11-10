@@ -9,6 +9,7 @@ import {
 } from "@/lib/club-server";
 import { INVITE_DAILY_LIMIT, type GoodFitLead, type InterestedLead, type LeadStudent } from "@/lib/club-types";
 import type { Preferences } from "@/lib/types";
+import { demoGoodFit, demoInterested, isDemoClub } from "@/lib/demo-club";
 
 type Ctx = { params: Promise<{ slug: string }> };
 const PAGE = 500;
@@ -96,6 +97,12 @@ export async function GET(request: Request, { params }: Ctx) {
       });
     }
     else hiddenInterested += 1;
+  }
+
+  if (isDemoClub(slug)) {
+    goodFit.push(...demoGoodFit());
+    goodFit.sort((a, b) => b.match - a.match || a.id.localeCompare(b.id));
+    interested.push(...demoInterested());
   }
 
   return Response.json({
