@@ -1,5 +1,6 @@
 import { after } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { claimReviewUrl } from "@/lib/claim-review";
 import { sendClaimAlert } from "@/lib/club-alerts";
 import { getClubSummary } from "@/lib/clubs";
 import { getStripe } from "@/lib/club-stripe";
@@ -74,7 +75,7 @@ export async function GET(request: Request, { params }: Ctx) {
   return Response.json(await claimState(auth.admin, auth.user, slug, session));
 }
 
-/** No allowlist match: file a request Jack reviews in the Supabase dashboard. */
+/** No allowlist match: file a request Jack reviews from the alert email. */
 export async function POST(request: Request, { params }: Ctx) {
   const { slug } = await params;
   const club = getClubSummary(slug);
@@ -97,19 +98,33 @@ export async function POST(request: Request, { params }: Ctx) {
   if (!role) return fail(400, `Tell us your officer role, in ${LIMITS.claimRole} characters or fewer.`);
   if (note === false) return fail(400, `Keep the note to ${LIMITS.claimNote} characters.`);
 
-  const { error } = await admin.from("club_claims").insert({
-    club_slug: slug,
-    user_id: user.id,
-    email: (user.email ?? "").toLowerCase(),
-    role_title: role,
-    note,
-  });
+  const { data: inserted, error } = await admin
+    .from("club_claims")
+    .insert({
+      club_slug: slug,
+      user_id: user.id,
+      email: (user.email ?? "").toLowerCase(),
+      role_title: role,
+      note,
+    })
+    .select("id")
+    .single();
   // 23505: a second tab beat this one to it, and the request is already on file.
   if (error && error.code !== "23505") return fail(500, "Couldn't send your request. Try again.");
-  if (!error) {
+  if (!error && inserted) {
+    const origin =
+      process.env.NEXT_PUBLIC_SITE_URL || request.headers.get("origin") || new URL(request.url).origin;
     // After the response, so a slow or failing email can't touch the request.
     after(() =>
-      sendClaimAlert({ slug, clubName: club.name, email: (user.email ?? "").toLowerCase(), role, note }),
+      sendClaimAlert({
+        slug,
+        clubName: club.name,
+        email: (user.email ?? "").toLowerCase(),
+        role,
+        note,
+        approveUrl: claimReviewUrl(origin, inserted.id, "approved"),
+        rejectUrl: claimReviewUrl(origin, inserted.id, "rejected"),
+      }),
     );
   }
   return Response.json(await claimState(admin, user, slug));

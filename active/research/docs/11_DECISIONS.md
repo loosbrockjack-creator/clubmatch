@@ -484,3 +484,13 @@ Continue, and a miss or failure says so then lets them on. The text isn't
 stored. Without a key, Other is just a card. Communities gained a sixth
 option, Disability and neurodiversity (3 clubs, now opt-in like the other
 identity groups), which also makes the 2-column grid even.
+
+## 2026-11-10: Claims stay manually reviewed, decided from the alert email
+
+A short-lived self-serve claim flow was reverted: anyone could have paid to run
+a club they aren't in. The claim alert email now carries signed Approve and
+Reject links (`/api/claims/review`, HMAC keyed on `SUPABASE_SECRET_KEY`). GET
+only shows a confirm page because mail scanners follow links; the POST updates
+the pending row, the existing trigger posts the inbox message, and Resend
+emails the student. Deciding by hand in the Supabase dashboard still works but
+sends only the inbox message, no email.
