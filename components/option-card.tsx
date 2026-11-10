@@ -11,6 +11,7 @@ export function OptionCard({
   label,
   hint,
   compact = false,
+  disabled = false,
 }: {
   type: "radio" | "checkbox";
   name: string;
@@ -20,15 +21,18 @@ export function OptionCard({
   label: string;
   hint: string;
   compact?: boolean;
+  /** For capped multi-selects: unchosen options grey out once the cap is hit. */
+  disabled?: boolean;
 }) {
   return (
-    <label className="block cursor-pointer">
+    <label className={`block ${disabled ? "cursor-not-allowed opacity-45" : "cursor-pointer"}`}>
       <input
         type={type}
         name={name}
         value={value}
         checked={checked}
         onChange={onChange}
+        disabled={disabled}
         className="peer sr-only"
       />
       <span

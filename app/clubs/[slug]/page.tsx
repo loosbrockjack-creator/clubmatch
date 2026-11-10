@@ -86,6 +86,32 @@ export async function generateMetadata({
   };
 }
 
+/** Categories so broad that sharing one says little about two clubs. */
+const CATCH_ALL = new Set(["Hobbies & Special Interest", "Leadership & Government"]);
+
+const TOPIC_STOPWORDS = new Set(["club", "and", "the", "of", "for", "students", "student"]);
+
+function sharedWords(a: string[], b: string[]) {
+  const words = (topics: string[]) =>
+    new Set(
+      topics
+        .flatMap((t) => t.toLowerCase().split(/[^a-z0-9]+/))
+        .filter((w) => w.length > 2 && !TOPIC_STOPWORDS.has(w)),
+    );
+  const left = words(a);
+  let count = 0;
+  for (const word of words(b)) if (left.has(word)) count += 1;
+  return count;
+}
+
+/** Stable per club pair, so ties spread out instead of sorting A to Z. */
+function tieBreak(base: string, slug: string) {
+  let h = 5381;
+  const input = base + slug;
+  for (let i = 0; i < input.length; i++) h = (h * 33) ^ input.charCodeAt(i);
+  return h >>> 0;
+}
+
 export default async function ClubDetailPage({
   params,
 }: {
@@ -208,10 +234,19 @@ export default async function ClubDetailPage({
       const shared =
         other.categories
           .filter((c) => club.categories.includes(c))
-          .reduce((sum, c) => sum + rarity(CATEGORY_COUNTS.get(c) ?? 1), 0) +
+          .reduce(
+            (sum, c) =>
+              sum + rarity(CATEGORY_COUNTS.get(c) ?? 1) * (CATCH_ALL.has(c) ? 0.3 : 1),
+            0,
+          ) +
         other.academicAreas.filter((a) => club.academicAreas.includes(a)).length *
           1.5 +
-        other.careerPaths.filter((c) => club.careerPaths.includes(c)).length * 1.2;
+        other.careerPaths.filter((c) => club.careerPaths.includes(c)).length * 1.2 +
+        // Shared topics ("dance", "k-pop") are the most specific overlap.
+        other.topics.filter((t) => club.topics.includes(t)).length * 2.5 +
+        // "k-pop dance" and "dance" share a word; that still counts, less.
+        sharedWords(club.topics, other.topics) * 0.8 +
+        (other.wants[0] && other.wants[0] === club.wants[0] ? 0.3 : 0);
 
       // Damp breadth: a club tagged with everything should not win on volume.
       return {
@@ -220,7 +255,9 @@ export default async function ClubDetailPage({
       };
     })
     .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score || a.club.name.localeCompare(b.club.name))
+    // Equal scores would otherwise fall back to the alphabet, which handed
+    // every hobby club the same three "A" neighbors. Hash against this club.
+    .sort((a, b) => b.score - a.score || tieBreak(club.slug, a.club.slug) - tieBreak(club.slug, b.club.slug))
     .slice(0, 3)
     .map((entry) => entry.club);
   const similar = greek ? relatedChapters : related;

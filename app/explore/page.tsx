@@ -10,17 +10,18 @@ import { FilterRow } from "@/components/filter-row";
 import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
 import { CLUB_COVERS } from "@/lib/photos";
-import { scoreClub } from "@/lib/matching";
+import { MATCH_THRESHOLD, scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
   ACADEMIC_AREAS,
   CAREER_BY_ID,
   COMMITMENTS,
+  CATEGORY_SET,
   COMMITMENT_SHORT,
-  EXPERIENCES,
+  WANTS,
   majorsForAreas,
 } from "@/lib/taxonomy";
-import type { AcademicAreaId, CommitmentId, ExperienceId } from "@/lib/types";
+import type { AcademicAreaId, ClubSummary, CommitmentId, Preferences, WantId } from "@/lib/types";
 
 type SortMode = "fit" | "az";
 
@@ -31,11 +32,27 @@ const PAGE_SIZE = 48;
 const AREA_DUPLICATES = new Set([
   "Business",
   "Engineering",
-  "Design",
+  "Computing & Data",
   "Agriculture & Life Sciences",
   "Liberal Arts & Sciences",
-  "Health & Human Sciences",
 ]);
+
+/** Short labels for the "What it offers" filter row. */
+const OFFERS = WANTS.map((w) => ({
+  id: w.id,
+  label:
+    {
+      career: "Career",
+      networking: "Networking",
+      community: "Community",
+      projects: "Projects",
+      competition: "Competition",
+      leadership: "Leadership",
+      academic: "Academic",
+      service: "Service",
+      entrepreneurship: "Startups",
+    }[w.id] ?? w.label,
+}));
 
 /**
  * Iowa State's own category labels, minus the academic ones. This is what makes
@@ -49,9 +66,11 @@ const CATEGORY_COUNTS = clubs.reduce((counts, club) => {
   return counts;
 }, new Map<string, number>());
 
+const CATEGORY_ORDER: string[] = [...CATEGORY_SET, "Fraternities", "Sororities"];
+
 const CATEGORIES = Array.from(CATEGORY_COUNTS)
   .filter(([id, count]) => count >= 8 && !AREA_DUPLICATES.has(id))
-  .sort((a, b) => a[0].localeCompare(b[0]))
+  .sort((a, b) => CATEGORY_ORDER.indexOf(a[0]) - CATEGORY_ORDER.indexOf(b[0]))
   .map(([id]) => ({ id, label: id }));
 
 /**
@@ -62,6 +81,19 @@ const CATEGORIES = Array.from(CATEGORY_COUNTS)
  */
 const ALL_CATEGORIES = new Set(CATEGORY_COUNTS.keys());
 const CHIP_ROW_CATEGORIES = new Set(CATEGORIES.map((c) => c.id));
+
+const RANKED_AUDIENCES = new Set(["general", "honor", "governance"]);
+
+/**
+ * A fit badge only for clubs that would be in the student's matches. "12% fit"
+ * on a club that matches nothing reads as a grade, not a guide. Community
+ * clubs are suggested on request, never ranked, so they get no number either.
+ */
+function fitBadge(prefs: Preferences, club: ClubSummary): number | undefined {
+  if (club.greek || !RANKED_AUDIENCES.has(club.audience)) return undefined;
+  const result = scoreClub(prefs, club);
+  return result.eligible && result.score >= MATCH_THRESHOLD ? result.score : undefined;
+}
 
 export default function ExplorePage() {
   return (
@@ -101,7 +133,7 @@ function ExploreView() {
     return requested && ALL_CATEGORIES.has(requested) ? [requested] : [];
   });
   const [commitments, setCommitments] = useState<CommitmentId[]>([]);
-  const [experiences, setExperiences] = useState<ExperienceId[]>([]);
+  const [offers, setOffers] = useState<WantId[]>([]);
   const [sort, setSort] = useState<SortMode>("fit");
   const [visible, setVisible] = useState(PAGE_SIZE);
 
@@ -124,10 +156,7 @@ function ExploreView() {
       if (commitments.length > 0 && !commitments.includes(club.commitmentLevel)) {
         return false;
       }
-      if (
-        experiences.length > 0 &&
-        !club.experienceTypes.some((e) => experiences.includes(e))
-      ) {
+      if (offers.length > 0 && !club.wants.some((w) => offers.includes(w))) {
         return false;
       }
       if (!needle) return true;
@@ -138,6 +167,7 @@ function ExploreView() {
         club.tagline,
         club.college,
         ...club.categories,
+        ...club.topics,
         ...majorsForAreas(club.academicAreas),
         ...club.careerPaths.map((id) => CAREER_BY_ID[id].label),
       ]
@@ -149,36 +179,45 @@ function ExploreView() {
 
     // Chapters are not ranked against clubs (see matchChapters): the quiz
     // barely tells them apart, and the opt-in bonus would float them above
-    // every club. In fit order they follow the clubs, alphabetically.
+    // every club. Clubs that aren't a match for this student (nothing
+    // specific in common, or opt-in only) follow the matches. Both groups
+    // trail alphabetically.
     const sorted =
       activeSort === "fit" && hasPrefs
         ? matches
-            .map((club) => ({ club, score: club.greek ? -1 : scoreClub(prefs, club).score }))
+            .map((club) => {
+              if (club.greek) return { club, score: -1 };
+              const result = scoreClub(prefs, club);
+              return { club, score: result.eligible ? result.score : -0.5 };
+            })
             .sort((a, b) => b.score - a.score || a.club.name.localeCompare(b.club.name))
             .map((entry) => entry.club)
         : matches.sort((a, b) => a.name.localeCompare(b.name));
 
     // Cover review: with no search or filters, the clubs that have new
     // watercolor covers lead the grid so they can be judged side by side.
+    // Only in A to Z order: in "Best fit for you" they'd bury the student's
+    // actual matches.
     const unfiltered =
+      activeSort === "az" &&
       !needle &&
-      areas.length + categories.length + commitments.length + experiences.length === 0;
+      areas.length + categories.length + commitments.length + offers.length === 0;
     if (!unfiltered) return sorted;
     const pinned = CLUB_COVERS.map((slug) => sorted.find((c) => c.slug === slug)).filter(
       (c): c is (typeof sorted)[number] => c !== undefined,
     );
     return [...pinned, ...sorted.filter((c) => !CLUB_COVERS.includes(c.slug))];
-  }, [query, areas, categories, commitments, experiences, activeSort, hasPrefs, prefs]);
+  }, [query, areas, categories, commitments, offers, activeSort, hasPrefs, prefs]);
 
   const filterCount =
-    areas.length + categories.length + commitments.length + experiences.length;
+    areas.length + categories.length + commitments.length + offers.length;
 
   function clearAll() {
     setQuery("");
     setAreas([]);
     setCategories([]);
     setCommitments([]);
-    setExperiences([]);
+    setOffers([]);
     setVisible(PAGE_SIZE);
   }
 
@@ -257,10 +296,10 @@ function ExploreView() {
           onToggle={toggler(setCommitments)}
         />
         <FilterRow
-          label="Experience"
-          options={EXPERIENCES}
-          selected={experiences}
-          onToggle={toggler(setExperiences)}
+          label="Offers"
+          options={OFFERS}
+          selected={offers}
+          onToggle={toggler(setOffers)}
         />
         <FilterRow
           label="Category"
@@ -355,11 +394,7 @@ function ExploreView() {
               <ClubCard
                 key={club.id}
                 club={club}
-                score={
-                  activeSort === "fit" && hasPrefs && !club.greek
-                    ? scoreClub(prefs, club).score
-                    : undefined
-                }
+                score={activeSort === "fit" && hasPrefs ? fitBadge(prefs, club) : undefined}
               />
             ))}
           </div>

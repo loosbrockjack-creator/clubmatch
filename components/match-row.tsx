@@ -9,11 +9,26 @@ import type { MatchResult } from "@/lib/types";
 export function MatchRow({
   result,
   rank,
+  aiReason,
 }: {
   result: MatchResult;
   rank: number;
+  /** A personal line written for this student, when it has arrived. */
+  aiReason?: string;
 }) {
   const { club, score, reasons } = result;
+  const lead = aiReason ?? reasons[0];
+  // Under an AI line, skip the topic line it almost always restates, but
+  // never drop the invitation-only note.
+  const honor = reasons.find((r) => r.startsWith("Membership is by invitation"));
+  const rest = aiReason
+    ? [
+        ...reasons
+          .filter((r) => r !== honor && !r.startsWith("You're into") && !r.startsWith("Your resume"))
+          .slice(0, 2),
+        ...(honor ? [honor] : []),
+      ]
+    : reasons.slice(1);
   const photo = photoForClub(club);
 
   return (
@@ -38,7 +53,7 @@ export function MatchRow({
                   rank === 1 ? "text-cardinal" : "text-ink-muted"
                 }`}
               >
-                {rank === 1 ? "Best match" : `Match ${rank}`}
+                {rank === 1 ? (score >= 60 ? "Best match" : "Top match") : `Match ${rank}`}
               </p>
               <h3 className="display mt-1.5 text-[20px] text-ink sm:text-[24px]">
                 <Link
@@ -59,13 +74,16 @@ export function MatchRow({
           </div>
         </div>
 
-        <p className="mt-3 text-[14px] leading-relaxed text-ink-soft sm:text-[15px]">
-          {reasons[0]}
+        <p
+          key={aiReason ? "ai" : "rule"}
+          className={`mt-3 text-[14px] leading-relaxed text-ink-soft sm:text-[15px] ${aiReason ? "fade-in" : ""}`}
+        >
+          {lead}
         </p>
 
-        {reasons.length > 1 && (
+        {rest.length > 0 && (
           <ul className="mt-2 space-y-1">
-            {reasons.slice(1).map((reason) => (
+            {rest.map((reason) => (
               <li
                 key={reason}
                 className="text-[13px] leading-relaxed text-ink-muted"

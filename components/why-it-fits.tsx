@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { allowedForPrefs, greekInterest, scoreClub } from "@/lib/matching";
+import { COMMUNITY_BY_ID } from "@/lib/taxonomy";
 import { useStoredPreferences } from "@/lib/preferences";
 import type { ClubSummary } from "@/lib/types";
 
@@ -31,7 +32,31 @@ export function WhyItFits({ club }: { club: ClubSummary }) {
     );
   }
 
-  const { score, reasons } = scoreClub(prefs, club);
+  const { score, reasons, eligible } = scoreClub(prefs, club);
+
+  // A percentage for a club the quiz would never suggest reads as a grade.
+  // Say plainly why it isn't in their matches instead.
+  if (!eligible && !club.greek) {
+    const community = club.communityTags[0];
+    const message =
+      club.audience === "residence"
+        ? "Residence hall communities aren't part of quiz matches. If you live here, you're already in."
+        : club.audience === "graduate"
+          ? "This group is for graduate or professional students, so it isn't part of quiz matches."
+          : community && ["identity", "faith", "international"].includes(club.audience)
+            ? `Clubs built around a community only show up in your matches if you ask for them. Pick "${COMMUNITY_BY_ID[community].label}" in the quiz to include clubs like this one.`
+            : "This club doesn't line up with your major, career interests, or anything you mentioned, so it isn't in your matches. It might still be worth a look.";
+    return (
+      <section className="rise mt-10 border-l-[3px] border-line-strong bg-muted p-6 sm:p-7">
+        <p className="text-[15px] leading-relaxed text-ink-soft">
+          {message}{" "}
+          <Link href="/match" className="link-isu">
+            Change your answers
+          </Link>
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="rise mt-10 border-l-[3px] border-gold bg-gold-tint p-6 sm:p-7">
@@ -45,9 +70,12 @@ export function WhyItFits({ club }: { club: ClubSummary }) {
           />
           Why it fits you
         </h2>
-        <span className="text-[22px] font-bold tabular-nums text-cardinal">
-          {score}% fit
-        </span>
+        {/* Community clubs are suggested because the student asked, not ranked. */}
+        {!["identity", "faith", "international"].includes(club.audience) && (
+          <span className="text-[22px] font-bold tabular-nums text-cardinal">
+            {score}% fit
+          </span>
+        )}
       </div>
 
       <ul className="mt-5 space-y-2.5">

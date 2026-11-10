@@ -9,7 +9,7 @@ import { COUNCILS } from "@/lib/taxonomy";
 const steps = [
   {
     title: "Answer six questions",
-    body: "Major, goals, career interests, time, the kind of experience you want, and whether Greek life is on the table. About a minute.",
+    body: "Major, career interests, what you want from a club, time, any communities you're looking for, and whether Greek life is on the table. About a minute.",
   },
   {
     title: "Get a ranked shortlist",

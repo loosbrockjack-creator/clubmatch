@@ -25,6 +25,17 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
           (name, photo, major, class year, bio, interests, what you&apos;re looking for, and
           links), your quiz answers, the clubs you save, and the clubs you say you&apos;re in.
         </p>
+        <p>
+          If you upload a resume or LinkedIn PDF to fill in the quiz, it&apos;s read once to pick
+          your answers and then discarded. We never store the file or its text. The upload, what
+          you type in the &quot;Anything specific?&quot; box, and your answers when we write your
+          match reasons are processed by our AI provider, Anthropic, only to do that.
+        </p>
+        <p>
+          The communities question (faith, culture, and similar) is optional. Clubs never see
+          that answer or anything you typed, and it never affects which students a club can
+          find.
+        </p>
       </>
     ),
   },
