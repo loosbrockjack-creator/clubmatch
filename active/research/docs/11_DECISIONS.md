@@ -484,3 +484,14 @@ Continue, and a miss or failure says so then lets them on. The text isn't
 stored. Without a key, Other is just a card. Communities gained a sixth
 option, Disability and neurodiversity (3 clubs, now opt-in like the other
 identity groups), which also makes the 2-column grid even.
+
+## 2026-11-10: Self-serve club claims
+
+**Claiming no longer waits on manual review.** Any signed-in student (sign-in is
+@iastate.edu only) can claim an unclaimed or lapsed club and go straight to
+Stripe Checkout; the webhook makes the payer an officer and the page is live
+within seconds. The request form, the Resend claim alert email, and the POST
+on `/api/clubs/[slug]/claim` are gone. The `club_claims` and
+`officer_allowlist` tables stay in the database but nothing reads them. Trade-off:
+a non-officer could pay to run a club's page. Handle that case by hand
+(refund in Stripe, remove the officer row) if it comes up.

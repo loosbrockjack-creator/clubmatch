@@ -1,11 +1,16 @@
 import { getClubSummary } from "@/lib/clubs";
 import { getStripe } from "@/lib/club-stripe";
-import { clubStatus, fail, getAccountRow, isOfficer, requireUser } from "@/lib/club-server";
+import { clubStatus, fail, getAccountRow, requireUser } from "@/lib/club-server";
 import { CLAIM_INTERVAL_MONTHS, CLAIM_PRICE_CENTS } from "@/lib/club-types";
 
 type Ctx = { params: Promise<{ slug: string }> };
 
-/** Starts Stripe Checkout. Eligibility is re-checked here, never taken from the client. */
+/**
+ * Starts Stripe Checkout. Any signed-in student (sign-in is @iastate.edu only)
+ * can claim an unclaimed club: paying is what makes them its officer, with no
+ * manual review. Whether the club is still open is re-checked here, never taken
+ * from the client, and a second payer loses the race and is refunded.
+ */
 export async function POST(request: Request, { params }: Ctx) {
   const { slug } = await params;
   const club = getClubSummary(slug);
@@ -21,22 +26,6 @@ export async function POST(request: Request, { params }: Ctx) {
   const status = await clubStatus(admin, slug, account);
   if (status === "active" || status === "past_due") {
     return fail(409, "This club has already been claimed.");
-  }
-
-  const email = (user.email ?? "").toLowerCase();
-  const [officer, { data: listed }, { data: approved }] = await Promise.all([
-    isOfficer(admin, user.id, slug),
-    admin.from("officer_allowlist").select("email").eq("email", email).eq("club_slug", slug).maybeSingle(),
-    admin
-      .from("club_claims")
-      .select("id")
-      .eq("club_slug", slug)
-      .eq("user_id", user.id)
-      .eq("status", "approved")
-      .limit(1),
-  ]);
-  if (!officer && !listed && !approved?.length) {
-    return fail(403, "We haven't confirmed you as an officer of this club yet.");
   }
 
   const origin =

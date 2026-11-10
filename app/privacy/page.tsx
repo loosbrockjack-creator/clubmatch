@@ -120,8 +120,7 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
         </p>
         <p>
           If you&apos;re an officer who pays for a club, Stripe handles the payment and receives
-          your email and card details. If you ask to claim a club, your email, role, and note are
-          sent to us by email through Resend so we can review it.
+          your email and card details.
         </p>
       </>
     ),
