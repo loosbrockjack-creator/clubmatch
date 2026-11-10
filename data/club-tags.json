@@ -4304,13 +4304,15 @@
 },
 "3400": {
 "academicAreas": [],
-"audience": "general",
+"audience": "identity",
 "careerPaths": [],
 "categories": [
-"Hobbies & Special Interest"
+"Culture & Identity"
 ],
 "commitmentLevel": "casual",
-"communityTags": [],
+"communityTags": [
+"disability"
+],
 "genderFocus": null,
 "openToAllMajors": true,
 "topics": [
@@ -7363,13 +7365,15 @@
 },
 "ada": {
 "academicAreas": [],
-"audience": "general",
+"audience": "identity",
 "careerPaths": [],
 "categories": [
 "Culture & Identity"
 ],
 "commitmentLevel": "casual",
-"communityTags": [],
+"communityTags": [
+"disability"
+],
 "genderFocus": null,
 "openToAllMajors": true,
 "topics": [
@@ -12649,13 +12653,15 @@
 },
 "ndsa": {
 "academicAreas": [],
-"audience": "general",
+"audience": "identity",
 "careerPaths": [],
 "categories": [
 "Culture & Identity"
 ],
 "commitmentLevel": "casual",
-"communityTags": [],
+"communityTags": [
+"disability"
+],
 "genderFocus": null,
 "openToAllMajors": true,
 "topics": [

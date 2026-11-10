@@ -476,3 +476,11 @@ interests.
 
 **Greek life lost "Open to either"** in the quiz. Answers saved with it still
 work.
+
+**Follow-up (same day).** "Other" on the careers question is a type-in field
+when AI is on: Haiku maps what they typed onto the listed careers
+(`/api/ai/career`), the match replaces Other and waits for a confirming
+Continue, and a miss or failure says so then lets them on. The text isn't
+stored. Without a key, Other is just a card. Communities gained a sixth
+option, Disability and neurodiversity (3 clubs, now opt-in like the other
+identity groups), which also makes the 2-column grid even.

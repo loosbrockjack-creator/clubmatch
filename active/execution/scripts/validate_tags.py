@@ -26,7 +26,7 @@ CAREERS = {"finance", "accounting", "consulting", "marketing", "real-estate", "s
 WANTS = {"career", "networking", "community", "leadership", "projects", "competition", "academic",
          "service", "entrepreneurship"}
 AUDIENCES = {"general", "identity", "faith", "international", "residence", "graduate", "honor", "governance"}
-COMMUNITIES = {"faith", "culture-heritage", "international", "lgbtq", "women-in-field"}
+COMMUNITIES = {"faith", "culture-heritage", "international", "lgbtq", "women-in-field", "disability"}
 COMMITMENTS = {"casual", "moderate", "involved", "high"}
 CATEGORIES = {"Business", "Engineering", "Computing & Data", "Agriculture & Life Sciences", "Design & Arts",
               "Health & Pre-Professional", "Liberal Arts & Sciences", "Media & Communication",

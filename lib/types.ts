@@ -81,7 +81,8 @@ export type CommunityId =
   | "culture-heritage"
   | "international"
   | "lgbtq"
-  | "women-in-field";
+  | "women-in-field"
+  | "disability";
 
 /** Who a club is for. Drives which clubs the quiz can recommend at all. */
 export type Audience =

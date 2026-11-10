@@ -13,12 +13,13 @@ import {
 } from "lucide-react";
 import { InterestSearch } from "@/components/interest-search";
 import { OptionCard } from "@/components/option-card";
-import { topicsOf } from "@/lib/interests";
+import { MAX_INTERESTS, topicsOf } from "@/lib/interests";
 import { clubs } from "@/lib/clubs";
 import { displayTopic, wantsFor } from "@/lib/matching";
 import {
   ACADEMIC_AREAS,
   CAREERS,
+  CAREER_BY_ID,
   COMMITMENTS,
   COMMUNITIES,
   FLEXIBLE_OPTION,
@@ -114,6 +115,12 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const [edits, setEdits] = useState<Draft | null>(null);
   const [upload, setUpload] = useState<Upload>({ state: "idle" });
   const [source, setSource] = useState<"resume" | "linkedin">("resume");
+  // The "Other" career: what they typed, whether we're reading it, and what we found.
+  const [otherText, setOtherText] = useState("");
+  const [mapping, setMapping] = useState(false);
+  const [otherPhase, setOtherPhase] = useState<
+    { kind: "idle" } | { kind: "matched"; labels: string[] } | { kind: "none" } | { kind: "failed" }
+  >({ kind: "idle" });
   const [pasted, setPasted] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -476,7 +483,41 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
               label={OTHER_CAREER.label}
               hint={OTHER_CAREER.hint}
             />
+            {ai && draft.careers.includes(OTHER_CAREER.id) && (
+              <div className="mt-3">
+                <label htmlFor="other-career" className="block text-[13px] font-semibold text-ink">
+                  What field is it?
+                </label>
+                <input
+                  id="other-career"
+                  type="text"
+                  maxLength={120}
+                  autoComplete="off"
+                  value={otherText}
+                  disabled={mapping}
+                  onChange={(event) => {
+                    setOtherText(event.target.value);
+                    setOtherPhase({ kind: "idle" });
+                  }}
+                  placeholder="e.g. sports medicine, film production, law"
+                  className="mt-1.5 h-11 w-full rounded-[4px] border border-line-strong bg-white px-4 text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:opacity-60"
+                />
+              </div>
+            )}
           </div>
+          <p
+            role="status"
+            aria-live="polite"
+            className="col-span-full min-h-[20px] text-[14px] text-ink-soft"
+          >
+            {otherPhase.kind === "matched"
+              ? `We read that as ${otherPhase.labels.join(" and ")}. Change anything that's off, then continue.`
+              : otherPhase.kind === "none"
+                ? "That doesn't match a field on the list, so we'll lean on your major and interests."
+                : otherPhase.kind === "failed"
+                  ? "We couldn't read that just now. Continue to skip it, or pick the closest field."
+                  : ""}
+          </p>
         </>
       ),
     },
@@ -551,8 +592,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
             <label htmlFor="interest-search" className="block text-[15px] font-semibold text-ink">
               What are you into?
             </label>
-            <p className="mb-3 mt-1 text-[13px] text-ink-muted">
-              A hobby, a sport, a cause, a field. Pick from the suggestions.
+            <p id="interest-search-hint" className="mb-3 mt-1 text-[13px] text-ink-muted">
+              A hobby, a sport, a cause, a field. Pick up to {MAX_INTERESTS} from the suggestions.
             </p>
             <InterestSearch
               picks={interests}
@@ -665,9 +706,59 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const numbered = step - offset + 1;
   const numberedTotal = totalSteps - offset;
 
-  function handleSubmit(event: React.FormEvent) {
+  /** Careers the typed "Other" field fits, or null if the reader failed. */
+  async function readOtherCareer(text: string): Promise<CareerId[] | null> {
+    try {
+      const res = await fetchWithin(
+        "/api/ai/career",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
+        },
+        10_000,
+      );
+      if (!res.ok) return null;
+      const data = (await res.json()) as { careers?: CareerId[] };
+      return data.careers ?? [];
+    } catch {
+      return null;
+    }
+  }
+
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!current.valid) return;
+    if (!current.valid || mapping) return;
+
+    // "Other" with a typed field: read it once. Matches replace Other and wait
+    // for a confirming Continue; a miss or failure says so, then lets them on.
+    const isCareersStep = step === offset + 1;
+    const typed = otherText.trim();
+    if (
+      ai &&
+      isCareersStep &&
+      draft.careers.includes(OTHER_CAREER.id) &&
+      typed.length >= 2 &&
+      otherPhase.kind === "idle"
+    ) {
+      setMapping(true);
+      const found = await readOtherCareer(typed);
+      setMapping(false);
+      if (found === null) {
+        setOtherPhase({ kind: "failed" });
+        return;
+      }
+      if (found.length === 0) {
+        setOtherPhase({ kind: "none" });
+        return;
+      }
+      setDraft((d) => ({
+        ...d,
+        careers: Array.from(new Set([...d.careers.filter((c) => c !== OTHER_CAREER.id), ...found])),
+      }));
+      setOtherPhase({ kind: "matched", labels: found.map((id) => CAREER_BY_ID[id].label) });
+      return;
+    }
     if (isLast) {
       const finalWants = wants.slice(0, MAX_WANTS);
       savePreferences({
@@ -783,11 +874,20 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
               )}
               <button
                 type="submit"
-                disabled={!current.valid || upload.state === "reading"}
+                disabled={!current.valid || mapping || upload.state === "reading"}
                 className="btn btn-primary min-w-[160px]"
               >
-                {isLast ? "See my matches" : isUploadStep ? "Skip, I'll answer" : "Continue"}
-                <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                {mapping ? (
+                  <>
+                    <LoaderCircle size={16} strokeWidth={2} className="animate-spin" aria-hidden />
+                    Reading that
+                  </>
+                ) : (
+                  <>
+                    {isLast ? "See my matches" : isUploadStep ? "Skip, I'll answer" : "Continue"}
+                    <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                  </>
+                )}
               </button>
             </div>
           </div>

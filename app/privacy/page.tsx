@@ -28,8 +28,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
         <p>
           If you upload a resume or LinkedIn PDF, or paste your LinkedIn profile, to fill in the
           quiz, it&apos;s read once to pick your answers and then discarded. We never store the
-          file or the text. That upload or paste, and your quiz answers when we write your match
-          reasons, are processed by our AI provider, Anthropic, only to do that. Your gender and
+          file or the text. That upload or paste, a field you type under &quot;Other&quot; on the careers
+          question, and your quiz answers when we write your match reasons, are processed by our AI provider, Anthropic, only to do that. Your gender and
           communities are never sent.
         </p>
         <p>

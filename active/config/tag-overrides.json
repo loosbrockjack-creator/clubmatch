@@ -65,5 +65,32 @@
   },
   "triiota": {
     "genderFocus": null
+  },
+  "ada": {
+    "audience": "identity",
+    "communityTags": [
+      "disability"
+    ],
+    "categories": [
+      "Culture & Identity"
+    ]
+  },
+  "ndsa": {
+    "audience": "identity",
+    "communityTags": [
+      "disability"
+    ],
+    "categories": [
+      "Culture & Identity"
+    ]
+  },
+  "3400": {
+    "audience": "identity",
+    "communityTags": [
+      "disability"
+    ],
+    "categories": [
+      "Culture & Identity"
+    ]
   }
 }

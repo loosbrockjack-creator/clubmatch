@@ -62,7 +62,7 @@ Short lowercase keywords a student might type to find this club: the specific ac
 
 ### audience
 - `general`: anyone could reasonably join for the club's purpose.
-- `identity`: primary purpose is community around a culture, ethnicity, nationality, gender identity, or sexuality
+- `identity`: primary purpose is community around a culture, ethnicity, nationality, gender identity, sexuality, or disability and neurodiversity
   (cultural associations, LGBTQ+ groups, heritage clubs). Professional societies with an identity focus
   (NSBE, SHPE, SWE, oSTEM, Women in Business) are `general` with `communityTags`, NOT `identity`.
 - `faith`: primary purpose is religious or spiritual community or worship.
@@ -73,7 +73,7 @@ Short lowercase keywords a student might type to find this club: the specific ac
 - `governance`: student government, councils, umbrella boards, program boards, event committees.
 
 ### communityTags (0 to 2)
-`faith`, `culture-heritage`, `international`, `lgbtq`, `women-in-field`
+`faith`, `culture-heritage`, `international`, `lgbtq`, `women-in-field`, `disability`
 - Required for `identity`, `faith`, `international` audiences. Optional for `general` clubs with an identity focus
   (SWE gets `women-in-field`; NSBE gets `culture-heritage`; a Muslim students' professional club gets `faith`).
 - Never put anything here a club's text does not say outright.

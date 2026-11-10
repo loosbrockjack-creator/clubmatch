@@ -268,6 +268,7 @@ export const COMMUNITIES: Option<CommunityId>[] = [
   { id: "international", label: "International students", hint: "Support and community" },
   { id: "lgbtq", label: "LGBTQ+ community", hint: "Groups and allies" },
   { id: "women-in-field", label: "Women in my field", hint: "Professional groups for women" },
+  { id: "disability", label: "Disability and neurodiversity", hint: "Awareness, support, and advocacy" },
 ];
 
 export const COMMUNITY_PHRASE: Record<CommunityId, string> = {
@@ -276,6 +277,7 @@ export const COMMUNITY_PHRASE: Record<CommunityId, string> = {
   international: "an international student community",
   lgbtq: "an LGBTQ+ community",
   "women-in-field": "women in your field",
+  disability: "a disability and neurodiversity community",
 };
 
 /** Explore filter categories, in display order. Chapters keep their own two. */

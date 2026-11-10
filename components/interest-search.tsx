@@ -131,10 +131,6 @@ export function InterestSearch({
         )}
       </div>
 
-      <p id="interest-search-hint" className="mt-2 text-[13px] text-ink-muted">
-        Pick up to {MAX_INTERESTS}. We&apos;ll look for clubs that do these.
-      </p>
-
       {picks.length > 0 && (
         <ul className="mt-3 flex flex-wrap gap-2" aria-label="Your interests">
           {picks.map((pick) => (
