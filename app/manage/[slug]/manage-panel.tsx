@@ -7,7 +7,6 @@ import {
   BarChart3,
   CalendarDays,
   CreditCard,
-  ExternalLink,
   Lock,
   Megaphone,
   PencilLine,
@@ -134,23 +133,12 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
 
   return (
     <>
-      <PageHeader crumbs={[{ href: `/clubs/${slug}`, label: clubName }]} title={`Manage ${clubName}`}>
-        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px]">
-          <Link href={`/clubs/${slug}`} className="link-isu inline-flex min-h-11 items-center gap-1.5 sm:min-h-0">
-            View your public page
-            <ExternalLink size={13} strokeWidth={2} aria-hidden />
-          </Link>
-          {current.status === "past_due" && (
-            <Link href={`/manage/${slug}?tab=billing`} className="chip chip-gold">
-              Payment problem: check Billing
-            </Link>
-          )}
-        </div>
-      </PageHeader>
+      {/* The crumb already links to the public page, so the header holds just the title. */}
+      <PageHeader crumbs={[{ href: `/clubs/${slug}`, label: clubName }]} title={`Manage ${clubName}`} />
 
       <nav aria-label="Admin sections" className="sticky top-[71px] z-30 border-b border-line bg-white">
         <div className="shell">
-          <ul ref={tabList} className="relative -mx-5 flex gap-1 overflow-x-auto px-5 md:mx-0 md:px-0">
+          <ul ref={tabList} className="relative -mx-5 flex gap-1 overflow-x-auto px-5 md:mx-0 md:justify-center md:px-0">
             {TABS.map(({ id, label, icon: Icon }) => {
               const active = id === tab;
               return (

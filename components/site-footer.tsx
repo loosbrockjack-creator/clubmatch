@@ -19,6 +19,7 @@ const columns = [
       { href: "/account", label: "My account" },
       { href: "/privacy", label: "Privacy" },
       { href: "/terms", label: "Terms" },
+      { href: `mailto:${CONTACT_EMAIL}`, label: "Contact" },
     ],
   },
   {
@@ -35,7 +36,7 @@ const columns = [
 export function SiteFooter() {
   return (
     <footer className="site-footer on-cardinal overflow-hidden bg-cardinal text-white">
-      <div className="shell pt-14 sm:pt-16">
+      <div className="shell pb-12 pt-14 sm:pb-14 sm:pt-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
             <p className="wordmark text-[30px] leading-none">ClubMatch</p>
@@ -62,7 +63,11 @@ export function SiteFooter() {
                   const external = link.href.startsWith("http");
                   return (
                     <li key={link.href}>
-                      {external ? (
+                      {link.href.startsWith("mailto:") ? (
+                        <a href={link.href} className="link-on-cardinal text-[14px] font-medium">
+                          {link.label}
+                        </a>
+                      ) : external ? (
                         <a
                           href={link.href}
                           target="_blank"
@@ -85,17 +90,6 @@ export function SiteFooter() {
               </ul>
             </nav>
           ))}
-        </div>
-
-        <div className="mt-12 flex flex-col gap-2 border-t border-white/25 pt-6 text-[12.5px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            Built for ENTSP 3100 at Iowa State University. Club images are
-            original watercolors or Pexels photos; chapter photos come from
-            each chapter&apos;s SFE page.
-          </p>
-          <a href={`mailto:${CONTACT_EMAIL}`} className="link-on-cardinal font-medium">
-            Contact
-          </a>
         </div>
       </div>
 

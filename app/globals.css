@@ -261,6 +261,27 @@
     transition: border-color 160ms var(--ease-out-soft);
   }
 
+  /* Safari draws date inputs with their own inner box pinned to the top.
+     Flex centering puts the value in the middle like every other field. */
+  .field[type="date"],
+  .field[type="time"],
+  .field[type="datetime-local"] {
+    display: flex;
+    align-items: center;
+    -webkit-appearance: none;
+    appearance: none;
+    line-height: normal;
+  }
+
+  .field::-webkit-date-and-time-value {
+    margin: 0;
+    text-align: left;
+  }
+
+  .field::-webkit-datetime-edit {
+    padding: 0;
+  }
+
   .field:hover {
     border-color: var(--color-ink-muted);
   }
