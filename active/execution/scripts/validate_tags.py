@@ -6,6 +6,7 @@ Overrides in active/config/tag-overrides.json win over shard output.
 """
 
 import collections
+import re
 import glob
 import json
 import os
@@ -33,7 +34,26 @@ CATEGORIES = {"Business", "Engineering", "Computing & Data", "Agriculture & Life
               "Performing Arts & Music", "Culture & Identity", "Faith & Spirituality",
               "Hobbies & Special Interest", "Residence Life"}
 FIELDS = ["academicAreas", "openToAllMajors", "careerPaths", "wants", "topics", "audience",
-          "communityTags", "commitmentLevel", "categories"]
+          "communityTags", "commitmentLevel", "categories", "genderFocus"]
+
+# Clubs built for one gender: the "(Men)" and "(Women)" teams, and Women-in-X
+# groups. Reviewed against the club list; fix edge cases in tag-overrides.json
+# ("genderFocus": "women" | "men" | null). Fraternities and sororities are
+# handled by the Greek life question instead.
+WOMEN_NAME = re.compile(
+    r"\(women\)|^women\b|\bwomen (in|who|impacting|inspired)\b|\bdigital women\b|girls who code"
+    r"|society of women|collegiate women|association for women|women in",
+    re.I,
+)
+MEN_NAME = re.compile(r"\(men\)", re.I)
+
+
+def gender_focus(name):
+    if WOMEN_NAME.search(name):
+        return "women"
+    if MEN_NAME.search(name):
+        return "men"
+    return None
 
 
 def load_shards():
@@ -74,6 +94,8 @@ def check(cid, t):
         not isinstance(x, str) or x != x.lower() or len(x) > 40 for x in topics
     ):
         errs.append(f"topics={topics}")
+    if t.get("genderFocus") not in (None, "women", "men"):
+        errs.append(f"genderFocus={t.get('genderFocus')}")
     if t.get("audience") in {"identity", "faith", "international"} and not t.get("communityTags"):
         errs.append("community audience without communityTags")
     if any(ch in json.dumps(t, ensure_ascii=False) for ch in "—–"):
@@ -91,6 +113,13 @@ def main():
     for cid, patch in overrides.items():
         if cid in tags:
             tags[cid].update(patch)
+
+    names = {c["id"]: c["name"] for c in json.load(open(CLUBS))}
+    for cid, t in tags.items():
+        t["genderFocus"] = gender_focus(names.get(cid, ""))
+    for cid, patch in overrides.items():
+        if cid in tags and "genderFocus" in patch:
+            tags[cid]["genderFocus"] = patch["genderFocus"]
 
     # Every College of Veterinary Medicine club is in the "veterinary" area.
     vet = {c["id"] for c in json.load(open(CLUBS)) if c.get("college") == "College of Veterinary Medicine"}
@@ -121,6 +150,8 @@ def main():
     print("commitment:", dist("commitmentLevel"))
     print("categories:", dist("categories"))
     print("no area and no career:", sum(1 for t in tags.values() if not t["academicAreas"] and not t["careerPaths"]))
+    gf = collections.Counter(t.get("genderFocus") for t in tags.values())
+    print("genderFocus:", dict(gf))
     print("low confidence:", sum(1 for t in tags.values() if t.get("confidence") == "low"))
     thin = [k for k, v in collections.Counter(x for t in tags.values() for x in t["careerPaths"]).items() if v < 3]
     print("careers under 3 clubs:", thin or "none")

@@ -1,6 +1,6 @@
 /**
- * Server-only AI plumbing for Smart Match: the resume reader, the
- * "Anything specific?" box, and AI-written "why it fits" lines.
+ * Server-only AI plumbing for Smart Match: the resume reader and AI-written
+ * "why it fits" lines.
  *
  * Everything here is optional. With no ANTHROPIC_API_KEY the quiz hides the AI
  * parts and the routes answer 404, so the site works the same without a key.
@@ -18,7 +18,7 @@ export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
  * Per IP per hour. Generous because a whole class on campus Wi-Fi can share
  * one IP; the Anthropic console spend cap is the real ceiling.
  */
-export const RATE_LIMITS = { resume: 40, interests: 120, reasons: 120 } as const;
+export const RATE_LIMITS = { resume: 40, reasons: 120 } as const;
 
 /** Reads a JSON body, refusing anything larger than `maxBytes`. */
 export async function readJsonBody(request: Request, maxBytes: number): Promise<unknown> {

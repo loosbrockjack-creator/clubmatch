@@ -56,5 +56,14 @@
   "lgsa": {
     "audience": "graduate",
     "note": "Serves Latina/o graduate and professional students"
+  },
+  "430": {
+    "genderFocus": "women"
+  },
+  "pma": {
+    "genderFocus": "men"
+  },
+  "triiota": {
+    "genderFocus": null
   }
 }

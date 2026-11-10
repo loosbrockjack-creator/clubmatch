@@ -11,7 +11,9 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { InterestSearch } from "@/components/interest-search";
 import { OptionCard } from "@/components/option-card";
+import { topicsOf } from "@/lib/interests";
 import { clubs } from "@/lib/clubs";
 import { displayTopic, wantsFor } from "@/lib/matching";
 import {
@@ -20,7 +22,9 @@ import {
   COMMITMENTS,
   COMMUNITIES,
   FLEXIBLE_OPTION,
-  GREEK_OPTIONS,
+  OTHER_CAREER,
+  GENDER_OPTIONS,
+  GREEK_QUIZ_OPTIONS,
   MAX_AREAS,
   MAX_WANTS,
   UNDECIDED_OPTION,
@@ -39,6 +43,7 @@ import type {
   CareerId,
   CommitmentId,
   CommunityId,
+  GenderId,
   GreekInterest,
   Preferences,
   WantId,
@@ -47,7 +52,6 @@ import type {
 type Draft = Preferences;
 
 const CHAPTER_COUNT = clubs.filter((club) => club.greek).length;
-const MAX_TEXT = 200;
 /** Pasted LinkedIn profile text. Matches the server's limits. */
 const MIN_PASTE = 80;
 const MAX_PASTE = 12_000;
@@ -99,7 +103,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const wantsGreek = useWantsGreekStep();
   // The upload step only exists when AI is available; it is step 0 then.
   const offset = ai ? 1 : 0;
-  const totalSteps = 6 + offset;
+  const totalSteps = 7 + offset;
   // null until the student moves. Results links students whose saved answers
   // predate the Greek question straight to it, but only when those answers
   // exist; otherwise the earlier steps would be skipped and saved empty.
@@ -109,10 +113,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     chosenStep ?? (wantsGreek && stored ? totalSteps - 1 : stored ? offset : 0);
   const [edits, setEdits] = useState<Draft | null>(null);
   const [upload, setUpload] = useState<Upload>({ state: "idle" });
-  const [mapping, setMapping] = useState(false);
   const [source, setSource] = useState<"resume" | "linkedin">("resume");
   const [pasted, setPasted] = useState("");
-  const [textFailed, setTextFailed] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const firstRender = useRef(true);
@@ -124,12 +126,14 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     ...base,
     wants: wantsFor(base).slice(0, MAX_WANTS),
     academicAreas: areasFor(base),
+    greek: base.greek === "either" ? null : base.greek,
   };
   const setDraft = (update: (current: Draft) => Draft) => setEdits(update(draft));
   const wants = draft.wants ?? [];
   const areas = draft.academicAreas ?? [];
   const communities = draft.communities ?? [];
   const resumeTopics = draft.resumeTopics ?? [];
+  const interests = draft.interests ?? [];
 
   useEffect(() => {
     if (firstRender.current) {
@@ -441,22 +445,40 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       subtitle: "Choose one or a few. You are not locking anything in.",
       columns: "sm:grid-cols-2 lg:grid-cols-3",
       valid: draft.careers.length > 0,
-      render: () =>
-        CAREERS.map((option) => (
-          <OptionCard
-            key={option.id}
-            type="checkbox"
-            name="careers"
-            value={option.id}
-            compact
-            checked={draft.careers.includes(option.id)}
-            onChange={() =>
-              setDraft((d) => ({ ...d, careers: toggle<CareerId>(d.careers, option.id) }))
-            }
-            label={option.label}
-            hint={option.hint}
-          />
-        )),
+      render: () => (
+        <>
+          {CAREERS.map((option) => (
+            <OptionCard
+              key={option.id}
+              type="checkbox"
+              name="careers"
+              value={option.id}
+              compact
+              checked={draft.careers.includes(option.id)}
+              onChange={() =>
+                setDraft((d) => ({ ...d, careers: toggle<CareerId>(d.careers, option.id) }))
+              }
+              label={option.label}
+              hint={option.hint}
+            />
+          ))}
+          {/* Spans the row so it reads as the last, catch-all choice. */}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <OptionCard
+              type="checkbox"
+              name="careers"
+              value={OTHER_CAREER.id}
+              compact
+              checked={draft.careers.includes(OTHER_CAREER.id)}
+              onChange={() =>
+                setDraft((d) => ({ ...d, careers: toggle<CareerId>(d.careers, OTHER_CAREER.id) }))
+              }
+              label={OTHER_CAREER.label}
+              hint={OTHER_CAREER.hint}
+            />
+          </div>
+        </>
+      ),
     },
     {
       question: "What do you want from a club?",
@@ -518,83 +540,60 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       ),
     },
     {
-      question: ai ? "Anything specific?" : "Looking for a community?",
-      subtitle: ai
-        ? "Both optional. A hobby or field you're into, and any community you'd like to find."
-        : "Optional. Some clubs are built around a faith, a culture, or an identity. We only include them if you ask.",
+      question: "Anything specific?",
+      subtitle:
+        "Both optional. Something you're into, and any community you'd like to find.",
       columns: "",
       valid: true,
       render: () => (
         <div className="space-y-10">
-          {ai && (
-            <div>
-              <label htmlFor="interest-text" className="block text-[15px] font-semibold text-ink">
-                Anything specific you&apos;re into?
-              </label>
-              <p id="interest-text-hint" className="mt-1 text-[13px] text-ink-muted">
-                A hobby, a sport, a cause, a field. We&apos;ll look for clubs that do it.
-              </p>
-              <textarea
-                id="interest-text"
-                aria-describedby="interest-text-hint"
-                rows={2}
-                maxLength={MAX_TEXT}
-                value={draft.interestText ?? ""}
-                onChange={(event) =>
-                  setDraft((d) => ({ ...d, interestText: event.target.value }))
-                }
-                placeholder="e.g. rock climbing, investing, K-pop dance, robotics"
-                className="mt-3 w-full resize-none rounded-[4px] border border-line-strong bg-white px-4 py-3 text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
-              />
-              <div className="mt-1 flex items-start justify-between gap-4">
-                <p role="status" aria-live="polite" className="text-[13px] text-cardinal">
-                  {textFailed
-                    ? "We couldn't read that just now. Continue again to try once more or skip it."
-                    : ""}
+          <div>
+            <label htmlFor="interest-search" className="block text-[15px] font-semibold text-ink">
+              What are you into?
+            </label>
+            <p className="mb-3 mt-1 text-[13px] text-ink-muted">
+              A hobby, a sport, a cause, a field. Pick from the suggestions.
+            </p>
+            <InterestSearch
+              picks={interests}
+              onChange={(next) => setDraft((d) => ({ ...d, interests: next }))}
+            />
+            {resumeTopics.length > 0 && (
+              <div className="mt-6">
+                <p className="text-[13px] text-ink-muted">
+                  From your {source === "linkedin" ? "profile" : "resume"}. Remove any you don&apos;t want clubs for.
                 </p>
-                <p className="shrink-0 text-[12px] tabular-nums text-ink-muted">
-                  {(draft.interestText ?? "").length}/{MAX_TEXT}
-                </p>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {resumeTopics.map((topic) => (
+                    <li key={topic}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setDraft((d) => ({
+                            ...d,
+                            resumeTopics: (d.resumeTopics ?? []).filter((t) => t !== topic),
+                          }))
+                        }
+                        className="chip transition-colors hover:border-cardinal"
+                        aria-label={`Remove ${displayTopic(topic)}`}
+                      >
+                        {capitalize(displayTopic(topic))}
+                        <X size={13} strokeWidth={2.25} aria-hidden />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              {resumeTopics.length > 0 && (
-                <div className="mt-2">
-                  <p className="text-[13px] text-ink-muted">
-                    From your {source === "linkedin" ? "profile" : "resume"}. Remove any you don&apos;t want clubs for.
-                  </p>
-                  <ul className="mt-2 flex flex-wrap gap-2">
-                    {resumeTopics.map((topic) => (
-                      <li key={topic}>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setDraft((d) => ({
-                              ...d,
-                              resumeTopics: (d.resumeTopics ?? []).filter((t) => t !== topic),
-                            }))
-                          }
-                          className="chip transition-colors hover:border-cardinal"
-                          aria-label={`Remove ${displayTopic(topic)}`}
-                        >
-                          {capitalize(displayTopic(topic))}
-                          <X size={13} strokeWidth={2.25} aria-hidden />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
 
           <fieldset className="min-w-0 border-0 p-0">
             <legend className="text-[15px] font-semibold text-ink">
-              {ai ? "Want to find any of these communities?" : "Pick any that you'd like to find."}
+              Want to find any of these communities?
             </legend>
-            {ai && (
-              <p className="mt-1 text-[13px] text-ink-muted">
-                Some clubs are built around a faith, a culture, or an identity. We only include them if you ask.
-              </p>
-            )}
+            <p className="mt-1 text-[13px] text-ink-muted">
+              Some clubs are built around a faith, a culture, or an identity. We only include them if you ask.
+            </p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {COMMUNITIES.map((option) => (
                 <OptionCard
@@ -620,12 +619,32 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       ),
     },
     {
+      question: "What's your gender?",
+      subtitle:
+        "Some clubs are built for one gender, like the men's and women's club teams. This only decides which of those we show. Clubs never see it.",
+      columns: "sm:grid-cols-3",
+      valid: draft.gender != null,
+      render: () =>
+        GENDER_OPTIONS.map((option) => (
+          <OptionCard
+            key={option.id}
+            type="radio"
+            name="gender"
+            value={option.id}
+            checked={draft.gender === option.id}
+            onChange={() => setDraft((d) => ({ ...d, gender: option.id as GenderId }))}
+            label={option.label}
+            hint={option.hint}
+          />
+        )),
+    },
+    {
       question: "Open to Greek life?",
       subtitle: `Iowa State has ${CHAPTER_COUNT} fraternities and sororities. We can include a few that fit.`,
       columns: "sm:grid-cols-2",
       valid: draft.greek != null,
       render: () =>
-        GREEK_OPTIONS.map((option) => (
+        GREEK_QUIZ_OPTIONS.map((option) => (
           <OptionCard
             key={option.id}
             type="radio"
@@ -643,53 +662,12 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const current = steps[step];
   const isLast = step === totalSteps - 1;
   const isUploadStep = ai && step === 0;
-  const isTextStep = step === totalSteps - 2;
   const numbered = step - offset + 1;
   const numberedTotal = totalSteps - offset;
 
-  /** Map the free-text box onto club topics. Resume topics stay separate. */
-  async function resolveTopics(): Promise<string[] | null> {
-    const text = (draft.interestText ?? "").trim();
-    if (!ai || !text) return [];
-    // Reuse a previous read of the same text, but never a failed (empty) one.
-    if (stored && stored.interestText === text && (stored.topics ?? []).length > 0) {
-      return stored.topics ?? [];
-    }
-    try {
-      const res = await fetchWithin(
-        "/api/ai/interests",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text }),
-        },
-        10_000,
-      );
-      if (!res.ok) return null;
-      const data = (await res.json()) as { topics?: string[] };
-      return data.topics ?? [];
-    } catch {
-      return null;
-    }
-  }
-
-  async function handleSubmit(event: React.FormEvent) {
+  function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!current.valid || mapping) return;
-    if (isTextStep) {
-      setMapping(true);
-      const topics = await resolveTopics();
-      setMapping(false);
-      // On a failed read, say so once; a second Continue moves on without it.
-      if (topics === null && !textFailed) {
-        setTextFailed(true);
-        return;
-      }
-      setTextFailed(false);
-      setEdits({ ...draft, topics: topics ?? [] });
-      setStep(step + 1);
-      return;
-    }
+    if (!current.valid) return;
     if (isLast) {
       const finalWants = wants.slice(0, MAX_WANTS);
       savePreferences({
@@ -700,7 +678,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
         goals: goalsFromWants(finalWants),
         experiences: experiencesFromWants(finalWants),
         communities,
-        topics: draft.topics ?? [],
+        interests,
+        topics: topicsOf(interests),
         resumeTopics,
         completedAt: new Date().toISOString(),
       });
@@ -804,20 +783,11 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
               )}
               <button
                 type="submit"
-                disabled={!current.valid || mapping || upload.state === "reading"}
+                disabled={!current.valid || upload.state === "reading"}
                 className="btn btn-primary min-w-[160px]"
               >
-                {mapping ? (
-                  <>
-                    <LoaderCircle size={16} strokeWidth={2} className="animate-spin" aria-hidden />
-                    Reading that
-                  </>
-                ) : (
-                  <>
-                    {isLast ? "See my matches" : isUploadStep ? "Skip, I'll answer" : "Continue"}
-                    <ArrowRight size={16} strokeWidth={2} aria-hidden />
-                  </>
-                )}
+                {isLast ? "See my matches" : isUploadStep ? "Skip, I'll answer" : "Continue"}
+                <ArrowRight size={16} strokeWidth={2} aria-hidden />
               </button>
             </div>
           </div>

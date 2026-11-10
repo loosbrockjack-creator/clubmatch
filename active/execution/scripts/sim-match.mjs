@@ -44,9 +44,10 @@ const AREA_CAREERS = {
 function student() {
   const area = rand() < 0.1 ? "undecided" : pick(AREAS);
   const pool = area !== "undecided" && rand() < 0.7 ? AREA_CAREERS[area] : CAREERS;
-  const careers = sample(pool, 1 + Math.floor(rand() * 3));
+  const careers = rand() < 0.08 ? ["other"] : sample(pool, 1 + Math.floor(rand() * 3));
   const wants = sample(WANTS, 1 + Math.floor(rand() * 3));
   return {
+    gender: pick(["male", "female", "prefer-not"]),
     academicArea: area,
     careers,
     wants,
@@ -73,7 +74,7 @@ function relevant(prefs, club) {
 function measure(label, run) {
   const counts = [], tops = [], twentieth = [], ties = [];
   const inTop10 = new Map();
-  let irrelevantTop10 = 0, top10Total = 0, unaskedCommunity = 0, hiddenAud = 0, furry = 0, empty = 0;
+  let genderLeak = 0, irrelevantTop10 = 0, top10Total = 0, unaskedCommunity = 0, hiddenAud = 0, furry = 0, empty = 0;
   s = 42;
   for (let i = 0; i < N; i++) {
     const prefs = student();
@@ -92,6 +93,7 @@ function measure(label, run) {
     const top20 = results.slice(0, 20).map((r) => byId.get(r.club.id) ?? r.club);
     if (top20.some((c) => COMMUNITY_AUD.has(c.audience) && !c.communityTags.some((t) => prefs.communities.includes(t)))) unaskedCommunity++;
     if (top20.some((c) => HIDDEN_AUD.has(c.audience))) hiddenAud++;
+    if (top20.some((c) => (prefs.gender === "male" && c.genderFocus === "women") || (prefs.gender === "female" && c.genderFocus === "men"))) genderLeak++;
     if (top20.some((c) => c.id === "amesfurryclub")) furry++;
   }
   const med = (a) => (a.length ? [...a].sort((x, y) => x - y)[Math.floor(a.length / 2)] : "n/a");
@@ -109,6 +111,7 @@ function measure(label, run) {
     "Top-10 slots with no major or career match": `${((irrelevantTop10 / Math.max(top10Total, 1)) * 100).toFixed(0)}%`,
     "Students shown a faith/culture/identity club they did not ask for (top 20)": unaskedCommunity,
     "Students shown a residence-hall or grad-only club (top 20)": hiddenAud,
+    "Students shown a club built for the other gender (top 20)": genderLeak,
     "Students shown Ames Furry Club (top 20)": furry,
   };
 }
@@ -139,6 +142,10 @@ const PERSONAS = [
   ["Finance resume listing volunteering", { academicArea: "business", careers: ["finance"], wants: ["career"], commitment: "moderate", resumeTopics: ["volunteering", "rock climbing"] }],
   ["Business + CS double major", { academicArea: "business", academicAreas: ["business", "computing"], careers: ["finance", "software"], wants: ["career", "projects"], commitment: "moderate" }],
   ["Vet Med (DVM) student", { academicArea: "veterinary", academicAreas: ["veterinary"], careers: ["healthcare"], wants: ["community", "service"], commitment: "casual" }],
+  ["Male engineer", { gender: "male", academicArea: "engineering", careers: ["engineering-design"], wants: ["career", "networking"], commitment: "moderate" }],
+  ["Female engineer", { gender: "female", academicArea: "engineering", careers: ["engineering-design"], wants: ["career", "networking"], commitment: "moderate" }],
+  ["Prefers not to say, engineer", { gender: "prefer-not", academicArea: "engineering", careers: ["engineering-design"], wants: ["career", "networking"], commitment: "moderate" }],
+  ["Business student, career Other only", { academicArea: "business", careers: ["other"], wants: ["career"], commitment: "moderate" }],
   ["Engineer seeking faith community", { academicArea: "engineering", careers: ["engineering-design"], wants: ["community"], commitment: "moderate", communities: ["faith"], topics: ["catholic"] }],
 ];
 

@@ -53,12 +53,15 @@ function answerChips(prefs: Preferences) {
     chips.push(`+${prefs.careers.length - 3} more`);
   }
 
-  [...topicsFor(prefs), ...resumeTopicsFor(prefs)]
-    .slice(0, 3)
-    .forEach((topic) => {
-      const label = displayTopic(topic);
-      chips.push(label.charAt(0).toUpperCase() + label.slice(1));
-    });
+  const interestLabels =
+    prefs.interests && prefs.interests.length > 0
+      ? prefs.interests.map((i) => i.label)
+      : [...topicsFor(prefs), ...resumeTopicsFor(prefs)].map((t) => {
+          const label = displayTopic(t);
+          return label.charAt(0).toUpperCase() + label.slice(1);
+        });
+  interestLabels.slice(0, 3).forEach((label) => chips.push(label));
+  if (interestLabels.length > 3) chips.push(`+${interestLabels.length - 3} more`);
 
   if (prefs.commitment && prefs.commitment !== "flexible") {
     chips.push(COMMITMENT_BY_ID[prefs.commitment].label);
@@ -347,10 +350,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
                   {wanted.length === 1
                     ? `${COMMUNITY_BY_ID[wanted[0]].label}: a few to start with.`
                     : "A few to start with."}{" "}
-                  {ai &&
-                    topicsFor(prefs).length === 0 &&
-                    (wanted.includes("faith") || wanted.includes("culture-heritage")) &&
-                    `Mention a specific ${wanted.includes("faith") && wanted.includes("culture-heritage") ? "faith or culture" : wanted.includes("faith") ? "faith" : "culture"} in the quiz to narrow these down.`}
+
                 </p>
                 <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {community.results.map((result) => (

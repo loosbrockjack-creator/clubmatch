@@ -449,3 +449,30 @@ are graduate groups, normally hidden from quiz results; a student who picks
 Veterinary Medicine gets them (`isRankable`), except vet clubs built around a
 faith or culture, which stay opt-in. The Graduate College's own groups are
 still left out of quiz results.
+
+## 2026-11-10: Gender question, interest search, "Other" career, Greek options
+
+**Gender question (reverses the earlier "never ask" call, at Jack's request).**
+Male, Female, or Prefer not to say. It only decides which gender-focused clubs
+show: 22 women-focused clubs (women's teams, Women in X groups) and 8
+men-focused ones, tagged `genderFocus` by `validate_tags.py` with fixes in
+`tag-overrides.json`. A male student doesn't get women-focused clubs and vice
+versa; "Prefer not to say" and answers saved before the question see all of
+them. A matching club gets a small boost. Private: officer lead scoring drops
+it (`scoreForOfficers`), the AI reasons route rebuilds preferences without it,
+and the privacy page says so. Fraternities and sororities stay on the Greek
+life question.
+
+**"Anything specific?" is a skills-style search**, not free text plus AI. A
+curated list of broad interests (`data/interests.json`) is searched in the
+browser; picking one adds a chip, up to 6, and each stands for a set of club
+topics. No API call, so it works without a key. Faith, culture, gender,
+sexuality, and politics are kept out of the list; communities have their own
+opt-in question.
+
+**Careers got an "Other" card** (full width, last). It can't match a club, so
+it is left out of the score's denominator; matching leans on major and
+interests.
+
+**Greek life lost "Open to either"** in the quiz. Answers saved with it still
+work.

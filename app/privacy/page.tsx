@@ -28,13 +28,14 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
         <p>
           If you upload a resume or LinkedIn PDF, or paste your LinkedIn profile, to fill in the
           quiz, it&apos;s read once to pick your answers and then discarded. We never store the
-          file or the text. That upload or paste, what
-          you type in the &quot;Anything specific?&quot; box, and your answers when we write your
-          match reasons are processed by our AI provider, Anthropic, only to do that.
+          file or the text. That upload or paste, and your quiz answers when we write your match
+          reasons, are processed by our AI provider, Anthropic, only to do that. Your gender and
+          communities are never sent.
         </p>
         <p>
-          The communities question (faith, culture, and similar) is optional. Clubs never see
-          that answer or anything you typed, and it never affects which students a club can
+          The communities question (faith, culture, and similar) is optional. The gender question
+          only decides whether we show clubs built for women or for men. Clubs never see either
+          answer or the interests you pick, and none of them affects which students a club can
           find.
         </p>
       </>

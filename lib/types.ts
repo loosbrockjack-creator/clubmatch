@@ -23,7 +23,9 @@ export type CareerId =
   | "agriculture-food"
   | "healthcare"
   | "media-comm"
-  | "entrepreneurship";
+  | "entrepreneurship"
+  /** "Something not listed". No club carries it; it just means the list didn't fit. */
+  | "other";
 
 export type GoalId =
   | "career"
@@ -64,6 +66,16 @@ export type WantId =
  * built around a faith, culture, or identity only show up for students who
  * ask for that kind of community.
  */
+/** Private. Only decides which clubs built for one gender are shown. */
+export type GenderId = "male" | "female" | "prefer-not";
+
+/** A broad interest the student picked, with the club topics it stands for. */
+export interface InterestPick {
+  id: string;
+  label: string;
+  topics: string[];
+}
+
 export type CommunityId =
   | "faith"
   | "culture-heritage"
@@ -155,6 +167,8 @@ export interface ClubSummary {
   topics: string[];
   audience: Audience;
   communityTags: CommunityId[];
+  /** Built for women or men (a gendered team, a Women in X group), else null. */
+  genderFocus: "women" | "men" | null;
   commitmentLevel: CommitmentId;
   freshmenWelcome: boolean;
   greek?: GreekSummary;
@@ -198,12 +212,14 @@ export interface Preferences {
   wants?: WantId[];
   /** Opt-in communities. Missing or empty means none. */
   communities?: CommunityId[];
-  /** Topic keywords matched from the "Anything specific?" box. */
+  /** Broad interests picked in "Anything specific?". */
+  interests?: InterestPick[];
+  /** The interests' club topics, flattened. What scoring reads. */
   topics?: string[];
+  /** Private. Missing on older answers, which show every club. */
+  gender?: GenderId | null;
   /** Topic keywords read from an uploaded resume. Weaker than typed ones. */
   resumeTopics?: string[];
-  /** What the student typed, so the box can be prefilled on a retake. */
-  interestText?: string;
   /** Missing on preferences saved before the Greek life step existed. */
   greek?: GreekInterest | null;
   completedAt: string;

@@ -7,6 +7,7 @@ import type {
   ExperienceId,
   GoalId,
   GreekInterest,
+  GenderId,
   GreekKind,
   WantId,
 } from "./types";
@@ -317,8 +318,21 @@ function toLookup<T extends string>(options: Option<T>[]) {
   >;
 }
 
+/** Last card on the careers question, for a student whose field isn't listed. */
+export const OTHER_CAREER: Option<"other"> = {
+  id: "other",
+  label: "Other",
+  hint: "Something not listed. We'll lean on your major and interests.",
+};
+
+export const GENDER_OPTIONS: Option<GenderId>[] = [
+  { id: "male", label: "Male", hint: "We'll leave out clubs built for women" },
+  { id: "female", label: "Female", hint: "We'll leave out clubs built for men" },
+  { id: "prefer-not", label: "Prefer not to say", hint: "Show me clubs for everyone" },
+];
+
 export const ACADEMIC_AREA_BY_ID = toLookup(ACADEMIC_AREAS);
-export const CAREER_BY_ID = toLookup(CAREERS);
+export const CAREER_BY_ID = toLookup<CareerId | "other">([...CAREERS, OTHER_CAREER]);
 export const GOAL_BY_ID = toLookup(GOALS);
 export const EXPERIENCE_BY_ID = toLookup(EXPERIENCES);
 export const COMMITMENT_BY_ID = toLookup(COMMITMENTS);
@@ -583,6 +597,9 @@ export const GREEK_OPTIONS: Option<GreekInterest>[] = [
 ];
 
 export const GREEK_OPTION_BY_ID = toLookup(GREEK_OPTIONS);
+
+/** What the quiz offers: "either" is only kept for answers saved before. */
+export const GREEK_QUIZ_OPTIONS = GREEK_OPTIONS.filter((o) => o.id !== "either");
 
 /**
  * The quiet metadata line under a card title. Clubs show their first two

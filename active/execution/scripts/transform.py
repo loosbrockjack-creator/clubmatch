@@ -24,7 +24,7 @@ INDEX_OUT = os.path.join(DATA, "clubs-index.json")
 INDEX_FIELDS = [
     "id", "name", "mark", "slug", "college", "tagline", "categories",
     "academicAreas", "openToAllMajors", "careerPaths", "goalsServed",
-    "experienceTypes", "wants", "topics", "audience", "communityTags",
+    "experienceTypes", "wants", "topics", "audience", "communityTags", "genderFocus",
     "commitmentLevel", "freshmenWelcome", "greek",
 ]
 
@@ -442,7 +442,7 @@ def build_best_for(areas, cats, open_to_all, application_required):
 
 TAGS = os.path.join(DATA, "club-tags.json")
 TAG_FIELDS = ["academicAreas", "openToAllMajors", "careerPaths", "wants", "topics",
-              "audience", "communityTags", "commitmentLevel", "categories"]
+              "audience", "communityTags", "commitmentLevel", "categories", "genderFocus"]
 
 WANT_TO_GOAL = {"career": "career", "networking": "networking", "community": "community",
                 "leadership": "leadership", "projects": "hands-on", "competition": "hands-on",
@@ -470,6 +470,7 @@ def apply_tags(built):
             club["topics"] = []
             club["audience"] = "greek"
             club["communityTags"] = []
+            club["genderFocus"] = None
             continue
         if not entry:
             club["wants"] = dedupe([GOAL_TO_WANT[g] for g in club["goalsServed"] if g in GOAL_TO_WANT]
@@ -478,6 +479,7 @@ def apply_tags(built):
             club["topics"] = []
             club["audience"] = "general"
             club["communityTags"] = []
+            club["genderFocus"] = None
             continue
         applied += 1
         for field in TAG_FIELDS:

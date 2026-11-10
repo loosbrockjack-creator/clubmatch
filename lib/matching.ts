@@ -54,6 +54,9 @@ const RESUME_TOPIC_POINTS = [20, 8] as const;
 /** A general club that also serves a community the student opted in to. */
 const COMMUNITY_BONUS = 15;
 
+/** A club built for the student's own gender (a women's team for a woman). */
+const GENDER_BONUS = 10;
+
 /** A club in the area a student's careers point to, when it isn't their own. */
 const NEAR_AREA_SHARE = 0.4;
 
@@ -213,6 +216,24 @@ function hasArea(prefs: Preferences) {
   return areasFor(prefs).length > 0;
 }
 
+/**
+ * A club built for one gender is left out for a student of the other. "Prefer
+ * not to say", and answers saved before the question, see every club.
+ */
+export function genderConflict(prefs: Preferences, club: ClubSummary): boolean {
+  if (!club.genderFocus) return false;
+  if (prefs.gender === "male") return club.genderFocus === "women";
+  if (prefs.gender === "female") return club.genderFocus === "men";
+  return false;
+}
+
+function genderMatches(prefs: Preferences, club: ClubSummary): boolean {
+  return (
+    (prefs.gender === "female" && club.genderFocus === "women") ||
+    (prefs.gender === "male" && club.genderFocus === "men")
+  );
+}
+
 /** The picked areas a club is built for, in the order the student picked them. */
 function hitAreas(prefs: Preferences, club: ClubSummary) {
   return areasFor(prefs).filter((a) => club.academicAreas.includes(a));
@@ -225,6 +246,7 @@ function hitAreas(prefs: Preferences, club: ClubSummary) {
  * Veterinary Medicine gets them.
  */
 export function isRankable(prefs: Preferences, club: ClubSummary): boolean {
+  if (genderConflict(prefs, club)) return false;
   if (RANKED_AUDIENCES.has(club.audience)) return true;
   if (
     club.audience !== "graduate" ||
@@ -302,9 +324,11 @@ function topicPoints(hits: string[], points: readonly number[]) {
 
 /** What a perfect club would score for this student. */
 function denominator(prefs: Preferences) {
+  // "Other" can't match a club, so it must not count against the student.
+  const realCareers = prefs.careers.filter((c) => c !== "other");
   return (
     (hasArea(prefs) ? WEIGHTS.academic : 0) +
-    (prefs.careers.length > 0 ? WEIGHTS.career : 0) +
+    (realCareers.length > 0 ? WEIGHTS.career : 0) +
     WEIGHTS.wants +
     WEIGHTS.commitment
   );
@@ -345,7 +369,7 @@ function buildReasons(prefs: Preferences, club: ClubSummary, parts: Parts): stri
 
   if (parts.topics.length > 0) {
     candidates.push({
-      text: `You're into ${joinWithAnd(parts.topics.slice(0, 2).map(displayTopic))}, and that's what this club does.`,
+      text: `You're into ${joinWithAnd(parts.topics.slice(0, 2))}, and that's what this club does.`,
       weight: 200,
     });
   } else if (parts.resumeTopics.length > 0) {
@@ -488,7 +512,8 @@ export function scoreClub(prefs: Preferences, club: ClubSummary): MatchResult {
     commitment.points +
     topicPoints(topics, TOPIC_POINTS) +
     topicPoints(resumeTopics, RESUME_TOPIC_POINTS) +
-    (communities.length > 0 ? COMMUNITY_BONUS : 0);
+    (communities.length > 0 ? COMMUNITY_BONUS : 0) +
+    (genderMatches(prefs, club) ? GENDER_BONUS : 0);
 
   // A club limited to one major is a poor fit for a student in another.
   if (!club.openToAllMajors && hasArea(prefs) && !academic.hit) total *= 0.5;
@@ -516,11 +541,17 @@ export function scoreClub(prefs: Preferences, club: ClubSummary): MatchResult {
       career,
       wants,
       commitment,
-      topics,
+      topics: topics.map((t) => interestLabelFor(prefs, t)),
       resumeTopics,
       communities,
     }),
   };
+}
+
+/** The interest a student picked that a topic belongs to, else the topic itself. */
+function interestLabelFor(prefs: Preferences, topic: string): string {
+  const pick = (prefs.interests ?? []).find((i) => i.topics.includes(topic));
+  return pick ? pick.label : displayTopic(topic);
 }
 
 /**
@@ -533,9 +564,10 @@ export function scoreForOfficers(prefs: Preferences, club: ClubSummary): number 
   const shared: Preferences = {
     ...prefs,
     communities: [],
+    interests: [],
     topics: [],
     resumeTopics: [],
-    interestText: "",
+    gender: null,
   };
   if (club.greek) return allowedForPrefs(shared, club) ? scoreClub(shared, club).score : 0;
   const result = scoreClub(shared, club);
@@ -664,34 +696,40 @@ export function matchCommunities(
 }
 
 /**
- * The best clubs for each topic the student typed, so a niche interest
- * ("K-pop dance") always gets a visible answer even when career-matched clubs
- * outscore it in the main list.
+ * The best clubs for each interest the student picked, so a niche interest
+ * ("K-pop") always gets a visible answer even when career-matched clubs
+ * outscore it in the main list. Answers saved before interests were picked
+ * from a list fall back to their typed topics.
  */
 export function matchTopics(
   prefs: Preferences,
   perTopic = 2,
   pool: ClubSummary[] = clubs,
 ): { topic: string; results: MatchResult[] }[] {
-  const typed = topicsFor(prefs).slice(0, 3);
-  if (typed.length === 0) return [];
+  const groups =
+    prefs.interests && prefs.interests.length > 0
+      ? prefs.interests.slice(0, 3).map((i) => ({ label: i.label, topics: new Set(i.topics) }))
+      : topicsFor(prefs)
+          .slice(0, 3)
+          .map((t) => ({ label: displayTopic(t), topics: new Set([t]) }));
+  if (groups.length === 0) return [];
   const seed = seedFor(prefs);
   const used = new Set<string>();
   const out: { topic: string; results: MatchResult[] }[] = [];
-  for (const topic of typed) {
+  for (const group of groups) {
     const results = pool
       .filter(
         (club) =>
           !club.greek &&
           isRankable(prefs, club) &&
-          club.topics.some((t) => t.toLowerCase() === topic),
+          club.topics.some((t) => group.topics.has(t.toLowerCase())),
       )
       .map((club) => scoreClub(prefs, club))
       .filter((r) => r.eligible && !used.has(r.club.id))
       .sort((a, b) => b.score - a.score || hash(seed + a.club.slug) - hash(seed + b.club.slug))
       .slice(0, perTopic);
     results.forEach((r) => used.add(r.club.id));
-    if (results.length > 0) out.push({ topic, results });
+    if (results.length > 0) out.push({ topic: group.label, results });
   }
   return out;
 }

@@ -33,22 +33,25 @@ Held as decided, logged rather than changed:
 - **Thin careers are real, not a tagging gap.** Iowa State has 1 accounting, 1 consulting, and 1 real-estate club, and 2 each for cybersecurity and supply chain (checked by name scan). To keep those students from getting 1 result, a club in the area a career points to (accounting -> business) now counts as a weaker match. "Top-10 slots with no major or career match" moved from 0% to 2% because of these near-area matches and typed topics; that is by design.
 - **Identity-focused professional societies** (SWE, NSBE, SHPE) stay in everyone's results, per the tagging spec. Students who opt in to that community get a +15 boost.
 - **Rate limits** are best effort per server instance (40 resumes, 120 text-box, and 120 reasons calls per IP per hour). The Anthropic console spend cap is the real ceiling.
+- **Zero-result students.** About 1% of simulated students are undecided on a major and pick only "Other" for careers. The quiz has nothing specific to match, so they see the "no strong matches" screen (it suggests adding a career or an interest) instead of unrelated clubs.
+- **Before column.** The "Before" numbers use the same simulated students, now including a gender answer and "Other" careers, so they shift slightly between runs.
 
 ## Simulation: 2000 students
 
 | Metric | Before | After |
 |---|---|---|
-| Results per student (median / p10 / p90) | 249 / 145 / 388 | 38 / 16 / 78 |
-| Students with zero results | 0 | 0 |
-| Top-1 score (median) | 89 | 82 |
-| 20th result score (median) | 72 | 55 |
-| Clubs that ever reach a top 10 | 329 | 236 |
-| Most common top-10 club (share of students) | Cardinal Space Mining Club (38%) | Algorithmic Trading Club (25%) |
-| Ties for #1 (median / max) | 1 / 62 | 1 / 42 |
-| Top-10 slots with no major or career match | 51% | 2% |
-| Students shown a faith/culture/identity club they did not ask for (top 20) | 1043 | 0 |
-| Students shown a residence-hall or grad-only club (top 20) | 1245 | 0 |
-| Students shown Ames Furry Club (top 20) | 0 | 0 |
+| Results per student (median / p10 / p90) | 246 / 137 / 392 | 38 / 14 / 77 |
+| Students with zero results | 0 | 25 |
+| Top-1 score (median) | 89 | 83 |
+| 20th result score (median) | 72 | 56 |
+| Clubs that ever reach a top 10 | 341 | 238 |
+| Most common top-10 club (share of students) | Cardinal Space Mining Club (41%) | Algorithmic Trading Club (24%) |
+| Ties for #1 (median / max) | 2 / 362 | 1 / 41 |
+| Top-10 slots with no major or career match | 54% | 2% |
+| Students shown a faith/culture/identity club they did not ask for (top 20) | 1052 | 0 |
+| Students shown a residence-hall or grad-only club (top 20) | 1234 | 0 |
+| Students shown a club built for the other gender (top 20) | 259 | 0 |
+| Students shown Ames Furry Club (top 20) | 1 | 0 |
 
 ## Personas (top 5)
 
@@ -66,7 +69,7 @@ Held as decided, logged rather than changed:
 
 **Agronomy student**
 - Before: Agricultural Marketing and Management Organization (98); Dairy Science Club (98); Natural Resource Ecology and Management Graduate Student Organization (98); Agronomy Graduate Student Club (95); Association of Graduate Animal Scientists (95)
-- After (49 results): Culinary Science Club (91); Agronomy Club (91); Farm Operations Club (91); Iowa Corn Growers Collegiate Club (91); Agricultural Systems Technology Club (91)
+- After (48 results): Culinary Science Club (91); Agronomy Club (91); Farm Operations Club (91); Iowa Corn Growers Collegiate Club (91); Agricultural Systems Technology Club (91)
 
 **Pre-med biology student**
 - Before: Cardinal Key Honor Society (98); Communication Disorders Club (98); Friends of MSF (98); National Organization of Minority Architecture Students (98); Pre-Medical Club (98)
@@ -87,16 +90,40 @@ Held as decided, logged rather than changed:
 
 **Undecided, accounting only**
 - Before: Beta Alpha Psi (82); Advanced Manufacturing Club (71); Advertising Club (71); Aerospace Engineering Graduate Student Organization (71); Agricultural and Rural Policy Studies Club (71)
-- After (6 results): Beta Alpha Psi (97); Collegiate Women in Business (67); Future Business Leaders of America Collegiate (67); Alpha Kappa Psi (67); Delta Sigma Pi (67)
+- After (6 results): Beta Alpha Psi (97); Collegiate Women in Business (67); Delta Sigma Pi (67); Future Business Leaders of America Collegiate (67); Alpha Kappa Psi (67)
 
 **Finance student who typed K-pop dance**
 - Before: Chemical Engineering Graduate Student Organization (98); Entrepreneurial Product Development Club (98); Finance Club (98); Investment Group (98); Real Estate Development Club (98)
 - After (33 results): Finance Club (91); Investment Group (91); The Actuarial Collective (91); Algorithmic Trading Club (91); Beta Alpha Psi (82)
-- Because you mentioned: k-pop: K-pop Club; dance: Bhangra Dance Club, Orchesis II Dance Club
+- Because you mentioned: K-pop: K-pop Club; dance: Bhangra Dance Club, Orchesis II Dance Club
 
 **Finance resume listing volunteering**
 - Before: Chemical Engineering Graduate Student Organization (98); Entrepreneurial Product Development Club (98); Finance Club (98); Investment Group (98); Real Estate Development Club (98)
 - After (29 results): Investment Group (91); Finance Club (91); Algorithmic Trading Club (91); The Actuarial Collective (91); Beta Alpha Psi (82)
+
+**Business + CS double major**
+- Before: Chemical Engineering Graduate Student Organization (88); Data Science Club (88); Entrepreneurial Product Development Club (88); Future Business Leaders of America Collegiate (88); Real Estate Development Club (88)
+- After (45 results): Investment Group (91); AI & ML Club (91); Algorithmic Trading Club (91); Institute of Electrical and Electronics Engineers (89); Developer Group (83)
+
+**Vet Med (DVM) student**
+- Before: Exercise is Medicine On Campus (87); Latinx Veterinary Medical Association (87); Pre-Physician Assistant Club (87); Pre-Veterinary Club (87); Students Helping Rescue Animals (87)
+- After (48 results): Veterinarians as One Inclusive Community for Empowerment (VOICE) (91); Omega Tau Sigma (91); Student Chapter of the Association of Shelter Veterinarians (84); Student American Veterinary Medical Association Chapter (81); CVM Animal Welfare Club (74)
+
+**Male engineer**
+- Before: Alpha Kappa Psi (98); Cardinal Key Honor Society (98); Data Science Club (98); Engineers Without Borders (98); Entrepreneur Club (98)
+- After (68 results): GeoInstitute Student Chapter of ASCE of Ames, Iowa (91); Associated General Contractors of America- Student Chapter (91); Society of Hispanic Professional Engineers (91); American Institute of Chemical Engineers (91); Sales Engineering Club (91)
+
+**Female engineer**
+- Before: Alpha Kappa Psi (98); Cardinal Key Honor Society (98); Data Science Club (98); Engineers Without Borders (98); Entrepreneur Club (98)
+- After (71 results): Society of Women Engineers (98); Digital Women (98); GeoInstitute Student Chapter of ASCE of Ames, Iowa (91); Associated General Contractors of America- Student Chapter (91); Society of Hispanic Professional Engineers (91)
+
+**Prefers not to say, engineer**
+- Before: Alpha Kappa Psi (98); Cardinal Key Honor Society (98); Data Science Club (98); Engineers Without Borders (98); Entrepreneur Club (98)
+- After (71 results): GeoInstitute Student Chapter of ASCE of Ames, Iowa (91); Associated General Contractors of America- Student Chapter (91); Society of Hispanic Professional Engineers (91); American Institute of Chemical Engineers (91); Society of Women Engineers (91)
+
+**Business student, career Other only**
+- Before: Advertising Club (75); Agricultural Business Club (75); Alpha Kappa Psi (75); Cardinal Key Honor Society (75); Chemical Engineering Graduate Student Organization (75)
+- After (29 results): Future Business Leaders of America Collegiate (98); Collegiate Women in Business (98); Delta Sigma Pi (98); Alpha Kappa Psi (98); Healthcare Management Club (98)
 
 **Engineer seeking faith community**
 - Before: 3D Printing and Design (98); American Institute of Aeronautics and Astronautics (98); Associated General Contractors of America- Student Chapter (98); Automotive Design Club (98); BOOST: Sports Engineering Club (98)

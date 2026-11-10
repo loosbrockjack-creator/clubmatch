@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
-import { allowedForPrefs, greekInterest, scoreClub } from "@/lib/matching";
+import { allowedForPrefs, genderConflict, greekInterest, scoreClub } from "@/lib/matching";
 import { COMMUNITY_BY_ID } from "@/lib/taxonomy";
 import { useStoredPreferences } from "@/lib/preferences";
 import type { ClubSummary } from "@/lib/types";
@@ -39,7 +39,9 @@ export function WhyItFits({ club }: { club: ClubSummary }) {
   if (!eligible && !club.greek) {
     const community = club.communityTags[0];
     const message =
-      club.audience === "residence"
+      genderConflict(prefs, club)
+        ? `This club is built for ${club.genderFocus}, so it isn't in your matches.`
+        : club.audience === "residence"
         ? "Residence hall communities aren't part of quiz matches. If you live here, you're already in."
         : club.audience === "graduate"
           ? "This group is for graduate or professional students, so it isn't part of quiz matches."
