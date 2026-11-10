@@ -25,7 +25,11 @@ export function SiteHeader() {
       <div className="h-[3px] bg-gold" />
 
       <div className="border-b border-line">
-        <div className="shell flex h-[68px] items-center justify-between gap-4">
+        <div
+          className={`shell h-[68px] items-center gap-4 ${
+            onMatch ? "flex justify-between" : "flex justify-between sm:grid sm:grid-cols-[1fr_auto_1fr]"
+          }`}
+        >
           <Link
             href="/"
             className="flex items-baseline gap-2.5 text-ink"
@@ -41,7 +45,10 @@ export function SiteHeader() {
 
           {!onMatch && (
             <>
-              <nav className="hidden items-center gap-1 sm:flex">
+              <nav
+                aria-label="Main"
+                className="hidden items-center gap-2 sm:flex"
+              >
                 {links.map((link) => {
                   const active = pathname.startsWith(link.href);
                   return (
@@ -49,25 +56,24 @@ export function SiteHeader() {
                       key={link.href}
                       href={link.href}
                       aria-current={active ? "page" : undefined}
-                      className={`relative px-3 py-2 text-[15px] font-semibold transition-colors after:absolute after:inset-x-3 after:bottom-1 after:h-[2px] after:transition-colors ${
-                        active
-                          ? "text-ink after:bg-cardinal"
-                          : "text-ink-soft after:bg-transparent hover:text-cardinal"
-                      }`}
+                      className="nav-link"
                     >
                       {link.label}
                     </Link>
                   );
                 })}
+              </nav>
+
+              <div className="hidden items-center justify-self-end sm:flex">
+                <AccountMenu />
+                <InboxLink className="mr-3 ml-1" />
                 <Link
                   href="/match"
-                  className="ml-3 inline-flex h-10 items-center rounded-[4px] bg-cardinal px-5 text-[14px] font-semibold text-white transition-colors hover:bg-cardinal-dark"
+                  className="inline-flex h-10 items-center rounded-[4px] bg-cardinal px-5 text-[14px] font-semibold text-white transition-colors hover:bg-cardinal-dark"
                 >
                   Find my clubs
                 </Link>
-                <InboxLink className="ml-2" />
-                <AccountMenu />
-              </nav>
+              </div>
 
               <div className="-mr-2 flex items-center gap-1 sm:hidden">
                 <InboxLink className="h-11 w-11" />

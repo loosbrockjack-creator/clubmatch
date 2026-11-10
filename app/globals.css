@@ -359,6 +359,57 @@
     color: var(--color-gold);
   }
 
+  /* ---- Nav link: line slides in from the left on hover --------------- */
+
+  .nav-link {
+    position: relative;
+    padding: 8px 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    transition: color 160ms var(--ease-out-soft);
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 2px;
+    height: 2px;
+    background: var(--color-cardinal);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 220ms var(--ease-out-soft);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link[aria-current="page"] {
+    color: var(--color-ink);
+  }
+
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .nav-link[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  /* ---- Pill ---------------------------------------------------------- */
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--color-line-strong);
+    background: #ffffff;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+
   /* ---- Eyebrow ------------------------------------------------------- */
 
   .eyebrow {

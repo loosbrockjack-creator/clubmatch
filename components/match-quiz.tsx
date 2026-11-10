@@ -842,7 +842,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
             <h1
               ref={headingRef}
               tabIndex={-1}
-              className="display gold-rule gold-rule-center text-center text-[30px] text-ink outline-none sm:text-[40px]"
+              className="display text-center text-[30px] text-ink outline-none sm:text-[40px]"
             >
               {current.question}
             </h1>

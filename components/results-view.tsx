@@ -196,13 +196,12 @@ export function ResultsView({ ai }: { ai: boolean }) {
     <>
       <div className="border-b border-line bg-muted">
         <div className="shell py-10 sm:py-14">
-          <div className="mx-auto max-w-4xl">
-            <p className="eyebrow">Your results</p>
-            <h1 className="display mt-4 text-[34px] text-cardinal sm:text-[46px]">
-              Your best matches
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="pill">Your results</p>
+            <h1 className="display mt-4 text-[36px] text-ink sm:text-[52px]">
+              Your best <span className="text-cardinal">matches</span>
             </h1>
-            <div className="mt-5 h-1 w-[54px] bg-gold" />
-            <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-ink-soft">
+            <p className="mx-auto mt-5 max-w-xl text-[16px] leading-relaxed text-ink-soft">
               {top.length > 0
                 ? results.length > RESULTS_PAGE
                   ? `${results.length} clubs line up with your answers. Here are the strongest. Fit scores are a guide, not a grade.`
@@ -210,7 +209,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
                 : "Nothing lined up closely with these answers."}
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-2">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
               {answerChips(prefs).map((chip) => (
                 <span key={chip} className="chip">
                   {chip}

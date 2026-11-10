@@ -16,6 +16,7 @@ export default function SavedPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Your shortlist"
         title="Saved clubs"
         intro="Your shortlist. Sign in and it follows you to every device."
       />

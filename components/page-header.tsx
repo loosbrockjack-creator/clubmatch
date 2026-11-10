@@ -9,19 +9,21 @@ import { ChevronRight } from "lucide-react";
 export function PageHeader({
   crumbs = [],
   title,
+  eyebrow,
   intro,
   children,
 }: {
   crumbs?: { href: string; label: string }[];
   title: string;
+  eyebrow?: string;
   intro?: string;
   children?: React.ReactNode;
 }) {
   return (
     <div className="border-b border-line bg-muted">
-      <div className="shell py-10 sm:py-14">
+      <div className="shell py-10 text-center sm:py-14">
         <nav aria-label="Breadcrumb">
-          <ol className="flex flex-wrap items-center gap-1.5 text-[13px] font-medium">
+          <ol className="flex flex-wrap items-center justify-center gap-1.5 text-[13px] font-medium">
             <li>
               <Link href="/" className="link-isu">
                 Home
@@ -54,14 +56,22 @@ export function PageHeader({
           </ol>
         </nav>
 
-        <h1 className="display mt-5 text-[34px] text-cardinal sm:text-[46px]">
+        {eyebrow && (
+          <p className="pill mt-6" role="note">
+            {eyebrow}
+          </p>
+        )}
+
+        <h1
+          className={`display mx-auto max-w-3xl text-[36px] text-ink sm:text-[52px] ${
+            eyebrow ? "mt-4" : "mt-6"
+          }`}
+        >
           {title}
         </h1>
 
-        <div className="mt-5 h-1 w-[54px] bg-gold" />
-
         {intro && (
-          <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-ink-soft">
+          <p className="mx-auto mt-5 max-w-xl text-[16px] leading-relaxed text-ink-soft sm:text-[17px]">
             {intro}
           </p>
         )}
