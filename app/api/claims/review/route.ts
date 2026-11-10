@@ -1,4 +1,5 @@
 import { getClubSummary } from "@/lib/clubs";
+import { activateClub } from "@/lib/club-activate";
 import { sendClaimDecision } from "@/lib/club-alerts";
 import { verifyClaimReview, type ClaimDecision } from "@/lib/claim-review";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
@@ -35,7 +36,7 @@ function page(title: string, inner: string, status = 200) {
 const p = (text: string) =>
   `<p style="margin:0 0 12px;font-size:15px;line-height:1.5;color:#4a4642">${text}</p>`;
 
-type Claim = { id: string; club_slug: string; email: string; role_title: string; note: string | null; status: string };
+type Claim = { id: string; user_id: string; club_slug: string; email: string; role_title: string; note: string | null; status: string };
 
 async function load(id: string, decision: string, sig: string) {
   if (!id || !verifyClaimReview(id, decision, sig)) {
@@ -45,7 +46,7 @@ async function load(id: string, decision: string, sig: string) {
   if (!admin) return { error: page("Not available", p("The database isn't configured."), 503) };
   const { data } = await admin
     .from("club_claims")
-    .select("id, club_slug, email, role_title, note, status")
+    .select("id, user_id, club_slug, email, role_title, note, status")
     .eq("id", id)
     .maybeSingle();
   if (!data) return { error: page("Request not found", p("This claim request no longer exists."), 404) };
@@ -102,20 +103,29 @@ export async function POST(request: Request) {
   if (error) return page("Couldn't save that", p("Try the link again in a minute."), 500);
   if (!updated?.length) return page("Already decided", p("Someone decided this request a moment ago. Nothing changed."));
 
+  const approved = result.decision === "approved";
+  if (approved) {
+    try {
+      await activateClub(admin, claim.club_slug, claim.user_id);
+    } catch (err) {
+      // The claim stays approved, and opening the claim page retries this.
+      console.error("Activation failed:", err instanceof Error ? err.message : "unknown");
+    }
+  }
+
   const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
   await sendClaimDecision({
     to: claim.email,
     clubName,
     decision: result.decision,
-    claimUrl: `${origin}/clubs/${claim.club_slug}/claim`,
+    url: approved ? `${origin}/manage/${claim.club_slug}` : `${origin}/clubs/${claim.club_slug}/claim`,
   });
 
-  const approved = result.decision === "approved";
   return page(
     approved ? "Approved" : "Rejected",
     p(
       approved
-        ? `${escapeHtml(claim.email)} can now pay to claim ${escapeHtml(clubName)}. We emailed them and left a message in their ClubMatch inbox.`
+        ? `${escapeHtml(claim.email)} now runs ${escapeHtml(clubName)}'s page and admin panel. We emailed them and left a message in their ClubMatch inbox.`
         : `We let ${escapeHtml(claim.email)} know, by email and in their ClubMatch inbox.`,
     ),
   );

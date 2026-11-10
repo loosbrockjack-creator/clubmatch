@@ -89,7 +89,7 @@ export function ExploreHighlights() {
             Featured
           </h2>
           <p className="mb-5 mt-2 text-[13.5px] text-ink-muted">
-            Clubs on ClubMatch&apos;s $49 plan, taking turns. It never changes your match scores.
+            Clubs that run their own ClubMatch page, taking turns. It never changes your match scores.
           </p>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredClubs.map((club) => (

@@ -25,7 +25,6 @@ import { MembersTab } from "./tab-members";
 import { LeadsTab } from "./tab-leads";
 import { CampaignsTab } from "./tab-campaigns";
 import { AnalyticsTab } from "./tab-analytics";
-import { BillingTab } from "./tab-billing";
 
 const TABS = [
   { id: "profile", label: "Profile", icon: PencilLine },
@@ -34,7 +33,6 @@ const TABS = [
   { id: "leads", label: "Leads", icon: Sparkles },
   { id: "campaigns", label: "Campaigns", icon: Megaphone },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
-  { id: "billing", label: "Billing", icon: CreditCard },
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
 
@@ -182,7 +180,6 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
         {tab === "leads" && <LeadsTab slug={slug} clubName={clubName} />}
         {tab === "campaigns" && <CampaignsTab slug={slug} />}
         {tab === "analytics" && <AnalyticsTab slug={slug} />}
-        {tab === "billing" && <BillingTab slug={slug} access={current} />}
       </div>
     </>
   );

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import {
   BadgeCheck,
   BarChart3,
@@ -18,7 +17,7 @@ import {
 import { PageHeader } from "@/components/page-header";
 import { useAccount } from "@/lib/account";
 import { apiFetch } from "@/lib/club-client";
-import { CLAIM_PRICE_LABEL, CLAIM_RENEWAL_TEXT, type ClaimState } from "@/lib/club-types";
+import type { ClaimState } from "@/lib/club-types";
 import { LIMITS } from "@/lib/club-validate";
 
 const PERKS = [
@@ -32,48 +31,27 @@ const PERKS = [
   { icon: BadgeCheck, title: "A real roster", body: "Confirm who's actually a member, and add other officers." },
 ];
 
-/** Webhooks usually land in seconds. After this, say so rather than spin forever. */
-const POLL_MS = 2000;
-const POLL_TRIES = 15;
-
 export function ClaimView({ slug, clubName }: { slug: string; clubName: string }) {
   const account = useAccount();
-  const params = useSearchParams();
-  const returned = params.get("status");
-  const session = params.get("session");
   const signedIn = account.status === "signed-in";
 
   const [state, setState] = useState<ClaimState | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [activating, setActivating] = useState(returned === "success");
 
   const load = useCallback(async () => {
-    const query = session ? `?session=${encodeURIComponent(session)}` : "";
-    const { data, error } = await apiFetch<ClaimState>(`/api/clubs/${slug}/claim${query}`);
+    const { data, error } = await apiFetch<ClaimState>(`/api/clubs/${slug}/claim`);
     if (data) {
       setState(data);
       setLoadError(null);
     } else setLoadError(error);
-    return data;
-  }, [slug, session]);
+  }, [slug]);
 
   useEffect(() => {
     if (!signedIn) return;
-    let cancelled = false;
     void (async () => {
-      let current = await load();
-      if (returned !== "success") return;
-      for (let i = 0; i < POLL_TRIES && !cancelled; i++) {
-        if (current?.duplicatePayment || (current?.status === "active" && current.isOfficer)) break;
-        await new Promise((resolve) => setTimeout(resolve, POLL_MS));
-        current = await load();
-      }
-      if (!cancelled) setActivating(false);
+      await load();
     })();
-    return () => {
-      cancelled = true;
-    };
-  }, [signedIn, load, returned]);
+  }, [signedIn, load]);
 
   return (
     <>
@@ -97,22 +75,18 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
             ))}
           </ul>
           <p className="mt-8 max-w-xl text-[13.5px] leading-relaxed text-ink-muted">
-            Paying never changes anyone&apos;s match score. Featured spots are always labeled, and officers
+            Running a page never changes anyone&apos;s match score. Featured spots are always labeled, and officers
             never see a student&apos;s quiz answers.
           </p>
         </section>
 
         <aside className="card px-6 py-7 lg:sticky lg:top-[96px]" aria-live="polite">
-          <p className="flex items-baseline gap-2">
-            <span className="display text-[38px] text-ink">{CLAIM_PRICE_LABEL}</span>
-            <span className="text-[15px] font-medium text-ink-soft">per semester</span>
-          </p>
-          <p className="mt-2 text-[13.5px] leading-relaxed text-ink-muted">
-            {CLAIM_RENEWAL_TEXT} Cancel any time.{" "}
-            <Link href="/terms" className="link-isu">
-              Terms
-            </Link>
-          </p>
+          <p className="text-[17px] font-semibold text-ink">How claiming works</p>
+          <ol className="mt-3 space-y-1.5 text-[14px] leading-relaxed text-ink-soft">
+            <li>1. Sign in and tell us your officer role.</li>
+            <li>2. We confirm you&apos;re an officer, usually within a day.</li>
+            <li>3. Your admin panel turns on and we email you.</li>
+          </ol>
           <div className="mt-6 border-t border-line pt-6">
             {account.status === "loading" ? (
               <div className="skeleton h-12 rounded-[4px]" />
@@ -133,8 +107,6 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
                 clubName={clubName}
                 state={state}
                 email={account.email}
-                returned={returned}
-                activating={activating}
                 onChange={setState}
               />
             )}
@@ -166,51 +138,22 @@ function Step({
   clubName,
   state,
   email,
-  returned,
-  activating,
   onChange,
 }: {
   slug: string;
   clubName: string;
   state: ClaimState;
   email: string | null;
-  returned: string | null;
-  activating: boolean;
   onChange: (next: ClaimState) => void;
 }) {
   const paidUp = state.status === "active" || state.status === "past_due";
-
-  if (state.duplicatePayment) {
-    return (
-      <div data-refund-notice>
-        <p className="text-[15px] font-semibold text-ink">{clubName} was claimed just before you paid.</p>
-        <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
-          Another officer got there first, so we cancelled your subscription and refunded your{" "}
-          {CLAIM_PRICE_LABEL}. It can take a few days to show on your card.
-        </p>
-        {state.isOfficer ? (
-          <Link href={`/manage/${slug}`} className="btn btn-primary mt-4 w-full">
-            Open the admin panel
-          </Link>
-        ) : (
-          <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
-            Ask whoever runs the page to add you as an officer. First tap I&apos;m a member on the club&apos;s page
-            so they can promote you.
-          </p>
-        )}
-        <Link href={`/clubs/${slug}`} className="btn btn-secondary mt-3 w-full">
-          Back to the club
-        </Link>
-      </div>
-    );
-  }
 
   if (paidUp && state.isOfficer) {
     return (
       <>
         <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
           <CheckCircle2 size={18} strokeWidth={2} aria-hidden className="text-cardinal" />
-          {returned === "success" ? `You've claimed ${clubName}.` : "You run this club's page."}
+          You run {clubName}&apos;s page.
         </p>
         <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
           Add your description, photos, and first event from the admin panel.
@@ -218,26 +161,6 @@ function Step({
         <Link href={`/manage/${slug}`} className="btn btn-primary mt-4 w-full">
           Open the admin panel
         </Link>
-      </>
-    );
-  }
-
-  if (returned === "success" && !paidUp) {
-    return activating ? (
-      <>
-        <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
-          <Clock size={18} strokeWidth={2} aria-hidden className="text-ink-muted" />
-          Payment received. Activating your club...
-        </p>
-        <div className="skeleton mt-4 h-2 rounded-full" />
-      </>
-    ) : (
-      <>
-        <p className="text-[15px] font-semibold text-ink">This is taking longer than usual.</p>
-        <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
-          If Stripe took your payment, your club turns on as soon as we hear from them. Refresh in a minute,
-          or email us and we&apos;ll sort it out.
-        </p>
       </>
     );
   }
@@ -259,20 +182,13 @@ function Step({
 
   return (
     <>
-      {returned === "cancelled" && (
-        <p role="status" className="mb-5 rounded-[4px] bg-muted px-3.5 py-3 text-[14px] text-ink-soft">
-          Checkout cancelled. You weren&apos;t charged.
-        </p>
-      )}
       {state.status === "lapsed" && (
         <p className="mb-5 rounded-[4px] bg-gold-tint px-3.5 py-3 text-[14px] leading-relaxed text-ink-soft">
-          This club&apos;s plan has ended, so its page is back to the directory listing. Everything officers
-          added is saved and comes back on renewal.
+          This club&apos;s page was turned off, so it&apos;s back to the directory listing. Everything officers
+          added is saved and comes back once a claim is confirmed.
         </p>
       )}
-      {state.canCheckout ? (
-        <CheckoutStep slug={slug} email={email} renewing={state.status === "lapsed"} />
-      ) : state.claim?.status === "pending" ? (
+      {state.claim?.status === "pending" ? (
         <>
           <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
             <Clock size={18} strokeWidth={2} aria-hidden className="text-ink-muted" />
@@ -284,8 +200,7 @@ function Step({
             <Link href="/inbox" className="link-isu">
               ClubMatch inbox
             </Link>{" "}
-            with the answer. If you&apos;re approved, the payment step appears right here. You won&apos;t be charged
-            before then.
+            with the answer. If you&apos;re approved, your admin panel turns on right away.
           </p>
           <p className="mt-3 text-[13px] text-ink-muted">
             Sent {new Date(state.claim.created_at).toLocaleDateString()} from {email}
@@ -293,46 +208,6 @@ function Step({
         </>
       ) : (
         <RequestStep slug={slug} clubName={clubName} email={email} rejected={state.claim?.status === "rejected"} onChange={onChange} />
-      )}
-    </>
-  );
-}
-
-function CheckoutStep({ slug, email, renewing }: { slug: string; email: string | null; renewing: boolean }) {
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function start() {
-    setBusy(true);
-    setError(null);
-    const { data, error: failure } = await apiFetch<{ url: string }>(`/api/clubs/${slug}/checkout`, {
-      method: "POST",
-    });
-    if (data?.url) {
-      window.location.assign(data.url);
-      return;
-    }
-    setError(failure);
-    setBusy(false);
-  }
-
-  return (
-    <>
-      <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
-        <BadgeCheck size={18} strokeWidth={2} aria-hidden className="text-cardinal" />
-        You&apos;re confirmed as an officer
-      </p>
-      <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">Signed in as {email}.</p>
-      <button type="button" onClick={start} disabled={busy} className="btn btn-primary mt-4 w-full">
-        {busy ? "Opening Stripe..." : renewing ? `Renew for ${CLAIM_PRICE_LABEL}` : `Claim for ${CLAIM_PRICE_LABEL}`}
-      </button>
-      <p className="mt-3 text-[12.5px] leading-relaxed text-ink-muted">
-        Secure checkout by Stripe. {CLAIM_RENEWAL_TEXT}
-      </p>
-      {error && (
-        <p role="alert" className="mt-3 text-[14px] font-medium text-cardinal">
-          {error}
-        </p>
       )}
     </>
   );
@@ -380,7 +255,7 @@ function RequestStep({
       </p>
       <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
         {email} isn&apos;t on our officer list for {clubName}. Send a request and we&apos;ll check it by hand.
-        No charge until you&apos;re approved.
+        
       </p>
       <label htmlFor="claim-role" className="field-label mt-5">
         Your officer role

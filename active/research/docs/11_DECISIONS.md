@@ -494,3 +494,13 @@ only shows a confirm page because mail scanners follow links; the POST updates
 the pending row, the existing trigger posts the inbox message, and Resend
 emails the student. Deciding by hand in the Supabase dashboard still works but
 sends only the inbox message, no email.
+
+## 2026-11-10: No payment step while pricing is undecided
+
+The $49 price is off the site. An approved claim (from the email link, or set
+by hand in Supabase, picked up the next time the officer opens the claim page)
+turns the club on with no period end and makes the claimant an officer
+(`lib/club-activate.ts`). The Billing tab is hidden. Stripe checkout, webhook,
+and billing routes stay in the repo unused for when a price is set. The
+claim-decision inbox message in the database trigger still mentions $49 until
+that function is updated.

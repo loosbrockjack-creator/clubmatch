@@ -146,7 +146,7 @@ export function MembersTab({ slug, clubName }: { slug: string; clubName: string 
       <section>
         <SectionTitle
           title={`Officers (${officers.length})`}
-          intro="Officers can use everything in this panel, including billing. To add one, they tap I'm a member on your page, then you make them an officer."
+          intro="Officers can use everything in this panel. To add one, they tap I'm a member on your page, then you make them an officer."
         />
         <ul className="card px-5">{officers.map(memberRow)}</ul>
       </section>

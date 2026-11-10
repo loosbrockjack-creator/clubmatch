@@ -1,6 +1,7 @@
 import { after } from "next/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { claimReviewUrl } from "@/lib/claim-review";
+import { activateClub } from "@/lib/club-activate";
 import { sendClaimAlert } from "@/lib/club-alerts";
 import { getClubSummary } from "@/lib/clubs";
 import { getStripe } from "@/lib/club-stripe";
@@ -38,6 +39,7 @@ async function claimState(
   user: User,
   slug: string,
   sessionId: string | null = null,
+  activate = true,
 ): Promise<ClaimState> {
   const account = await getAccountRow(admin, slug);
   const status = await clubStatus(admin, slug, account);
@@ -55,13 +57,21 @@ async function claimState(
   ]);
   const claim = (claims?.[0] as ClaimState["claim"]) ?? null;
   const paidUp = status === "active" || status === "past_due";
+  // No payment step while pricing is undecided: a confirmed officer (allowlisted,
+  // approved, or a lapsed officer) gets the club turned on right here. This also
+  // covers claims approved by hand in the Supabase dashboard.
+  const confirmed = Boolean(listed) || claim?.status === "approved" || officer;
+  if (activate && confirmed && !(paidUp && officer)) {
+    await activateClub(admin, slug, user.id);
+    return claimState(admin, user, slug, sessionId, false);
+  }
   const duplicatePayment =
     paidUp && (await lostTheRace(user, slug, sessionId, account?.stripe_subscription_id ?? null));
   return {
     duplicatePayment,
     status,
     isOfficer: officer,
-    canCheckout: !paidUp && (Boolean(listed) || claim?.status === "approved" || officer),
+    canCheckout: false,
     claim,
   };
 }

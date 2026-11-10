@@ -21,8 +21,8 @@ const RULES: { title: string; body: string }[] = [
     body: "Club details come from Iowa State's public directories and our own summaries. They can be out of date, so check a club's own page before you show up. Fit scores are suggestions, not guarantees.",
   },
   {
-    title: "Club plans and payments",
-    body: "Officers can claim a club's page for $49 per semester. The plan renews automatically every 6 months at $49 until you cancel, and payments are handled by Stripe. Cancel any time from Billing in your club's admin panel: the page stays active until the end of the period you paid for. If a plan ends, the page goes back to its directory listing and we keep what you added, so renewing brings it back. Featured spots are always labeled, and paying never changes a student's match scores. Questions about a charge or a refund? Email us.",
+    title: "Claiming a club",
+    body: "Officers can ask to claim their club's page. We confirm each request by hand before the admin panel turns on. If a club's page is turned off, it goes back to its directory listing and we keep what officers added. Featured spots are always labeled, and running a page never changes a student's match scores.",
   },
   {
     title: "Good-fit students and messages",

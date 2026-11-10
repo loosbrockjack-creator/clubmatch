@@ -96,19 +96,20 @@ export async function sendClaimDecision(claim: {
   to: string;
   clubName: string;
   decision: "approved" | "rejected";
-  claimUrl: string;
+  /** The admin panel when approved, the claim page when not. */
+  url: string;
 }) {
   const approved = claim.decision === "approved";
   const subject = approved
     ? `You're approved to claim ${claim.clubName}`
     : `We couldn't confirm your claim for ${claim.clubName}`;
   const body = approved
-    ? `We confirmed you're an officer of ${claim.clubName}. Open the claim page to finish up: $49 per semester, and your club's page and admin panel turn on right away.`
+    ? `We confirmed you're an officer of ${claim.clubName}. Your club's admin panel is ready: add your description, photos, and first event.`
     : `We couldn't confirm you're an officer of ${claim.clubName}, so you weren't charged. If that's a mistake, you can send a new request from the claim page.`;
   const html = layout(
     approved ? "You're approved" : "We couldn't confirm your claim",
     `<p style="margin:0 0 24px;font-size:15px;line-height:1.5;color:#4a4642">${escapeHtml(body)}</p>
-      <p style="margin:0">${button(claim.claimUrl, approved ? "Finish claiming" : "Open the claim page", true)}</p>`,
+      <p style="margin:0">${button(claim.url, approved ? "Open the admin panel" : "Open the claim page", true)}</p>`,
   );
-  await send({ to: claim.to, subject, html, text: `${body}\n\n${claim.claimUrl}` }, "Claim decision email");
+  await send({ to: claim.to, subject, html, text: `${body}\n\n${claim.url}` }, "Claim decision email");
 }

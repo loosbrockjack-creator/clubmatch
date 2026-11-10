@@ -353,7 +353,7 @@ function FeaturedToggle({
       <div>
         <h2 className="text-[15.5px] font-semibold text-ink">Featured on Explore</h2>
         <p className="mt-1 max-w-md text-[14px] leading-relaxed text-ink-soft">
-          Take turns in the labeled Featured row on Explore. Included in your $49 plan. It doesn&apos;t change anyone&apos;s match scores.
+          Take turns in the labeled Featured row on Explore. It doesn&apos;t change anyone&apos;s match scores.
         </p>
         <FormStatus error={error} />
       </div>
