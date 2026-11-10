@@ -81,7 +81,11 @@ export async function POST(request: Request, { params }: Ctx) {
     if (!session.url) return fail(502, "Stripe didn't return a checkout page. Try again.");
     return Response.json({ url: session.url });
   } catch (err) {
-    console.error("Checkout failed:", err instanceof Error ? err.message : "unknown");
-    return fail(502, "Couldn't start checkout. Try again.");
+    // Stripe's error code (never the key or message) goes in the reply, so a
+    // setup problem in production can be named from the page itself.
+    const stripeErr = err as { type?: string; code?: string; param?: string; message?: string };
+    console.error("Checkout failed:", stripeErr.type, stripeErr.code, stripeErr.param, stripeErr.message);
+    const code = [stripeErr.code ?? stripeErr.type, stripeErr.param].filter(Boolean).join(", ");
+    return fail(502, `Couldn't start checkout${code ? ` (${code})` : ""}. Try again.`);
   }
 }
