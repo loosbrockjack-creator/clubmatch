@@ -19,6 +19,7 @@ import { PageHeader } from "@/components/page-header";
 import { useAccount } from "@/lib/account";
 import { apiFetch } from "@/lib/club-client";
 import { CLAIM_PRICE_LABEL, CLAIM_RENEWAL_TEXT, type ClaimState } from "@/lib/club-types";
+import { LIMITS } from "@/lib/club-validate";
 
 const PERKS = [
   { icon: PencilLine, title: "Your own page", body: "Your words, photos, links, and meeting info, with a Verified by officers badge." },
@@ -134,6 +135,7 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
                 email={account.email}
                 returned={returned}
                 activating={activating}
+                onChange={setState}
               />
             )}
           </div>
@@ -166,6 +168,7 @@ function Step({
   email,
   returned,
   activating,
+  onChange,
 }: {
   slug: string;
   clubName: string;
@@ -173,6 +176,7 @@ function Step({
   email: string | null;
   returned: string | null;
   activating: boolean;
+  onChange: (next: ClaimState) => void;
 }) {
   const paidUp = state.status === "active" || state.status === "past_due";
 
@@ -267,23 +271,34 @@ function Step({
         </p>
       )}
       {state.canCheckout ? (
-        <CheckoutStep slug={slug} clubName={clubName} email={email} renewing={state.status === "lapsed"} />
-      ) : null}
+        <CheckoutStep slug={slug} email={email} renewing={state.status === "lapsed"} />
+      ) : state.claim?.status === "pending" ? (
+        <>
+          <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+            <Clock size={18} strokeWidth={2} aria-hidden className="text-ink-muted" />
+            We&apos;re checking your request
+          </p>
+          <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
+            We check each request by hand to confirm you&apos;re an officer of {clubName}. You&apos;ll get a message
+            in your{" "}
+            <Link href="/inbox" className="link-isu">
+              ClubMatch inbox
+            </Link>{" "}
+            with the answer. If you&apos;re approved, the payment step appears right here. You won&apos;t be charged
+            before then.
+          </p>
+          <p className="mt-3 text-[13px] text-ink-muted">
+            Sent {new Date(state.claim.created_at).toLocaleDateString()} from {email}
+          </p>
+        </>
+      ) : (
+        <RequestStep slug={slug} clubName={clubName} email={email} rejected={state.claim?.status === "rejected"} onChange={onChange} />
+      )}
     </>
   );
 }
 
-function CheckoutStep({
-  slug,
-  clubName,
-  email,
-  renewing,
-}: {
-  slug: string;
-  clubName: string;
-  email: string | null;
-  renewing: boolean;
-}) {
+function CheckoutStep({ slug, email, renewing }: { slug: string; email: string | null; renewing: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -303,14 +318,11 @@ function CheckoutStep({
 
   return (
     <>
-      <p className="text-[15px] font-semibold text-ink">
-        {renewing ? `Bring ${clubName}'s page back` : `Run ${clubName} on ClubMatch`}
+      <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+        <BadgeCheck size={18} strokeWidth={2} aria-hidden className="text-cardinal" />
+        You&apos;re confirmed as an officer
       </p>
-      <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
-        For officers of the club. Your page goes live as soon as you pay, and you can add other
-        officers from the admin panel.
-      </p>
-      <p className="mt-2 text-[13px] text-ink-muted">Signed in as {email}</p>
+      <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">Signed in as {email}.</p>
       <button type="button" onClick={start} disabled={busy} className="btn btn-primary mt-4 w-full">
         {busy ? "Opening Stripe..." : renewing ? `Renew for ${CLAIM_PRICE_LABEL}` : `Claim for ${CLAIM_PRICE_LABEL}`}
       </button>
@@ -323,5 +335,84 @@ function CheckoutStep({
         </p>
       )}
     </>
+  );
+}
+
+function RequestStep({
+  slug,
+  clubName,
+  email,
+  rejected,
+  onChange,
+}: {
+  slug: string;
+  clubName: string;
+  email: string | null;
+  rejected: boolean;
+  onChange: (next: ClaimState) => void;
+}) {
+  const [role, setRole] = useState("");
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!role.trim()) {
+      setError("Tell us your officer role.");
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    const { data, error: failure } = await apiFetch<ClaimState>(`/api/clubs/${slug}/claim`, {
+      method: "POST",
+      body: JSON.stringify({ role, note }),
+    });
+    setBusy(false);
+    if (data) onChange(data);
+    else setError(failure);
+  }
+
+  return (
+    <form onSubmit={submit} noValidate>
+      <p className="text-[15px] font-semibold text-ink">
+        {rejected ? "We couldn't confirm your last request" : "We don't have you on file yet"}
+      </p>
+      <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
+        {email} isn&apos;t on our officer list for {clubName}. Send a request and we&apos;ll check it by hand.
+        No charge until you&apos;re approved.
+      </p>
+      <label htmlFor="claim-role" className="field-label mt-5">
+        Your officer role
+      </label>
+      <input
+        id="claim-role"
+        className="field"
+        value={role}
+        maxLength={LIMITS.claimRole}
+        onChange={(event) => setRole(event.target.value)}
+        placeholder="President"
+        aria-invalid={Boolean(error)}
+      />
+      <label htmlFor="claim-note" className="field-label mt-4">
+        Anything that helps us check <span className="font-normal text-ink-muted">(optional)</span>
+      </label>
+      <textarea
+        id="claim-note"
+        className="field h-auto py-3"
+        rows={3}
+        value={note}
+        maxLength={LIMITS.claimNote}
+        onChange={(event) => setNote(event.target.value)}
+      />
+      {error && (
+        <p role="alert" className="mt-3 text-[14px] font-medium text-cardinal">
+          {error}
+        </p>
+      )}
+      <button type="submit" disabled={busy} className="btn btn-primary mt-4 w-full">
+        {busy ? "Sending..." : "Send request"}
+      </button>
+    </form>
   );
 }

@@ -34,8 +34,9 @@ export interface ClubEvent {
 export interface ClaimState {
   status: ClubStatus;
   isOfficer: boolean;
-  /** The club is open to claim (unclaimed or lapsed), so checkout is allowed. */
+  /** Allowed to go straight to checkout: allowlisted, approved, or a lapsed officer. */
   canCheckout: boolean;
+  claim: { status: "pending" | "approved" | "rejected"; created_at: string } | null;
   /** This student's checkout lost a race for the club, so Stripe refunded it. */
   duplicatePayment: boolean;
 }

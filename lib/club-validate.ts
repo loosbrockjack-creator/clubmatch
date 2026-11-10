@@ -13,6 +13,8 @@ export const LIMITS = {
   eventLocation: 160,
   campaignSubject: 120,
   campaignBody: 2000,
+  claimRole: 80,
+  claimNote: 500,
   inviteNote: 200,
 } as const;
 
