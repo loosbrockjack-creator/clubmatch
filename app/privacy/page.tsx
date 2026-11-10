@@ -26,8 +26,9 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
           links), your quiz answers, the clubs you save, and the clubs you say you&apos;re in.
         </p>
         <p>
-          If you upload a resume or LinkedIn PDF to fill in the quiz, it&apos;s read once to pick
-          your answers and then discarded. We never store the file or its text. The upload, what
+          If you upload a resume or LinkedIn PDF, or paste your LinkedIn profile, to fill in the
+          quiz, it&apos;s read once to pick your answers and then discarded. We never store the
+          file or the text. That upload or paste, what
           you type in the &quot;Anything specific?&quot; box, and your answers when we write your
           match reasons are processed by our AI provider, Anthropic, only to do that.
         </p>

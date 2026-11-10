@@ -2,7 +2,15 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, FileText, LoaderCircle, Upload, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ExternalLink,
+  FileText,
+  LoaderCircle,
+  Upload,
+  X,
+} from "lucide-react";
 import { OptionCard } from "@/components/option-card";
 import { clubs } from "@/lib/clubs";
 import { displayTopic, wantsFor } from "@/lib/matching";
@@ -38,6 +46,9 @@ type Draft = Preferences;
 
 const CHAPTER_COUNT = clubs.filter((club) => club.greek).length;
 const MAX_TEXT = 200;
+/** Pasted LinkedIn profile text. Matches the server's limits. */
+const MIN_PASTE = 80;
+const MAX_PASTE = 12_000;
 /** Matches lib/ai.ts: Vercel refuses function bodies over 4.5 MB. */
 const MAX_UPLOAD = 4 * 1024 * 1024;
 
@@ -97,6 +108,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const [edits, setEdits] = useState<Draft | null>(null);
   const [upload, setUpload] = useState<Upload>({ state: "idle" });
   const [mapping, setMapping] = useState(false);
+  const [source, setSource] = useState<"resume" | "linkedin">("resume");
+  const [pasted, setPasted] = useState("");
   const [textFailed, setTextFailed] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -120,6 +133,41 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  /** Both the PDF and the pasted profile come back as the same answers. */
+  async function applyAnswers(res: Response) {
+    const data = (await res.json().catch(() => ({}))) as {
+      error?: string;
+      academicArea?: AcademicAreaId | "undecided";
+      careers?: CareerId[];
+      wants?: WantId[];
+      resumeTopics?: string[];
+      summary?: string;
+    };
+    if (!res.ok || data.error) {
+      setUpload({
+        state: "error",
+        message: data.error ?? "We couldn't read that. Answer the quiz instead.",
+      });
+      return;
+    }
+    setEdits({
+      ...draft,
+      academicArea: data.academicArea ?? draft.academicArea,
+      careers: data.careers?.length ? data.careers : draft.careers,
+      wants: data.wants?.length ? data.wants.slice(0, MAX_WANTS) : wants,
+      resumeTopics: data.resumeTopics ?? [],
+    });
+    setUpload({ state: "done", summary: data.summary ?? "" });
+    setStep(1);
+  }
+
+  function readFailed() {
+    setUpload({
+      state: "error",
+      message: "That took too long or the reader is down. Answer the quiz instead.",
+    });
+  }
+
   async function readResume(file: File) {
     if (file.type && file.type !== "application/pdf") {
       setUpload({ state: "error", message: "That isn't a PDF. Export your resume or LinkedIn profile as a PDF." });
@@ -133,42 +181,87 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     try {
       const form = new FormData();
       form.append("file", file);
-      const res = await fetchWithin("/api/ai/resume", { method: "POST", body: form }, 25_000);
-      const data = (await res.json().catch(() => ({}))) as {
-        error?: string;
-        academicArea?: AcademicAreaId | "undecided";
-        careers?: CareerId[];
-        wants?: WantId[];
-        resumeTopics?: string[];
-        summary?: string;
-      };
-      if (!res.ok || data.error) {
-        setUpload({ state: "error", message: data.error ?? "We couldn't read that file. Answer the quiz instead." });
-        return;
-      }
-      setEdits({
-        ...draft,
-        academicArea: data.academicArea ?? draft.academicArea,
-        careers: data.careers?.length ? data.careers : draft.careers,
-        wants: data.wants?.length ? data.wants.slice(0, MAX_WANTS) : wants,
-        resumeTopics: data.resumeTopics ?? [],
-      });
-      setUpload({ state: "done", summary: data.summary ?? "" });
-      setStep(1);
+      await applyAnswers(await fetchWithin("/api/ai/resume", { method: "POST", body: form }, 25_000));
     } catch {
+      readFailed();
+    }
+  }
+
+  async function readProfileText() {
+    const text = pasted.trim();
+    if (text.length < MIN_PASTE) {
       setUpload({
         state: "error",
-        message: "That took too long or the reader is down. Answer the quiz instead.",
+        message: "Paste a bit more of your profile: your headline, About, and Experience.",
       });
+      return;
+    }
+    setUpload({ state: "reading", name: "your profile" });
+    try {
+      await applyAnswers(
+        await fetchWithin(
+          "/api/ai/resume",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text }),
+          },
+          25_000,
+        ),
+      );
+    } catch {
+      readFailed();
     }
   }
 
   const prefilled = upload.state === "done";
 
+  const reading = upload.state === "reading";
+
+  /** The PDF drop zone, full size for a resume, smaller under the paste box. */
+  const dropZone = (compact: boolean) => (
+    <label
+      htmlFor="resume-file"
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={(event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files?.[0];
+        if (file && !reading) readResume(file);
+      }}
+      className={`flex flex-col items-center justify-center gap-3 rounded-[6px] border border-dashed bg-white text-center transition-colors duration-200 ${
+        compact ? "px-5 py-6" : "px-6 py-10"
+      } ${
+        reading
+          ? "border-cardinal"
+          : "cursor-pointer border-line-strong hover:border-cardinal focus-within:border-cardinal"
+      }`}
+    >
+      {reading ? (
+        <>
+          <LoaderCircle size={24} strokeWidth={1.75} className="animate-spin text-cardinal" aria-hidden />
+          <span className="text-[15px] font-semibold text-ink">Reading {upload.name}</span>
+          <span className="text-[13px] text-ink-muted">This takes a few seconds.</span>
+        </>
+      ) : (
+        <>
+          {!compact && (
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-cardinal-tint text-cardinal">
+              <Upload size={20} strokeWidth={1.75} aria-hidden />
+            </span>
+          )}
+          <span className="text-[15px] font-semibold text-ink">
+            {compact ? "Drop the PDF here or choose it" : "Choose a PDF or drop it here"}
+          </span>
+          <span className="text-[13px] text-ink-muted">Up to 4 MB.</span>
+        </>
+      )}
+    </label>
+  );
+
   const uploadStep = {
-    question: "Start with your resume?",
+    question: "Start with your resume or LinkedIn?",
     subtitle:
-      "Optional. Upload a resume or your LinkedIn profile as a PDF and we'll fill in the quiz for you. We read it once and never store it.",
+      "Optional. We'll read it once to fill in the quiz for you, then throw it away. Nothing is stored.",
     columns: "",
     valid: true,
     render: () => (
@@ -179,50 +272,103 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
           accept="application/pdf,.pdf"
           className="sr-only"
           id="resume-file"
-          disabled={upload.state === "reading"}
+          disabled={reading}
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (file) readResume(file);
             event.target.value = "";
           }}
         />
-        <label
-          htmlFor="resume-file"
-          onDragOver={(event) => event.preventDefault()}
-          onDrop={(event) => {
-            event.preventDefault();
-            const file = event.dataTransfer.files?.[0];
-            if (file && upload.state !== "reading") readResume(file);
-          }}
-          className={`flex flex-col items-center justify-center gap-3 rounded-[6px] border border-dashed bg-white px-6 py-10 text-center transition-colors duration-200 ${
-            upload.state === "reading"
-              ? "border-cardinal"
-              : "cursor-pointer border-line-strong hover:border-cardinal focus-within:border-cardinal"
-          }`}
+
+        <div
+          role="group"
+          aria-label="What to start from"
+          className="mx-auto mb-6 grid w-full max-w-xs grid-cols-2 rounded-[6px] border border-line bg-muted p-1"
         >
-          {upload.state === "reading" ? (
-            <>
-              <LoaderCircle size={26} strokeWidth={1.75} className="animate-spin text-cardinal" aria-hidden />
-              <span className="text-[15px] font-semibold text-ink">Reading {upload.name}</span>
-              <span className="text-[13px] text-ink-muted">This takes a few seconds.</span>
-            </>
-          ) : (
-            <>
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-cardinal-tint text-cardinal">
-                <Upload size={20} strokeWidth={1.75} aria-hidden />
-              </span>
-              <span className="text-[15px] font-semibold text-ink">Choose a PDF or drop it here</span>
-              <span className="text-[13px] text-ink-muted">
-                On LinkedIn: your profile, More, Save to PDF. Up to 4 MB.
-              </span>
-            </>
-          )}
-        </label>
+          {(["resume", "linkedin"] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={source === option}
+              disabled={reading}
+              onClick={() => {
+                setSource(option);
+                if (upload.state === "error") setUpload({ state: "idle" });
+              }}
+              className={`h-9 rounded-[4px] text-[14px] font-semibold transition-colors duration-150 ${
+                source === option ? "bg-white text-ink shadow-sm" : "text-ink-muted hover:text-ink"
+              }`}
+            >
+              {option === "resume" ? "Resume" : "LinkedIn"}
+            </button>
+          ))}
+        </div>
+
+        {source === "resume" ? (
+          dropZone(false)
+        ) : (
+          <div className="space-y-6">
+            <div>
+              <label htmlFor="linkedin-text" className="block text-[15px] font-semibold text-ink">
+                Paste your profile
+              </label>
+              <p id="linkedin-text-hint" className="mt-1 text-[13px] leading-relaxed text-ink-muted">
+                <a
+                  href="https://www.linkedin.com/in/me/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-isu inline-flex items-center gap-1"
+                >
+                  Open your LinkedIn profile
+                  <ExternalLink size={12} strokeWidth={2} aria-hidden />
+                </a>
+                , copy your headline, About, and Experience, and paste them here. Works on your phone too.
+              </p>
+              <textarea
+                id="linkedin-text"
+                aria-describedby="linkedin-text-hint"
+                rows={6}
+                maxLength={MAX_PASTE}
+                value={pasted}
+                disabled={reading}
+                onChange={(event) => setPasted(event.target.value)}
+                placeholder="Finance student at Iowa State. Investment analyst intern..."
+                className="mt-3 w-full resize-y rounded-[4px] border border-line-strong bg-white px-4 py-3 text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:opacity-60"
+              />
+              <div className="mt-3 flex justify-end">
+                <button
+                  type="button"
+                  onClick={readProfileText}
+                  disabled={reading || pasted.trim().length === 0}
+                  className="btn btn-secondary"
+                >
+                  {reading ? (
+                    <>
+                      <LoaderCircle size={16} strokeWidth={2} className="animate-spin" aria-hidden />
+                      Reading
+                    </>
+                  ) : (
+                    "Fill in my answers"
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[15px] font-semibold text-ink">Or save it as a PDF</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-ink-muted">
+                On a computer, open your profile, click Resources (or More), then Save to PDF.
+              </p>
+              <div className="mt-3">{dropZone(true)}</div>
+            </div>
+          </div>
+        )}
+
         <p role="status" aria-live="polite" className="mt-4 min-h-[22px] text-center text-[14px] text-cardinal">
           {upload.state === "error"
             ? upload.message
-            : upload.state === "reading"
-              ? "Reading your file."
+            : reading
+              ? `Reading ${upload.name}.`
               : ""}
         </p>
         <p className="mt-2 text-center text-[13px] text-ink-muted">
@@ -389,7 +535,9 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
               </div>
               {resumeTopics.length > 0 && (
                 <div className="mt-2">
-                  <p className="text-[13px] text-ink-muted">From your resume. Remove any you don&apos;t want clubs for.</p>
+                  <p className="text-[13px] text-ink-muted">
+                    From your {source === "linkedin" ? "profile" : "resume"}. Remove any you don&apos;t want clubs for.
+                  </p>
                   <ul className="mt-2 flex flex-wrap gap-2">
                     {resumeTopics.map((topic) => (
                       <li key={topic}>
@@ -550,7 +698,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
               onClick={() => setStep(0)}
               className="link-isu text-[13px] font-semibold"
             >
-              Start from your resume instead
+              Start from your resume or LinkedIn
             </button>
           ) : (
             <p className="text-[13px] text-ink-muted">About a minute</p>
@@ -579,7 +727,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
             <FileText size={16} strokeWidth={1.75} className="mt-0.5 shrink-0 text-cardinal" aria-hidden />
             <p className="flex-1 text-[14px] leading-relaxed text-ink-soft">
               {upload.summary ? `${upload.summary} ` : ""}
-              We filled in your answers from your resume. Change anything that&apos;s off.
+              We filled in your answers from {source === "linkedin" ? "your profile" : "your resume"}. Change anything that&apos;s off.
             </p>
             <button
               type="button"
