@@ -23,7 +23,7 @@
 },
 "100": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -1431,7 +1431,7 @@
 },
 "1553": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -1544,7 +1544,7 @@
 },
 "1635": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -1718,7 +1718,7 @@
 },
 "1845": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -1769,7 +1769,7 @@
 },
 "1877": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -1956,7 +1956,7 @@
 },
 "1978": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -3103,7 +3103,7 @@
 },
 "287": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -3519,7 +3519,7 @@
 },
 "3224": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -3955,7 +3955,7 @@
 },
 "3358": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [],
@@ -4479,7 +4479,7 @@
 },
 "3465": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [],
@@ -5110,7 +5110,7 @@
 },
 "3589": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [],
@@ -5584,7 +5584,7 @@
 },
 "419": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [],
@@ -5743,7 +5743,7 @@
 },
 "447": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -5992,7 +5992,7 @@
 },
 "513": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6124,7 +6124,7 @@
 },
 "556": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6214,7 +6214,7 @@
 },
 "626": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6391,7 +6391,7 @@
 },
 "67": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6416,7 +6416,7 @@
 },
 "68": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6463,7 +6463,7 @@
 },
 "69": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6526,7 +6526,7 @@
 },
 "70": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6761,7 +6761,7 @@
 },
 "877": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -6785,7 +6785,7 @@
 },
 "887": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -8590,7 +8590,9 @@
 ]
 },
 "cvf": {
-"academicAreas": [],
+"academicAreas": [
+"veterinary"
+],
 "audience": "graduate",
 "careerPaths": [],
 "categories": [
@@ -8614,7 +8616,7 @@
 },
 "cvmags": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [],
@@ -12355,7 +12357,7 @@
 },
 "ots": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -14408,7 +14410,7 @@
 },
 "vbma": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -14458,7 +14460,7 @@
 },
 "voice": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "general",
 "careerPaths": [
@@ -14483,7 +14485,7 @@
 },
 "vphc": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [
@@ -14857,7 +14859,7 @@
 },
 "zew": {
 "academicAreas": [
-"agriculture"
+"veterinary"
 ],
 "audience": "graduate",
 "careerPaths": [

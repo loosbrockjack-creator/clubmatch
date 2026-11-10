@@ -10,7 +10,7 @@ import { FilterRow } from "@/components/filter-row";
 import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
 import { CLUB_COVERS } from "@/lib/photos";
-import { MATCH_THRESHOLD, scoreClub } from "@/lib/matching";
+import { MATCH_THRESHOLD, isRankable, scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
   ACADEMIC_AREAS,
@@ -82,15 +82,13 @@ const CATEGORIES = Array.from(CATEGORY_COUNTS)
 const ALL_CATEGORIES = new Set(CATEGORY_COUNTS.keys());
 const CHIP_ROW_CATEGORIES = new Set(CATEGORIES.map((c) => c.id));
 
-const RANKED_AUDIENCES = new Set(["general", "honor", "governance"]);
-
 /**
  * A fit badge only for clubs that would be in the student's matches. "12% fit"
  * on a club that matches nothing reads as a grade, not a guide. Community
  * clubs are suggested on request, never ranked, so they get no number either.
  */
 function fitBadge(prefs: Preferences, club: ClubSummary): number | undefined {
-  if (club.greek || !RANKED_AUDIENCES.has(club.audience)) return undefined;
+  if (club.greek || !isRankable(prefs, club)) return undefined;
   const result = scoreClub(prefs, club);
   return result.eligible && result.score >= MATCH_THRESHOLD ? result.score : undefined;
 }

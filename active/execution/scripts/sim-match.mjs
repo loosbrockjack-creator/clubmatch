@@ -25,7 +25,7 @@ const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 2 ** 32);
 const pick = (arr) => arr[Math.floor(rand() * arr.length)];
 const sample = (arr, k) => [...arr].sort(() => rand() - 0.5).slice(0, k);
 
-const AREAS = TAX.ACADEMIC_AREAS.map((a) => a.id);
+const AREAS = TAX.ACADEMIC_AREAS.map((a) => a.id).filter((a) => a !== "veterinary");
 const CAREERS = TAX.CAREERS.map((c) => c.id);
 const WANTS = TAX.WANTS.map((w) => w.id);
 const COMMS = TAX.COMMUNITIES.map((c) => c.id);
@@ -65,7 +65,7 @@ const HIDDEN_AUD = new Set(["residence", "graduate"]);
 
 function relevant(prefs, club) {
   return (
-    (prefs.academicArea !== "undecided" && club.academicAreas.includes(prefs.academicArea)) ||
+    TAX.areasFor(prefs).some((a) => club.academicAreas.includes(a)) ||
     prefs.careers.some((c) => club.careerPaths.includes(c))
   );
 }
@@ -137,6 +137,8 @@ const PERSONAS = [
   ["Undecided, accounting only", { academicArea: "undecided", careers: ["accounting"], wants: ["career"], commitment: "moderate" }],
   ["Finance student who typed K-pop dance", { academicArea: "business", careers: ["finance"], wants: ["career"], commitment: "moderate", topics: ["k-pop", "dance"] }],
   ["Finance resume listing volunteering", { academicArea: "business", careers: ["finance"], wants: ["career"], commitment: "moderate", resumeTopics: ["volunteering", "rock climbing"] }],
+  ["Business + CS double major", { academicArea: "business", academicAreas: ["business", "computing"], careers: ["finance", "software"], wants: ["career", "projects"], commitment: "moderate" }],
+  ["Vet Med (DVM) student", { academicArea: "veterinary", academicAreas: ["veterinary"], careers: ["healthcare"], wants: ["community", "service"], commitment: "casual" }],
   ["Engineer seeking faith community", { academicArea: "engineering", careers: ["engineering-design"], wants: ["community"], commitment: "moderate", communities: ["faith"], topics: ["catholic"] }],
 ];
 

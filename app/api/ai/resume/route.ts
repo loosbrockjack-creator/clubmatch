@@ -28,13 +28,13 @@ export const maxDuration = 30;
 const MIN_PASTE_CHARS = 80;
 const MAX_PASTE_CHARS = 12_000;
 
-const AREA_IDS = ["undecided", ...ACADEMIC_AREAS.map((a) => a.id as string)] as [string, ...string[]];
+const AREA_IDS = ACADEMIC_AREAS.map((a) => a.id as string) as [string, ...string[]];
 const CAREER_IDS = CAREERS.map((c) => c.id) as [string, ...string[]];
 const WANT_IDS = WANTS.map((w) => w.id) as [string, ...string[]];
 
 const Answers = z.object({
   isResume: z.boolean(),
-  academicArea: z.enum(AREA_IDS),
+  academicAreas: z.array(z.enum(AREA_IDS)),
   careers: z.array(z.enum(CAREER_IDS)),
   wants: z.array(z.enum(WANT_IDS)),
   topics: z.array(z.string()),
@@ -47,7 +47,7 @@ Rules:
 - Use only what the document says. Do not guess beyond it.
 - Ignore name, contact details, photos, and addresses.
 - Never consider or infer race, ethnicity, religion, gender, sexuality, age, disability, nationality, or immigration status, even if the document mentions them. Those are the student's to share, not ours to infer.
-- academicArea: the area of their major. Map: business (finance, accounting, marketing, management, supply chain, MIS-business), engineering, computing (computer science, software, data science, cybersecurity), agriculture (ag, animal science, agronomy, food science, natural resources, pre-vet), design (architecture, graphic/industrial/interior design, art), liberal-arts (sciences, math, psychology, journalism, humanities, social sciences), human-sciences (kinesiology, nutrition, hospitality, apparel, education, event management). Use "undecided" if no major is clear.
+- academicAreas: up to 3 areas for their major(s) and minor(s), main one first. Map: business (finance, accounting, marketing, management, supply chain, MIS-business), engineering, computing (computer science, software, data science, cybersecurity), agriculture (ag, animal science, agronomy, food science, natural resources, pre-vet), design (architecture, graphic/industrial/interior design, art), liberal-arts (sciences, math, psychology, journalism, humanities, social sciences), human-sciences (kinesiology, nutrition, hospitality, apparel, education, event management), veterinary (the DVM program at the College of Veterinary Medicine). Empty list if no major is clear.
 - careers: up to 3 career areas their experience and stated goals point to, strongest first.
 - wants: up to 3 things they seem to want from a club, judged from their activities (career, networking, community, leadership, projects, competition, academic, service, entrepreneurship).
 - topics: up to 4 hobbies, sports, or specific activities from the document (for example from an Interests or Activities section), chosen ONLY from the vocabulary below, copied exactly. Do not repeat their major or career field here; careers covers that. Empty if none fit.
@@ -121,7 +121,7 @@ export async function POST(request: Request) {
     }
 
     return json({
-      academicArea: out.academicArea,
+      academicAreas: Array.from(new Set(out.academicAreas)).slice(0, 3),
       careers: Array.from(new Set(out.careers)).slice(0, 3),
       wants: Array.from(new Set(out.wants)).slice(0, 3),
       resumeTopics: knownTopics(out.topics).slice(0, 4),

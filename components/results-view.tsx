@@ -26,6 +26,7 @@ import {
   COMMITMENT_BY_ID,
   COMMUNITY_BY_ID,
   GREEK_OPTION_BY_ID,
+  areasFor,
 } from "@/lib/taxonomy";
 import type { CommunityId, Preferences } from "@/lib/types";
 
@@ -37,8 +38,9 @@ function communityCategory(ids: CommunityId[]) {
 function answerChips(prefs: Preferences) {
   const chips: string[] = [];
 
-  if (prefs.academicArea && prefs.academicArea !== "undecided") {
-    chips.push(ACADEMIC_AREA_BY_ID[prefs.academicArea].label);
+  const areas = areasFor(prefs);
+  if (areas.length > 0) {
+    areas.forEach((area) => chips.push(ACADEMIC_AREA_BY_ID[area].label));
   } else if (prefs.academicArea === "undecided") {
     chips.push("Still deciding");
   }

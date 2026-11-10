@@ -6,7 +6,7 @@
  * Only labels are shown, never the taxonomy hints, which were written for the
  * quiz and don't belong on a profile.
  */
-import { ACADEMIC_AREAS, CAREERS, GOALS } from "./taxonomy";
+import { ACADEMIC_AREAS, CAREERS, GOALS, areasFor } from "./taxonomy";
 import type { Preferences } from "./types";
 
 export const MAX_INTERESTS = 12;
@@ -49,7 +49,7 @@ export function knownInterests(ids: readonly string[] | null | undefined): strin
 /** Suggested chips for a student who has quiz answers. */
 export function interestsFromPreferences(prefs: Preferences | null | undefined): string[] {
   if (!prefs) return [];
-  const area = prefs.academicArea && prefs.academicArea !== "undecided" ? [`area:${prefs.academicArea}`] : [];
+  const area = areasFor(prefs).map((a) => `area:${a}`);
   return knownInterests([
     ...area,
     ...(prefs.careers ?? []).map((id) => `career:${id}`),

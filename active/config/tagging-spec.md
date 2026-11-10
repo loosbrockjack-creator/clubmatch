@@ -19,7 +19,7 @@ or a community they opted into).
 ## Fields
 
 ### academicAreas (0 to 2)
-`business`, `engineering`, `computing`, `agriculture`, `design`, `liberal-arts`, `human-sciences`
+`business`, `engineering`, `computing`, `agriculture`, `design`, `liberal-arts`, `human-sciences`, `veterinary`
 - Only when the club exists for students of that academic area (a major society, a discipline club, a pre-professional
   club tied to that college). A rocketry team is `engineering`. A finance club is `business`.
 - A general hobby, sport, culture, faith, or residence club gets `[]` even if some members are engineers.
@@ -28,7 +28,7 @@ or a community they opted into).
   (architecture, landscape arch, graphic/industrial/interior design, art). human-sciences = kinesiology, nutrition,
   hospitality, apparel, education, family studies, event management. liberal-arts = sciences, math, humanities,
   social sciences, journalism, pre-law, psychology. agriculture = ag, animal science, food science, agronomy,
-  ag business, environmental/natural resources, pre-vet. Veterinary Medicine (DVM) clubs: `agriculture`.
+  ag business, environmental/natural resources, pre-vet. Veterinary Medicine (DVM) clubs: `veterinary` (validate_tags.py sets this for every club in the College of Veterinary Medicine). Pre-vet clubs are `agriculture`.
 
 ### openToAllMajors (bool)
 True unless the club restricts membership to a major, program, or college.

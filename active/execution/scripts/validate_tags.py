@@ -17,7 +17,8 @@ OVERRIDES = os.path.join(ROOT, "active/config/tag-overrides.json")
 OUT = os.path.join(ROOT, "data/club-tags.json")
 CLUBS = os.path.join(ROOT, "data/clubs.json")
 
-AREAS = {"business", "engineering", "computing", "agriculture", "design", "liberal-arts", "human-sciences"}
+AREAS = {"business", "engineering", "computing", "agriculture", "design", "liberal-arts", "human-sciences",
+         "veterinary"}
 CAREERS = {"finance", "accounting", "consulting", "marketing", "real-estate", "supply-chain", "software",
            "data-ai", "cybersecurity", "engineering-design", "architecture", "agriculture-food",
            "healthcare", "media-comm", "entrepreneurship"}
@@ -90,6 +91,11 @@ def main():
     for cid, patch in overrides.items():
         if cid in tags:
             tags[cid].update(patch)
+
+    # Every College of Veterinary Medicine club is in the "veterinary" area.
+    vet = {c["id"] for c in json.load(open(CLUBS)) if c.get("college") == "College of Veterinary Medicine"}
+    for cid in vet & set(tags):
+        tags[cid]["academicAreas"] = ["veterinary"]
 
     expected = {c["id"] for c in json.load(open(CLUBS)) if not c.get("greek")}
     missing = expected - set(tags)

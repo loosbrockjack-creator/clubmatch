@@ -21,9 +21,11 @@ import {
   COMMUNITIES,
   FLEXIBLE_OPTION,
   GREEK_OPTIONS,
+  MAX_AREAS,
   MAX_WANTS,
   UNDECIDED_OPTION,
   WANTS,
+  areasFor,
   experiencesFromWants,
   goalsFromWants,
 } from "@/lib/taxonomy";
@@ -118,9 +120,14 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   // Answers from a previous run seed the quiz until the student changes one.
   // Older answers carry goals and experiences; wantsFor merges them.
   const base: Draft = stored ? { ...emptyPreferences, ...stored } : emptyPreferences;
-  const draft: Draft = edits ?? { ...base, wants: wantsFor(base).slice(0, MAX_WANTS) };
+  const draft: Draft = edits ?? {
+    ...base,
+    wants: wantsFor(base).slice(0, MAX_WANTS),
+    academicAreas: areasFor(base),
+  };
   const setDraft = (update: (current: Draft) => Draft) => setEdits(update(draft));
   const wants = draft.wants ?? [];
+  const areas = draft.academicAreas ?? [];
   const communities = draft.communities ?? [];
   const resumeTopics = draft.resumeTopics ?? [];
 
@@ -137,7 +144,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   async function applyAnswers(res: Response) {
     const data = (await res.json().catch(() => ({}))) as {
       error?: string;
-      academicArea?: AcademicAreaId | "undecided";
+      academicAreas?: AcademicAreaId[];
       careers?: CareerId[];
       wants?: WantId[];
       resumeTopics?: string[];
@@ -150,9 +157,11 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       });
       return;
     }
+    const found = (data.academicAreas ?? []).slice(0, MAX_AREAS);
     setEdits({
       ...draft,
-      academicArea: data.academicArea ?? draft.academicArea,
+      academicArea: found[0] ?? draft.academicArea,
+      academicAreas: found.length > 0 ? found : areas,
       careers: data.careers?.length ? data.careers : draft.careers,
       wants: data.wants?.length ? data.wants.slice(0, MAX_WANTS) : wants,
       resumeTopics: data.resumeTopics ?? [],
@@ -382,31 +391,45 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     ...(ai ? [uploadStep] : []),
     {
       question: "What are you studying?",
-      subtitle: "Pick the area closest to your major.",
+      subtitle: `Pick up to ${MAX_AREAS}, like a double major or a minor.`,
       columns: "sm:grid-cols-2",
-      valid: draft.academicArea !== null,
+      valid: areas.length > 0 || draft.academicArea === "undecided",
       render: () => (
         <>
-          {ACADEMIC_AREAS.map((option) => (
-            <OptionCard
-              key={option.id}
-              type="radio"
-              name="academic-area"
-              value={option.id}
-              checked={draft.academicArea === option.id}
-              onChange={() =>
-                setDraft((d) => ({ ...d, academicArea: option.id as AcademicAreaId }))
-              }
-              label={option.label}
-              hint={option.hint}
-            />
-          ))}
+          {ACADEMIC_AREAS.map((option) => {
+            const checked = areas.includes(option.id);
+            return (
+              <OptionCard
+                key={option.id}
+                type="checkbox"
+                name="academic-areas"
+                value={option.id}
+                checked={checked}
+                disabled={!checked && areas.length >= MAX_AREAS}
+                onChange={() =>
+                  setDraft((d) => {
+                    const next = toggle<AcademicAreaId>(d.academicAreas ?? [], option.id);
+                    return { ...d, academicAreas: next, academicArea: next[0] ?? null };
+                  })
+                }
+                label={option.label}
+                hint={option.hint}
+              />
+            );
+          })}
           <OptionCard
-            type="radio"
-            name="academic-area"
+            type="checkbox"
+            name="academic-areas"
             value={UNDECIDED_OPTION.id}
             checked={draft.academicArea === "undecided"}
-            onChange={() => setDraft((d) => ({ ...d, academicArea: "undecided" }))}
+            onChange={() =>
+              // Still deciding is the opposite of picking: it clears the picks.
+              setDraft((d) =>
+                d.academicArea === "undecided"
+                  ? { ...d, academicArea: null }
+                  : { ...d, academicArea: "undecided", academicAreas: [] },
+              )
+            }
             label={UNDECIDED_OPTION.label}
             hint={UNDECIDED_OPTION.hint}
           />
@@ -671,6 +694,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       const finalWants = wants.slice(0, MAX_WANTS);
       savePreferences({
         ...draft,
+        academicArea: areas[0] ?? "undecided",
+        academicAreas: areas,
         wants: finalWants,
         goals: goalsFromWants(finalWants),
         experiences: experiencesFromWants(finalWants),

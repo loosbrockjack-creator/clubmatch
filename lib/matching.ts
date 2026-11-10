@@ -8,6 +8,7 @@ import {
   COMMITMENT_TEXT,
   COMMUNITY_PHRASE,
   WANT_PHRASE,
+  areasFor,
   joinWithAnd,
   wantsFromLegacy,
 } from "./taxonomy";
@@ -209,13 +210,40 @@ export function allowedForPrefs(prefs: Preferences, club: ClubSummary): boolean 
 /* ---- components ---------------------------------------------------------- */
 
 function hasArea(prefs: Preferences) {
-  return Boolean(prefs.academicArea && prefs.academicArea !== "undecided");
+  return areasFor(prefs).length > 0;
+}
+
+/** The picked areas a club is built for, in the order the student picked them. */
+function hitAreas(prefs: Preferences, club: ClubSummary) {
+  return areasFor(prefs).filter((a) => club.academicAreas.includes(a));
+}
+
+/**
+ * Whether a club can be in the main ranked list for this student. Graduate
+ * groups are normally out (an undergrad can't join), but the College of
+ * Veterinary Medicine's clubs are all graduate groups, so a student who picked
+ * Veterinary Medicine gets them.
+ */
+export function isRankable(prefs: Preferences, club: ClubSummary): boolean {
+  if (RANKED_AUDIENCES.has(club.audience)) return true;
+  if (
+    club.audience !== "graduate" ||
+    !club.academicAreas.includes("veterinary") ||
+    !areasFor(prefs).includes("veterinary")
+  ) {
+    return false;
+  }
+  // A vet club built around a faith or culture stays opt-in like any other.
+  return (
+    club.communityTags.length === 0 ||
+    club.communityTags.some((t) => communitiesFor(prefs).includes(t))
+  );
 }
 
 function academicPart(prefs: Preferences, club: ClubSummary) {
   // A club tagged with many areas is general, not built for this one.
   const focus = club.academicAreas.length > 2 ? 0.7 : 1;
-  const hit = hasArea(prefs) && club.academicAreas.includes(prefs.academicArea as never);
+  const hit = hitAreas(prefs, club).length > 0;
   if (hit) return { points: WEIGHTS.academic * focus, hit: true, near: false };
   // Careers point at an area too: an undecided student who wants accounting,
   // or an engineer who wants finance, should see business clubs, a step down.
@@ -309,8 +337,8 @@ function buildReasons(prefs: Preferences, club: ClubSummary, parts: Parts): stri
         weight: 100,
       });
     }
-    const focus = prefs.academicArea ? AFFILIATION_FOR_AREA[prefs.academicArea] : undefined;
-    if (focus && club.greek.affiliations.includes(focus)) {
+    const focus = chapterFocus(prefs, club);
+    if (focus) {
       candidates.push({ text: `${FOCUS_PHRASE[focus]}, which fits your major.`, weight: 90 });
     }
   }
@@ -338,9 +366,11 @@ function buildReasons(prefs: Preferences, club: ClubSummary, parts: Parts): stri
   }
 
   if (parts.academic.hit && hasArea(prefs) && !club.greek) {
-    const label = ACADEMIC_AREA_BY_ID[prefs.academicArea as keyof typeof ACADEMIC_AREA_BY_ID].label;
+    const labels = hitAreas(prefs, club)
+      .slice(0, 2)
+      .map((a) => ACADEMIC_AREA_BY_ID[a].label.toLowerCase());
     candidates.push({
-      text: `Built for ${label.toLowerCase()} students.`,
+      text: `Built for ${joinWithAnd(labels)} students.`,
       weight: parts.academic.points,
     });
   }
@@ -403,6 +433,13 @@ function buildReasons(prefs: Preferences, club: ClubSummary, parts: Parts): stri
 
 /* ---- scoring -------------------------------------------------------------- */
 
+/** The chapter's SFE focus tag, if it lines up with any area the student picked. */
+function chapterFocus(prefs: Preferences, club: ClubSummary): string | undefined {
+  return areasFor(prefs)
+    .map((a) => AFFILIATION_FOR_AREA[a])
+    .find((tag): tag is string => Boolean(tag) && Boolean(club.greek?.affiliations.includes(tag as string)));
+}
+
 function scoreChapter(prefs: Preferences, club: ClubSummary): MatchResult {
   const wants = wantsPart(wantsFor(prefs), club);
   const commitment = commitmentPart(prefs, club);
@@ -414,9 +451,7 @@ function scoreChapter(prefs: Preferences, club: ClubSummary): MatchResult {
       : interest === "either"
         ? GREEK_BONUS.either
         : 0;
-  const focus = prefs.academicArea ? AFFILIATION_FOR_AREA[prefs.academicArea] : undefined;
-  const focusPoints =
-    focus && club.greek?.affiliations.includes(focus) ? GREEK_FOCUS_BONUS : 0;
+  const focusPoints = chapterFocus(prefs, club) ? GREEK_FOCUS_BONUS : 0;
   const total = wants.points + commitment.points + greek + focusPoints;
   const max = WEIGHTS.wants + WEIGHTS.commitment + GREEK_BONUS.exact;
   return {
@@ -467,7 +502,7 @@ export function scoreClub(prefs: Preferences, club: ClubSummary): MatchResult {
     resumeTopics.length > 0;
   const eligible = COMMUNITY_AUDIENCES.has(club.audience)
     ? communities.length > 0
-    : RANKED_AUDIENCES.has(club.audience) && specific;
+    : isRankable(prefs, club) && specific;
 
   const max = denominator(prefs);
   const score = max > 0 ? Math.min(98, Math.round((total / max) * 100)) : 0;
@@ -516,7 +551,7 @@ function hash(input: string): number {
 
 function seedFor(prefs: Preferences) {
   return [
-    prefs.academicArea,
+    ...areasFor(prefs),
     ...wantsFor(prefs),
     ...prefs.careers,
     prefs.commitment,
@@ -538,7 +573,7 @@ function specificity(club: ClubSummary) {
 export function matchClubs(prefs: Preferences, pool: ClubSummary[] = clubs): MatchResult[] {
   const seed = seedFor(prefs);
   const ranked = pool
-    .filter((club) => !club.greek && RANKED_AUDIENCES.has(club.audience))
+    .filter((club) => !club.greek && isRankable(prefs, club))
     .map((club) => scoreClub(prefs, club))
     .filter((result) => result.eligible && result.score >= MATCH_THRESHOLD)
     .sort(
@@ -648,7 +683,7 @@ export function matchTopics(
       .filter(
         (club) =>
           !club.greek &&
-          RANKED_AUDIENCES.has(club.audience) &&
+          isRankable(prefs, club) &&
           club.topics.some((t) => t.toLowerCase() === topic),
       )
       .map((club) => scoreClub(prefs, club))

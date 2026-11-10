@@ -21,8 +21,9 @@ import {
   COMMITMENT_BY_ID,
   COMMITMENT_TEXT,
   WANT_BY_ID,
+  areasFor,
 } from "@/lib/taxonomy";
-import type { Club, Preferences } from "@/lib/types";
+import type { AcademicAreaId, Club, Preferences } from "@/lib/types";
 
 /**
  * One personal "why it fits" line per club on the first page of results.
@@ -57,10 +58,8 @@ Rules:
 const cache = new Map<string, Record<string, string>>();
 
 function studentSummary(prefs: Preferences) {
-  const area =
-    prefs.academicArea && prefs.academicArea !== "undecided"
-      ? ACADEMIC_AREA_BY_ID[prefs.academicArea]?.label
-      : "Still deciding on a major";
+  const picked = areasFor(prefs).map((a) => ACADEMIC_AREA_BY_ID[a]?.label).filter(Boolean);
+  const area = picked.length > 0 ? picked.join(" and ") : "Still deciding on a major";
   const lines = [
     `Studying: ${area}`,
     `Career interests: ${prefs.careers.map((c) => CAREER_BY_ID[c]?.label).filter(Boolean).join(", ") || "none given"}`,
@@ -134,10 +133,8 @@ function cleanPreferences(raw: Preferences): Preferences {
       .filter((v): v is T => typeof v === "string" && Object.hasOwn(known, v))
       .slice(0, max);
   return {
-    academicArea:
-      typeof raw.academicArea === "string" && Object.hasOwn(ACADEMIC_AREA_BY_ID, raw.academicArea)
-        ? raw.academicArea
-        : "undecided",
+    academicArea: "undecided",
+    academicAreas: pick<AcademicAreaId>(raw.academicAreas, ACADEMIC_AREA_BY_ID, 3),
     careers: pick(raw.careers, CAREER_BY_ID, 15),
     wants: pick(raw.wants, WANT_BY_ID, 9),
     goals: [],
@@ -176,7 +173,7 @@ export async function POST(request: Request) {
   const key = createHash("sha256")
     .update(
       JSON.stringify([
-        prefs.academicArea,
+        areasFor(prefs),
         prefs.careers,
         wantsFor(prefs),
         prefs.commitment,

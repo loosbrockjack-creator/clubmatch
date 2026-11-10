@@ -36,7 +36,7 @@ export const ACADEMIC_AREAS: Option<AcademicAreaId>[] = [
   {
     id: "agriculture",
     label: "Agriculture & Life Sciences",
-    hint: "Agronomy, animal science, agribusiness, food science",
+    hint: "Agronomy, animal science, food science, pre-vet",
   },
   {
     id: "design",
@@ -53,7 +53,27 @@ export const ACADEMIC_AREAS: Option<AcademicAreaId>[] = [
     label: "Human Sciences",
     hint: "Education, kinesiology, dietetics, event management",
   },
+  {
+    id: "veterinary",
+    label: "Veterinary Medicine",
+    hint: "The DVM program at the College of Veterinary Medicine",
+  },
 ];
+
+/** Most areas a student can pick: enough for a double major and a minor. */
+export const MAX_AREAS = 3;
+
+/**
+ * The areas a student picked. Reads the new list, falls back to the single
+ * answer saved before multi-select, and is empty for "Still deciding".
+ */
+export function areasFor(prefs: {
+  academicArea: AcademicAreaId | "undecided" | null;
+  academicAreas?: AcademicAreaId[];
+}): AcademicAreaId[] {
+  if (prefs.academicAreas && prefs.academicAreas.length > 0) return prefs.academicAreas;
+  return prefs.academicArea && prefs.academicArea !== "undecided" ? [prefs.academicArea] : [];
+}
 
 export const UNDECIDED_OPTION: Option<"undecided"> = {
   id: "undecided",
@@ -443,6 +463,13 @@ const MAJORS_BY_AREA: Record<AcademicAreaId, string[]> = {
     "Education",
     "Event Management",
     "Apparel Merchandising",
+  ],
+  veterinary: [
+    "Veterinary Medicine (DVM)",
+    "Small Animal Medicine",
+    "Large Animal Medicine",
+    "Wildlife and Exotics",
+    "Shelter Medicine",
   ],
 };
 

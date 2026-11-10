@@ -433,3 +433,19 @@ static, so adding the key in Vercel needs a redeploy to show the AI parts.
 
 **Results:** top 20, then "Show more" in pages of 20. Fit % is kept and
 recalibrated against the best a club could score for that student.
+
+## 2026-11-10: Multi-select areas and Veterinary Medicine
+
+The "What are you studying?" step lets a student pick up to 3 areas (double
+major, minor); "Still deciding" clears the picks. `Preferences.academicAreas`
+holds the list and `academicArea` stays as the first pick, so older answers,
+officer checks, and totals keep working (`areasFor` in `lib/taxonomy.ts` reads
+both). Any picked area counts as a major match.
+
+All 7 Iowa State colleges with student clubs are now covered: Veterinary
+Medicine was missing, so it is a new area. Every College of Veterinary
+Medicine club is tagged `veterinary` (set by `validate_tags.py`). Those clubs
+are graduate groups, normally hidden from quiz results; a student who picks
+Veterinary Medicine gets them (`isRankable`), except vet clubs built around a
+faith or culture, which stay opt-in. The Graduate College's own groups are
+still left out of quiz results.

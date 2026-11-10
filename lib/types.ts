@@ -5,7 +5,8 @@ export type AcademicAreaId =
   | "agriculture"
   | "design"
   | "liberal-arts"
-  | "human-sciences";
+  | "human-sciences"
+  | "veterinary";
 
 export type CareerId =
   | "finance"
@@ -180,7 +181,13 @@ export interface Club extends ClubSummary {
 }
 
 export interface Preferences {
+  /**
+   * The student's main area, or "undecided". Kept (as the first pick of
+   * `academicAreas`) so older answers, officer checks, and totals still work.
+   */
   academicArea: AcademicAreaId | "undecided" | null;
+  /** Everything they picked, up to 3 (a double major, a minor). Missing on older answers. */
+  academicAreas?: AcademicAreaId[];
   /** Legacy: kept in sync from `wants` so saved profiles keep working. */
   goals: GoalId[];
   careers: CareerId[];
