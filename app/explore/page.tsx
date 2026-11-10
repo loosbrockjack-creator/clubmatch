@@ -105,7 +105,6 @@ function ExploreFallback() {
   return (
     <>
       <PageHeader
-        eyebrow="Student organizations"
         title="Explore clubs"
         intro="Every registered student organization at Iowa State. Search by name, major, or career area."
       />
@@ -250,7 +249,6 @@ function ExploreView() {
   return (
     <>
       <PageHeader
-        eyebrow="Student organizations"
         title="Explore clubs"
         intro="Every registered student organization at Iowa State. Search by name, major, or career area."
       >

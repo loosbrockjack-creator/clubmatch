@@ -9,13 +9,11 @@ import { ChevronRight } from "lucide-react";
 export function PageHeader({
   crumbs = [],
   title,
-  eyebrow,
   intro,
   children,
 }: {
   crumbs?: { href: string; label: string }[];
   title: string;
-  eyebrow?: string;
   intro?: string;
   children?: React.ReactNode;
 }) {
@@ -56,16 +54,8 @@ export function PageHeader({
           </ol>
         </nav>
 
-        {eyebrow && (
-          <p className="pill mt-6" role="note">
-            {eyebrow}
-          </p>
-        )}
-
         <h1
-          className={`display mx-auto max-w-3xl text-[36px] text-ink sm:text-[52px] ${
-            eyebrow ? "mt-4" : "mt-6"
-          }`}
+          className="display mx-auto mt-6 max-w-3xl text-[36px] text-ink sm:text-[52px]"
         >
           {title}
         </h1>

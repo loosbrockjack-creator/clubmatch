@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronRight, GraduationCap } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { ClubCard } from "@/components/club-card";
 import { clubs } from "@/lib/clubs";
 import { INTEREST_TILES, homepageArt } from "@/lib/photos";
@@ -88,46 +88,31 @@ export default function LandingPage() {
           />
         </div>
 
-        {/* Paper wash keeps the headline readable over the painting. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 hidden bg-[#f6efe2]/80 sm:block"
-        />
+        <div className="shell flex flex-col justify-center py-14 sm:min-h-[600px] sm:py-28">
+          <div className="max-w-2xl sm:max-w-[41%]">
+            <p className="eyebrow">Iowa State University</p>
+            <h1 className="display mt-5 text-[42px] text-ink sm:text-[56px] lg:text-[64px]">
+              Find the clubs
+              <br />
+              that fit <span className="text-cardinal">you</span>.
+            </h1>
+            <p className="mt-6 max-w-md text-[17px] leading-relaxed text-ink-soft sm:text-[18px]">
+              Iowa State has {clubs.length} student organizations. Tell us what
+              you are studying and what you want out of one, and we will narrow
+              it to the handful worth your time.
+            </p>
 
-        <div className="shell flex flex-col items-center justify-center py-14 text-center sm:min-h-[600px] sm:py-28">
-          <p className="pill">
-            <GraduationCap
-              size={15}
-              strokeWidth={1.75}
-              aria-hidden
-              className="text-cardinal"
-            />
-            Built for Iowa State students
-          </p>
-          <h1 className="display mt-6 max-w-3xl text-[42px] text-ink sm:text-[64px] lg:text-[72px]">
-            Find the clubs
-            <br />
-            that fit <span className="text-cardinal">you</span>.
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl text-[17px] leading-relaxed text-ink-soft sm:text-[18px]">
-            Iowa State has {clubs.length} student organizations. Tell us what
-            you are studying and what you want out of one, and we will narrow
-            it to the handful worth your time.
-          </p>
-
-          <div className="mt-9 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
-            <Link href="/match" className="btn btn-primary w-full sm:w-auto">
-              Find my clubs
-              <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
-            </Link>
-            <Link href="/explore" className="btn btn-secondary w-full sm:w-auto">
-              Browse all clubs
-              <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
-            </Link>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="/match" className="btn btn-primary w-full sm:w-auto">
+                Find my clubs
+                <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
+              </Link>
+              <Link href="/explore" className="btn btn-secondary w-full sm:w-auto">
+                Browse all clubs
+                <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
+              </Link>
+            </div>
           </div>
-          <p className="mt-5 text-[13.5px] text-ink-muted">
-            About a minute. No account needed.
-          </p>
         </div>
 
         <div className="relative aspect-[12/5] sm:hidden">

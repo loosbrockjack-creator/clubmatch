@@ -197,8 +197,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
       <div className="border-b border-line bg-muted">
         <div className="shell py-10 sm:py-14">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="pill">Your results</p>
-            <h1 className="display mt-4 text-[36px] text-ink sm:text-[52px]">
+            <h1 className="display text-[36px] text-ink sm:text-[52px]">
               Your best <span className="text-cardinal">matches</span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-[16px] leading-relaxed text-ink-soft">
