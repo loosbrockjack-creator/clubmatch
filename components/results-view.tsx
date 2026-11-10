@@ -8,7 +8,6 @@ import { ClubCard } from "@/components/club-card";
 import { ClubMark } from "@/components/club-mark";
 import {
   RESULTS_PAGE,
-  buildInvolvementStack,
   communitiesFor,
   displayTopic,
   matchChapters,
@@ -119,7 +118,6 @@ export function ResultsView({ ai }: { ai: boolean }) {
     () => (prefs ? matchClubs(prefs) : []),
     [prefs],
   );
-  const stack = useMemo(() => buildInvolvementStack(results), [results]);
   const chapters = useMemo(() => (prefs ? matchChapters(prefs) : []), [prefs]);
   const byTopic = useMemo(() => {
     if (!prefs) return [];
@@ -257,41 +255,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
           </div>
         ) : (
           <>
-            {stack.length > 0 && (
-              <section>
-                <h2 className="display gold-rule text-[26px] text-ink">
-                  A balanced start
-                </h2>
-                <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">
-                  Three clubs that cover different things, rather than three
-                  versions of the same one.
-                </p>
-                <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                  {stack.map(({ label, note, result }) => (
-                    <Link
-                      key={result.club.id}
-                      href={`/clubs/${result.club.slug}`}
-                      className="card card-interactive flex flex-col border-t-2 border-t-cardinal p-5"
-                    >
-                      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-cardinal">
-                        {label}
-                      </span>
-                      <span className="mt-3 flex items-center gap-3">
-                        <ClubMark mark={result.club.mark} size="sm" />
-                        <span className="text-[15px] font-bold leading-snug tracking-[-0.01em] text-ink">
-                          {result.club.name}
-                        </span>
-                      </span>
-                      <span className="mt-3 text-[13.5px] leading-relaxed text-ink-soft">
-                        {note}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            <section className="mt-14">
+            <section>
               <h2 className="sr-only">Ranked matches</h2>
               <div className="space-y-4">
                 {top.map((result, index) => (
