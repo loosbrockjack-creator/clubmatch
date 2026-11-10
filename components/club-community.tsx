@@ -32,7 +32,7 @@ export function ClubCommunity({
       ) : (
         <section className="mt-14">
           <h2 className="display gold-rule text-[26px] text-ink">Events and news</h2>
-          <div className="card flex flex-col gap-5 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div className="card mt-5 flex flex-col gap-5 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <div className="flex gap-4">
               <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-tint text-gold-deep">
                 <CalendarDays size={20} strokeWidth={1.75} aria-hidden />
