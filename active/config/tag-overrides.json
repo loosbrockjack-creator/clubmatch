@@ -1,0 +1,60 @@
+{
+  "3604": {
+    "audience": "graduate",
+    "note": "Faculty and staff group, not a student club"
+  },
+  "903": {
+    "audience": "graduate",
+    "note": "Faculty and staff group, not a student club"
+  },
+  "1053": {
+    "audience": "graduate",
+    "note": "Members are faculty and staff"
+  },
+  "419": {
+    "audience": "graduate",
+    "note": "Vet Med bookstore, not a member club"
+  },
+  "tpusa": {
+    "audience": "general",
+    "communityTags": [],
+    "categories": [
+      "Leadership & Government"
+    ],
+    "note": "Political organization first"
+  },
+  "isufulbright": {
+    "audience": "international",
+    "communityTags": [
+      "international"
+    ],
+    "note": "Fulbright exchange students are international students",
+    "categories": [
+      "Culture & Identity"
+    ]
+  },
+  "cvf": {
+    "audience": "graduate",
+    "note": "Vet Med only, undergrads cannot join"
+  },
+  "ifc": {
+    "audience": "international",
+    "communityTags": [
+      "international",
+      "faith"
+    ],
+    "note": "Main purpose is serving international students"
+  },
+  "bgsa": {
+    "topics": [
+      "black graduate students",
+      "mentoring"
+    ],
+    "audience": "graduate",
+    "note": "Graduate student association"
+  },
+  "lgsa": {
+    "audience": "graduate",
+    "note": "Serves Latina/o graduate and professional students"
+  }
+}

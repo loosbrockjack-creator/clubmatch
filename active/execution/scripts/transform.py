@@ -24,7 +24,8 @@ INDEX_OUT = os.path.join(DATA, "clubs-index.json")
 INDEX_FIELDS = [
     "id", "name", "mark", "slug", "college", "tagline", "categories",
     "academicAreas", "openToAllMajors", "careerPaths", "goalsServed",
-    "experienceTypes", "commitmentLevel", "freshmenWelcome", "greek",
+    "experienceTypes", "wants", "topics", "audience", "communityTags",
+    "commitmentLevel", "freshmenWelcome", "greek",
 ]
 
 # --- ISU category -> ClubMatch taxonomy -------------------------------------
@@ -434,6 +435,67 @@ def build_best_for(areas, cats, open_to_all, application_required):
     return ""
 
 
+# --- reviewed tags (Smart Match) ---------------------------------------------
+# data/club-tags.json holds tags written from each club's own registry text and
+# reviewed against active/config/tagging-spec.md. When a club has an entry, it
+# replaces the keyword guesses above for every matching and filtering field.
+
+TAGS = os.path.join(DATA, "club-tags.json")
+TAG_FIELDS = ["academicAreas", "openToAllMajors", "careerPaths", "wants", "topics",
+              "audience", "communityTags", "commitmentLevel", "categories"]
+
+WANT_TO_GOAL = {"career": "career", "networking": "networking", "community": "community",
+                "leadership": "leadership", "projects": "hands-on", "competition": "hands-on",
+                "academic": "skills", "entrepreneurship": "entrepreneurship"}
+WANT_TO_EXPERIENCE = {"career": "professional", "networking": "professional",
+                      "projects": "projects", "competition": "competition",
+                      "academic": "academic", "community": "community", "service": "service"}
+GOAL_TO_WANT = {"career": "career", "networking": "networking", "community": "community",
+                "leadership": "leadership", "hands-on": "projects", "skills": "projects",
+                "entrepreneurship": "entrepreneurship"}
+EXPERIENCE_TO_WANT = {"professional": "career", "projects": "projects",
+                      "competition": "competition", "academic": "academic",
+                      "community": "community", "service": "service"}
+
+
+def apply_tags(built):
+    tags = json.load(open(TAGS)) if os.path.exists(TAGS) else {}
+    applied = 0
+    for club in built:
+        entry = tags.get(club["id"])
+        if club.get("greek"):
+            club["wants"] = dedupe([GOAL_TO_WANT[g] for g in club["goalsServed"] if g in GOAL_TO_WANT]
+                                   + [EXPERIENCE_TO_WANT[e] for e in club["experienceTypes"]
+                                      if e in EXPERIENCE_TO_WANT])
+            club["topics"] = []
+            club["audience"] = "greek"
+            club["communityTags"] = []
+            continue
+        if not entry:
+            club["wants"] = dedupe([GOAL_TO_WANT[g] for g in club["goalsServed"] if g in GOAL_TO_WANT]
+                                   + [EXPERIENCE_TO_WANT[e] for e in club["experienceTypes"]
+                                      if e in EXPERIENCE_TO_WANT])
+            club["topics"] = []
+            club["audience"] = "general"
+            club["communityTags"] = []
+            continue
+        applied += 1
+        for field in TAG_FIELDS:
+            club[field] = entry[field]
+        wants = club["wants"]
+        club["goalsServed"] = dedupe([WANT_TO_GOAL[w] for w in wants if w in WANT_TO_GOAL]) or ["community"]
+        club["experienceTypes"] = dedupe([WANT_TO_EXPERIENCE[w] for w in wants if w in WANT_TO_EXPERIENCE]) or ["community"]
+        audience = club["audience"]
+        if audience == "residence":
+            club["bestFor"] = "Students living in this residence hall community."
+        elif audience == "graduate":
+            club["bestFor"] = "Graduate and professional students."
+        else:
+            club["bestFor"] = build_best_for(club["academicAreas"], [], club["openToAllMajors"],
+                                             club["applicationRequired"])
+    return applied
+
+
 # --- main transform ---------------------------------------------------------
 
 def build(rec):
@@ -580,6 +642,8 @@ if __name__ == "__main__":
               f"{len(report['untagged'])} untagged")
         print(f"  created:  {report['created']}")
         print(f"  untagged: {report['untagged']}")
+
+    print(f"tags: {apply_tags(built)} clubs use reviewed tags")
 
     # House style has no em or en dashes, including in quoted registry text.
     # Spaced dashes become commas; a dash inside a number range becomes a hyphen.
