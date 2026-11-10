@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { ClubCard } from "@/components/club-card";
 import { clubs } from "@/lib/clubs";
-import { INTEREST_TILES, photoAlt, photoSrc } from "@/lib/photos";
+import { INTEREST_TILES, homepageArt } from "@/lib/photos";
 import { COUNCILS } from "@/lib/taxonomy";
 
 const steps = [
@@ -54,6 +54,8 @@ export default function LandingPage() {
             .slice(0, FEATURED_SLUGS.length - picked.length),
         ];
 
+  const hero = homepageArt("hero");
+  const quiz = homepageArt("community");
   const chapters = clubs.filter((club) => club.greek);
   const pickedChapters = FEATURED_CHAPTERS.map((slug) =>
     chapters.find((club) => club.slug === slug),
@@ -69,51 +71,60 @@ export default function LandingPage() {
   return (
     <>
       {/* ---- Hero ------------------------------------------------------ */}
-      <section className="relative isolate">
-        <div className="absolute inset-0 -z-10">
+      <section className="relative isolate overflow-hidden bg-[#f6efe2]">
+        {/* Desktop: the painting fills the section, people on the right, quiet
+            paper on the left under the headline. Phone: art sits in its own
+            panel below the text so no face is ever behind copy. */}
+        <div className="absolute inset-0 -z-10 hidden sm:block">
           <Image
-            src={photoSrc("hero")}
-            alt={photoAlt("hero")}
+            src={hero.src}
+            alt={hero.alt}
             fill
             priority
+            quality={90}
             sizes="100vw"
-            className="object-cover object-[42%_35%] sm:object-[50%_35%]"
+            style={{ objectPosition: hero.position }}
+            className="object-cover"
           />
-          {/* A left-weighted gradient keeps the photo readable behind the
-              headline on wide screens. At phone width the text spans the full
-              frame, so it gets a flat scrim instead. */}
-          <div className="absolute inset-0 bg-black/55 sm:hidden" />
-          <div className="absolute inset-0 hidden bg-gradient-to-r from-black/80 via-black/55 to-black/20 sm:block" />
         </div>
 
-        <div className="on-cardinal shell flex min-h-[520px] flex-col justify-center py-20 sm:min-h-[600px] sm:py-28">
-          <div className="max-w-2xl">
-            <p className="eyebrow text-gold">Iowa State University</p>
-            <h1 className="display mt-5 text-[42px] text-white sm:text-[64px]">
+        <div className="shell flex flex-col justify-center py-14 sm:min-h-[600px] sm:py-28">
+          <div className="max-w-2xl sm:max-w-[41%]">
+            <p className="eyebrow">Iowa State University</p>
+            <h1 className="display mt-5 text-[42px] text-ink sm:text-[56px] lg:text-[64px]">
               Find the clubs
               <br />
-              that fit <span className="text-gold">you</span>.
+              that fit <span className="text-cardinal">you</span>.
             </h1>
-            <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-white/90 sm:text-[18px]">
+            <p className="mt-6 max-w-md text-[17px] leading-relaxed text-ink-soft sm:text-[18px]">
               Iowa State has {clubs.length} student organizations. Tell us what
               you are studying and what you want out of one, and we will narrow
               it to the handful worth your time.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/match" className="btn btn-on-cardinal w-full sm:w-auto">
+              <Link href="/match" className="btn btn-primary w-full sm:w-auto">
                 Find my clubs
                 <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
               </Link>
-              <Link
-                href="/explore"
-                className="btn btn-ghost-on-cardinal w-full sm:w-auto"
-              >
+              <Link href="/explore" className="btn btn-secondary w-full sm:w-auto">
                 Browse all clubs
                 <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
               </Link>
             </div>
           </div>
+        </div>
+
+        <div className="relative aspect-[12/5] sm:hidden">
+          <Image
+            src={hero.src}
+            alt={hero.alt}
+            fill
+            quality={90}
+            sizes="100vw"
+            style={{ objectPosition: hero.position }}
+            className="object-cover"
+          />
         </div>
       </section>
 
@@ -138,10 +149,12 @@ export default function LandingPage() {
             >
               <div className="tile-image relative aspect-[4/3]">
                 <Image
-                  src={photoSrc(tile.photo)}
-                  alt={photoAlt(tile.photo)}
+                  src={homepageArt(tile.photo).src}
+                  alt={homepageArt(tile.photo).alt}
                   fill
+                  quality={90}
                   sizes="(min-width: 1024px) 280px, 45vw"
+                  style={{ objectPosition: homepageArt(tile.photo).position }}
                   className="object-cover"
                 />
               </div>
@@ -233,10 +246,12 @@ export default function LandingPage() {
 
           <div className="relative hidden aspect-[4/3] lg:col-span-8 lg:col-start-5 lg:row-start-1 lg:block lg:aspect-[16/10]">
             <Image
-              src={photoSrc("community")}
-              alt={photoAlt("community")}
+              src={quiz.src}
+              alt={quiz.alt}
               fill
+              quality={90}
               sizes="(min-width: 1024px) 60vw, 100vw"
+              style={{ objectPosition: quiz.position }}
               className="object-cover"
             />
           </div>

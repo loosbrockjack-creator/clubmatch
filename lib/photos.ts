@@ -138,6 +138,106 @@ function hash(input: string): number {
   return h >>> 0;
 }
 
+/**
+ * Watercolor art for the landing page only (hero, eight interest tiles, quiz
+ * panel). Kept separate from the category pools above, which other surfaces
+ * still use. Files live in public/artwork/homepage.
+ */
+export type HomepageArt = "hero" | "community" | HomepageTileKey;
+type HomepageTileKey =
+  | "engineering"
+  | "business"
+  | "agriculture"
+  | "design"
+  | "service"
+  | "culture"
+  | "music"
+  | "sports";
+
+const HOMEPAGE_ART: Record<
+  HomepageArt,
+  { src: string; alt: string; position: string }
+> = {
+  hero: {
+    src: "/artwork/homepage/hero/homepage-hero-campus-community.png",
+    alt: "Illustration of students welcoming a peer on a spring Iowa State campus path.",
+    position: "74% 58%",
+  },
+  engineering: {
+    src: "/artwork/homepage/categories/homepage-category-engineering.png",
+    alt: "Watercolor illustration of students testing a small engineering prototype.",
+    position: "50% 58%",
+  },
+  business: {
+    src: "/artwork/homepage/categories/homepage-category-business.png",
+    alt: "Watercolor illustration of students discussing business research outside Gerdin.",
+    position: "52% 52%",
+  },
+  agriculture: {
+    src: "/artwork/homepage/categories/homepage-category-agriculture.png",
+    alt: "Watercolor illustration of students comparing seedlings beside garden beds.",
+    position: "52% 58%",
+  },
+  design: {
+    src: "/artwork/homepage/categories/homepage-category-design.png",
+    alt: "Watercolor illustration of students developing a clay piece and design model.",
+    position: "50% 58%",
+  },
+  service: {
+    src: "/artwork/homepage/categories/homepage-category-service.png",
+    alt: "Watercolor illustration of students volunteering together on an autumn campus path.",
+    position: "50% 55%",
+  },
+  culture: {
+    src: "/artwork/homepage/categories/homepage-category-culture.png",
+    alt: "Watercolor illustration of students sharing stories and crafts at a cultural exchange.",
+    position: "50% 55%",
+  },
+  music: {
+    src: "/artwork/homepage/categories/homepage-category-music.png",
+    alt: "Watercolor illustration of students rehearsing acoustic music and singing.",
+    position: "50% 54%",
+  },
+  sports: {
+    src: "/artwork/homepage/categories/homepage-category-sports.png",
+    alt: "Watercolor illustration of students practicing volleyball on a campus lawn.",
+    position: "52% 55%",
+  },
+  community: {
+    src: "/artwork/homepage/quiz/homepage-quiz-find-your-community.png",
+    alt: "Watercolor illustration of students welcoming a peer into a campus lounge conversation.",
+    position: "68% 52%",
+  },
+};
+
+export function homepageArt(key: HomepageArt) {
+  return HOMEPAGE_ART[key];
+}
+
+/**
+ * Name-and-letters identity cards for the Greek and interest-group listings
+ * that have no photo of their own (ClubMatch artwork, not official logos).
+ * Keyed by runtime slug. A real chapter photo always wins over these.
+ */
+const GREEK_IDENTITY: Record<string, { src: string; alt: string }> = Object.fromEntries(
+  [
+    ["alpha-phi-alpha-fraternity-inc", "Alpha Phi Alpha Fraternity, Inc."],
+    ["catalyst-interest-group", "Catalyst"],
+    ["delta-sigma-theta-sorority-inc-phi-chapter", "Delta Sigma Theta Sorority, Inc."],
+    ["lambda-theta-nu-sorority-incorporated", "Lambda Theta Nu"],
+    ["lambda-theta-phi-latin-fraternity-inc", "Lambda Theta Phi Latin Fraternity, Inc."],
+    ["omega-psi-phi-fraternity-inc", "Omega Psi Phi Fraternity, Inc."],
+    ["sigma-nu", "Sigma Nu"],
+    ["zeta-psi", "Zeta Psi"],
+  ].map(([slug, name]) => [
+    slug,
+    {
+      src: `/artwork/greek-identity/greek-fallback-${slug}.png`,
+      alt: `ClubMatch identity artwork for ${name}`,
+    },
+  ]),
+);
+
 export function photoSrc(key: PhotoKey, variant = 1): string {
   return variant <= 1 ? `/photos/${key}.jpg` : `/photos/${key}-${variant}.jpg`;
 }
@@ -183,6 +283,8 @@ export function photoForClub(club: {
   alt: string;
   own: boolean;
   quality: number;
+  /** "identity" is typeset name artwork: no photo gradient, never a chapter photo. */
+  kind: "cover" | "photo" | "identity" | "stock";
 } {
   if (CLUB_COVER_SET.has(club.slug)) {
     return {
@@ -194,6 +296,7 @@ export function photoForClub(club: {
       // Watercolor wash and paper grain break up badly at Next's default 75,
       // so covers are served at 90 (allowed in next.config.ts images.qualities).
       quality: 90,
+      kind: "cover",
     };
   }
   // Greek chapters use the photo they posted on their SFE page. Chapters
@@ -207,6 +310,19 @@ export function photoForClub(club: {
       alt: club.name ? `${club.name} at Iowa State` : "Chapter photo",
       own: true,
       quality: 75,
+      kind: "photo",
+    };
+  }
+  const identity = GREEK_IDENTITY[club.slug];
+  if (identity) {
+    return {
+      key: "community",
+      variant: 0,
+      src: identity.src,
+      alt: identity.alt,
+      own: false,
+      quality: 90,
+      kind: "identity",
     };
   }
   const key = club.greek ? "community" : keyForClub(club);
@@ -219,6 +335,7 @@ export function photoForClub(club: {
     alt: photoAlt(key),
     own: false,
     quality: 75,
+    kind: "stock",
   };
 }
 
@@ -229,7 +346,7 @@ export function photoForClub(club: {
 export const INTEREST_TILES: {
   category: string;
   label: string;
-  photo: PhotoKey;
+  photo: HomepageTileKey;
 }[] = [
   { category: "Engineering", label: "Engineering", photo: "engineering" },
   { category: "Business", label: "Business", photo: "business" },
