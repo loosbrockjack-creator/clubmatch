@@ -1,5 +1,5 @@
 import { getClubSummary } from "@/lib/clubs";
-import { allowedForPrefs, MATCH_THRESHOLD, scoreClub } from "@/lib/matching";
+import { allowedForPrefs, MATCH_THRESHOLD, scoreForOfficers } from "@/lib/matching";
 import { fail, readJson, requireOfficer } from "@/lib/club-server";
 import { INVITE_DAILY_LIMIT } from "@/lib/club-types";
 import { cleanText, LIMITS } from "@/lib/club-validate";
@@ -41,7 +41,7 @@ export async function POST(request: Request, { params }: Ctx) {
     Boolean(answers?.academicArea) &&
     answers !== null &&
     allowedForPrefs(answers, club) &&
-    scoreClub(answers, club).score >= MATCH_THRESHOLD;
+    scoreForOfficers(answers, club) >= MATCH_THRESHOLD;
   if (!fits) return fail(404, NOT_ELIGIBLE);
 
   const message = [

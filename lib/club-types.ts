@@ -101,7 +101,7 @@ export const CAMPAIGN_DAILY_LIMIT = 2;
 export const CAMPAIGN_WEEKLY_LIMIT = 5;
 
 /** How many ranked matches Results shows, and so what counts as showing up in them. */
-export const RESULT_LIMIT = 9;
+export const RESULT_LIMIT = 20;
 
 export const ACTIVITY_KINDS = ["impression", "view", "save", "interested", "lead", "join"] as const;
 export type ActivityKind = (typeof ACTIVITY_KINDS)[number];

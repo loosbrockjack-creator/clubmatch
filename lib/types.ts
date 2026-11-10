@@ -43,6 +43,45 @@ export type ExperienceId =
 
 export type CommitmentId = "casual" | "moderate" | "involved" | "high";
 
+/**
+ * What a student wants from a club. The quiz used to ask this as two
+ * overlapping questions (goals and experience); this one list replaces both.
+ */
+export type WantId =
+  | "career"
+  | "networking"
+  | "community"
+  | "leadership"
+  | "projects"
+  | "competition"
+  | "academic"
+  | "service"
+  | "entrepreneurship";
+
+/**
+ * Communities a student can opt in to. Nobody is asked who they are; clubs
+ * built around a faith, culture, or identity only show up for students who
+ * ask for that kind of community.
+ */
+export type CommunityId =
+  | "faith"
+  | "culture-heritage"
+  | "international"
+  | "lgbtq"
+  | "women-in-field";
+
+/** Who a club is for. Drives which clubs the quiz can recommend at all. */
+export type Audience =
+  | "general"
+  | "identity"
+  | "faith"
+  | "international"
+  | "residence"
+  | "graduate"
+  | "honor"
+  | "governance"
+  | "greek";
+
 /** Iowa State's four Greek governing councils. */
 export type CouncilId = "cpc" | "ifc" | "mgc" | "nphc";
 
@@ -106,8 +145,15 @@ export interface ClubSummary {
   academicAreas: AcademicAreaId[];
   openToAllMajors: boolean;
   careerPaths: CareerId[];
+  /** Derived from `wants`; kept for profile interests and older code paths. */
   goalsServed: GoalId[];
+  /** Derived from `wants`; kept for older code paths. */
   experienceTypes: ExperienceId[];
+  wants: WantId[];
+  /** Short lowercase keywords a student might type ("rock climbing"). */
+  topics: string[];
+  audience: Audience;
+  communityTags: CommunityId[];
   commitmentLevel: CommitmentId;
   freshmenWelcome: boolean;
   greek?: GreekSummary;
@@ -135,10 +181,22 @@ export interface Club extends ClubSummary {
 
 export interface Preferences {
   academicArea: AcademicAreaId | "undecided" | null;
+  /** Legacy: kept in sync from `wants` so saved profiles keep working. */
   goals: GoalId[];
   careers: CareerId[];
   commitment: CommitmentId | "flexible" | null;
+  /** Legacy: kept in sync from `wants`. */
   experiences: ExperienceId[];
+  /** Missing on answers saved before the merged question existed. */
+  wants?: WantId[];
+  /** Opt-in communities. Missing or empty means none. */
+  communities?: CommunityId[];
+  /** Topic keywords matched from the "Anything specific?" box. */
+  topics?: string[];
+  /** Topic keywords read from an uploaded resume. Weaker than typed ones. */
+  resumeTopics?: string[];
+  /** What the student typed, so the box can be prefilled on a retake. */
+  interestText?: string;
   /** Missing on preferences saved before the Greek life step existed. */
   greek?: GreekInterest | null;
   completedAt: string;
@@ -148,4 +206,6 @@ export interface MatchResult {
   club: ClubSummary;
   score: number;
   reasons: string[];
+  /** False when the club matched nothing specific or is opt-in only. */
+  eligible: boolean;
 }

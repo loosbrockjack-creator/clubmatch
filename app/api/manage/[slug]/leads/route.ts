@@ -1,6 +1,6 @@
 import { getClubSummary } from "@/lib/clubs";
 import { whyFit } from "@/lib/club-leads";
-import { allowedForPrefs, MATCH_THRESHOLD, scoreClub } from "@/lib/matching";
+import { allowedForPrefs, MATCH_THRESHOLD, scoreForOfficers } from "@/lib/matching";
 import {
   LEAD_COLUMNS,
   publicProfiles,
@@ -58,7 +58,7 @@ export async function GET(request: Request, { params }: Ctx) {
       for (const student of candidates) {
         const answers = prefs.get(student.id);
         if (!answers?.academicArea || !allowedForPrefs(answers, club)) continue;
-        const match = scoreClub(answers, club).score;
+        const match = scoreForOfficers(answers, club);
         if (match >= MATCH_THRESHOLD) {
           goodFit.push({
             ...toLead(student),

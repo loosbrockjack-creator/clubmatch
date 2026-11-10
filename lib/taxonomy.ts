@@ -2,11 +2,13 @@ import type {
   AcademicAreaId,
   CareerId,
   CommitmentId,
+  CommunityId,
   CouncilId,
   ExperienceId,
   GoalId,
   GreekInterest,
   GreekKind,
+  WantId,
 } from "./types";
 
 export interface Option<T extends string> {
@@ -206,10 +208,74 @@ export const COMMITMENTS: Option<CommitmentId>[] = [
   },
   {
     id: "high",
-    label: "As much as it takes",
+    label: "More than 8 hours a week",
     hint: "Competition teams and big projects",
   },
 ];
+
+/** The merged "What do you want from a club?" question. Pick up to three. */
+export const WANTS: Option<WantId>[] = [
+  { id: "career", label: "Career and resume", hint: "Recruiting, skills employers notice" },
+  { id: "networking", label: "Meet people in my field", hint: "Peers, alumni, professionals" },
+  { id: "community", label: "Friends and community", hint: "People to hang out with" },
+  { id: "projects", label: "Build things", hint: "Hands-on projects you can show" },
+  { id: "competition", label: "Compete", hint: "Teams that take on other schools" },
+  { id: "leadership", label: "Lead something", hint: "Run events, hold an officer role" },
+  { id: "academic", label: "Go deeper in my subject", hint: "Research, talks, study" },
+  { id: "service", label: "Give back", hint: "Volunteering and outreach" },
+  { id: "entrepreneurship", label: "Start something", hint: "Ventures and side projects" },
+];
+
+export const MAX_WANTS = 3;
+
+export const WANT_PHRASE: Record<WantId, string> = {
+  career: "building your career",
+  networking: "meeting people in your field",
+  community: "finding your people",
+  projects: "building things",
+  competition: "competing",
+  leadership: "leading",
+  academic: "going deeper in your subject",
+  service: "giving back",
+  entrepreneurship: "starting something",
+};
+
+/** Optional, opt-in. Never asks who the student is, only what they want to find. */
+export const COMMUNITIES: Option<CommunityId>[] = [
+  { id: "faith", label: "Faith and spirituality", hint: "Worship, study, fellowship" },
+  { id: "culture-heritage", label: "Culture and heritage", hint: "Cultural and heritage associations" },
+  { id: "international", label: "International students", hint: "Support and community" },
+  { id: "lgbtq", label: "LGBTQ+ community", hint: "Groups and allies" },
+  { id: "women-in-field", label: "Women in my field", hint: "Professional groups for women" },
+];
+
+export const COMMUNITY_PHRASE: Record<CommunityId, string> = {
+  faith: "a faith community",
+  "culture-heritage": "a cultural community",
+  international: "an international student community",
+  lgbtq: "an LGBTQ+ community",
+  "women-in-field": "women in your field",
+};
+
+/** Explore filter categories, in display order. Chapters keep their own two. */
+export const CATEGORY_SET = [
+  "Business",
+  "Engineering",
+  "Computing & Data",
+  "Agriculture & Life Sciences",
+  "Design & Arts",
+  "Health & Pre-Professional",
+  "Liberal Arts & Sciences",
+  "Media & Communication",
+  "Service & Volunteering",
+  "Leadership & Government",
+  "Sports & Recreation",
+  "Performing Arts & Music",
+  "Culture & Identity",
+  "Faith & Spirituality",
+  "Hobbies & Special Interest",
+  "Residence Life",
+] as const;
 
 export const FLEXIBLE_OPTION: Option<"flexible"> = {
   id: "flexible",
@@ -236,6 +302,65 @@ export const CAREER_BY_ID = toLookup(CAREERS);
 export const GOAL_BY_ID = toLookup(GOALS);
 export const EXPERIENCE_BY_ID = toLookup(EXPERIENCES);
 export const COMMITMENT_BY_ID = toLookup(COMMITMENTS);
+export const WANT_BY_ID = toLookup(WANTS);
+export const COMMUNITY_BY_ID = toLookup(COMMUNITIES);
+
+/** Old two-question answers onto the merged list, for answers saved before it. */
+const GOAL_TO_WANT: Record<GoalId, WantId> = {
+  career: "career",
+  networking: "networking",
+  community: "community",
+  leadership: "leadership",
+  "hands-on": "projects",
+  skills: "projects",
+  entrepreneurship: "entrepreneurship",
+};
+const EXPERIENCE_TO_WANT: Record<ExperienceId, WantId> = {
+  professional: "career",
+  projects: "projects",
+  competition: "competition",
+  academic: "academic",
+  community: "community",
+  service: "service",
+};
+const WANT_TO_GOAL: Partial<Record<WantId, GoalId>> = {
+  career: "career",
+  networking: "networking",
+  community: "community",
+  leadership: "leadership",
+  projects: "hands-on",
+  competition: "hands-on",
+  academic: "skills",
+  entrepreneurship: "entrepreneurship",
+};
+const WANT_TO_EXPERIENCE: Partial<Record<WantId, ExperienceId>> = {
+  career: "professional",
+  networking: "professional",
+  projects: "projects",
+  competition: "competition",
+  academic: "academic",
+  community: "community",
+  service: "service",
+};
+
+function unique<T>(items: (T | undefined)[]): T[] {
+  return Array.from(new Set(items.filter((i): i is T => i !== undefined)));
+}
+
+export function wantsFromLegacy(goals: GoalId[], experiences: ExperienceId[]): WantId[] {
+  return unique([
+    ...goals.map((g) => GOAL_TO_WANT[g]),
+    ...experiences.map((e) => EXPERIENCE_TO_WANT[e]),
+  ]);
+}
+
+export function goalsFromWants(wants: WantId[]): GoalId[] {
+  return unique(wants.map((w) => WANT_TO_GOAL[w]));
+}
+
+export function experiencesFromWants(wants: WantId[]): ExperienceId[] {
+  return unique(wants.map((w) => WANT_TO_EXPERIENCE[w]));
+}
 
 export const GOAL_PHRASE: Record<GoalId, string> = {
   career: "career development",

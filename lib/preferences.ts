@@ -12,6 +12,10 @@ export const emptyPreferences: Preferences = {
   careers: [],
   commitment: null,
   experiences: [],
+  wants: [],
+  communities: [],
+  topics: [],
+  interestText: "",
   greek: null,
   completedAt: "",
 };

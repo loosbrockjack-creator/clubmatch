@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { getClubSummary } from "@/lib/clubs";
 import { fail, readJson, verifiedUser } from "@/lib/club-server";
 import { ACTIVITY_KINDS, RESULT_LIMIT, type ActivityKind } from "@/lib/club-types";
-import { matchChapters, matchClubs } from "@/lib/matching";
+import { GREEK_SUGGESTIONS, matchChapters, matchClubs } from "@/lib/matching";
 import { ACADEMIC_AREA_BY_ID } from "@/lib/taxonomy";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import type { Preferences } from "@/lib/types";
@@ -20,7 +20,7 @@ import type { Preferences } from "@/lib/types";
  * kinds, and shown separately with a label saying they're unverified.
  */
 const ANONYMOUS_KINDS: ActivityKind[] = ["impression", "view", "lead"];
-const MAX_SLUGS = RESULT_LIMIT + 3;
+const MAX_SLUGS = RESULT_LIMIT + GREEK_SUGGESTIONS;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const WINDOW_MS = 60_000;
@@ -121,7 +121,9 @@ export async function POST(request: Request) {
     // Only clubs truly in this student's results count as a match.
     const shown = new Set(
       prefs
-        ? [...matchClubs(prefs).slice(0, RESULT_LIMIT), ...matchChapters(prefs)].map((r) => r.club.slug)
+        ? [...matchClubs(prefs).slice(0, RESULT_LIMIT), ...matchChapters(prefs)].map(
+            (r) => r.club.slug,
+          )
         : [],
     );
     counted = counted.filter((slug) => shown.has(slug));
