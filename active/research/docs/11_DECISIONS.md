@@ -389,3 +389,47 @@ contact address. `memberships.role` already allows `officer` for later.
 **Branding:** borrows the iastate.edu / Admissions feel (cardinal panel over
 a photo, big serif title, gold rules, outlined buttons) without ISU marks,
 and the footer states ClubMatch is not affiliated with Iowa State.
+
+## 2026-11-09: Smart Match (quiz, tags, scoring, AI)
+
+Plan: `12_SMART_MATCH_PLAN.md`. Before/after numbers: `active/research/smart-match-report.md`.
+
+**Tags are reviewed, not keyword-guessed.** Every non-Greek club was re-tagged
+from its own registry text against `active/config/tagging-spec.md` and spot
+checked by a second reviewer. Tags live in `data/club-tags.json`, merged by
+`transform.py` on every rebuild; hand fixes go in `active/config/tag-overrides.json`
+and are applied by `active/execution/scripts/validate_tags.py --write`.
+Max 2 academic areas and 3 careers per club. New fields: `wants`, `topics`,
+`audience`, `communityTags`. `goalsServed` and `experienceTypes` are now
+derived from `wants` so older code and saved profile interests keep working.
+
+**Relevance gate.** A club is only a match if it lines up with something
+specific: the student's academic area, a career, or a topic they typed.
+"Open to all majors", time, and generic wants never qualify a club alone.
+Rare wants count for more than common ones.
+
+**Identity is opt-in, never asked.** The quiz never asks race, religion, or
+gender. One optional question asks which communities a student wants to find.
+Faith, culture, identity, and international clubs appear only for students who
+ask, in their own unranked section. Professional societies with an identity
+focus (SWE, NSBE, SHPE) stay in normal results and get a small boost for
+students who asked. Residence-hall and grad-only groups never appear in quiz
+results.
+
+**Private answers stay private from clubs.** Officer lead lists and invites
+score students with `scoreForOfficers`, which drops communities and typed
+topics. Community-section impressions are not logged.
+
+**Goals and Experience merged** into one "What do you want from a club?"
+question (pick up to 3). "As much as it takes" became "8+ hours a week".
+
+**AI is optional and never ranks.** Claude Haiku 5.5 reads an uploaded resume
+or LinkedIn PDF (once, in memory, never stored) to pre-fill answers, maps the
+"Anything specific?" box onto club topic keywords, and writes "why it fits"
+lines that replace the rule-based ones when they arrive. Ranking stays
+deterministic in `lib/matching.ts`. Without `ANTHROPIC_API_KEY` the AI parts
+don't render and the routes return 404. Note: `/match` and `/results` are
+static, so adding the key in Vercel needs a redeploy to show the AI parts.
+
+**Results:** top 20, then "Show more" in pages of 20. Fit % is kept and
+recalibrated against the best a club could score for that student.
