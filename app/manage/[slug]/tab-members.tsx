@@ -120,7 +120,7 @@ export function MembersTab({ slug, clubName }: { slug: string; clubName: string 
   const hasMembers = unconfirmed.length + confirmed.length > 0;
 
   return (
-    <div className="max-w-3xl space-y-10">
+    <div className="mx-auto max-w-3xl space-y-10">
       <FormStatus error={actionError} />
       {unconfirmed.length > 0 && (
         <section>

@@ -203,7 +203,7 @@ export function LeadsTab({ slug, clubName }: { slug: string; clubName: string })
   if (!data) return <PanelSkeleton />;
 
   return (
-    <div className="max-w-3xl space-y-12">
+    <div className="mx-auto max-w-3xl space-y-12">
       <section>
         <SectionTitle
           title="Told you they're interested"
