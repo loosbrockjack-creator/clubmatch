@@ -1,4 +1,5 @@
 import "server-only";
+import { demoUpcomingEvents } from "./demo-events";
 import type { ActivityRow } from "./club-insights";
 import type {
   ClubEvent,
@@ -29,7 +30,6 @@ const daysAgo = (n: number, hour = 15) => {
   date.setUTCHours(hour, 0, 0, 0);
   return date.toISOString();
 };
-const daysAhead = (n: number, hour: number) => daysAgo(-n, hour);
 
 type Person = [name: string, major: string, year: string, interests: string[], lookingFor: string];
 
@@ -130,9 +130,7 @@ export function demoEvents(slug: string): ClubEvent[] {
     ends_at: new Date(new Date(starts).getTime() + hours * 60 * 60 * 1000).toISOString(),
   });
   return [
-    event(1, "Pitch Night: Spring Product Teams", "Five teams pitch the products they built this semester. Free pizza, and judges from the Iowa State startup community.", "Student Innovation Center, Room 0102", daysAhead(6, 23), 2),
-    event(2, "Prototype Workshop: 3D Printing Basics", "Bring an idea, leave with a printed part. We cover CAD export, slicing, and print settings. No experience needed.", "Student Innovation Center Makerspace", daysAhead(13, 22), 1.5),
-    event(3, "Founder Q&A with ISU Alumni", "Three alumni founders talk about turning a class project into a company. Open questions after.", "Gerdin Business Building, Room 1148", daysAhead(20, 23), 1.5),
+    ...demoUpcomingEvents(slug),
     event(4, "Kickoff Meeting and Team Matching", "Meet the club, hear this semester's project ideas, and find a team.", "Student Innovation Center, Room 0102", daysAgo(24, 23), 1.5),
     event(5, "Customer Discovery Bootcamp", "How to run interviews that tell you whether anyone wants what you're building.", "Pearson Hall, Room 1110", daysAgo(10, 23), 2),
   ];

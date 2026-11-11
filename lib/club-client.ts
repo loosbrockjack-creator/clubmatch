@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { withDemoEvents } from "./demo-events";
 import { getSupabase } from "./supabase";
 import { useAccount } from "./account";
 import { readLocalPreferences } from "./preferences";
@@ -130,7 +131,7 @@ export function useUnreadCount(): number {
 /** Upcoming public events. Past ones drop off as soon as they end. */
 export async function fetchUpcomingEvents(options: { slug?: string; withinDays?: number; limit?: number }) {
   const sb = getSupabase();
-  if (!sb) return [];
+  if (!sb) return withDemoEvents([], options);
   const now = new Date();
   // An event with no end time counts as over 3 hours after it starts. Ended
   // events are filtered in the query, so they can't use up the limit.
@@ -150,7 +151,7 @@ export async function fetchUpcomingEvents(options: { slug?: string; withinDays?:
   }
   const { data, error } = await query;
   if (error) throw new Error(error.message);
-  return (data ?? []) as ClubEvent[];
+  return withDemoEvents((data ?? []) as ClubEvent[], options);
 }
 
 export function formatEventTime(event: Pick<ClubEvent, "starts_at" | "ends_at">) {
