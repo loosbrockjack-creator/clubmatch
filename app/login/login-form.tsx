@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronRight, Loader2 } from "lucide-react";
 import { CodeInput } from "@/components/code-input";
-import { normalizeIsuEmail, sendCode, useAccount, verifyCode } from "@/lib/account";
+import {
+  continueParked,
+  forgetThisDevice,
+  normalizeIsuEmail,
+  parkedEmail,
+  sendCode,
+  useAccount,
+  verifyCode,
+} from "@/lib/account";
 
 /** Must match Auth > Email OTP length in the Supabase dashboard. */
 const CODE_LENGTH = 6;
@@ -28,6 +36,7 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [resendIn, setResendIn] = useState(0);
+  const remembered = useSyncExternalStore(parkedEmail.subscribe, parkedEmail.get, parkedEmail.getServer);
 
   // Already signed in (or just finished): go where they were headed.
   useEffect(() => {
@@ -139,6 +148,50 @@ export function LoginForm() {
           </button>
         </div>
       </form>
+    );
+  }
+
+  async function onContinue() {
+    setBusy(true);
+    setError(null);
+    const problem = await continueParked();
+    setBusy(false);
+    if (problem) setError(problem);
+    // On success the account state flips to signed-in and the effect redirects.
+  }
+
+  if (remembered && account.status === "signed-out") {
+    return (
+      <div className="mt-7">
+        <p className="text-[15.5px] leading-relaxed text-ink-soft">
+          Welcome back. You signed in on this browser before, so there&apos;s no code to wait for.
+        </p>
+        <button
+          type="button"
+          onClick={() => void onContinue()}
+          disabled={busy}
+          className="btn btn-primary mt-6 w-full max-w-md justify-center"
+        >
+          {busy ? <Loader2 size={16} className="animate-spin" aria-hidden /> : null}
+          Continue as {remembered}
+        </button>
+        {error && (
+          <p role="alert" className="mt-3 text-[14px] font-medium text-cardinal">
+            {error}
+          </p>
+        )}
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            setError(null);
+            void forgetThisDevice();
+          }}
+          className="mt-5 block text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+        >
+          Use a different email
+        </button>
+      </div>
     );
   }
 

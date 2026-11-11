@@ -514,3 +514,13 @@ Development Club): 14 members, 10 good-fit and 6 interested students, 5 events,
 description. Nothing is written to the database, so the public site and other
 clubs never see it. Edits to a sample row are refused with a plain message.
 Remove the slug from `DEMO_CLUBS` to turn it off.
+
+## 2026-11-10: Sign out parks the session
+
+Signing out no longer revokes the Supabase session. It clears the app's
+signed-in state and local data and records a "parked" entry in localStorage;
+the sign-in page then offers "Continue as <email>" with no new code. While
+parked, the account state reads signed-out and `apiFetch` sends no token.
+"Use a different email" and account deletion end the session for real
+(`forgetThisDevice`). Trade-off: on a shared computer the next person could
+continue as you unless you choose "Use a different email".

@@ -135,7 +135,61 @@ function ensureLoaded(user: { id: string; email?: string }) {
   return promise;
 }
 
+/**
+ * Signing out "parks" the session instead of ending it: the app treats the
+ * student as signed out, but Supabase keeps the session in this browser, so
+ * the sign-in page can offer "Continue as <email>" with no new code. Ending it
+ * for real (a different email, or deleting the account) goes through
+ * forgetThisDevice. The parked id is checked against the live session, so a
+ * stale entry never signs anyone in.
+ */
+const PARKED_KEY = "clubmatch:parked";
+type Parked = { userId: string; email: string };
+
+function readParked(): Parked | null {
+  try {
+    const raw = window.localStorage.getItem(PARKED_KEY);
+    const value = raw ? (JSON.parse(raw) as Partial<Parked>) : null;
+    return value?.userId && value.email ? { userId: value.userId, email: value.email } : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeParked(value: Parked | null) {
+  try {
+    if (value) window.localStorage.setItem(PARKED_KEY, JSON.stringify(value));
+    else window.localStorage.removeItem(PARKED_KEY);
+  } catch {
+    // Private mode: signing out then just ends the session, as before.
+  }
+  for (const listener of parkedListeners) listener();
+}
+
+const parkedListeners = new Set<() => void>();
+
+/** For useSyncExternalStore: the parked email, or "" when there isn't one. */
+export const parkedEmail = {
+  subscribe(listener: () => void) {
+    parkedListeners.add(listener);
+    return () => parkedListeners.delete(listener);
+  },
+  get: () => readParked()?.email ?? "",
+  getServer: () => "",
+};
+
+/** True while this browser holds a parked session, so API calls go out unsigned. */
+export function isParked() {
+  return typeof window !== "undefined" && readParked() !== null;
+}
+
 async function handleSession(user: { id: string; email?: string } | null) {
+  if (user && readParked()?.userId === user.id) {
+    loading = null;
+    registerRemote(null);
+    set({ ...SERVER_STATE, status: "signed-out" });
+    return;
+  }
   if (!user) {
     loading = null;
     registerRemote(null);
@@ -300,20 +354,50 @@ export async function verifyCode(email: string, token: string): Promise<string |
   if (!sb) return "Accounts aren't available right now.";
   const { data, error } = await sb.auth.verifyOtp({ email, token, type: "email" });
   if (error) return friendlyAuthError(error.message, error.status);
+  // A fresh code replaces whatever session was parked here.
+  writeParked(null);
   // Load the account before the caller navigates, so the next page has it.
   if (data.user) await ensureLoaded(data.user);
   return null;
 }
 
-export async function signOut() {
-  const sb = getSupabase();
+function clearSignedInState() {
   const userId = state.userId;
   loading = null;
   registerRemote(null);
   clearLocalAccountData();
   if (userId) writeFlag(mergedKey(userId), false);
   set({ ...SERVER_STATE, status: "signed-out" });
-  await sb?.auth.signOut();
+}
+
+/** Signs out of the app but keeps the session parked for a one-tap return. */
+export async function signOut() {
+  const { userId, email } = state;
+  if (userId && email) writeParked({ userId, email });
+  clearSignedInState();
+}
+
+/** Ends the session for real, so the next sign-in on this browser needs a code. */
+export async function forgetThisDevice() {
+  writeParked(null);
+  clearSignedInState();
+  await getSupabase()?.auth.signOut();
+}
+
+/** Signs the parked student back in. Returns an error message, or null. */
+export async function continueParked(): Promise<string | null> {
+  const sb = getSupabase();
+  const parked = readParked();
+  if (!sb || !parked) return "Sign in with your email.";
+  const { data } = await sb.auth.getSession();
+  const user = data.session?.user;
+  if (!user || user.id !== parked.userId) {
+    await forgetThisDevice();
+    return "That sign-in expired. Enter your email and we'll send a code.";
+  }
+  writeParked(null);
+  await ensureLoaded(user);
+  return null;
 }
 
 /** Updates `profiles` columns. Quiz answers sync separately (see registerRemote). */
@@ -417,6 +501,6 @@ export async function deleteAccount(): Promise<string | null> {
   await removeAvatarFiles(userId);
   const { error } = await sb.rpc("delete_my_account");
   if (error) return "Couldn't delete your account. Try again, or email us.";
-  await signOut();
+  await forgetThisDevice();
   return null;
 }

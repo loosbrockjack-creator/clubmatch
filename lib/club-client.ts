@@ -3,7 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { withDemoEvents } from "./demo-events";
 import { getSupabase } from "./supabase";
-import { useAccount } from "./account";
+import { isParked, useAccount } from "./account";
 import { readLocalPreferences } from "./preferences";
 import type { ActivityKind, ClubEvent } from "./club-types";
 
@@ -12,7 +12,8 @@ export async function apiFetch<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<{ data: T | null; error: string | null; status: number }> {
-  const session = (await getSupabase()?.auth.getSession())?.data.session;
+  // A parked (signed-out) session must not act for the student.
+  const session = isParked() ? null : (await getSupabase()?.auth.getSession())?.data.session;
   const headers = new Headers(init.headers);
   if (session?.access_token) headers.set("Authorization", `Bearer ${session.access_token}`);
   if (init.body && !(init.body instanceof FormData)) headers.set("Content-Type", "application/json");
