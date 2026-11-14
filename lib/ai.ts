@@ -4,12 +4,16 @@
  *
  * Everything here is optional. With no ANTHROPIC_API_KEY the quiz hides the AI
  * parts and the routes answer 404, so the site works the same without a key.
- * AI never ranks clubs; lib/matching.ts does, deterministically.
+ * The survey path is ranked by lib/matching.ts, deterministically. The resume
+ * path (/api/ai/picks) lets the model pick clubs on judgment, because a
+ * keyword score can't tell a team captain from a one-line mention.
  */
 import Anthropic from "@anthropic-ai/sdk";
 import { clubs } from "./clubs";
 
 export const AI_MODEL = "claude-haiku-5-5";
+/** Picking clubs from a resume needs judgment, so it gets the bigger model. */
+export const AI_PICKS_MODEL = "claude-sonnet-5-5";
 
 /** Vercel rejects function bodies over 4.5 MB, so uploads stop at 4. */
 export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
@@ -18,7 +22,7 @@ export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
  * Per IP per hour. Generous because a whole class on campus Wi-Fi can share
  * one IP; the Anthropic console spend cap is the real ceiling.
  */
-export const RATE_LIMITS = { resume: 40, reasons: 120, career: 120 } as const;
+export const RATE_LIMITS = { resume: 40, picks: 20, reasons: 120, career: 120 } as const;
 
 /** Reads a JSON body, refusing anything larger than `maxBytes`. */
 export async function readJsonBody(request: Request, maxBytes: number): Promise<unknown> {

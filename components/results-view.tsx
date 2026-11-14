@@ -10,6 +10,7 @@ import {
   RESULTS_PAGE,
   communitiesFor,
   displayTopic,
+  matchAiPicks,
   matchChapters,
   matchClubs,
   matchCommunities,
@@ -119,8 +120,11 @@ export function ResultsView({ ai }: { ai: boolean }) {
     return () => window.clearTimeout(timer);
   }, []);
 
+  // Resume path: the AI's picks, filtered for gender and time. Survey path:
+  // the deterministic ranking.
+  const fromResume = Boolean(prefs && prefs.aiPicks?.length);
   const results = useMemo(
-    () => (prefs ? matchClubs(prefs) : []),
+    () => (prefs ? (prefs.aiPicks?.length ? matchAiPicks(prefs) : matchClubs(prefs)) : []),
     [prefs],
   );
   const chapters = useMemo(() => (prefs ? matchChapters(prefs) : []), [prefs]);
@@ -150,7 +154,8 @@ export function ResultsView({ ai }: { ai: boolean }) {
   // Personal one-liners for the first page. The rule-based reasons show first;
   // these replace them card by card when they arrive. Failure changes nothing.
   useEffect(() => {
-    if (!ai || !prefs || results.length === 0) return;
+    // Resume picks already carry the AI's own reason for each club.
+    if (!ai || !prefs || fromResume || results.length === 0) return;
     const controller = new AbortController();
     fetch("/api/ai/reasons", {
       method: "POST",
@@ -165,7 +170,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
       .then((data: { reasons?: Record<string, string> }) => setAiReasons(data.reasons ?? {}))
       .catch(() => {});
     return () => controller.abort();
-  }, [ai, prefs, results]);
+  }, [ai, prefs, fromResume, results]);
 
   if (prefs === null || !settled) {
     return <ResultsSkeleton />;
@@ -201,7 +206,9 @@ export function ResultsView({ ai }: { ai: boolean }) {
               Your best <span className="text-cardinal">matches</span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-[16px] leading-relaxed text-ink-soft">
-              {top.length > 0
+              {top.length > 0 && fromResume
+                ? "Picked from your resume, then checked against the time you have. Fit scores are a guide, not a grade."
+                : top.length > 0
                 ? results.length > RESULTS_PAGE
                   ? `${results.length} clubs line up with your answers. Here are the strongest. Fit scores are a guide, not a grade.`
                   : `${results.length} ${results.length === 1 ? "club lines" : "clubs line"} up with your answers. Fit scores are a guide, not a grade.`

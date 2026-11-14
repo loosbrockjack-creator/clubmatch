@@ -14,7 +14,7 @@ import {
   rateLimited,
   readJsonBody,
 } from "@/lib/ai";
-import { ACADEMIC_AREAS, CAREERS, WANTS } from "@/lib/taxonomy";
+import { ACADEMIC_AREAS, CAREERS, MAX_WANTS, WANTS } from "@/lib/taxonomy";
 
 /**
  * Reads an uploaded resume or LinkedIn "Save to PDF" export once, in memory,
@@ -49,7 +49,7 @@ Rules:
 - Never consider or infer race, ethnicity, religion, gender, sexuality, age, disability, nationality, or immigration status, even if the document mentions them. Those are the student's to share, not ours to infer.
 - academicAreas: up to 3 areas for their major(s) and minor(s), main one first. Map: business (finance, accounting, marketing, management, supply chain, MIS-business), engineering, computing (computer science, software, data science, cybersecurity), agriculture (ag, animal science, agronomy, food science, natural resources, pre-vet), design (architecture, graphic/industrial/interior design, art), liberal-arts (sciences, math, psychology, journalism, humanities, social sciences), human-sciences (kinesiology, nutrition, hospitality, apparel, education, event management), veterinary (the DVM program at the College of Veterinary Medicine). Empty list if no major is clear.
 - careers: up to 3 career areas their experience and stated goals point to, strongest first.
-- wants: up to 3 things they seem to want from a club, judged from their activities (career, networking, community, leadership, projects, competition, academic, service, entrepreneurship).
+- wants: up to ${MAX_WANTS} things they seem to want from a club, judged from their activities (career, networking, community, leadership, projects, competition, academic, service, entrepreneurship).
 - topics: up to 4 hobbies, sports, or specific activities from the document (for example from an Interests or Activities section), chosen ONLY from the vocabulary below, copied exactly. Do not repeat their major or career field here; careers covers that. Empty if none fit.
 - summary: one short sentence to the student, second person, under 20 words, like "Looks like you're studying finance and into investing and rock climbing." No dashes.
 - isResume: false if this is clearly not a resume or profile (then other fields can be minimal).
@@ -123,7 +123,7 @@ export async function POST(request: Request) {
     return json({
       academicAreas: Array.from(new Set(out.academicAreas)).slice(0, 3),
       careers: Array.from(new Set(out.careers)).slice(0, 3),
-      wants: Array.from(new Set(out.wants)).slice(0, 3),
+      wants: Array.from(new Set(out.wants)).slice(0, MAX_WANTS),
       resumeTopics: knownTopics(out.topics).slice(0, 4),
       summary: noDashes(out.summary).slice(0, 160),
     });

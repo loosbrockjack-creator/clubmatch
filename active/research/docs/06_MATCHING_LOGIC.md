@@ -1,7 +1,20 @@
 # Matching Logic
 
 Deterministic, explainable, and easy to tune. Implemented in `lib/matching.ts`.
-Updated 2026-11-09 for Smart Match (see `12_SMART_MATCH_PLAN.md`).
+Updated 2026-11-09 for Smart Match (see `12_SMART_MATCH_PLAN.md`), and
+2026-11-14 for the two-path design below.
+
+## Two paths
+- **Survey path** (no upload): everything in this doc. Deterministic.
+- **Resume path** (resume or LinkedIn upload): `/api/ai/picks` sends the resume
+  plus the whole rankable catalog (one line per club, cached) to Claude Sonnet
+  5.5, which returns about 20 picks with a 55-98 fit and a one-line reason.
+  The student then answers only time, gender, and Greek life. `matchAiPicks`
+  drops gender conflicts (gender is never sent to the AI) and takes 5 / 15 / 25
+  points off a pick that runs 1 / 2 / 3 commitment steps over their time. If
+  the picks call fails, the quiz falls back to the old reader and the full
+  survey, pre-filled. Why: a keyword score can't tell a team captain from a
+  one-line mention, and sport clubs carry no area or career tags.
 
 ## Eligibility (before any scoring)
 - Main results only include `general`, `honor`, and `governance` audience clubs.
@@ -20,7 +33,9 @@ Updated 2026-11-09 for Smart Match (see `12_SMART_MATCH_PLAN.md`).
 | Wants | 15 | Rarity-weighted overlap; full credit = the student's two rarest picks |
 | Time | 10 | Exact 10, one step 6, two 2.5, three 0. Flexible = 8 |
 | Topic | +45 / +15 | First and second topic hits |
-| Community | +8 | General club also tagged with a community the student asked for |
+| Resume topic | +20 / +8 | Same, for topics read from a resume (survey fallback only) |
+| Community | +15 | General club also tagged with a community the student asked for |
+| Gender | +10 | Club built for the student's gender (male or female only) |
 
 Penalties: club limited to one major and not the student's area x0.5; honor society x0.9.
 

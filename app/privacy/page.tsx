@@ -26,15 +26,17 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
           links), your quiz answers, the clubs you save, and the clubs you say you&apos;re in.
         </p>
         <p>
-          If you upload a resume or LinkedIn PDF, or paste your LinkedIn profile, to fill in the
-          quiz, it&apos;s read once to pick your answers and then discarded. We never store the
+          If you upload a resume or LinkedIn PDF, or paste your LinkedIn profile, it&apos;s read
+          once to pick clubs for you and fill in your answers, then discarded. We keep only the
+          list of clubs it picked. We never store the
           file or the text. That upload or paste, a field you type under &quot;Other&quot; on the careers
           question, and your quiz answers when we write your match reasons, are processed by our AI provider, Anthropic, only to do that. Your gender and
           communities are never sent.
         </p>
         <p>
           The communities question (faith, culture, and similar) is optional. The gender question
-          only decides whether we show clubs built for women or for men. Clubs never see either
+          only decides whether we include the few clubs built for women or for men. Answering
+          Other or Prefer not to say shows every club open to everyone. Clubs never see either
           answer or the interests you pick, and none of them affects which students a club can
           find.
         </p>

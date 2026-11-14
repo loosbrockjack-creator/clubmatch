@@ -67,7 +67,8 @@ export type WantId =
  * ask for that kind of community.
  */
 /** Private. Only decides which clubs built for one gender are shown. */
-export type GenderId = "male" | "female" | "prefer-not";
+/** "other" filters exactly like "prefer-not": every club, no bonus. */
+export type GenderId = "male" | "female" | "other" | "prefer-not";
 
 /** A broad interest the student picked, with the club topics it stands for. */
 export interface InterestPick {
@@ -223,7 +224,20 @@ export interface Preferences {
   resumeTopics?: string[];
   /** Missing on preferences saved before the Greek life step existed. */
   greek?: GreekInterest | null;
+  /**
+   * Clubs the AI picked after reading a resume or LinkedIn profile. Present
+   * only on the resume path; the survey path clears it. Never holds any of
+   * the resume itself.
+   */
+  aiPicks?: AiPick[];
   completedAt: string;
+}
+
+/** One club the AI picked from a resume, with its fit and one-line reason. */
+export interface AiPick {
+  slug: string;
+  fit: number;
+  reason: string;
 }
 
 export interface MatchResult {

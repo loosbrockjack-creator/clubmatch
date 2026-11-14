@@ -220,6 +220,7 @@ function hasArea(prefs: Preferences) {
  * A club built for one gender is left out for a student of the other. "Prefer
  * not to say", and answers saved before the question, see every club.
  */
+/* "Other" and "Prefer not to say" both land here: every club, no bonus. */
 export function genderConflict(prefs: Preferences, club: ClubSummary): boolean {
   if (!club.genderFocus) return false;
   if (prefs.gender === "male") return club.genderFocus === "women";
@@ -625,6 +626,37 @@ export function matchClubs(prefs: Preferences, pool: ClubSummary[] = clubs): Mat
 }
 
 const MAX_NEAR_ONLY = 5;
+
+/** Fit points a resume pick loses per commitment step it runs over their time. */
+const AI_OVER_TIME_PENALTY = [0, 5, 15, 25];
+
+/**
+ * The resume path's main list. The AI already judged fit from the whole
+ * resume; this only applies what the student told us after: gender (never
+ * sent to the AI) and how much time they have.
+ */
+export function matchAiPicks(prefs: Preferences, pool: ClubSummary[] = clubs): MatchResult[] {
+  const bySlug = new Map(pool.map((club) => [club.slug, club]));
+  const pref = prefs.commitment;
+  const results: MatchResult[] = [];
+  for (const pick of prefs.aiPicks ?? []) {
+    const club = bySlug.get(pick.slug);
+    if (!club || club.greek || !isRankable(prefs, club)) continue;
+    let score = pick.fit;
+    if (pref && pref !== "flexible") {
+      const over =
+        COMMITMENT_ORDER.indexOf(club.commitmentLevel) - COMMITMENT_ORDER.indexOf(pref);
+      if (over > 0) score -= AI_OVER_TIME_PENALTY[Math.min(over, AI_OVER_TIME_PENALTY.length - 1)];
+    }
+    results.push({
+      club,
+      score: Math.max(1, Math.min(98, Math.round(score))),
+      reasons: pick.reason ? [pick.reason] : [],
+      eligible: true,
+    });
+  }
+  return results.sort((a, b) => b.score - a.score);
+}
 
 function isNearOnly(prefs: Preferences, club: ClubSummary) {
   const academic = academicPart(prefs, club);

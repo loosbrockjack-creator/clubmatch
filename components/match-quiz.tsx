@@ -41,6 +41,7 @@ import {
 } from "@/lib/preferences";
 import type {
   AcademicAreaId,
+  AiPick,
   CareerId,
   CommitmentId,
   CommunityId,
@@ -95,8 +96,20 @@ function useWantsGreekStep() {
 type Upload =
   | { state: "idle" }
   | { state: "reading"; name: string }
-  | { state: "done"; summary: string }
+  | { state: "done"; summary: string; fellBack: boolean }
   | { state: "error"; message: string };
+
+/** What /api/ai/picks and /api/ai/resume send back. Picks only come from the first. */
+type ReadResult = {
+  error?: string;
+  fallback?: boolean;
+  picks?: AiPick[];
+  academicAreas?: AcademicAreaId[];
+  careers?: CareerId[];
+  wants?: WantId[];
+  resumeTopics?: string[];
+  summary?: string;
+};
 
 export function MatchQuiz({ ai }: { ai: boolean }) {
   const router = useRouter();
@@ -104,7 +117,10 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const wantsGreek = useWantsGreekStep();
   // The upload step only exists when AI is available; it is step 0 then.
   const offset = ai ? 1 : 0;
-  const totalSteps = 7 + offset;
+  // Clubs the AI picked from their resume. Set means the short resume path:
+  // the upload, then only time, gender, and Greek life.
+  const [picks, setPicks] = useState<AiPick[] | null>(null);
+  const totalSteps = picks ? 4 : 7 + offset;
   // null until the student moves. Results links students whose saved answers
   // predate the Greek question straight to it, but only when those answers
   // exist; otherwise the earlier steps would be skipped and saved empty.
@@ -152,22 +168,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   }, [step]);
 
   /** Both the PDF and the pasted profile come back as the same answers. */
-  async function applyAnswers(res: Response) {
-    const data = (await res.json().catch(() => ({}))) as {
-      error?: string;
-      academicAreas?: AcademicAreaId[];
-      careers?: CareerId[];
-      wants?: WantId[];
-      resumeTopics?: string[];
-      summary?: string;
-    };
-    if (!res.ok || data.error) {
-      setUpload({
-        state: "error",
-        message: data.error ?? "We couldn't read that. Answer the quiz instead.",
-      });
-      return;
-    }
+  function applyAnswers(data: ReadResult, fellBack: boolean) {
     const found = (data.academicAreas ?? []).slice(0, MAX_AREAS);
     setEdits({
       ...draft,
@@ -177,15 +178,43 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       wants: data.wants?.length ? data.wants.slice(0, MAX_WANTS) : wants,
       resumeTopics: data.resumeTopics ?? [],
     });
-    setUpload({ state: "done", summary: data.summary ?? "" });
+    setPicks(data.picks?.length ? data.picks : null);
+    setUpload({ state: "done", summary: data.summary ?? "", fellBack });
     setStep(1);
   }
 
-  function readFailed() {
+  function readFailed(message?: string) {
     setUpload({
       state: "error",
-      message: "That took too long or the reader is down. Answer the quiz instead.",
+      message: message ?? "That took too long or the reader is down. Answer the quiz instead.",
     });
+  }
+
+  /**
+   * The AI picks clubs straight from the resume. If that fails for any reason
+   * other than "this isn't a resume", fall back to the quick reader, which
+   * only fills in the quiz, so the student is never stranded.
+   */
+  async function readUpload(init: () => RequestInit, name: string) {
+    setUpload({ state: "reading", name });
+    try {
+      const res = await fetchWithin("/api/ai/picks", init(), 55_000);
+      const data = (await res.json().catch(() => ({}))) as ReadResult;
+      if (res.ok && data.picks?.length) return applyAnswers(data, false);
+      if (!data.fallback && res.status !== 404 && res.status !== 429) {
+        return readFailed(data.error ?? "We couldn't read that. Answer the quiz instead.");
+      }
+    } catch {
+      // Timed out or offline: try the quick reader below.
+    }
+    try {
+      const res = await fetchWithin("/api/ai/resume", init(), 25_000);
+      const data = (await res.json().catch(() => ({}))) as ReadResult;
+      if (!res.ok || data.error) return readFailed(data.error);
+      applyAnswers({ ...data, picks: undefined }, true);
+    } catch {
+      readFailed();
+    }
   }
 
   async function readResume(file: File) {
@@ -197,14 +226,11 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       setUpload({ state: "error", message: "That file is over 4 MB." });
       return;
     }
-    setUpload({ state: "reading", name: file.name });
-    try {
+    await readUpload(() => {
       const form = new FormData();
       form.append("file", file);
-      await applyAnswers(await fetchWithin("/api/ai/resume", { method: "POST", body: form }, 25_000));
-    } catch {
-      readFailed();
-    }
+      return { method: "POST", body: form };
+    }, file.name);
   }
 
   async function readProfileText() {
@@ -216,22 +242,14 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       });
       return;
     }
-    setUpload({ state: "reading", name: "your profile" });
-    try {
-      await applyAnswers(
-        await fetchWithin(
-          "/api/ai/resume",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text }),
-          },
-          25_000,
-        ),
-      );
-    } catch {
-      readFailed();
-    }
+    await readUpload(
+      () => ({
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      }),
+      "your profile",
+    );
   }
 
   const prefilled = upload.state === "done";
@@ -260,7 +278,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
         <>
           <LoaderCircle size={24} strokeWidth={1.75} className="animate-spin text-cardinal" aria-hidden />
           <span className="text-[15px] font-semibold text-ink">Reading {upload.name}</span>
-          <span className="text-[13px] text-ink-muted">This takes a few seconds.</span>
+          <span className="text-[13px] text-ink-muted">Picking clubs that fit. About 10 seconds.</span>
         </>
       ) : (
         <>
@@ -281,7 +299,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const uploadStep = {
     question: "Start with your resume or LinkedIn?",
     subtitle:
-      "Optional. We'll read it once to fill in the quiz for you, then throw it away. Nothing is stored.",
+      "Optional. We'll read it once, pick the clubs that fit you, then throw it away. Nothing is stored.",
     columns: "",
     valid: true,
     render: () => (
@@ -368,7 +386,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
                       Reading
                     </>
                   ) : (
-                    "Fill in my answers"
+                    "Pick my clubs"
                   )}
                 </button>
               </div>
@@ -388,18 +406,17 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
           {upload.state === "error"
             ? upload.message
             : reading
-              ? `Reading ${upload.name}.`
+              ? `Reading ${upload.name} and picking clubs.`
               : ""}
         </p>
         <p className="mt-2 text-center text-[13px] text-ink-muted">
-          We use it only to pick your quiz answers. Your name, contact info, and anything personal are ignored.
+          We use it only to pick your clubs. Your name, contact info, and anything personal are ignored.
         </p>
       </div>
     ),
   };
 
-  const steps = [
-    ...(ai ? [uploadStep] : []),
+  const surveySteps = [
     {
       question: "What are you studying?",
       subtitle: `Pick up to ${MAX_AREAS}, like a double major or a minor.`,
@@ -662,8 +679,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     {
       question: "What's your gender?",
       subtitle:
-        "Some clubs are built for one gender, like the men's and women's club teams. This only decides which of those we show. Clubs never see it.",
-      columns: "sm:grid-cols-3",
+        "A few clubs, like the men's and women's club sports teams, are for one gender. We only use this to show you the right ones, and it stays private.",
+      columns: "sm:grid-cols-2",
       valid: draft.gender != null,
       render: () =>
         GENDER_OPTIONS.map((option) => (
@@ -700,7 +717,12 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     },
   ];
 
-  const current = steps[step];
+  // Resume path: the AI already read their major, goals, and interests, so
+  // only ask what a resume can't say. Indexes: time, gender, Greek life.
+  const steps = picks
+    ? [uploadStep, surveySteps[3], surveySteps[5], surveySteps[6]]
+    : [...(ai ? [uploadStep] : []), ...surveySteps];
+  const current = steps[step] ?? steps[0];
   const isLast = step === totalSteps - 1;
   const isUploadStep = ai && step === 0;
   const numbered = step - offset + 1;
@@ -732,7 +754,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
 
     // "Other" with a typed field: read it once. Matches replace Other and wait
     // for a confirming Continue; a miss or failure says so, then lets them on.
-    const isCareersStep = step === offset + 1;
+    const isCareersStep = !picks && step === offset + 1;
     const typed = otherText.trim();
     if (
       ai &&
@@ -772,16 +794,21 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
         interests,
         topics: topicsOf(interests),
         resumeTopics,
+        // Only the resume path ranks by AI picks. The survey path clears them,
+        // except the one-question Greek catch-up, which keeps what they had.
+        aiPicks: picks ?? (wantsGreek ? base.aiPicks : undefined),
         completedAt: new Date().toISOString(),
       });
       router.push("/results");
       return;
     }
+    // "Skip, I'll answer" leaves the resume path for the full quiz.
+    if (isUploadStep) setPicks(null);
     setStep(step + 1);
   }
 
   return (
-    <div className="shell pb-24 pt-6 sm:pt-8">
+    <div className="quiz-focus shell pb-16 pt-6 sm:pt-8">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center justify-between gap-4">
           <p className="text-[13px] font-semibold text-ink-muted">
@@ -814,15 +841,21 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
           />
         </div>
 
-        {prefilled && !isUploadStep && step <= 3 && (
+        {prefilled && !isUploadStep && (picks ? step === 1 : step <= 3) && (
           <div
             role="status"
             className="rise mt-6 flex items-start gap-3 border-l-[3px] border-gold bg-gold-tint px-4 py-3"
           >
             <FileText size={16} strokeWidth={1.75} className="mt-0.5 shrink-0 text-cardinal" aria-hidden />
             <p className="flex-1 text-[14px] leading-relaxed text-ink-soft">
-              {upload.summary ? `${upload.summary} ` : ""}
-              We filled in your answers from {source === "linkedin" ? "your profile" : "your resume"}. Change anything that&apos;s off.
+              {upload.state === "done" && upload.fellBack
+                ? "We couldn't pick clubs from that just now, so here's the quick quiz. We filled in what we could. "
+                : upload.summary
+                  ? `${upload.summary} `
+                  : ""}
+              {picks
+                ? `We picked your clubs from ${source === "linkedin" ? "your profile" : "your resume"}. Three quick questions and you're done.`
+                : <>We filled in your answers from {source === "linkedin" ? "your profile" : "your resume"}. Change anything that&apos;s off.</>}
             </p>
             <button
               type="button"

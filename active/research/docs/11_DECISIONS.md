@@ -544,3 +544,23 @@ all clubs) use `RollLink` (`components/ui/roll-link.tsx`): the label slides
 out the top while a solid fill slides up from below carrying a second copy of
 the label (aria-hidden). Straight fill, no skew, so the whole box fills. 400ms,
 longer than our usual 150-250ms, by request. Everything else keeps the plain fade.
+
+## 2026-11-14: Resume path picks clubs with AI; survey tweaks
+
+A friend's resume said basketball captain and the basketball club came back at
+40%. Resume topics were worth 20 points against 45 for picked ones, and sport
+clubs have no area or career tags, so they could never earn 60 of 85 points.
+No weight tuning fixes "captain matters more than a mention", so the resume
+and LinkedIn path now lets Claude Sonnet 5.5 pick about 20 clubs from the full
+rankable catalog (`/api/ai/picks`, catalog in a 1h cached system prompt, about
+$0.03 a student). The student then answers only time, gender, and Greek life;
+`matchAiPicks` applies gender (never sent to the AI) and a time penalty.
+Students who skip the upload get the deterministic survey, unchanged. The
+picks are stored as slugs, fits, and reasons in preferences (`aiPicks`); the
+resume itself never is.
+
+Also: "What do you want from a club?" now allows 5 picks (scoring only divides
+by the two rarest, so more picks never dilute). Gender gains "Other", which
+filters exactly like "Prefer not to say", and the hints now say what's
+included rather than what's left out. The footer is hidden in the match quiz:
+the desktop footer lift landed half-revealed on every step.

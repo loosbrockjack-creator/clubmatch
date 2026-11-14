@@ -234,7 +234,7 @@ export const COMMITMENTS: Option<CommitmentId>[] = [
   },
 ];
 
-/** The merged "What do you want from a club?" question. Pick up to three. */
+/** The merged "What do you want from a club?" question. Pick up to five. */
 export const WANTS: Option<WantId>[] = [
   { id: "career", label: "Career and resume", hint: "Recruiting, skills employers notice" },
   { id: "networking", label: "Meet people in my field", hint: "Peers, alumni, professionals" },
@@ -247,7 +247,7 @@ export const WANTS: Option<WantId>[] = [
   { id: "entrepreneurship", label: "Start something", hint: "Ventures and side projects" },
 ];
 
-export const MAX_WANTS = 3;
+export const MAX_WANTS = 5;
 
 export const WANT_PHRASE: Record<WantId, string> = {
   career: "building your career",
@@ -328,9 +328,10 @@ export const OTHER_CAREER: Option<"other"> = {
 };
 
 export const GENDER_OPTIONS: Option<GenderId>[] = [
-  { id: "male", label: "Male", hint: "We'll leave out clubs built for women" },
-  { id: "female", label: "Female", hint: "We'll leave out clubs built for men" },
-  { id: "prefer-not", label: "Prefer not to say", hint: "Show me clubs for everyone" },
+  { id: "male", label: "Male", hint: "Includes men's club teams" },
+  { id: "female", label: "Female", hint: "Includes women's club teams" },
+  { id: "other", label: "Other", hint: "Shows clubs open to everyone" },
+  { id: "prefer-not", label: "Prefer not to say", hint: "Shows clubs open to everyone" },
 ];
 
 export const ACADEMIC_AREA_BY_ID = toLookup(ACADEMIC_AREAS);

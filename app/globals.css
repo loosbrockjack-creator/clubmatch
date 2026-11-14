@@ -603,3 +603,14 @@
     background: var(--color-canvas);
   }
 }
+
+/* The match quiz is a focused flow, like a checkout: no footer, and none of the
+   half-revealed footer the lift above leaves on a page just taller than the
+   screen. */
+body:has(.quiz-focus) .site-footer {
+  display: none;
+}
+
+body:has(.quiz-focus) .site-main {
+  padding-bottom: 0;
+}
