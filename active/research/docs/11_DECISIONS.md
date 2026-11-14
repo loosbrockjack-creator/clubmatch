@@ -538,9 +538,9 @@ chips, and a shared `ButtonSpinner` on the Interested button while it waits.
 These fire only after a click, never on page load. Pure CSS, no motion
 library; the global reduced-motion rule turns it all off.
 
-Exception: the nav bar Find my clubs CTA and three home page CTAs (hero
-Browse all clubs, Take the quiz, See
-all clubs) use `RollLink` (`components/ui/roll-link.tsx`): the label slides
+Exception: only the home page's "Not sure where to start?" Take the quiz CTA
+uses `RollLink` (the nav and other home CTAs went back to the plain fade plus
+arrow push on 2026-11-14, by request: too much commotion). It uses `RollLink` (`components/ui/roll-link.tsx`): the label slides
 out the top while a solid fill slides up from below carrying a second copy of
 the label (aria-hidden). Straight fill, no skew, so the whole box fills. 400ms,
 longer than our usual 150-250ms, by request. Everything else keeps the plain fade.
@@ -564,3 +564,12 @@ by the two rarest, so more picks never dilute). Gender gains "Other", which
 filters exactly like "Prefer not to say", and the hints now say what's
 included rather than what's left out. The footer is hidden in the match quiz:
 the desktop footer lift landed half-revealed on every step.
+
+## 2026-11-14: Simpler, noticeable motion
+
+One hover language for buttons: the fill darkens a shade and the arrow pushes
+4px with a hair of overshoot (220ms). The roll-up is gone from the nav CTA and
+the hero / See all clubs buttons; it stays only on the "Take the quiz" panel
+button. The heart pop, club page click moments, and card hovers are unchanged.
+New: the nav inbox icon is an inline SVG tray, and on hover a letter drops in
+and settles behind the tray's front lip.

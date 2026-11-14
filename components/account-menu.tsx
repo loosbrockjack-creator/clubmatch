@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Inbox } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { signOut, useAccount } from "@/lib/account";
 import { refreshUnread, useOfficerClubs, useUnreadCount } from "@/lib/club-client";
@@ -28,9 +27,28 @@ export function InboxLink({ className = "" }: { className?: string }) {
     <Link
       href="/inbox"
       aria-label={unread > 0 ? `Inbox, ${unread} unread` : "Inbox"}
-      className={`relative inline-flex h-10 w-10 items-center justify-center rounded-[4px] text-ink-soft transition-colors hover:bg-muted hover:text-cardinal ${className}`}
+      className={`inbox-link relative inline-flex h-10 w-10 items-center justify-center rounded-[4px] text-ink-soft transition-colors hover:bg-muted hover:text-cardinal ${className}`}
     >
-      <Inbox size={20} strokeWidth={1.75} aria-hidden />
+      {/* Lucide's inbox tray, plus a letter that drops in on hover. */}
+      <svg
+        width={20}
+        height={20}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.75}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        overflow="visible"
+        aria-hidden
+      >
+        <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+        <g className="inbox-letter">
+          <rect x="7.5" y="6" width="9" height="6.5" rx="1" fill="var(--color-muted)" />
+          <path d="m7.75 6.5 4.25 3 4.25-3" />
+        </g>
+        <polyline className="inbox-lip" points="22 12 16 12 14 15 10 15 8 12 2 12" />
+      </svg>
       {unread > 0 && (
         <span
           aria-hidden

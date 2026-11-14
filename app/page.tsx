@@ -108,10 +108,10 @@ export default function LandingPage() {
                 Find my clubs
                 <ChevronRight size={17} strokeWidth={2.25} aria-hidden className="btn-arrow" />
               </Link>
-              <RollLink href="/explore" variant="secondary" className="w-full sm:w-auto">
+              <Link href="/explore" className="btn btn-secondary w-full sm:w-auto">
                 Browse all clubs
-                <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
-              </RollLink>
+                <ChevronRight size={17} strokeWidth={2.25} aria-hidden className="btn-arrow" />
+              </Link>
             </div>
           </div>
         </div>
@@ -300,10 +300,10 @@ export default function LandingPage() {
           ))}
         </div>
 
-        <RollLink href="/explore" variant="secondary" className="mt-10">
+        <Link href="/explore" className="btn btn-secondary mt-10">
           See all {clubs.length} clubs
-          <ArrowRight size={16} strokeWidth={2} aria-hidden />
-        </RollLink>
+          <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
+        </Link>
       </section>
     </>
   );

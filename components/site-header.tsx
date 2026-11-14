@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { RollLink } from "@/components/ui/roll-link";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { AccountMenu, InboxLink, MobileAccountLinks } from "./account-menu";
 import { SaveTracker } from "./club-trackers";
 
@@ -68,9 +67,10 @@ export function SiteHeader() {
               <div className="hidden items-center justify-self-end sm:flex">
                 <AccountMenu />
                 <InboxLink className="mr-3 ml-1" />
-                <RollLink href="/match" variant="primary" size="sm">
+                <Link href="/match" className="btn btn-primary h-10 gap-2 px-5 text-[14px]">
                   Find my clubs
-                </RollLink>
+                  <ArrowRight size={15} strokeWidth={2} aria-hidden className="btn-arrow" />
+                </Link>
               </div>
 
               <div className="-mr-2 flex items-center gap-1 sm:hidden">

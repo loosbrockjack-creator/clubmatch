@@ -171,20 +171,21 @@
   }
 
   /* Arrows inside buttons and links nudge toward where they go. */
+  /* A quick push with a hair of overshoot, so it's felt, not watched. */
   .btn-arrow,
   .btn-arrow-back {
-    transition: transform 200ms var(--ease-out-soft);
+    transition: transform 220ms cubic-bezier(0.3, 1.6, 0.5, 1);
   }
 
   @media (hover: hover) {
     :hover > .btn-arrow,
     .group:hover .btn-arrow {
-      transform: translateX(3px);
+      transform: translateX(4px);
     }
 
     :hover > .btn-arrow-back,
     .group:hover .btn-arrow-back {
-      transform: translateX(-3px);
+      transform: translateX(-4px);
     }
   }
 
@@ -624,4 +625,45 @@ body:has(.quiz-focus) .site-footer {
 
 body:has(.quiz-focus) .site-main {
   padding-bottom: 0;
+}
+
+/* Nav inbox: on hover a letter drops into the tray and settles. */
+.inbox-letter {
+  opacity: 0;
+  transform: translateY(-9px);
+}
+
+@media (hover: hover) {
+  .inbox-link:hover .inbox-letter {
+    animation: letter-drop 460ms cubic-bezier(0.3, 1.5, 0.5, 1) forwards;
+  }
+}
+
+.inbox-link:focus-visible .inbox-letter {
+  animation: letter-drop 460ms cubic-bezier(0.3, 1.5, 0.5, 1) forwards;
+}
+
+@keyframes letter-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-9px);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(1px);
+  }
+}
+
+/* The tray's front lip covers the letter's bottom once it lands, on the same
+   gray as the hovered button. Unfilled at rest so nothing shows on white. */
+.inbox-lip {
+  fill: none;
+}
+
+.inbox-link:hover .inbox-lip,
+.inbox-link:focus-visible .inbox-lip {
+  fill: var(--color-muted);
 }
