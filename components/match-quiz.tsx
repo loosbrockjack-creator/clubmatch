@@ -183,6 +183,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
       careers: data.careers?.length ? data.careers : draft.careers,
       wants: data.wants?.length ? data.wants.slice(0, MAX_WANTS) : wants,
       resumeTopics: data.resumeTopics ?? [],
+      // A fresh upload asks the resume path's three questions from scratch.
+      ...(data.picks?.length ? { commitment: null, gender: null, greek: null } : {}),
     });
     setPicks(data.picks?.length ? data.picks : null);
     setUpload({ state: "done", summary: data.summary ?? "", fellBack });

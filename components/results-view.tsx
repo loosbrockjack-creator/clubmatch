@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, SlidersHorizontal } from "lucide-react";
+import { ClearAnswers } from "@/components/clear-answers";
 import { MatchRow } from "@/components/match-row";
 import { ClubCard } from "@/components/club-card";
 import { ClubMark } from "@/components/club-mark";
@@ -228,6 +229,10 @@ export function ResultsView({ ai }: { ai: boolean }) {
                 <SlidersHorizontal size={13} strokeWidth={2} aria-hidden />
                 Adjust answers
               </Link>
+            </div>
+
+            <div className="mt-4">
+              <ClearAnswers />
             </div>
 
             {prefs.greek == null && (

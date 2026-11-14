@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, ExternalLink, Loader2, LogOut } from "lucide-react";
 import { AccountGate } from "@/components/account-gate";
 import { Avatar } from "@/components/avatar";
+import { ClearAnswers } from "@/components/clear-answers";
 import { ClubCard } from "@/components/club-card";
 import { ProfileForm } from "@/components/profile-form";
 import { LetClubsFindMe, ProfileVisibility } from "@/components/profile-settings";
@@ -16,7 +17,7 @@ import {
   type Profile,
 } from "@/lib/account";
 import { clubBySlug } from "@/lib/clubs";
-import { useSavedClubs } from "@/lib/preferences";
+import { useSavedClubs, useStoredPreferences } from "@/lib/preferences";
 
 const TABS = [
   { id: "saved", label: "Saved" },
@@ -212,6 +213,7 @@ function SettingsTab({ profile, email }: { profile: Profile; email: string | nul
   const [confirm, setConfirm] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const hasAnswers = Boolean(useStoredPreferences());
 
   return (
     <div className="max-w-2xl space-y-12">
@@ -227,6 +229,26 @@ function SettingsTab({ profile, email }: { profile: Profile; email: string | nul
             How privacy works
           </Link>
         </p>
+      </section>
+
+      <section>
+        <h2 className="display gold-rule mb-4 text-[24px] text-ink">Quiz answers</h2>
+        {hasAnswers ? (
+          <>
+            <p className="mb-4 text-[15px] leading-relaxed text-ink-soft">
+              Your answers (and any clubs picked from your resume) shape your matches. Clear them to start fresh.
+              Your saved clubs stay.
+            </p>
+            <ClearAnswers />
+          </>
+        ) : (
+          <p className="text-[15px] text-ink-soft">
+            No quiz answers saved.{" "}
+            <Link href="/match" className="link-isu">
+              Take the quiz
+            </Link>
+          </p>
+        )}
       </section>
 
       <section>

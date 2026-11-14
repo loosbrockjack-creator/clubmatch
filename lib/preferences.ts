@@ -32,7 +32,7 @@ const EMPTY_SAVED: string[] = [];
  */
 type Remote = {
   save: (slug: string, saved: boolean) => void;
-  preferences: (prefs: Preferences) => void;
+  preferences: (prefs: Preferences | null) => void;
 };
 let remote: Remote | null = null;
 
@@ -137,6 +137,20 @@ function useIsHydrated() {
 export function savePreferences(prefs: Preferences) {
   write(PREFS_KEY, JSON.stringify(prefs));
   remote?.preferences(prefs);
+}
+
+/**
+ * Wipes the quiz answers (and any resume picks) here and, when signed in, on
+ * the account too. Saved clubs are left alone.
+ */
+export function clearPreferences() {
+  try {
+    window.localStorage.removeItem(PREFS_KEY);
+  } catch {
+    // Nothing stored to clear.
+  }
+  emit();
+  remote?.preferences(null);
 }
 
 /* ---- Used by lib/account.ts to sync with the signed-in account ---- */
