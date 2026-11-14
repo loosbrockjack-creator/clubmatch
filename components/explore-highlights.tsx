@@ -53,7 +53,8 @@ export function ExploreHighlights() {
           <h2 id="this-week-heading" className="display gold-rule text-[24px] text-ink">
             This week on campus
           </h2>
-          <ul className="-mx-5 mt-5 flex gap-3 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0">
+          {/* pt and pb give the hover lift and its shadow room inside the scroller, which clips. */}
+          <ul className="-mx-5 -mb-4 mt-4 flex gap-3 overflow-x-auto px-5 pb-6 pt-1 sm:mx-0 sm:px-0">
             {eventRows.map((event) => (
               <li key={event.id} className="w-[270px] shrink-0">
                 <Link
