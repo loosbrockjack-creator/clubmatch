@@ -679,7 +679,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     {
       question: "What's your gender?",
       subtitle:
-        "A few clubs, like the men's and women's club sports teams, are for one gender. We only use this to show you the right ones, and it stays private.",
+        "This helps us show you the right club sports teams. It stays private and is never shared with clubs.",
       columns: "sm:grid-cols-2",
       valid: draft.gender != null,
       render: () =>
