@@ -119,7 +119,13 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   const offset = ai ? 1 : 0;
   // Clubs the AI picked from their resume. Set means the short resume path:
   // the upload, then only time, gender, and Greek life.
-  const [picks, setPicks] = useState<AiPick[] | null>(null);
+  // A student who already went the resume way comes back to it: "Adjust
+  // answers" opens their three questions, not the full survey. undefined until
+  // they upload again or skip to the survey.
+  const [chosenPicks, setPicks] = useState<AiPick[] | null | undefined>(undefined);
+  const savedPicks = ai && stored && stored.aiPicks?.length ? stored.aiPicks : null;
+  const picks = chosenPicks === undefined ? savedPicks : chosenPicks;
+  const returning = chosenPicks === undefined && savedPicks !== null;
   const totalSteps = picks ? 4 : 7 + offset;
   // null until the student moves. Results links students whose saved answers
   // predate the Greek question straight to it, but only when those answers
@@ -794,9 +800,8 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
         interests,
         topics: topicsOf(interests),
         resumeTopics,
-        // Only the resume path ranks by AI picks. The survey path clears them,
-        // except the one-question Greek catch-up, which keeps what they had.
-        aiPicks: picks ?? (wantsGreek ? base.aiPicks : undefined),
+        // Only the resume path ranks by AI picks. The survey path clears them.
+        aiPicks: picks ?? undefined,
         completedAt: new Date().toISOString(),
       });
       router.push("/results");
@@ -814,13 +819,13 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
           <p className="text-[13px] font-semibold text-ink-muted">
             {isUploadStep ? "Optional shortcut" : `Step ${numbered} of ${numberedTotal}`}
           </p>
-          {ai && step === offset && !prefilled ? (
+          {ai && step === offset && (!prefilled || picks) ? (
             <button
               type="button"
               onClick={() => setStep(0)}
               className="link-isu text-[13px] font-semibold"
             >
-              Start from your resume or LinkedIn
+              {picks ? "Upload a new file" : "Start from your resume or LinkedIn"}
             </button>
           ) : (
             <p className="text-[13px] text-ink-muted">About a minute</p>
@@ -840,6 +845,22 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
             style={{ width: `${(Math.max(0, numbered) / numberedTotal) * 100}%` }}
           />
         </div>
+
+        {returning && step === 1 && (
+          <div
+            role="status"
+            className="rise mt-6 flex items-start gap-3 border-l-[3px] border-gold bg-gold-tint px-4 py-3"
+          >
+            <FileText size={16} strokeWidth={1.75} className="mt-0.5 shrink-0 text-cardinal" aria-hidden />
+            <p className="flex-1 text-[14px] leading-relaxed text-ink-soft">
+              Your clubs were picked from your resume. Change these answers, or{" "}
+              <button type="button" onClick={() => setStep(0)} className="link-isu font-semibold">
+                upload a new file
+              </button>
+              .
+            </p>
+          </div>
+        )}
 
         {prefilled && !isUploadStep && (picks ? step === 1 : step <= 3) && (
           <div
