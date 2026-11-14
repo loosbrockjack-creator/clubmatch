@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { RollLink } from "@/components/ui/roll-link";
 import { AccountMenu, InboxLink, MobileAccountLinks } from "./account-menu";
 import { SaveTracker } from "./club-trackers";
 
@@ -67,12 +68,9 @@ export function SiteHeader() {
               <div className="hidden items-center justify-self-end sm:flex">
                 <AccountMenu />
                 <InboxLink className="mr-3 ml-1" />
-                <Link
-                  href="/match"
-                  className="inline-flex h-10 items-center rounded-[4px] bg-cardinal px-5 text-[14px] font-semibold text-white transition-colors hover:bg-cardinal-dark"
-                >
+                <RollLink href="/match" variant="primary" size="sm">
                   Find my clubs
-                </Link>
+                </RollLink>
               </div>
 
               <div className="-mr-2 flex items-center gap-1 sm:hidden">

@@ -538,7 +538,8 @@ chips, and a shared `ButtonSpinner` on the Interested button while it waits.
 These fire only after a click, never on page load. Pure CSS, no motion
 library; the global reduced-motion rule turns it all off.
 
-Exception: three home page CTAs (hero Browse all clubs, Take the quiz, See
+Exception: the nav bar Find my clubs CTA and three home page CTAs (hero
+Browse all clubs, Take the quiz, See
 all clubs) use `RollLink` (`components/ui/roll-link.tsx`): the label slides
 out the top while a solid fill slides up from below carrying a second copy of
 the label (aria-hidden). Straight fill, no skew, so the whole box fills. 400ms,
