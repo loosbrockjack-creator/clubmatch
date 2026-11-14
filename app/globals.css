@@ -153,9 +153,6 @@
   /* ISU uses squared-off rectangles, not pills. 4px radius throughout. */
 
   .btn {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -168,40 +165,9 @@
     line-height: 1;
     cursor: pointer;
     transition:
-      background-color 160ms var(--ease-out-soft),
-      border-color 220ms var(--ease-out-soft),
-      color 220ms var(--ease-out-soft),
-      transform 120ms var(--ease-out-soft);
-  }
-
-  /* Hover fill layer. Each variant sets its color and wipe direction; the
-     layer sits behind the label and retracts the way it came. */
-  .btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-color: transparent;
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition:
-      transform 240ms var(--ease-out-soft),
-      opacity 240ms var(--ease-out-soft);
-    pointer-events: none;
-  }
-
-  .btn:active:not(:disabled) {
-    transform: scale(0.97);
-  }
-
-  @media (hover: hover) {
-    .btn:hover:not(:disabled)::before {
-      transform: none;
-    }
-  }
-
-  .btn:disabled::before {
-    display: none;
+      background-color 200ms var(--ease-out-soft),
+      border-color 200ms var(--ease-out-soft),
+      color 200ms var(--ease-out-soft);
   }
 
   /* Arrows inside buttons and links nudge toward where they go. */
@@ -228,12 +194,9 @@
     border: 1px solid var(--color-cardinal);
   }
 
-  .btn-primary::before {
-    background-color: var(--color-cardinal-dark);
-  }
-
   @media (hover: hover) {
     .btn-primary:hover:not(:disabled) {
+      background-color: var(--color-cardinal-dark);
       border-color: var(--color-cardinal-dark);
     }
   }
@@ -251,15 +214,9 @@
     border: 1px solid var(--color-ink);
   }
 
-  /* Ink rises from the bottom, like a fill line. */
-  .btn-secondary::before {
-    background-color: var(--color-ink);
-    transform: scaleY(0);
-    transform-origin: center bottom;
-  }
-
   @media (hover: hover) {
     .btn-secondary:hover:not(:disabled) {
+      background-color: var(--color-ink);
       color: #ffffff;
     }
   }
@@ -277,12 +234,9 @@
     border: 1px solid #ffffff;
   }
 
-  .btn-on-cardinal::before {
-    background-color: var(--color-gold);
-  }
-
   @media (hover: hover) {
     .btn-on-cardinal:hover:not(:disabled) {
+      background-color: var(--color-gold);
       border-color: var(--color-gold);
       color: var(--color-ink);
     }
@@ -294,12 +248,9 @@
     border: 1px solid rgb(255 255 255 / 0.55);
   }
 
-  .btn-ghost-on-cardinal::before {
-    background-color: rgb(255 255 255 / 0.12);
-  }
-
   @media (hover: hover) {
     .btn-ghost-on-cardinal:hover:not(:disabled) {
+      background-color: rgb(255 255 255 / 0.12);
       border-color: #ffffff;
     }
   }
@@ -311,12 +262,9 @@
     border: 1.5px solid var(--color-cardinal);
   }
 
-  .btn-outline-cardinal::before {
-    background-color: var(--color-cardinal);
-  }
-
   @media (hover: hover) {
     .btn-outline-cardinal:hover:not(:disabled) {
+      background-color: var(--color-cardinal);
       color: #ffffff;
     }
   }
@@ -386,21 +334,10 @@
     border: 1px solid transparent;
   }
 
-  /* Quiet: a muted wash blooms from the center. */
-  .btn-quiet::before {
-    background-color: var(--color-muted);
-    opacity: 0;
-    transform: scale(0.85);
-    transform-origin: center;
-  }
-
   @media (hover: hover) {
     .btn-quiet:hover:not(:disabled) {
       color: var(--color-ink);
-    }
-
-    .btn-quiet:hover:not(:disabled)::before {
-      opacity: 1;
+      background-color: var(--color-muted);
     }
   }
 

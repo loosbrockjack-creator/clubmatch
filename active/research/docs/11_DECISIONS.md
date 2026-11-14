@@ -527,14 +527,13 @@ continue as you unless you choose "Use a different email".
 
 ## 2026-11-14: Button motion system
 
-Every `.btn` variant now has a hover fill layer (`::before`) that wipes in
-instead of snapping: cardinal-dark L to R on primary, ink rising from the
-bottom on secondary, cardinal on outline, gold on white-on-cardinal, a center
-bloom on quiet. All `.btn` press to 97% on `:active`. Hover rules sit behind
-`@media (hover: hover)` so taps on phones never leave a stuck fill. Arrows
-in CTAs take `.btn-arrow` / `.btn-arrow-back` and nudge 3px. Extra moments:
-heart pop + ring on save, a checkmark that draws in on Saved / Interested /
-Member, press + tick pop on quiz option cards and filter chips, and a shared
-`ButtonSpinner` on the Interested button while it waits. Animations fire only
-after a click, never on page load. Pure CSS, no motion library; the global
-reduced-motion rule turns it all off.
+Hover stays a plain color fade (200ms) on every `.btn` variant, matching ISU's
+own site. Directional fill wipes and a press-shrink were tried and cut: on 90+
+buttons they read as repetitive and off-brand. Hover rules sit behind
+`@media (hover: hover)` so taps on phones never leave a stuck color. Arrows
+in CTAs take `.btn-arrow` / `.btn-arrow-back` and nudge 3px. Click moments
+carry the personality: heart pop + ring on save, a checkmark that draws in on
+Saved / Interested / Member, press + tick pop on quiz option cards and filter
+chips, and a shared `ButtonSpinner` on the Interested button while it waits.
+These fire only after a click, never on page load. Pure CSS, no motion
+library; the global reduced-motion rule turns it all off.
