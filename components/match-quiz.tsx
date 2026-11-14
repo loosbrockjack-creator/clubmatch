@@ -679,7 +679,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
     {
       question: "What's your gender?",
       subtitle:
-        "This helps us show you the right club sports teams. It stays private and is never shared with clubs.",
+        "Pick your gender.",
       columns: "sm:grid-cols-2",
       valid: draft.gender != null,
       render: () =>
