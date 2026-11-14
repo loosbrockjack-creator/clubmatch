@@ -524,3 +524,17 @@ parked, the account state reads signed-out and `apiFetch` sends no token.
 "Use a different email" and account deletion end the session for real
 (`forgetThisDevice`). Trade-off: on a shared computer the next person could
 continue as you unless you choose "Use a different email".
+
+## 2026-11-14: Button motion system
+
+Every `.btn` variant now has a hover fill layer (`::before`) that wipes in
+instead of snapping: cardinal-dark L to R on primary, ink rising from the
+bottom on secondary, cardinal on outline, gold on white-on-cardinal, a center
+bloom on quiet. All `.btn` press to 97% on `:active`. Hover rules sit behind
+`@media (hover: hover)` so taps on phones never leave a stuck fill. Arrows
+in CTAs take `.btn-arrow` / `.btn-arrow-back` and nudge 3px. Extra moments:
+heart pop + ring on save, a checkmark that draws in on Saved / Interested /
+Member, press + tick pop on quiz option cards and filter chips, and a shared
+`ButtonSpinner` on the Interested button while it waits. Animations fire only
+after a click, never on page load. Pure CSS, no motion library; the global
+reduced-motion rule turns it all off.

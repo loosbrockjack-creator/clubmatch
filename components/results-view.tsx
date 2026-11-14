@@ -182,7 +182,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
           </p>
           <Link href="/match" className="btn btn-primary mt-7">
             Start the match quiz
-            <ArrowRight size={16} strokeWidth={2} aria-hidden />
+            <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
           </Link>
         </div>
       </div>
@@ -325,7 +325,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
                                 {result.club.tagline}
                               </span>
                             </span>
-                            <ArrowRight size={15} strokeWidth={2} aria-hidden className="shrink-0 text-ink-muted" />
+                            <ArrowRight size={15} strokeWidth={2} aria-hidden className="btn-arrow shrink-0 text-ink-muted" />
                           </Link>
                         ))}
                       </div>
@@ -361,7 +361,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
                     className="link-isu mt-5 inline-flex items-center gap-1 text-[14px]"
                   >
                     See all {community.total}
-                    <ArrowRight size={14} strokeWidth={2} aria-hidden />
+                    <ArrowRight size={14} strokeWidth={2} aria-hidden className="btn-arrow" />
                   </Link>
                 )}
               </section>
@@ -402,7 +402,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
                 <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
                   <Link href="/explore" className="btn btn-on-cardinal w-full sm:w-auto">
                     Browse all clubs
-                    <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                    <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
                   </Link>
                   {prefs.greek && prefs.greek !== "no" && (
                     <Link
@@ -414,7 +414,7 @@ export function ResultsView({ ai }: { ai: boolean }) {
                       className="btn btn-ghost-on-cardinal w-full sm:w-auto"
                     >
                       Compare every chapter
-                      <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                      <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
                     </Link>
                   )}
                 </div>

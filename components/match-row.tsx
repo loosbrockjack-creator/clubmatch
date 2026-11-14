@@ -112,7 +112,7 @@ export function MatchRow({
           )}
           <span className="ml-auto hidden items-center gap-1 text-[13px] font-semibold text-ink transition-transform group-hover:translate-x-0.5 sm:inline-flex">
             View club
-            <ArrowRight size={14} strokeWidth={2} aria-hidden />
+            <ArrowRight size={14} strokeWidth={2} aria-hidden className="btn-arrow" />
           </span>
         </div>
       </div>

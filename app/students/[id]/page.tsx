@@ -320,7 +320,7 @@ function Nudge({
       </div>
       <Link href={href} className="btn btn-secondary h-10 shrink-0 self-start px-4 text-[14px] sm:self-auto">
         {action}
-        <ArrowRight size={15} aria-hidden />
+        <ArrowRight size={15} aria-hidden className="btn-arrow" />
       </Link>
     </div>
   );

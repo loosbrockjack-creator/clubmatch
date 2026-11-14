@@ -6,6 +6,7 @@ import { BellRing, Check } from "lucide-react";
 import { useAccount } from "@/lib/account";
 import { logActivity, useOfficerClubs } from "@/lib/club-client";
 import { getSupabase } from "@/lib/supabase";
+import { ButtonSpinner } from "@/components/button-spinner";
 
 /**
  * "I'm interested": the one action that tells a claimed club's officers, unlike
@@ -17,6 +18,8 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
   const userId = account.userId;
   const [state, setState] = useState<{ userId: string; interested: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
+  // Animate the check only when the student flips it on, never on page load.
+  const [justToggled, setJustToggled] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isOfficer = useOfficerClubs().includes(slug);
 
@@ -72,6 +75,7 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
       setError("Couldn't update that. Try again.");
       return;
     }
+    setJustToggled(true);
     setState({ userId: userId, interested: !interested });
     if (!interested) logActivity("interested", [slug]);
   }
@@ -83,15 +87,25 @@ export function ClubInterestButton({ slug, clubName }: { slug: string; clubName:
         onClick={toggle}
         disabled={!loaded || busy}
         aria-pressed={interested}
+        aria-busy={busy || undefined}
         data-interest-button
         className={`btn h-auto min-h-12 w-full py-3 leading-snug sm:w-auto ${interested ? "btn-outline-cardinal" : "btn-primary"} disabled:opacity-70`}
       >
-        {interested ? (
-          <Check size={16} strokeWidth={2.25} aria-hidden />
+        {busy ? (
+          <ButtonSpinner />
+        ) : interested ? (
+          <Check
+            size={16}
+            strokeWidth={2.25}
+            aria-hidden
+            className={justToggled ? "check-draw" : undefined}
+          />
         ) : (
           <BellRing size={16} strokeWidth={2} aria-hidden />
         )}
-        {interested ? "Officers know you're interested" : "I'm interested"}
+        <span key={String(interested)} className={justToggled ? "fade-in" : undefined}>
+          {interested ? "Officers know you're interested" : "I'm interested"}
+        </span>
         <span className="sr-only"> in {clubName}</span>
       </button>
       {interested && (

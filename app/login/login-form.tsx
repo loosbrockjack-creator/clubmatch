@@ -126,7 +126,7 @@ export function LoginForm() {
           >
             {busy ? <Loader2 size={16} className="animate-spin" aria-hidden /> : null}
             Sign in
-            {!busy && <ChevronRight size={16} strokeWidth={2.25} aria-hidden />}
+            {!busy && <ChevronRight size={16} strokeWidth={2.25} aria-hidden className="btn-arrow" />}
           </button>
           <button
             type="button"
@@ -227,7 +227,7 @@ export function LoginForm() {
       <button type="submit" disabled={busy} className="btn btn-outline-cardinal mt-7 rounded-full">
         {busy ? <Loader2 size={16} className="animate-spin" aria-hidden /> : null}
         Email me a code
-        {!busy && <ChevronRight size={16} strokeWidth={2.25} aria-hidden />}
+        {!busy && <ChevronRight size={16} strokeWidth={2.25} aria-hidden className="btn-arrow" />}
       </button>
     </form>
   );

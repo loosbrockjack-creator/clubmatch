@@ -153,6 +153,9 @@
   /* ISU uses squared-off rectangles, not pills. 4px radius throughout. */
 
   .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -166,8 +169,57 @@
     cursor: pointer;
     transition:
       background-color 160ms var(--ease-out-soft),
-      border-color 160ms var(--ease-out-soft),
-      color 160ms var(--ease-out-soft);
+      border-color 220ms var(--ease-out-soft),
+      color 220ms var(--ease-out-soft),
+      transform 120ms var(--ease-out-soft);
+  }
+
+  /* Hover fill layer. Each variant sets its color and wipe direction; the
+     layer sits behind the label and retracts the way it came. */
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: transparent;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition:
+      transform 240ms var(--ease-out-soft),
+      opacity 240ms var(--ease-out-soft);
+    pointer-events: none;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  @media (hover: hover) {
+    .btn:hover:not(:disabled)::before {
+      transform: none;
+    }
+  }
+
+  .btn:disabled::before {
+    display: none;
+  }
+
+  /* Arrows inside buttons and links nudge toward where they go. */
+  .btn-arrow,
+  .btn-arrow-back {
+    transition: transform 200ms var(--ease-out-soft);
+  }
+
+  @media (hover: hover) {
+    :hover > .btn-arrow,
+    .group:hover .btn-arrow {
+      transform: translateX(3px);
+    }
+
+    :hover > .btn-arrow-back,
+    .group:hover .btn-arrow-back {
+      transform: translateX(-3px);
+    }
   }
 
   .btn-primary {
@@ -176,9 +228,14 @@
     border: 1px solid var(--color-cardinal);
   }
 
-  .btn-primary:hover:not(:disabled) {
+  .btn-primary::before {
     background-color: var(--color-cardinal-dark);
-    border-color: var(--color-cardinal-dark);
+  }
+
+  @media (hover: hover) {
+    .btn-primary:hover:not(:disabled) {
+      border-color: var(--color-cardinal-dark);
+    }
   }
 
   .btn-primary:disabled {
@@ -194,9 +251,17 @@
     border: 1px solid var(--color-ink);
   }
 
-  .btn-secondary:hover:not(:disabled) {
+  /* Ink rises from the bottom, like a fill line. */
+  .btn-secondary::before {
     background-color: var(--color-ink);
-    color: #ffffff;
+    transform: scaleY(0);
+    transform-origin: center bottom;
+  }
+
+  @media (hover: hover) {
+    .btn-secondary:hover:not(:disabled) {
+      color: #ffffff;
+    }
   }
 
   .btn-secondary:disabled {
@@ -212,10 +277,15 @@
     border: 1px solid #ffffff;
   }
 
-  .btn-on-cardinal:hover:not(:disabled) {
+  .btn-on-cardinal::before {
     background-color: var(--color-gold);
-    border-color: var(--color-gold);
-    color: var(--color-ink);
+  }
+
+  @media (hover: hover) {
+    .btn-on-cardinal:hover:not(:disabled) {
+      border-color: var(--color-gold);
+      color: var(--color-ink);
+    }
   }
 
   .btn-ghost-on-cardinal {
@@ -224,9 +294,14 @@
     border: 1px solid rgb(255 255 255 / 0.55);
   }
 
-  .btn-ghost-on-cardinal:hover:not(:disabled) {
+  .btn-ghost-on-cardinal::before {
     background-color: rgb(255 255 255 / 0.12);
-    border-color: #ffffff;
+  }
+
+  @media (hover: hover) {
+    .btn-ghost-on-cardinal:hover:not(:disabled) {
+      border-color: #ffffff;
+    }
   }
 
   /* Outlined cardinal: the ISU account-page button. */
@@ -236,9 +311,14 @@
     border: 1.5px solid var(--color-cardinal);
   }
 
-  .btn-outline-cardinal:hover:not(:disabled) {
+  .btn-outline-cardinal::before {
     background-color: var(--color-cardinal);
-    color: #ffffff;
+  }
+
+  @media (hover: hover) {
+    .btn-outline-cardinal:hover:not(:disabled) {
+      color: #ffffff;
+    }
   }
 
   .btn-outline-cardinal:disabled {
@@ -306,9 +386,22 @@
     border: 1px solid transparent;
   }
 
-  .btn-quiet:hover:not(:disabled) {
-    color: var(--color-ink);
+  /* Quiet: a muted wash blooms from the center. */
+  .btn-quiet::before {
     background-color: var(--color-muted);
+    opacity: 0;
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+
+  @media (hover: hover) {
+    .btn-quiet:hover:not(:disabled) {
+      color: var(--color-ink);
+    }
+
+    .btn-quiet:hover:not(:disabled)::before {
+      opacity: 1;
+    }
   }
 
   /* ---- Links --------------------------------------------------------- */
@@ -479,6 +572,58 @@
       opacity: 1;
       transform: none;
     }
+  }
+
+  /* ---- Button moments ------------------------------------------------ */
+
+  /* Heart on save: a quick pop plus a faint ring that fades outward. */
+  .heart-pop {
+    animation: heart-pop 300ms var(--ease-out-soft);
+  }
+
+  @keyframes heart-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.25); }
+    70% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  .ring-burst::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 1.5px solid var(--color-cardinal);
+    pointer-events: none;
+    animation: ring-burst 420ms var(--ease-out-soft) both;
+  }
+
+  @keyframes ring-burst {
+    from { opacity: 0.4; transform: scale(0.6); }
+    to { opacity: 0; transform: scale(1.6); }
+  }
+
+  /* Checkmark draws itself in when something flips on. */
+  .check-draw path,
+  .check-draw polyline {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: check-draw 280ms 60ms var(--ease-out-soft) forwards;
+  }
+
+  @keyframes check-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Selected tick in quiz option cards. */
+  .tick-pop {
+    animation: tick-pop 220ms var(--ease-out-soft);
+  }
+
+  @keyframes tick-pop {
+    0% { transform: scale(0.6); }
+    60% { transform: scale(1.12); }
+    100% { transform: scale(1); }
   }
 
   /* A line of copy replaced in place, e.g. a personal "why it fits". */

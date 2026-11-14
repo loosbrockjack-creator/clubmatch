@@ -176,7 +176,7 @@ function Empty({ title, body }: { title: string; body: string }) {
       <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Link href="/match" className="btn btn-primary">
           Find my clubs
-          <ArrowRight size={16} strokeWidth={2} aria-hidden />
+          <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
         </Link>
         <Link href="/explore" className="btn btn-secondary">
           Browse all clubs

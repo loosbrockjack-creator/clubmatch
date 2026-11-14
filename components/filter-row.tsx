@@ -29,7 +29,7 @@ export function FilterRow<T extends string>({
               type="button"
               aria-pressed={active}
               onClick={() => onToggle(option.id)}
-              className={`chip transition-colors ${
+              className={`chip transition-[color,background-color,border-color,transform] duration-150 active:scale-[0.96] ${
                 active
                   ? "border-cardinal bg-cardinal-tint text-cardinal"
                   : "hover:border-line-strong hover:bg-muted-deep"

@@ -10,6 +10,9 @@ import { toggleMembership, useAccount } from "@/lib/account";
 export function MemberButton({ slug, clubName }: { slug: string; clubName: string }) {
   const account = useAccount();
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  // Animate the check only when the student flips it on, never on page load.
+  const [justToggled, setJustToggled] = useState(false);
   const isMember = account.memberships.includes(slug);
   const isOfficer = useOfficerClubs().includes(slug);
 
@@ -44,18 +47,30 @@ export function MemberButton({ slug, clubName }: { slug: string; clubName: strin
         type="button"
         aria-pressed={isMember}
         onClick={async () => {
+          // Membership flips optimistically, so no spinner: just ignore repeat taps.
+          if (busy) return;
+          setBusy(true);
+          setJustToggled(true);
           const problem = await toggleMembership(slug);
+          setBusy(false);
           setError(problem);
           if (!problem && !isMember) logActivity("join", [slug]);
         }}
         className={`btn w-full sm:w-auto ${isMember ? "btn-outline-cardinal" : "btn-secondary"}`}
       >
         {isMember ? (
-          <Check size={16} strokeWidth={2.25} aria-hidden />
+          <Check
+            size={16}
+            strokeWidth={2.25}
+            aria-hidden
+            className={justToggled ? "check-draw" : undefined}
+          />
         ) : (
           <UserPlus size={16} strokeWidth={2} aria-hidden />
         )}
-        {isMember ? "You're a member" : "I'm a member"}
+        <span key={String(isMember)} className={justToggled ? "fade-in" : undefined}>
+          {isMember ? "You're a member" : "I'm a member"}
+        </span>
         <span className="sr-only"> of {clubName}</span>
       </button>
       {error && (

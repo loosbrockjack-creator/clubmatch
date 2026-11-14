@@ -862,7 +862,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
               disabled={step === 0}
               className="btn btn-quiet disabled:invisible"
             >
-              <ArrowLeft size={16} strokeWidth={2} aria-hidden />
+              <ArrowLeft size={16} strokeWidth={2} aria-hidden className="btn-arrow-back" />
               Back
             </button>
 
@@ -885,7 +885,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
                 ) : (
                   <>
                     {isLast ? "See my matches" : isUploadStep ? "Skip, I'll answer" : "Continue"}
-                    <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                    <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
                   </>
                 )}
               </button>

@@ -25,7 +25,11 @@ export function OptionCard({
   disabled?: boolean;
 }) {
   return (
-    <label className={`block ${disabled ? "cursor-not-allowed opacity-45" : "cursor-pointer"}`}>
+    <label
+      className={`block transition-transform duration-100 ease-out ${
+        disabled ? "cursor-not-allowed opacity-45" : "cursor-pointer active:scale-[0.98]"
+      }`}
+    >
       <input
         type={type}
         name={name}
@@ -63,11 +67,11 @@ export function OptionCard({
             type === "radio" ? "rounded-full" : "rounded-[3px]"
           } ${
             checked
-              ? "border-cardinal bg-cardinal text-white"
+              ? "tick-pop border-cardinal bg-cardinal text-white"
               : "border-line-strong bg-surface text-transparent"
           }`}
         >
-          <Check size={13} strokeWidth={3} />
+          <Check size={13} strokeWidth={3} className={checked ? "check-draw" : ""} />
         </span>
       </span>
     </label>
