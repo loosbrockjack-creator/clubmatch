@@ -29,6 +29,7 @@ import {
   areasFor,
 } from "@/lib/taxonomy";
 import type { CommunityId, Preferences } from "@/lib/types";
+import { RollLink } from "@/components/ui/roll-link";
 
 /** Where "See all" for a community section points in Explore. */
 function communityCategory(ids: CommunityId[]) {
@@ -180,10 +181,10 @@ export function ResultsView({ ai }: { ai: boolean }) {
           <p className="mt-5 text-[15.5px] leading-relaxed text-ink-soft">
             Answer a few quick questions and we will rank the clubs that fit you.
           </p>
-          <Link href="/match" className="btn btn-primary mt-7">
+          <RollLink href="/match" variant="primary" className="mt-7">
             Start the match quiz
-            <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
-          </Link>
+            <ArrowRight size={16} strokeWidth={2} aria-hidden />
+          </RollLink>
         </div>
       </div>
     );
@@ -248,12 +249,12 @@ export function ResultsView({ ai }: { ai: boolean }) {
               you&apos;re into. You can also browse everything and filter it yourself.
             </p>
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/match" className="btn btn-primary">
+              <RollLink href="/match" variant="primary">
                 Adjust my answers
-              </Link>
-              <Link href="/explore" className="btn btn-secondary">
+              </RollLink>
+              <RollLink href="/explore" variant="secondary">
                 Browse all clubs
-              </Link>
+              </RollLink>
             </div>
           </div>
         ) : (
@@ -400,22 +401,23 @@ export function ResultsView({ ai }: { ai: boolean }) {
                   filterable.
                 </p>
                 <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                  <Link href="/explore" className="btn btn-on-cardinal w-full sm:w-auto">
+                  <RollLink href="/explore" variant="on-cardinal" className="w-full sm:w-auto">
                     Browse all clubs
-                    <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
-                  </Link>
+                    <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                  </RollLink>
                   {prefs.greek && prefs.greek !== "no" && (
-                    <Link
+                    <RollLink
                       href={
                         prefs.greek === "either"
                           ? "/greek"
                           : `/greek?kind=${prefs.greek}`
                       }
-                      className="btn btn-ghost-on-cardinal w-full sm:w-auto"
+                      variant="ghost-on-cardinal"
+                      className="w-full sm:w-auto"
                     >
                       Compare every chapter
-                      <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
-                    </Link>
+                      <ArrowRight size={16} strokeWidth={2} aria-hidden />
+                    </RollLink>
                   )}
                 </div>
               </div>

@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/page-header";
 import { refreshUnread } from "@/lib/club-client";
 import { getClubSummary } from "@/lib/clubs";
 import { getSupabase } from "@/lib/supabase";
+import { RollLink } from "@/components/ui/roll-link";
 
 type Message = {
   id: string;
@@ -131,9 +132,9 @@ function Messages({ userId }: { userId: string }) {
             When a club you&apos;re in sends a message, it lands here. Find a club and tell its officers
             you&apos;re interested to start hearing from them.
           </p>
-          <Link href="/explore" className="btn btn-secondary mt-6">
+          <RollLink href="/explore" variant="secondary" className="mt-6">
             Explore clubs
-          </Link>
+          </RollLink>
         </div>
       )}
 

@@ -17,6 +17,7 @@ import {
 } from "@/lib/account";
 import { clubBySlug } from "@/lib/clubs";
 import { useSavedClubs } from "@/lib/preferences";
+import { RollLink } from "@/components/ui/roll-link";
 
 const TABS = [
   { id: "saved", label: "Saved" },
@@ -174,13 +175,13 @@ function Empty({ title, body }: { title: string; body: string }) {
       <h2 className="display text-[24px] text-ink">{title}</h2>
       <p className="mx-auto mt-3 max-w-sm text-[14.5px] leading-relaxed text-ink-soft">{body}</p>
       <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <Link href="/match" className="btn btn-primary">
+        <RollLink href="/match" variant="primary">
           Find my clubs
-          <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
-        </Link>
-        <Link href="/explore" className="btn btn-secondary">
+          <ArrowRight size={16} strokeWidth={2} aria-hidden />
+        </RollLink>
+        <RollLink href="/explore" variant="secondary">
           Browse all clubs
-        </Link>
+        </RollLink>
       </div>
     </div>
   );

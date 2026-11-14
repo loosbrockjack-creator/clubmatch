@@ -5,6 +5,7 @@ import { ClubCard } from "@/components/club-card";
 import { clubs } from "@/lib/clubs";
 import { INTEREST_TILES, homepageArt } from "@/lib/photos";
 import { COUNCILS } from "@/lib/taxonomy";
+import { RollLink } from "@/components/ui/roll-link";
 
 const steps = [
   {
@@ -103,14 +104,14 @@ export default function LandingPage() {
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/match" className="btn btn-primary w-full sm:w-auto">
+              <RollLink href="/match" variant="primary" className="w-full sm:w-auto">
                 Find my clubs
-                <ChevronRight size={17} strokeWidth={2.25} aria-hidden className="btn-arrow" />
-              </Link>
-              <Link href="/explore" className="btn btn-secondary w-full sm:w-auto">
+                <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
+              </RollLink>
+              <RollLink href="/explore" variant="secondary" className="w-full sm:w-auto">
                 Browse all clubs
-                <ChevronRight size={17} strokeWidth={2.25} aria-hidden className="btn-arrow" />
-              </Link>
+                <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
+              </RollLink>
             </div>
           </div>
         </div>
@@ -216,10 +217,10 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <Link href="/greek" className="btn btn-secondary mt-10">
+          <RollLink href="/greek" variant="secondary" className="mt-10">
             See all {chapters.length} chapters
-            <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
-          </Link>
+            <ArrowRight size={16} strokeWidth={2} aria-hidden />
+          </RollLink>
         </div>
       </section>
 
@@ -238,10 +239,10 @@ export default function LandingPage() {
               get missed. Six questions get you a ranked shortlist with the
               reasoning shown, so you can tell a real fit from a long list.
             </p>
-            <Link href="/match" className="btn btn-on-cardinal mt-8">
+            <RollLink href="/match" variant="on-cardinal" className="mt-8">
               Take the quiz
-              <ChevronRight size={17} strokeWidth={2.25} aria-hidden className="btn-arrow" />
-            </Link>
+              <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
+            </RollLink>
           </div>
 
           <div className="relative hidden aspect-[4/3] lg:col-span-8 lg:col-start-5 lg:row-start-1 lg:block lg:aspect-[16/10]">
@@ -299,10 +300,10 @@ export default function LandingPage() {
           ))}
         </div>
 
-        <Link href="/explore" className="btn btn-secondary mt-10">
+        <RollLink href="/explore" variant="secondary" className="mt-10">
           See all {clubs.length} clubs
-          <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
-        </Link>
+          <ArrowRight size={16} strokeWidth={2} aria-hidden />
+        </RollLink>
       </section>
     </>
   );
