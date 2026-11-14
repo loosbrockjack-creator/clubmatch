@@ -450,7 +450,7 @@
 
   .footer-bigword-wrap {
     overflow: hidden;
-    height: clamp(44px, 11.5vw, 150px);
+    height: var(--footer-peek);
     margin-top: 8px;
     user-select: none;
     pointer-events: none;
@@ -588,8 +588,18 @@
   }
 }
 
+/* How much of the footer's big wordmark shows below the page, and the sticky
+   header above it (68px bar + 3px gold rule). */
+:root {
+  --footer-peek: clamp(44px, 11.5vw, 150px);
+  --header-h: 71px;
+}
+
 /* The page lifts off a pinned footer. Desktop only, and only when the footer
-   fits the screen; otherwise its top would never be reachable. */
+   fits the screen; otherwise its top would never be reachable.
+   Every page is at least a screen tall minus the wordmark strip, so each one
+   opens the same way: page content down to just above the big CLUBMATCH,
+   links and fine print hidden until you scroll. */
 @media (min-width: 1024px) and (min-height: 760px) {
   .site-footer {
     position: sticky;
@@ -601,6 +611,7 @@
     position: relative;
     z-index: 1;
     background: var(--color-canvas);
+    min-height: calc(100svh - var(--header-h) - var(--footer-peek));
   }
 }
 
