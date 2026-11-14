@@ -1,4 +1,4 @@
-import { RollLink } from "@/components/ui/roll-link";
+import Link from "next/link";
 
 export default function NotFound() {
   return (
@@ -13,12 +13,12 @@ export default function NotFound() {
           The club or page you were looking for may have moved.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <RollLink href="/explore" variant="primary">
+          <Link href="/explore" className="btn btn-primary">
             Browse all clubs
-          </RollLink>
-          <RollLink href="/" variant="secondary">
+          </Link>
+          <Link href="/" className="btn btn-secondary">
             Back home
-          </RollLink>
+          </Link>
         </div>
       </div>
     </div>

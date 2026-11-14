@@ -538,10 +538,8 @@ chips, and a shared `ButtonSpinner` on the Interested button while it waits.
 These fire only after a click, never on page load. Pure CSS, no motion
 library; the global reduced-motion rule turns it all off.
 
-Exception: discovery CTAs (Find my clubs, Browse all clubs, Take the quiz,
-See all clubs / chapters, empty-state Browse links) use `RollLink`
-(`components/ui/roll-link.tsx`): the label rolls up out the top while a
-skewed brand-color fill sweeps in from below with a second copy of the label
-(aria-hidden). 500ms, longer than our usual 150-250ms, by request: these few
-buttons are meant to stand out. Admin, claim and profile utility buttons keep
-the plain fade.
+Exception: three home page CTAs (hero Browse all clubs, Take the quiz, See
+all clubs) use `RollLink` (`components/ui/roll-link.tsx`): the label slides
+out the top while a solid fill slides up from below carrying a second copy of
+the label (aria-hidden). Straight fill, no skew, so the whole box fills. 400ms,
+longer than our usual 150-250ms, by request. Everything else keeps the plain fade.

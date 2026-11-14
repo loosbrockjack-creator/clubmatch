@@ -28,7 +28,6 @@ import {
 import { resolveProfileLinks } from "@/lib/profile-links";
 import { getSupabase } from "@/lib/supabase";
 import type { ClubSummary } from "@/lib/types";
-import { RollLink } from "@/components/ui/roll-link";
 
 type MembershipRow = { club_slug: string; role: ClubRole; verified: boolean };
 type ClubEntry = { club: ClubSummary; role: ClubRole; verified: boolean };
@@ -143,9 +142,9 @@ function StudentProfile({ me }: { me: Profile }) {
         <p className="mx-auto mt-3 max-w-sm text-[15px] text-ink-soft">
           The student may have hidden their profile or deleted their account.
         </p>
-        <RollLink href="/explore" variant="secondary" className="mt-8">
+        <Link href="/explore" className="btn btn-secondary mt-8">
           Browse clubs
-        </RollLink>
+        </Link>
       </div>
     );
   }

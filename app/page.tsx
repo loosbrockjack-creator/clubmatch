@@ -104,10 +104,10 @@ export default function LandingPage() {
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <RollLink href="/match" variant="primary" className="w-full sm:w-auto">
+              <Link href="/match" className="btn btn-primary w-full sm:w-auto">
                 Find my clubs
-                <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
-              </RollLink>
+                <ChevronRight size={17} strokeWidth={2.25} aria-hidden className="btn-arrow" />
+              </Link>
               <RollLink href="/explore" variant="secondary" className="w-full sm:w-auto">
                 Browse all clubs
                 <ChevronRight size={17} strokeWidth={2.25} aria-hidden />
@@ -217,10 +217,10 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <RollLink href="/greek" variant="secondary" className="mt-10">
+          <Link href="/greek" className="btn btn-secondary mt-10">
             See all {chapters.length} chapters
-            <ArrowRight size={16} strokeWidth={2} aria-hidden />
-          </RollLink>
+            <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
+          </Link>
         </div>
       </section>
 

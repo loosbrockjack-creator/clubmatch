@@ -1,11 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ClubCard } from "@/components/club-card";
 import { PageHeader } from "@/components/page-header";
 import { clubBySlug } from "@/lib/clubs";
 import { useSavedClubs } from "@/lib/preferences";
-import { RollLink } from "@/components/ui/roll-link";
 
 export default function SavedPage() {
   const { saved, ready } = useSavedClubs();
@@ -34,13 +34,13 @@ export default function SavedPage() {
             Tap the heart on any club to keep it here while you decide.
           </p>
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <RollLink href="/match" variant="primary">
+            <Link href="/match" className="btn btn-primary">
               Find my clubs
-              <ArrowRight size={16} strokeWidth={2} aria-hidden />
-            </RollLink>
-            <RollLink href="/explore" variant="secondary">
+              <ArrowRight size={16} strokeWidth={2} aria-hidden className="btn-arrow" />
+            </Link>
+            <Link href="/explore" className="btn btn-secondary">
               Browse all clubs
-            </RollLink>
+            </Link>
           </div>
         </div>
       ) : (
