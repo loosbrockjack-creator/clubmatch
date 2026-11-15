@@ -159,16 +159,19 @@ export default function LandingPage() {
                   className="object-cover"
                 />
               </div>
-              {/* The chevron stays inline so it trails the last word when the
-                  label wraps, instead of floating off to the right edge. */}
+              {/* The chevron is glued to the last word so a wrapping label
+                  carries it along instead of leaving it alone on a new line. */}
               <h3 className="mt-3 text-[15px] font-bold leading-snug tracking-[-0.01em] text-ink">
-                {tile.label}
-                <ChevronRight
-                  size={15}
-                  strokeWidth={2.5}
-                  aria-hidden
-                  className="ml-1 inline-block shrink-0 align-[-2px] text-cardinal transition-transform group-hover:translate-x-0.5"
-                />
+                {tile.label.split(" ").slice(0, -1).join(" ")}{" "}
+                <span className="whitespace-nowrap">
+                  {tile.label.split(" ").at(-1)}
+                  <ChevronRight
+                    size={15}
+                    strokeWidth={2.5}
+                    aria-hidden
+                    className="ml-1 inline-block shrink-0 align-[-2px] text-cardinal transition-transform group-hover:translate-x-0.5"
+                  />
+                </span>
               </h3>
               <p className="mt-0.5 text-[13px] text-ink-muted">
                 {clubs.filter((c) => c.categories.includes(tile.category)).length}{" "}

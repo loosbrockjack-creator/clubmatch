@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { AccountMenu, InboxLink, MobileAccountLinks } from "./account-menu";
 import { SaveTracker } from "./club-trackers";
 
@@ -17,6 +17,19 @@ export function SiteHeader() {
   const pathname = usePathname();
   const onMatch = pathname === "/match";
   const [open, setOpen] = useState(false);
+
+  // Close on navigation (back/forward included) and on Escape.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setOpen(false);
+  }
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <header className="sticky top-0 z-40 bg-white">
@@ -81,9 +94,14 @@ export function SiteHeader() {
                   aria-expanded={open}
                   aria-controls="mobile-nav"
                   aria-label={open ? "Close menu" : "Open menu"}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] text-cardinal transition-colors hover:bg-muted"
+                  data-open={open}
+                  className="menu-toggle inline-flex h-11 w-11 items-center justify-center rounded-[4px] text-cardinal transition-colors hover:bg-muted"
                 >
-                  {open ? <X size={22} /> : <Menu size={22} />}
+                  <span aria-hidden className="menu-bars">
+                    <span />
+                    <span />
+                    <span />
+                  </span>
                 </button>
               </div>
             </>
@@ -100,32 +118,48 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {open && !onMatch && (
-        <nav
-          id="mobile-nav"
-          className="border-b border-line bg-white shadow-sm sm:hidden"
-        >
-          <div className="shell flex flex-col py-2">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="border-b border-line py-3.5 text-[16px] font-semibold text-ink"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <MobileAccountLinks onNavigate={() => setOpen(false)} />
-            <Link
-              href="/match"
-              onClick={() => setOpen(false)}
-              className="btn btn-primary my-4 w-full"
-            >
-              Find my clubs
-            </Link>
-          </div>
-        </nav>
+      {!onMatch && (
+        <>
+          {/* Dims the page under the open menu; tapping it closes the menu. */}
+          <div
+            aria-hidden
+            data-open={open}
+            onClick={() => setOpen(false)}
+            className="mobile-nav-scrim sm:hidden"
+          />
+          <nav
+            id="mobile-nav"
+            aria-label="Menu"
+            data-open={open}
+            inert={!open}
+            className="mobile-nav sm:hidden"
+          >
+            <div className="mobile-nav-inner">
+              <div className="shell flex flex-col py-2">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="mobile-nav-item border-b border-line py-3.5 text-[16px] font-semibold text-ink"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <div className="mobile-nav-item flex flex-col">
+                  <MobileAccountLinks onNavigate={() => setOpen(false)} />
+                </div>
+                <Link
+                  href="/match"
+                  onClick={() => setOpen(false)}
+                  className="mobile-nav-item btn btn-primary my-4 w-full"
+                >
+                  Find my clubs
+                </Link>
+              </div>
+            </div>
+          </nav>
+        </>
       )}
     </header>
   );

@@ -38,6 +38,12 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    background-color: var(--color-canvas);
+  }
+
+  /* Set by FooterCanvas: Safari's under-toolbar strip matches the footer. */
+  html[data-footer-in-view] {
+    background-color: var(--color-cardinal);
   }
 
   body {
@@ -666,4 +672,121 @@ body:has(.quiz-focus) .site-main {
 .inbox-link:hover .inbox-lip,
 .inbox-link:focus-visible .inbox-lip {
   fill: var(--color-muted);
+}
+
+/* ---- Mobile menu: panel unfolds, links rise in, bars morph to an X ---- */
+
+.menu-bars {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 14px;
+}
+
+.menu-bars > span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 160ms ease;
+}
+
+.menu-bars > span:nth-child(1) { top: 0; }
+.menu-bars > span:nth-child(2) { top: 6px; }
+.menu-bars > span:nth-child(3) { top: 12px; }
+
+.menu-toggle[data-open="true"] .menu-bars > span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle[data-open="true"] .menu-bars > span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.4);
+}
+.menu-toggle[data-open="true"] .menu-bars > span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Panel overlays the page under the header instead of pushing it down. */
+.mobile-nav {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  display: grid;
+  grid-template-rows: 0fr;
+  background: #fff;
+  border-bottom: 1px solid transparent;
+  box-shadow: 0 12px 24px -16px rgb(0 0 0 / 0);
+  transition:
+    grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms ease,
+    border-color 320ms ease;
+}
+
+.mobile-nav[data-open="true"] {
+  grid-template-rows: 1fr;
+  border-bottom-color: var(--color-line);
+  box-shadow: 0 12px 24px -16px rgb(0 0 0 / 0.18);
+}
+
+.mobile-nav-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mobile-nav[data-open="true"] .mobile-nav-inner {
+  max-height: calc(100svh - var(--header-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mobile-nav-item {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.mobile-nav[data-open="true"] .mobile-nav-item {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 260ms ease,
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-nav[data-open="true"] .mobile-nav-item:nth-child(1) { transition-delay: 40ms; }
+.mobile-nav[data-open="true"] .mobile-nav-item:nth-child(2) { transition-delay: 70ms; }
+.mobile-nav[data-open="true"] .mobile-nav-item:nth-child(3) { transition-delay: 100ms; }
+.mobile-nav[data-open="true"] .mobile-nav-item:nth-child(4) { transition-delay: 130ms; }
+.mobile-nav[data-open="true"] .mobile-nav-item:nth-child(5) { transition-delay: 160ms; }
+
+.mobile-nav-scrim {
+  position: fixed;
+  inset: 0;
+  top: var(--header-h);
+  z-index: -1;
+  background: rgb(20 16 14 / 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.mobile-nav-scrim[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-bars > span,
+  .mobile-nav,
+  .mobile-nav-item,
+  .mobile-nav-scrim {
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
 }

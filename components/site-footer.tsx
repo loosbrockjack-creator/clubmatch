@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { clubs } from "@/lib/clubs";
 import { CONTACT_EMAIL } from "@/lib/site";
+import { FooterCanvas } from "./footer-canvas";
 
 const columns = [
   {
@@ -36,6 +37,7 @@ const columns = [
 export function SiteFooter() {
   return (
     <footer className="site-footer on-cardinal overflow-hidden bg-cardinal text-white">
+      <FooterCanvas />
       <div className="shell pb-12 pt-14 sm:pb-14 sm:pt-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
