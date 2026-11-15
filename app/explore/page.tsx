@@ -10,7 +10,7 @@ import { FilterRow } from "@/components/filter-row";
 import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
 import { CLUB_COVERS } from "@/lib/photos";
-import { MATCH_THRESHOLD, isRankable, scoreClub } from "@/lib/matching";
+import { matchesBySlug, scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
   ACADEMIC_AREAS,
@@ -83,16 +83,11 @@ const ALL_CATEGORIES = new Set(CATEGORY_COUNTS.keys());
 const CHIP_ROW_CATEGORIES = new Set(CATEGORIES.map((c) => c.id));
 
 /**
- * A fit badge only for clubs that would be in the student's matches. "12% fit"
- * on a club that matches nothing reads as a grade, not a guide. Community
- * clubs are suggested on request, never ranked, so they get no number either.
+ * A fit badge only for clubs that are in the student's matches, with the same
+ * number the results page shows. "12% fit" on a club that matches nothing
+ * reads as a grade, not a guide. Chapters and community clubs are suggested
+ * separately, never ranked, so they get no number either.
  */
-function fitBadge(prefs: Preferences, club: ClubSummary): number | undefined {
-  if (club.greek || !isRankable(prefs, club)) return undefined;
-  const result = scoreClub(prefs, club);
-  return result.eligible && result.score >= MATCH_THRESHOLD ? result.score : undefined;
-}
-
 export default function ExplorePage() {
   return (
     <Suspense fallback={<ExploreFallback />}>
@@ -137,6 +132,7 @@ function ExploreView() {
 
   const hasPrefs = prefs !== null && prefs !== false;
   const activeSort: SortMode = hasPrefs ? sort : "az";
+  const matched = useMemo(() => (hasPrefs ? matchesBySlug(prefs) : null), [hasPrefs, prefs]);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -184,7 +180,9 @@ function ExploreView() {
       activeSort === "fit" && hasPrefs
         ? matches
             .map((club) => {
-              if (club.greek) return { club, score: -1 };
+              const match = matched?.get(club.slug);
+              if (match) return { club, score: 1000 + match.score };
+              if (club.greek || prefs.aiPicks?.length) return { club, score: -1 };
               const result = scoreClub(prefs, club);
               return { club, score: result.eligible ? result.score : -0.5 };
             })
@@ -205,7 +203,7 @@ function ExploreView() {
       (c): c is (typeof sorted)[number] => c !== undefined,
     );
     return [...pinned, ...sorted.filter((c) => !CLUB_COVERS.includes(c.slug))];
-  }, [query, areas, categories, commitments, offers, activeSort, hasPrefs, prefs]);
+  }, [query, areas, categories, commitments, offers, activeSort, hasPrefs, prefs, matched]);
 
   const filterCount =
     areas.length + categories.length + commitments.length + offers.length;
@@ -392,7 +390,7 @@ function ExploreView() {
               <ClubCard
                 key={club.id}
                 club={club}
-                score={activeSort === "fit" && hasPrefs ? fitBadge(prefs, club) : undefined}
+                score={activeSort === "fit" ? matched?.get(club.slug)?.score : undefined}
               />
             ))}
           </div>

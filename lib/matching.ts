@@ -658,6 +658,35 @@ export function matchAiPicks(prefs: Preferences, pool: ClubSummary[] = clubs): M
   return results.sort((a, b) => b.score - a.score);
 }
 
+/**
+ * The student's matches by slug: exactly the list the results page ranks
+ * (resume picks on the resume path, the rule-based ranking otherwise). Explore
+ * badges and club pages read their fit from here so the same club never shows
+ * two different percentages.
+ */
+export function matchesBySlug(prefs: Preferences): Map<string, MatchResult> {
+  const list = prefs.aiPicks?.length ? matchAiPicks(prefs) : matchClubs(prefs);
+  return new Map(list.map((result) => [result.club.slug, result]));
+}
+
+/**
+ * A club's fit for one student, consistent with the results page. On the
+ * resume path a picked club takes the AI's score with its reason first; a club
+ * the resume didn't pick is not a match.
+ */
+export function fitFor(prefs: Preferences, club: ClubSummary): MatchResult {
+  const rule = scoreClub(prefs, club);
+  if (club.greek || !prefs.aiPicks?.length) return rule;
+  const pick = matchAiPicks(prefs, [club])[0];
+  if (!pick) return { ...rule, eligible: false };
+  return {
+    ...rule,
+    score: pick.score,
+    eligible: true,
+    reasons: [...pick.reasons, ...rule.reasons.filter((r) => !pick.reasons.includes(r))],
+  };
+}
+
 function isNearOnly(prefs: Preferences, club: ClubSummary) {
   const academic = academicPart(prefs, club);
   return (

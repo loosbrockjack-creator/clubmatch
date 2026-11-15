@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
-import { allowedForPrefs, genderConflict, greekInterest, scoreClub } from "@/lib/matching";
+import { allowedForPrefs, fitFor, scoreClub, genderConflict, greekInterest } from "@/lib/matching";
 import { COMMUNITY_BY_ID } from "@/lib/taxonomy";
 import { useStoredPreferences } from "@/lib/preferences";
 import type { ClubSummary } from "@/lib/types";
@@ -32,7 +32,7 @@ export function WhyItFits({ club }: { club: ClubSummary }) {
     );
   }
 
-  const { score, reasons, eligible } = scoreClub(prefs, club);
+  const { score, reasons, eligible } = fitFor(prefs, club);
 
   // A percentage for a club the quiz would never suggest reads as a grade.
   // Say plainly why it isn't in their matches instead.
@@ -41,6 +41,8 @@ export function WhyItFits({ club }: { club: ClubSummary }) {
     const message =
       genderConflict(prefs, club)
         ? `This club is built for ${club.genderFocus}, so it isn't in your matches.`
+        : prefs.aiPicks?.length && scoreClub(prefs, club).eligible
+        ? "This club wasn't one of the picks from your resume, so it isn't scored. It might still be worth a look."
         : club.audience === "residence"
         ? "Residence hall communities aren't part of quiz matches. If you live here, you're already in."
         : club.audience === "graduate"
