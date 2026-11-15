@@ -20,7 +20,9 @@ export function FilterRow<T extends string>({
       <span className="text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-muted sm:flex sm:h-[30px] sm:w-[112px] sm:shrink-0 sm:items-center">
         {label}
       </span>
-      <div className="flex min-w-0 flex-1 flex-wrap gap-2">
+      {/* Phone: one sideways-scrolling row per filter, bleeding to the screen
+          edges, so the filters stay short and results start near the top. */}
+      <div className="filter-scroll -mx-5 flex min-w-0 flex-1 gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         {options.map((option) => {
           const active = selected.includes(option.id);
           return (
@@ -29,7 +31,7 @@ export function FilterRow<T extends string>({
               type="button"
               aria-pressed={active}
               onClick={() => onToggle(option.id)}
-              className={`chip transition-[color,background-color,border-color,transform] duration-150 active:scale-[0.96] ${
+              className={`chip h-10 shrink-0 px-3.5 text-[13.5px] sm:h-[30px] sm:px-[11px] sm:text-[12.5px] transition-[color,background-color,border-color,transform] duration-150 active:scale-[0.96] ${
                 active
                   ? "border-cardinal bg-cardinal-tint text-cardinal"
                   : "hover:border-line-strong hover:bg-muted-deep"

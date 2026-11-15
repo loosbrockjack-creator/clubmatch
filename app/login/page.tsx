@@ -45,7 +45,7 @@ export default function LoginPage() {
         </div>
       </section>
 
-      <section className="shell pb-20 pt-14 sm:pt-20">
+      <section className="shell pb-12 pt-14 sm:pb-20 sm:pt-20">
         <h2 className="display text-[38px] leading-tight text-cardinal sm:text-[56px]">
           Your ClubMatch account
         </h2>
@@ -55,7 +55,7 @@ export default function LoginPage() {
         </p>
 
         <div className="mt-12 grid gap-14 md:grid-cols-2 md:gap-16">
-          <div>
+          <div id="sign-in" className="scroll-mt-[96px]">
             <h3 className="display text-[28px] text-cardinal sm:text-[32px]">
               Sign in or create an account
             </h3>

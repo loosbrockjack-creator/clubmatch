@@ -28,7 +28,13 @@ export function SiteHeader() {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // Hold the page still behind the open menu.
+    const root = document.documentElement;
+    root.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      root.style.overflow = "";
+    };
   }, [open]);
 
   return (

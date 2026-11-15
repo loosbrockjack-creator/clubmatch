@@ -44,6 +44,16 @@ export function LoginForm() {
     router.replace(account.profile && !account.profile.onboarded ? "/account/welcome" : next);
   }, [account.status, account.profile, next, router]);
 
+  // The code step is shorter than the email step, so a phone scrolled down to
+  // the email field would land mid-form. Bring the form's heading back up.
+  useEffect(() => {
+    if (step !== "code") return;
+    const anchor = document.getElementById("sign-in");
+    if (anchor && anchor.getBoundingClientRect().top < 0) {
+      anchor.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+  }, [step]);
+
   useEffect(() => {
     if (resendIn <= 0) return;
     const timer = setTimeout(() => setResendIn((s) => s - 1), 1000);
@@ -122,7 +132,7 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={busy || code.length !== CODE_LENGTH}
-            className="btn btn-outline-cardinal rounded-full"
+            className="btn btn-outline-cardinal w-full rounded-full sm:w-auto"
           >
             {busy ? <Loader2 size={16} className="animate-spin" aria-hidden /> : null}
             Sign in
@@ -132,7 +142,7 @@ export function LoginForm() {
             type="button"
             disabled={busy || resendIn > 0}
             onClick={() => void requestCode(email)}
-            className="text-[14px] font-semibold text-cardinal underline-offset-4 hover:underline disabled:text-ink-muted disabled:no-underline"
+            className="inline-flex min-h-10 items-center text-[14px] font-semibold text-cardinal underline-offset-4 hover:underline disabled:text-ink-muted disabled:no-underline"
           >
             {resendIn > 0 ? `Resend code in ${resendIn}s` : "Resend code"}
           </button>
@@ -142,7 +152,7 @@ export function LoginForm() {
               setStep("email");
               setError(null);
             }}
-            className="text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+            className="inline-flex min-h-10 items-center text-[14px] font-semibold text-ink-soft underline-offset-4 hover:text-ink hover:underline"
           >
             Wrong email?
           </button>

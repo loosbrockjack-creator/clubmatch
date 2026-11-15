@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ArrowUpRight, Search, X } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Search, X } from "lucide-react";
 import { ClubCard } from "./club-card";
 import { FilterRow } from "./filter-row";
 import { clubs } from "@/lib/clubs";
@@ -171,8 +171,16 @@ export function GreekBrowser() {
                 <span className="mt-3 text-[14px] leading-relaxed text-ink-soft">
                   {council.line}
                 </span>
-                <span className="mt-auto pt-5 text-[13px] font-semibold text-ink transition-colors group-hover:text-cardinal">
+                <span className="mt-auto inline-flex items-center gap-1 pt-5 text-[13px] font-semibold text-cardinal">
                   {active ? "Showing these chapters" : "See chapters"}
+                  {!active && (
+                    <ChevronRight
+                      size={15}
+                      strokeWidth={2.5}
+                      aria-hidden
+                      className="transition-transform group-hover:translate-x-0.5"
+                    />
+                  )}
                 </span>
               </button>
             );
@@ -203,7 +211,7 @@ export function GreekBrowser() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search by name, letters, or nickname"
-                className="h-12 w-full rounded-[4px] border border-line-strong bg-white pl-11 pr-4 text-[15px] text-ink shadow-sm placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
+                className="h-12 w-full rounded-[4px] border border-line-strong bg-white pl-11 pr-4 text-[16px] sm:text-[15px] text-ink shadow-sm placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
               />
             </div>
           </div>

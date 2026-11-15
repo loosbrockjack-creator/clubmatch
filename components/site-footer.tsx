@@ -60,13 +60,13 @@ export function SiteFooter() {
               <h2 className="text-[13px] font-bold uppercase tracking-[0.12em] text-gold">
                 {column.heading}
               </h2>
-              <ul className="mt-4 space-y-3">
+              <ul className="mt-3 space-y-0.5 sm:mt-4 sm:space-y-3">
                 {column.links.map((link) => {
                   const external = link.href.startsWith("http");
                   return (
                     <li key={link.href}>
                       {link.href.startsWith("mailto:") ? (
-                        <a href={link.href} className="link-on-cardinal text-[14px] font-medium">
+                        <a href={link.href} className="link-on-cardinal inline-flex min-h-10 items-center text-[14px] font-medium sm:inline sm:min-h-0">
                           {link.label}
                         </a>
                       ) : external ? (
@@ -74,14 +74,14 @@ export function SiteFooter() {
                           href={link.href}
                           target="_blank"
                           rel="noreferrer"
-                          className="link-on-cardinal text-[14px] font-medium"
+                          className="link-on-cardinal inline-flex min-h-10 items-center text-[14px] font-medium sm:inline sm:min-h-0"
                         >
                           {link.label}
                         </a>
                       ) : (
                         <Link
                           href={link.href}
-                          className="link-on-cardinal text-[14px] font-medium"
+                          className="link-on-cardinal inline-flex min-h-10 items-center text-[14px] font-medium sm:inline sm:min-h-0"
                         >
                           {link.label}
                         </Link>

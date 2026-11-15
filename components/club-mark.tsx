@@ -2,12 +2,12 @@ const sizes = {
   sm: "h-11 w-11 rounded-[4px]",
   md: "h-[52px] w-[52px] rounded-[5px]",
   lg: "h-[68px] w-[68px] rounded-[6px]",
-  xl: "h-[76px] w-[76px] rounded-[6px] sm:h-[96px] sm:w-[96px] sm:rounded-[8px]",
+  xl: "h-14 w-14 rounded-[6px] sm:h-[96px] sm:w-[96px] sm:rounded-[8px]",
 } as const;
 
 function textSize(mark: string, size: keyof typeof sizes) {
   const long = mark.length >= 4;
-  if (size === "xl") return long ? "text-lg sm:text-2xl" : "text-2xl sm:text-3xl";
+  if (size === "xl") return long ? "text-[13px] sm:text-2xl" : "text-lg sm:text-3xl";
   if (size === "lg") return long ? "text-sm" : "text-xl";
   if (size === "md") return long ? "text-[11px]" : "text-[15px]";
   return long ? "text-[10px]" : "text-[13px]";

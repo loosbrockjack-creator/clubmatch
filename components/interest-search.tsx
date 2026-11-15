@@ -92,7 +92,7 @@ export function InterestSearch({
             }
           }}
           placeholder={full ? `That's ${MAX_INTERESTS}. Remove one to add another.` : "Start typing, like AI, climbing, or investing"}
-          className="h-12 w-full rounded-[4px] border border-line-strong bg-white pl-11 pr-4 text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:bg-muted disabled:opacity-70"
+          className="h-12 w-full rounded-[4px] border border-line-strong bg-white pl-11 pr-4 text-[16px] sm:text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:bg-muted disabled:opacity-70"
         />
 
         {showList && (

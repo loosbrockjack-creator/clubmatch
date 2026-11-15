@@ -411,6 +411,7 @@
   .panel-cardinal {
     background-color: var(--color-cardinal);
     color: #ffffff;
+    border-radius: var(--radius-card);
   }
 
   .panel-cardinal .eyebrow {
@@ -789,4 +790,28 @@ body:has(.quiz-focus) .site-main {
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
   }
+}
+
+/* Quiz actions pin to the bottom of the phone screen. */
+@media (max-width: 639px) {
+  .quiz-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    margin-inline: -20px;
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+    background: rgb(255 255 255 / 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--color-line);
+  }
+}
+
+/* Sideways chip rows on phones: swipeable, no visible scrollbar. */
+.filter-scroll {
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.filter-scroll::-webkit-scrollbar {
+  display: none;
 }

@@ -53,7 +53,7 @@ export function OptionCard({
             {label}
           </span>
           <span
-            className={`mt-1 block leading-snug text-ink-muted ${
+            className={`mt-1 block text-pretty leading-snug text-ink-muted ${
               compact ? "text-[12px]" : "text-[13px]"
             }`}
           >

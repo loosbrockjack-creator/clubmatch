@@ -30,7 +30,7 @@ export function SaveButton({
         if (!isSaved) setPops((n) => n + 1);
         toggle(slug);
       }}
-      className={`relative z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-transparent text-ink-muted transition-colors hover:border-line hover:bg-muted hover:text-ink ${className}`}
+      className={`relative z-10 inline-flex h-9 w-9 before:absolute before:-inset-1 before:content-[''] items-center justify-center rounded-full border border-transparent text-ink-muted transition-colors hover:border-line hover:bg-muted hover:text-ink ${className}`}
     >
       {popping && <span key={`ring-${pops}`} aria-hidden className="ring-burst absolute inset-0" />}
       <Heart

@@ -35,7 +35,7 @@ export function CodeInput({
   }
 
   return (
-    <div className="flex gap-2 sm:gap-2.5" role="group" aria-label="Sign-in code">
+    <div className="grid max-w-[360px] grid-cols-6 gap-2 sm:flex sm:max-w-none sm:gap-2.5" role="group" aria-label="Sign-in code">
       {Array.from({ length }, (_, index) => (
         <input
           key={index}
@@ -73,7 +73,7 @@ export function CodeInput({
               refs.current[index + 1]?.focus();
             }
           }}
-          className={`h-14 w-11 rounded-[4px] border bg-surface text-center text-[22px] font-semibold tabular-nums text-ink transition-colors focus-visible:border-cardinal focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-cardinal disabled:bg-muted sm:h-16 sm:w-12 ${
+          className={`h-14 w-full rounded-[4px] border bg-surface text-center text-[22px] font-semibold tabular-nums text-ink transition-colors focus-visible:border-cardinal focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-cardinal disabled:bg-muted sm:h-16 sm:w-12 ${
             invalid ? "border-cardinal" : "border-line-strong"
           }`}
         />

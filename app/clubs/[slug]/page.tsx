@@ -141,16 +141,17 @@ export default async function ClubDetailPage({
   const summaryIsOneSentence = !/[.!?]\s+\S/.test(club.summary);
   const summaryAddsNothing =
     !officerDescription && club.summary.startsWith(taglineStem) && summaryIsOneSentence;
-  // A chapter's tagline is the first sentence of its own description, so the
+  // The tagline is the first sentence of the club's own description, so the
   // About section picks up where the header left off instead of repeating it.
-  const aboutText = officerDescription
-    ? officerDescription
-    : greek && !club.tagline.endsWith("...") && club.summary.startsWith(club.tagline)
+  const aboutRest =
+    !club.tagline.endsWith("...") && club.summary.startsWith(club.tagline)
       ? club.summary.slice(club.tagline.length).trim()
-      : club.summary;
+      : "";
+  const aboutText = officerDescription ? officerDescription : aboutRest || club.summary;
 
   // "Biweekly" on its own reads like a stray word under a how-to heading.
-  const meetingNote = officerMeeting || (club.meetingDetail.length >= 40 ? club.meetingDetail : "");
+  const directoryMeeting = withoutPastTerms(club.meetingDetail);
+  const meetingNote = officerMeeting || (directoryMeeting.length >= 40 ? directoryMeeting : "");
 
   // Chapter tiles show only what SFE states. SFE publishes no time
   // commitment, so there is no Time tile, and a fact SFE leaves out is
@@ -350,7 +351,7 @@ export default async function ClubDetailPage({
       {/* A chapter's own photo is often a group shot, so it gets a taller
           frame anchored higher to keep faces clear of the header card. */}
       <div
-        className={`relative ${photo.own ? "h-[240px] sm:h-[420px]" : "h-[180px] sm:h-[280px]"}`}
+        className={`relative ${photo.own ? "h-[280px] sm:h-[420px]" : "h-[220px] sm:h-[280px]"}`}
       >
         <Image
           src={photo.src}
@@ -360,7 +361,7 @@ export default async function ClubDetailPage({
           fill
           priority
           sizes="100vw"
-          className={`object-cover ${photo.own ? "object-[50%_30%]" : "object-[50%_40%]"}`}
+          className={`object-cover ${photo.own ? "object-[50%_25%]" : "object-[50%_35%]"}`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-black/10" />
       </div>
@@ -371,7 +372,7 @@ export default async function ClubDetailPage({
             <nav aria-label="Breadcrumb" className="mb-6">
               <ol className="flex flex-wrap items-center gap-1.5 text-[13px] font-medium">
                 <li>
-                  <Link href="/" className="link-isu">
+                  <Link href="/" className="link-isu -my-2 inline-block py-2">
                     Home
                   </Link>
                 </li>
@@ -382,11 +383,11 @@ export default async function ClubDetailPage({
                     aria-hidden
                     className="text-ink-muted"
                   />
-                  <Link href={greek ? "/greek" : "/explore"} className="link-isu">
+                  <Link href={greek ? "/greek" : "/explore"} className="link-isu -my-2 inline-block py-2">
                     {greek ? "Greek life" : "Explore"}
                   </Link>
                 </li>
-                <li className="flex min-w-0 items-center gap-1.5">
+                <li className="hidden min-w-0 items-center gap-1.5 sm:flex">
                   <ChevronRight
                     size={13}
                     strokeWidth={2.5}
@@ -401,10 +402,10 @@ export default async function ClubDetailPage({
             </nav>
 
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <div className="flex items-start gap-4 sm:items-center sm:gap-5">
                 <ClubMark mark={greek?.letters || club.mark} size="xl" />
-                <div>
-                  <h1 className="display text-[30px] text-ink sm:text-[40px]">
+                <div className="min-w-0">
+                  <h1 className="display text-balance break-words text-[26px] text-ink sm:text-[40px]">
                     {club.name}
                   </h1>
                   {verified && (
@@ -458,6 +459,16 @@ export default async function ClubDetailPage({
                 {verified && <ClubInterestButton slug={club.slug} clubName={club.name} />}
                 <InterestedButton slug={club.slug} clubName={club.name} quiet={verified} />
                 <MemberButton slug={club.slug} clubName={club.name} />
+                {!greek && club.stuorgUrl && (
+                  <TrackedLink
+                    slug={club.slug}
+                    href={club.stuorgUrl}
+                    className="btn btn-secondary w-full sm:w-auto"
+                  >
+                    Visit club page
+                    <ArrowUpRight size={15} strokeWidth={2} aria-hidden />
+                  </TrackedLink>
+                )}
               </div>
               {verified && <ClubInterestNote slug={club.slug} />}
             </div>
@@ -658,14 +669,14 @@ export default async function ClubDetailPage({
               </div>
 
               {chapterLinks.length > 0 && (
-                <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2.5 border-t border-white/20 pt-6 text-[14px]">
+                <ul className="mt-7 flex flex-col gap-y-1 border-t border-white/20 pt-5 text-[14px] sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2.5 sm:pt-6">
                   {chapterLinks.map((link) => (
                     <li key={link.label}>
                       <a
                         href={link.href}
                         target="_blank"
                         rel="noreferrer"
-                        className="link-on-cardinal inline-flex items-center gap-1 font-semibold"
+                        className="link-on-cardinal inline-flex min-h-10 items-center gap-1 font-semibold sm:min-h-0"
                       >
                         {link.label}
                         <ArrowUpRight size={13} strokeWidth={2} aria-hidden />
@@ -738,4 +749,29 @@ export default async function ClubDetailPage({
       </div>
     </>
   );
+}
+
+/**
+ * Directory meeting notes go stale ("Kick-off for Fall 2022 is September 6th").
+ * Drop any sentence that names a semester or year already behind us, so the
+ * page never sends a student to a meeting that happened years ago.
+ */
+function withoutPastTerms(text: string): string {
+  if (!text) return "";
+  const now = new Date();
+  const year = now.getFullYear();
+  const pastThisYear = now.getMonth() >= 7 ? ["spring", "summer"] : now.getMonth() >= 4 ? ["spring"] : [];
+  const sentences = text.match(/[^.!?]+[.!?]*/g) ?? [text];
+  return sentences
+    .filter((sentence) => {
+      for (const match of sentence.matchAll(/\b(?:(spring|summer|fall|winter)\s+)?(20\d{2})\b/gi)) {
+        const y = Number(match[2]);
+        const term = match[1]?.toLowerCase();
+        if (y < year) return false;
+        if (y === year && term && pastThisYear.includes(term)) return false;
+      }
+      return true;
+    })
+    .join("")
+    .trim();
 }

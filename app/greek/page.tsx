@@ -37,7 +37,7 @@ export default function GreekPage() {
               sizes="100vw"
               className="object-cover object-[60%_50%]"
             />
-            <div className="absolute inset-0 bg-black/55 sm:hidden" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black/80 sm:hidden" />
             <div className="absolute inset-0 hidden bg-gradient-to-r from-black/80 via-black/55 to-black/15 sm:block" />
           </div>
         )}
@@ -75,7 +75,7 @@ export default function GreekPage() {
                 { value: housed, label: "Houses" },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <dt className="text-[12px] font-semibold uppercase tracking-[0.12em] text-white/70">
+                  <dt className="text-[12px] font-semibold uppercase tracking-[0.12em] text-white/85 sm:text-white/70">
                     {stat.label}
                   </dt>
                   <dd className="display mt-1 text-[30px] tabular-nums text-white sm:text-[34px]">

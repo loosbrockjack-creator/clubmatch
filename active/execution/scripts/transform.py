@@ -376,6 +376,15 @@ GREETING_RX = re.compile(
     r"^(this is|here is) (the|our) (home|web)?page", re.I)
 
 
+def fit_tagline(s):
+    """A tagline is a complete thought, never a sentence chopped off with an
+    ellipsis. Cards clamp it visually, so a long first sentence stays whole;
+    only a runaway one (a paragraph with no full stop) gets cut."""
+    if len(s) <= 300:
+        return s
+    return truncate(s, 200)
+
+
 def pick_tagline(sents, name):
     """The first sentence that says something, not a greeting or a header."""
     for s in sents[:4]:
@@ -384,12 +393,12 @@ def pick_tagline(sents, name):
             continue
         if GREETING_RX.search(s) or C.POINTER_RX.search(s):
             continue
-        return s if len(s) <= 165 else truncate(s, 140)
+        return fit_tagline(s)
 
     for s in sents:
         s = clean_prose(s)
         if len(s) >= 25:
-            return s if len(s) <= 165 else truncate(s, 140)
+            return fit_tagline(s)
     return f"{name} is a registered student organization at Iowa State."
 
 

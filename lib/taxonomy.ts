@@ -580,12 +580,12 @@ export const GREEK_OPTIONS: Option<GreekInterest>[] = [
   {
     id: "fraternity",
     label: "Fraternities",
-    hint: "IFC, multicultural, and NPHC chapters",
+    hint: "IFC, multicultural, and NPHC",
   },
   {
     id: "sorority",
     label: "Sororities",
-    hint: "Panhellenic, multicultural, and NPHC chapters",
+    hint: "Panhellenic, multicultural, and NPHC",
   },
   {
     id: "either",

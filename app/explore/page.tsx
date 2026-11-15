@@ -271,7 +271,7 @@ function ExploreView() {
               setVisible(PAGE_SIZE);
             }}
             placeholder="Search clubs, majors, or career areas..."
-            className="h-14 w-full rounded-[4px] border border-line-strong bg-white pl-12 pr-5 text-[15px] text-ink shadow-sm placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal sm:h-[58px]"
+            className="h-14 w-full rounded-[4px] border border-line-strong bg-white pl-12 pr-5 text-[16px] text-ink sm:text-[15px] shadow-sm placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal sm:h-[58px]"
           />
         </div>
       </PageHeader>
@@ -339,11 +339,11 @@ function ExploreView() {
           <p className="text-[14px] font-semibold text-ink">
             {filtered.length} {filtered.length === 1 ? "club" : "clubs"}
           </p>
-          {(filterCount > 0 || query) && (
+          {(filterCount > 0 || query) && filtered.length > 0 && (
             <button
               type="button"
               onClick={clearAll}
-              className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-muted hover:text-ink"
+              className="-my-2 inline-flex min-h-10 items-center gap-1 px-1 text-[13px] font-medium text-ink-muted hover:text-ink"
             >
               <X size={13} strokeWidth={2} aria-hidden />
               Clear
@@ -366,7 +366,7 @@ function ExploreView() {
                 setSort(event.target.value as SortMode);
                 setVisible(PAGE_SIZE);
               }}
-              className="h-9 rounded-[4px] border border-line-strong bg-white px-2.5 text-[13px] font-medium text-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
+              className="h-9 rounded-[4px] border border-line-strong bg-white px-2.5 text-[16px] sm:text-[13px] font-medium text-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal"
             >
               <option value="fit">Best fit for you</option>
               <option value="az">A to Z</option>
@@ -376,7 +376,7 @@ function ExploreView() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="card mt-6 px-6 py-20 text-center">
+        <div className="card mt-6 px-6 py-12 text-center sm:py-20">
           <h2 className="display text-[24px] text-ink">No clubs match that.</h2>
           <p className="mx-auto mt-3 max-w-sm text-[14.5px] leading-relaxed text-ink-soft">
             Try a broader search term or remove one of the filters.

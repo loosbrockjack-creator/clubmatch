@@ -573,3 +573,23 @@ the hero / See all clubs buttons; it stays only on the "Take the quiz" panel
 button. The heart pop, club page click moments, and card hovers are unchanged.
 New: the nav inbox icon is an inline SVG tray, and on hover a letter drops in
 and settles behind the tray's front lip.
+
+## 2026-11-14: Mobile pass
+
+From a three-agent phone audit. The quiz's Back / Continue bar pins to the
+bottom of the screen on phones. Explore and Greek filters are one swipeable row
+each on phones, with 40px chips. Every text field is 16px on phones so iOS
+never zooms on focus. The mobile menu animates open over a dimmed page, which
+stays still behind it. Club pages show "Visit club page" with the other actions,
+put the logo beside the name, and drop the current-page crumb on phones. The
+phone hero is a taller crop of the painting whose sky fades into the cream.
+While the footer is on screen the root background turns cardinal, so Safari's
+strip under its toolbar matches the footer instead of showing white.
+
+Taglines (transform.py `fit_tagline`) keep the whole first sentence up to 300
+characters instead of cutting at 140 with "...". Cards clamp them visually.
+Cutting at a clause break was tried and dropped: about one in five landed
+mid-list ("dedicated to building an inclusive."). Ellipsis taglines went from
+272 to 43. The club page's About now continues after the tagline for every
+club, not only chapters. Directory meeting notes drop any sentence naming a
+term already past ("Kick-off for Fall 2022...").

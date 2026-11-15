@@ -379,7 +379,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
                 disabled={reading}
                 onChange={(event) => setPasted(event.target.value)}
                 placeholder="Finance student at Iowa State. Investment analyst intern..."
-                className="mt-3 w-full resize-y rounded-[4px] border border-line-strong bg-white px-4 py-3 text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:opacity-60"
+                className="mt-3 w-full resize-y rounded-[4px] border border-line-strong bg-white px-4 py-3 text-[16px] sm:text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:opacity-60"
               />
               <div className="mt-3 flex justify-end">
                 <button
@@ -525,7 +525,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
                     setOtherPhase({ kind: "idle" });
                   }}
                   placeholder="e.g. sports medicine, film production, law"
-                  className="mt-1.5 h-11 w-full rounded-[4px] border border-line-strong bg-white px-4 text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:opacity-60"
+                  className="mt-1.5 h-11 w-full rounded-[4px] border border-line-strong bg-white px-4 text-[16px] sm:text-[15px] text-ink placeholder:text-ink-muted focus:border-cardinal focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cardinal disabled:opacity-60"
                 />
               </div>
             )}
@@ -815,7 +815,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
   }
 
   return (
-    <div className="quiz-focus shell pb-16 pt-6 sm:pt-8">
+    <div className="quiz-focus shell pb-6 pt-6 sm:pb-16 sm:pt-8">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center justify-between gap-4">
           <p className="text-[13px] font-semibold text-ink-muted">
@@ -911,18 +911,20 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
             </div>
           </fieldset>
 
-          <div className="mt-10 flex items-center justify-between gap-4">
+          {/* Phone: pinned to the bottom of the screen so Continue is always
+              in reach, however long the step. Desktop: sits under the step. */}
+          <div className="quiz-actions mt-10 flex items-center justify-between gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => setStep(Math.max(0, step - 1))}
               disabled={step === 0}
-              className="btn btn-quiet disabled:invisible"
+              className="btn btn-quiet shrink-0 disabled:hidden sm:disabled:invisible sm:disabled:inline-flex"
             >
               <ArrowLeft size={16} strokeWidth={2} aria-hidden className="btn-arrow-back" />
               Back
             </button>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-1 items-center justify-end gap-4">
               {!current.valid && (
                 <p className="hidden text-[13px] text-ink-muted sm:block">
                   Pick at least one to continue
@@ -931,7 +933,7 @@ export function MatchQuiz({ ai }: { ai: boolean }) {
               <button
                 type="submit"
                 disabled={!current.valid || mapping || upload.state === "reading"}
-                className="btn btn-primary min-w-[160px]"
+                className="btn btn-primary w-full sm:w-auto sm:min-w-[160px]"
               >
                 {mapping ? (
                   <>
