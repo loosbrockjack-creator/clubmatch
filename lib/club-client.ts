@@ -5,7 +5,7 @@ import { withDemoEvents } from "./demo-events";
 import { getSupabase } from "./supabase";
 import { isParked, useAccount } from "./account";
 import { readLocalPreferences } from "./preferences";
-import type { ActivityKind, ClubEvent } from "./club-types";
+import { EVENT_COLUMNS, EVENT_COLUMNS_LEGACY, type ActivityKind, type ClubEvent } from "./club-types";
 
 /** Calls one of our API routes with the signed-in student's token attached. */
 export async function apiFetch<T>(
@@ -137,22 +137,27 @@ export async function fetchUpcomingEvents(options: { slug?: string; withinDays?:
   // An event with no end time counts as over 3 hours after it starts. Ended
   // events are filtered in the query, so they can't use up the limit.
   const openStart = new Date(now.getTime() - 3 * 60 * 60 * 1000).toISOString();
-  let query = sb
-    .from("club_events")
-    .select("id, club_slug, title, description, location, link, starts_at, ends_at")
-    .or(`ends_at.gte."${now.toISOString()}",and(ends_at.is.null,starts_at.gte."${openStart}")`)
-    .order("starts_at", { ascending: true })
-    .limit(options.limit ?? 40);
-  if (options.slug) query = query.eq("club_slug", options.slug);
-  if (options.withinDays) {
-    query = query.lte(
-      "starts_at",
-      new Date(now.getTime() + options.withinDays * 24 * 60 * 60 * 1000).toISOString(),
-    );
-  }
-  const { data, error } = await query;
+  const run = (columns: string) => {
+    let query = sb
+      .from("club_events")
+      .select(columns)
+      .or(`ends_at.gte."${now.toISOString()}",and(ends_at.is.null,starts_at.gte."${openStart}")`)
+      .order("starts_at", { ascending: true })
+      .limit(options.limit ?? 40);
+    if (options.slug) query = query.eq("club_slug", options.slug);
+    if (options.withinDays) {
+      query = query.lte(
+        "starts_at",
+        new Date(now.getTime() + options.withinDays * 24 * 60 * 60 * 1000).toISOString(),
+      );
+    }
+    return query;
+  };
+  let { data, error } = await run(EVENT_COLUMNS);
+  // Before migration 0014 adds the photo column, read events without it.
+  if (error?.code === "42703") ({ data, error } = await run(EVENT_COLUMNS_LEGACY));
   if (error) throw new Error(error.message);
-  return withDemoEvents((data ?? []) as ClubEvent[], options);
+  return withDemoEvents((data ?? []) as unknown as ClubEvent[], options);
 }
 
 export function formatEventTime(event: Pick<ClubEvent, "starts_at" | "ends_at">) {

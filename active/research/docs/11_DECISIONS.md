@@ -593,3 +593,20 @@ mid-list ("dedicated to building an inclusive."). Ellipsis taglines went from
 272 to 43. The club page's About now continues after the tagline for every
 club, not only chapters. Directory meeting notes drop any sentence naming a
 term already past ("Kick-off for Fall 2022...").
+
+## Event photos (2026-11-15)
+
+**Officers can add one optional photo per event.** It uploads to the existing
+public `club-photos` bucket under `<slug>/events/`, same 3 MB and
+JPG/PNG/WebP rules as club photos, with the file type checked from its bytes.
+The events API only accepts a photo URL inside that club's own events folder,
+and deletes the old file when a photo is replaced or the event is removed.
+
+**Explore's "This week" cards always lead with an image**: the event photo,
+or the club's cover when there isn't one, so the row reads evenly. The club
+page shows the event photo as a banner on the event card when there is one.
+
+**Migration `0014_event_photos.sql` adds `club_events.photo`.** Until it is
+pasted into the SQL editor, reads fall back to the old columns (Postgres
+`42703`), so events keep showing, and only saving an event *with* a photo is
+refused with a plain message.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 import { fetchUpcomingEvents, formatEventTime } from "@/lib/club-client";
 import type { ClubEvent } from "@/lib/club-types";
@@ -41,36 +42,50 @@ export function ClubEvents({ slug, clubName }: { slug: string; clubName: string 
       ) : (
         <ul className="mt-5 space-y-3">
           {events.map((event) => (
-            <li key={event.id} className="card px-5 py-5 sm:px-6">
-              <p className="flex items-center gap-1.5 text-[13px] font-semibold text-cardinal">
-                <CalendarDays size={14} strokeWidth={2} aria-hidden />
-                {formatEventTime(event)}
-              </p>
-              <h3 className="mt-2 text-[17px] font-bold leading-snug tracking-[-0.01em] text-ink">
-                {event.title}
-              </h3>
-              {event.location && (
-                <p className="mt-1.5 flex items-center gap-1.5 text-[14px] text-ink-muted">
-                  <MapPin size={14} strokeWidth={1.75} aria-hidden />
-                  {event.location}
+            <li key={event.id} className="card overflow-hidden p-0">
+              {event.photo && (
+                <div className="relative aspect-[16/9] bg-muted sm:aspect-[21/9]">
+                  <Image
+                    src={event.photo}
+                    alt={`Photo for ${event.title}`}
+                    fill
+                    unoptimized
+                    sizes="(min-width: 768px) 720px, 92vw"
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <div className="px-5 py-5 sm:px-6">
+                <p className="flex items-center gap-1.5 text-[13px] font-semibold text-cardinal">
+                  <CalendarDays size={14} strokeWidth={2} aria-hidden />
+                  {formatEventTime(event)}
                 </p>
-              )}
-              {event.description && (
-                <p className="mt-3 whitespace-pre-line text-[14.5px] leading-relaxed text-ink-soft">
-                  {event.description}
-                </p>
-              )}
-              {event.link && (
-                <a
-                  href={event.link}
-                  target="_blank"
-                  rel="noreferrer noopener nofollow"
-                  className="link-isu mt-3 inline-flex items-center gap-1 text-[14px]"
-                >
-                  Event details
-                  <ArrowUpRight size={13} strokeWidth={2} aria-hidden />
-                </a>
-              )}
+                <h3 className="mt-2 text-[17px] font-bold leading-snug tracking-[-0.01em] text-ink">
+                  {event.title}
+                </h3>
+                {event.location && (
+                  <p className="mt-1.5 flex items-center gap-1.5 text-[14px] text-ink-muted">
+                    <MapPin size={14} strokeWidth={1.75} aria-hidden />
+                    {event.location}
+                  </p>
+                )}
+                {event.description && (
+                  <p className="mt-3 whitespace-pre-line text-[14.5px] leading-relaxed text-ink-soft">
+                    {event.description}
+                  </p>
+                )}
+                {event.link && (
+                  <a
+                    href={event.link}
+                    target="_blank"
+                    rel="noreferrer noopener nofollow"
+                    className="link-isu mt-3 inline-flex items-center gap-1 text-[14px]"
+                  >
+                    Event details
+                    <ArrowUpRight size={13} strokeWidth={2} aria-hidden />
+                  </a>
+                )}
+              </div>
             </li>
           ))}
         </ul>

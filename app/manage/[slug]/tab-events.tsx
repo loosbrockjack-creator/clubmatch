@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { CalendarDays, MapPin, Pencil, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { CalendarDays, ImagePlus, MapPin, Pencil, Trash2 } from "lucide-react";
 import { apiFetch, formatEventTime } from "@/lib/club-client";
 import type { ClubEvent } from "@/lib/club-types";
 import { LIMITS } from "@/lib/club-validate";
@@ -15,8 +16,18 @@ type Draft = {
   link: string;
   starts_at: string;
   ends_at: string;
+  photo: string;
 };
-const BLANK: Draft = { id: null, title: "", description: "", location: "", link: "", starts_at: "", ends_at: "" };
+const BLANK: Draft = {
+  id: null,
+  title: "",
+  description: "",
+  location: "",
+  link: "",
+  starts_at: "",
+  ends_at: "",
+  photo: "",
+};
 
 /** ISO to the local value a datetime-local input wants. */
 function toLocalInput(iso: string | null) {
@@ -32,6 +43,8 @@ export function EventsTab({ slug }: { slug: string }) {
   const [formError, setFormError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   if (error) return <PanelError message={error} onRetry={() => void reload()} />;
   if (!data) return <PanelSkeleton />;
@@ -64,6 +77,21 @@ export function EventsTab({ slug }: { slug: string }) {
     await reload();
   }
 
+  async function uploadPhoto(file: File) {
+    setUploading(true);
+    setFormError(null);
+    setSaved(null);
+    const form = new FormData();
+    form.append("photo", file);
+    const res = await apiFetch<{ url: string }>(`/api/manage/${slug}/events/photo`, { method: "POST", body: form });
+    setUploading(false);
+    if (fileInput.current) fileInput.current.value = "";
+    if (res.data) {
+      const url = res.data.url;
+      setDraft((d) => ({ ...d, photo: url }));
+    } else setFormError(res.error);
+  }
+
   async function remove(id: string) {
     setPendingDelete(null);
     const res = await apiFetch(`/api/manage/${slug}/events`, { method: "DELETE", body: JSON.stringify({ id }) });
@@ -79,18 +107,25 @@ export function EventsTab({ slug }: { slug: string }) {
 
   const row = (event: ClubEvent, canEdit: boolean) => (
     <li key={event.id} className="flex flex-col gap-3 border-b border-line py-4 last:border-b-0 sm:flex-row sm:items-start sm:justify-between">
-      <div className="min-w-0">
-        <p className="flex items-center gap-1.5 text-[13px] font-semibold text-cardinal">
-          <CalendarDays size={13} strokeWidth={2} aria-hidden />
-          {formatEventTime(event)}
-        </p>
-        <p className="mt-1 text-[15.5px] font-semibold text-ink">{event.title}</p>
-        {event.location && (
-          <p className="mt-0.5 flex items-center gap-1 text-[13.5px] text-ink-muted">
-            <MapPin size={13} strokeWidth={1.75} aria-hidden />
-            {event.location}
-          </p>
+      <div className="flex min-w-0 items-start gap-3.5">
+        {event.photo && (
+          <div className="relative mt-0.5 aspect-[16/9] w-20 shrink-0 overflow-hidden rounded-[8px] bg-muted">
+            <Image src={event.photo} alt="" fill unoptimized sizes="80px" className="object-cover" />
+          </div>
         )}
+        <div className="min-w-0">
+          <p className="flex items-center gap-1.5 text-[13px] font-semibold text-cardinal">
+            <CalendarDays size={13} strokeWidth={2} aria-hidden />
+            {formatEventTime(event)}
+          </p>
+          <p className="mt-1 text-[15.5px] font-semibold text-ink">{event.title}</p>
+          {event.location && (
+            <p className="mt-0.5 flex items-center gap-1 text-[13.5px] text-ink-muted">
+              <MapPin size={13} strokeWidth={1.75} aria-hidden />
+              {event.location}
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex shrink-0 items-center gap-1">
         {canEdit && (
@@ -106,6 +141,7 @@ export function EventsTab({ slug }: { slug: string }) {
                 link: event.link ?? "",
                 starts_at: toLocalInput(event.starts_at),
                 ends_at: toLocalInput(event.ends_at),
+                photo: event.photo ?? "",
               });
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
@@ -183,9 +219,50 @@ export function EventsTab({ slug }: { slug: string }) {
             </label>
             <input id="event-link" className="field" inputMode="url" {...field("link")} placeholder="https://" />
           </div>
+          <div>
+            <p className="field-label">
+              Photo <span className="font-normal text-ink-muted">(optional)</span>
+            </p>
+            <p className="-mt-0.5 mb-3 text-[13px] leading-relaxed text-ink-muted">
+              Shows on Explore and your page. Wide photos work best. JPG, PNG, or WebP, up to 3 MB.
+            </p>
+            {draft.photo && (
+              <div className="relative mb-3 aspect-[16/9] overflow-hidden rounded-[12px] bg-muted">
+                <Image src={draft.photo} alt="Event photo preview" fill unoptimized sizes="400px" className="object-cover" />
+              </div>
+            )}
+            <div className="flex flex-wrap items-center gap-2">
+              <label
+                className={`btn btn-secondary cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-cardinal ${uploading ? "opacity-60" : ""}`}
+              >
+                <ImagePlus size={16} strokeWidth={1.75} aria-hidden />
+                {uploading ? "Uploading..." : draft.photo ? "Replace photo" : "Add a photo"}
+                <input
+                  ref={fileInput}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  disabled={uploading}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) void uploadPhoto(file);
+                  }}
+                />
+              </label>
+              {draft.photo && !uploading && (
+                <button
+                  type="button"
+                  className="btn btn-quiet"
+                  onClick={() => setDraft((d) => ({ ...d, photo: "" }))}
+                >
+                  Remove photo
+                </button>
+              )}
+            </div>
+          </div>
           <FormStatus error={formError} success={saved} />
           <div className="flex flex-wrap gap-3">
-            <button type="submit" disabled={busy} className="btn btn-primary">
+            <button type="submit" disabled={busy || uploading} className="btn btn-primary">
               {busy ? "Saving..." : draft.id ? "Save event" : "Post event"}
             </button>
             {draft.id && (

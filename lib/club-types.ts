@@ -29,7 +29,12 @@ export interface ClubEvent {
   link: string | null;
   starts_at: string;
   ends_at: string | null;
+  /** Public URL in the club-photos bucket. Missing until migration 0014 runs. */
+  photo?: string | null;
 }
+
+export const EVENT_COLUMNS_LEGACY = "id, club_slug, title, description, location, link, starts_at, ends_at";
+export const EVENT_COLUMNS = `${EVENT_COLUMNS_LEGACY}, photo`;
 
 export interface ClaimState {
   status: ClubStatus;
