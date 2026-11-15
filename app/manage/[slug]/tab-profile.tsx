@@ -172,9 +172,7 @@ function ProfileForm({
         </div>
         <fieldset>
           <legend className="field-label">Links</legend>
-          {links.length === 0 && (
-            <p className="mb-3 text-[14px] text-ink-muted">Add your Instagram, GroupMe, or website.</p>
-          )}
+          <p className="mb-3 text-[14px] text-ink-muted">Add your socials, GroupMe, website, etc.</p>
           <ul className="space-y-3">
             {links.map((link, index) => (
               <li key={index} className="flex flex-col gap-2 sm:flex-row sm:items-center">
