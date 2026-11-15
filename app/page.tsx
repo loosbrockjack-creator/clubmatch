@@ -89,7 +89,7 @@ export default function LandingPage() {
           />
         </div>
 
-        <div className="shell flex flex-col justify-center py-14 sm:min-h-[600px] sm:py-28">
+        <div className="shell flex flex-col justify-center pb-2 pt-14 sm:min-h-[600px] sm:py-28">
           <div className="max-w-2xl sm:max-w-[41%]">
             <p className="eyebrow">Iowa State University</p>
             <h1 className="display mt-5 text-[42px] text-ink sm:text-[56px] lg:text-[64px]">
@@ -116,14 +116,23 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="relative aspect-[12/5] sm:hidden">
+        {/* Phone: a taller crop centred on the group. Its sky and branches
+            dissolve into the paper above, so text and art read as one scene
+            while every face stays clear of the copy. */}
+        <div
+          className="relative -mt-2 aspect-[5/4] sm:hidden"
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent 0%, #000 42%)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 42%)",
+          }}
+        >
           <Image
             src={hero.src}
             alt={hero.alt}
             fill
             quality={90}
             sizes="100vw"
-            style={{ objectPosition: hero.position }}
+            style={{ objectPosition: "62% 70%" }}
             className="object-cover"
           />
         </div>
