@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, MapPin } from "lucide-react";
 import { ClubCard } from "@/components/club-card";
-import { fetchUpcomingEvents, formatEventTime } from "@/lib/club-client";
+import { EventExploreTile } from "@/components/event-cards";
+import { fetchUpcomingEvents } from "@/lib/club-client";
 import { getClubSummary } from "@/lib/clubs";
 import { rotateFeatured } from "@/lib/club-featured";
 import { photoForClub } from "@/lib/photos";
@@ -67,43 +66,7 @@ export function ExploreHighlights() {
                     href={`/clubs/${event.club_slug}`}
                     className="card card-interactive group flex h-full flex-col overflow-hidden p-0"
                   >
-                    <span className="relative block aspect-[16/9] overflow-hidden bg-muted">
-                      {event.photo ? (
-                        <Image
-                          src={event.photo}
-                          alt=""
-                          fill
-                          unoptimized
-                          sizes="270px"
-                          className="object-cover transition-transform duration-400 ease-out group-hover:scale-[1.03]"
-                        />
-                      ) : (
-                        <Image
-                          src={cover.src}
-                          alt=""
-                          quality={cover.quality}
-                          fill
-                          sizes="270px"
-                          className="object-cover transition-transform duration-400 ease-out group-hover:scale-[1.03]"
-                        />
-                      )}
-                    </span>
-                    <span className="flex flex-1 flex-col px-4 pb-4 pt-3.5">
-                      <span className="flex items-center gap-1.5 text-[12.5px] font-semibold text-cardinal">
-                        <CalendarDays size={13} strokeWidth={2} aria-hidden />
-                        {formatEventTime(event)}
-                      </span>
-                      <span className="mt-2 line-clamp-2 text-[15px] font-bold leading-snug text-ink">
-                        {event.title}
-                      </span>
-                      <span className="mt-1 line-clamp-1 text-[13px] text-ink-soft">{club.name}</span>
-                      {event.location && (
-                        <span className="mt-1 flex items-center gap-1 text-[12.5px] text-ink-muted">
-                          <MapPin size={12} strokeWidth={1.75} aria-hidden className="shrink-0" />
-                          <span className="line-clamp-1">{event.location}</span>
-                        </span>
-                      )}
-                    </span>
+                    <EventExploreTile event={event} clubName={club.name} cover={cover} />
                   </Link>
                 </li>
               );

@@ -2,10 +2,13 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { CalendarDays, ImagePlus, MapPin, Pencil, Trash2 } from "lucide-react";
+import { CalendarDays, Eye, ImagePlus, MapPin, Pencil, Trash2, X } from "lucide-react";
+import { EventExploreTile, EventPageCard } from "@/components/event-cards";
 import { apiFetch, formatEventTime } from "@/lib/club-client";
 import type { ClubEvent } from "@/lib/club-types";
 import { LIMITS } from "@/lib/club-validate";
+import { getClubSummary } from "@/lib/clubs";
+import { photoForClub } from "@/lib/photos";
 import { EmptyState, FormStatus, PanelError, PanelSkeleton, SectionTitle, usePanelData } from "./shared";
 
 type Draft = {
@@ -36,7 +39,7 @@ function toLocalInput(iso: string | null) {
   return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
 }
 
-export function EventsTab({ slug }: { slug: string }) {
+export function EventsTab({ slug, clubName }: { slug: string; clubName: string }) {
   const { data, error, reload } = usePanelData<{ events: ClubEvent[] }>(`/api/manage/${slug}/events`);
   const [draft, setDraft] = useState<Draft>(BLANK);
   const [busy, setBusy] = useState(false);
@@ -45,6 +48,7 @@ export function EventsTab({ slug }: { slug: string }) {
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const previewDialog = useRef<HTMLDialogElement>(null);
 
   if (error) return <PanelError message={error} onRetry={() => void reload()} />;
   if (!data) return <PanelSkeleton />;
@@ -56,6 +60,7 @@ export function EventsTab({ slug }: { slug: string }) {
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
+    previewDialog.current?.close();
     setBusy(true);
     setFormError(null);
     setSaved(null);
@@ -98,6 +103,24 @@ export function EventsTab({ slug }: { slug: string }) {
     if (res.error) setFormError(res.error);
     await reload();
   }
+
+  // The draft shaped like a posted event, so the preview runs through the same cards students see.
+  const toIso = (local: string) => {
+    const date = local ? new Date(local) : null;
+    return date && !Number.isNaN(date.getTime()) ? date.toISOString() : "";
+  };
+  const previewEvent = {
+    title: draft.title.trim() || "Untitled event",
+    description: draft.description.trim() || null,
+    location: draft.location.trim() || null,
+    link: draft.link.trim() || null,
+    photo: draft.photo || null,
+    starts_at: toIso(draft.starts_at),
+    ends_at: toIso(draft.ends_at) || null,
+  };
+  const previewTime = previewEvent.starts_at ? undefined : "Pick a start time";
+  const club = getClubSummary(slug);
+  const cover = club ? photoForClub(club) : null;
 
   const field = (key: keyof Draft) => ({
     value: draft[key] ?? "",
@@ -265,6 +288,15 @@ export function EventsTab({ slug }: { slug: string }) {
             <button type="submit" disabled={busy || uploading} className="btn btn-primary">
               {busy ? "Saving..." : draft.id ? "Save event" : "Post event"}
             </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              disabled={uploading}
+              onClick={() => previewDialog.current?.showModal()}
+            >
+              <Eye size={16} strokeWidth={1.75} aria-hidden />
+              Preview
+            </button>
             {draft.id && (
               <button type="button" className="btn btn-quiet" onClick={() => setDraft(BLANK)}>
                 Cancel
@@ -272,6 +304,63 @@ export function EventsTab({ slug }: { slug: string }) {
             )}
           </div>
         </div>
+
+        <dialog
+          ref={previewDialog}
+          aria-labelledby="event-preview-heading"
+          className="event-preview m-auto max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] max-w-[760px] overflow-hidden rounded-[16px] border border-line bg-surface p-0 text-ink"
+          onClick={(e) => {
+            // A click on the backdrop lands on the dialog itself.
+            if (e.target === e.currentTarget) e.currentTarget.close();
+          }}
+        >
+          <div className="flex max-h-[calc(100dvh-32px)] flex-col">
+            <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4 sm:px-6">
+              <div>
+                <h2 id="event-preview-heading" className="text-[17px] font-semibold text-ink">
+                  Preview
+                </h2>
+                <p className="mt-0.5 text-[13.5px] text-ink-muted">How students will see it. Nothing is posted yet.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => previewDialog.current?.close()}
+                className="-mr-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[8px] text-ink-muted transition-colors hover:bg-muted hover:text-ink"
+              >
+                <X size={18} strokeWidth={1.75} aria-hidden />
+                <span className="sr-only">Close preview</span>
+              </button>
+            </div>
+
+            <div className="flex-1 space-y-8 overflow-y-auto bg-muted px-5 py-6 sm:px-6">
+              <section>
+                <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-ink-muted">On your club page</p>
+                <div className="card overflow-hidden p-0">
+                  <EventPageCard event={previewEvent} time={previewTime} />
+                </div>
+              </section>
+              {club && cover && (
+                <section>
+                  <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-ink-muted">
+                    On Explore, the week it happens
+                  </p>
+                  <div className="card flex w-[270px] max-w-full flex-col overflow-hidden p-0">
+                    <EventExploreTile event={previewEvent} clubName={clubName} cover={cover} time={previewTime} />
+                  </div>
+                </section>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center justify-end gap-3 border-t border-line px-5 py-4 sm:px-6">
+              <button type="button" className="btn btn-quiet" onClick={() => previewDialog.current?.close()}>
+                Keep editing
+              </button>
+              <button type="submit" disabled={busy || uploading} className="btn btn-primary">
+                {busy ? "Saving..." : draft.id ? "Save event" : "Post event"}
+              </button>
+            </div>
+          </div>
+        </dialog>
       </form>
 
       <div className="min-w-0">

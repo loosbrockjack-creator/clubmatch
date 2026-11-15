@@ -163,7 +163,7 @@ export function ManagePanel({ slug, clubName }: { slug: string; clubName: string
 
       <div className="shell pb-12 pt-9">
         {tab === "profile" && <ProfileTab slug={slug} clubName={clubName} access={current} onAccess={(value) => userId && setAccess({ userId, value })} />}
-        {tab === "events" && <EventsTab slug={slug} />}
+        {tab === "events" && <EventsTab slug={slug} clubName={clubName} />}
         {tab === "members" && <MembersTab slug={slug} clubName={clubName} />}
         {tab === "leads" && <LeadsTab slug={slug} clubName={clubName} />}
         {tab === "campaigns" && <CampaignsTab slug={slug} />}

@@ -610,3 +610,9 @@ page shows the event photo as a banner on the event card when there is one.
 pasted into the SQL editor, reads fall back to the old columns (Postgres
 `42703`), so events keep showing, and only saving an event *with* a photo is
 refused with a plain message.
+
+**Officers can preview an event before posting.** A Preview button on the
+Events tab opens a native `<dialog>` showing the draft as it will read on the
+club page and on Explore's "This week" row, with Post event right there. Both
+the live pages and the preview render from `components/event-cards.tsx`, so
+the preview can't drift from what students actually see.

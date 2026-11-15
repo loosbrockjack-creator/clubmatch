@@ -815,3 +815,39 @@ body:has(.quiz-focus) .site-main {
 .filter-scroll::-webkit-scrollbar {
   display: none;
 }
+
+/* Admin event preview: a native modal dialog. Page behind it stays put. */
+html:has(dialog.event-preview[open]) {
+  overflow: hidden;
+}
+.event-preview {
+  box-shadow:
+    0 1px 2px rgb(26 26 26 / 0.06),
+    0 24px 64px rgb(26 26 26 / 0.18);
+}
+.event-preview::backdrop {
+  background: rgb(26 26 26 / 0.45);
+}
+.event-preview[open] {
+  animation: event-preview-in 200ms var(--ease-out-soft);
+}
+.event-preview[open]::backdrop {
+  animation: event-preview-fade 200ms var(--ease-out-soft);
+}
+@keyframes event-preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+}
+@keyframes event-preview-fade {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .event-preview[open],
+  .event-preview[open]::backdrop {
+    animation: none;
+  }
+}
