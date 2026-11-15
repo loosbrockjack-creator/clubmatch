@@ -9,7 +9,6 @@ import { ExploreHighlights } from "@/components/explore-highlights";
 import { FilterRow } from "@/components/filter-row";
 import { PageHeader } from "@/components/page-header";
 import { clubs } from "@/lib/clubs";
-import { CLUB_COVERS } from "@/lib/photos";
 import { matchesBySlug, scoreClub } from "@/lib/matching";
 import { useStoredPreferences } from "@/lib/preferences";
 import {
@@ -176,8 +175,8 @@ function ExploreView() {
     // every club. Clubs that aren't a match for this student (nothing
     // specific in common, or opt-in only) follow the matches. Both groups
     // trail alphabetically.
-    const sorted =
-      activeSort === "fit" && hasPrefs
+    // No quiz answers (signed out or never took it): plain A to Z.
+    return activeSort === "fit" && hasPrefs
         ? matches
             .map((club) => {
               const match = matched?.get(club.slug);
@@ -189,21 +188,7 @@ function ExploreView() {
             .sort((a, b) => b.score - a.score || a.club.name.localeCompare(b.club.name))
             .map((entry) => entry.club)
         : matches.sort((a, b) => a.name.localeCompare(b.name));
-
-    // Cover review: with no search or filters, the clubs that have new
-    // watercolor covers lead the grid so they can be judged side by side.
-    // Only in A to Z order: in "Best fit for you" they'd bury the student's
-    // actual matches.
-    const unfiltered =
-      activeSort === "az" &&
-      !needle &&
-      areas.length + categories.length + commitments.length + offers.length === 0;
-    if (!unfiltered) return sorted;
-    const pinned = CLUB_COVERS.map((slug) => sorted.find((c) => c.slug === slug)).filter(
-      (c): c is (typeof sorted)[number] => c !== undefined,
-    );
-    return [...pinned, ...sorted.filter((c) => !CLUB_COVERS.includes(c.slug))];
-  }, [query, areas, categories, commitments, offers, activeSort, hasPrefs, prefs, matched]);
+  },[query, areas, categories, commitments, offers, activeSort, hasPrefs, prefs, matched]);
 
   const filterCount =
     areas.length + categories.length + commitments.length + offers.length;
