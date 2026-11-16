@@ -1,4 +1,5 @@
 import clubIndex from "@/data/clubs-index.json";
+import { localDemo } from "@/lib/local-demo";
 import type { ClubSummary } from "./types";
 
 /**
@@ -10,7 +11,8 @@ import type { ClubSummary } from "./types";
  * through lib/clubs-detail.ts, which server components import. Keeping the two
  * apart is what stops roughly a megabyte of text from shipping to the client.
  */
-export const clubs = clubIndex as ClubSummary[];
+// Plus any local-only demo club (empty on the live site, see lib/local-demo.ts).
+export const clubs = [...(clubIndex as ClubSummary[]), ...localDemo.clubs];
 
 export const clubBySlug = new Map(clubs.map((club) => [club.slug, club]));
 

@@ -45,7 +45,7 @@ export async function GET(request: Request, { params }: Ctx) {
   const both = new Set([...memberSet, ...interestedSet]).size;
   return Response.json({
     campaigns: demo
-      ? [...(campaigns ?? []), ...demoCampaigns()].sort((a, b) =>
+      ? [...(campaigns ?? []), ...demoCampaigns(slug)].sort((a, b) =>
           String(b.created_at).localeCompare(String(a.created_at)),
         )
       : (campaigns ?? []),

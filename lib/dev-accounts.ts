@@ -3,7 +3,9 @@
  * They exist only in the clubmatch-dev Supabase project (see
  * active/execution/scripts/seed-dev.mjs). Sign in at /dev-login on localhost.
  */
-export const DEV_ACCOUNTS = [
+import { localDemo } from "@/lib/local-demo";
+
+const BASE_ACCOUNTS = [
   { key: "officer", email: "cm-dev-officer@iastate.edu", label: "Club officer (Data Science Club)" },
   { key: "student-cs", email: "cm-dev-cs@iastate.edu", label: "Student: computer science" },
   { key: "student-finance", email: "cm-dev-finance@iastate.edu", label: "Student: finance" },
@@ -12,7 +14,11 @@ export const DEV_ACCOUNTS = [
   { key: "student-new", email: "cm-dev-new@iastate.edu", label: "Student: brand new, no profile" },
 ] as const;
 
-export type DevAccountKey = (typeof DEV_ACCOUNTS)[number]["key"];
+/** Plus any local-only demo account (see lib/local-demo.ts). */
+export const DEV_ACCOUNTS: readonly { key: string; email: string; label: string }[] = [
+  ...BASE_ACCOUNTS,
+  ...localDemo.devAccounts,
+];
 
 /** Dev sign-in works only in `next dev`, with DEV_LOGIN=1, on localhost. */
 export function devLoginEnabled(host?: string | null): boolean {

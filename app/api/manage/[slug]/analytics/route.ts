@@ -46,7 +46,7 @@ export async function GET(request: Request, { params }: Ctx) {
     admin.from("club_invites").select("user_id, created_at").eq("club_slug", slug),
     admin.from("club_interests").select("user_id, created_at").eq("club_slug", slug),
   ]);
-  if (isDemoClub(slug)) rows.push(...demoActivity(days, chicagoDay));
+  if (isDemoClub(slug)) rows.push(...demoActivity(slug, days, chicagoDay));
   const saidInterested = new Map((interests ?? []).map((row) => [row.user_id as string, row.created_at as string]));
   const inviteStats = {
     sent: invites?.length ?? 0,

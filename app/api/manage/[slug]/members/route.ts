@@ -30,7 +30,7 @@ export async function GET(request: Request, { params }: Ctx) {
       since: row.created_at as string,
     };
   });
-  if (isDemoClub(slug)) members.push(...demoMembers());
+  if (isDemoClub(slug)) members.push(...demoMembers(slug));
   return Response.json({ members, you: ctx.user.id });
 }
 

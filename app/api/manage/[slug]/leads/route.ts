@@ -100,9 +100,9 @@ export async function GET(request: Request, { params }: Ctx) {
   }
 
   if (isDemoClub(slug)) {
-    goodFit.push(...demoGoodFit());
+    goodFit.push(...demoGoodFit(slug));
     goodFit.sort((a, b) => b.match - a.match || a.id.localeCompare(b.id));
-    interested.push(...demoInterested());
+    interested.push(...demoInterested(slug));
   }
 
   return Response.json({

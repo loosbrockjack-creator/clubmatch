@@ -616,3 +616,14 @@ Events tab opens a native `<dialog>` showing the draft as it will read on the
 club page and on Explore's "This week" row, with Post event right there. Both
 the live pages and the preview render from `components/event-cards.tsx`, so
 the preview can't drift from what students actually see.
+
+## 2026-11-16: Demo mode is local-only
+
+EPDC's sample data is gone, since a real client is taking over the admin
+panel. The demo engine (`lib/demo-club.ts`, `lib/demo-events.ts`) stays, but
+it holds no club content. Demo clubs, their sample content, and a demo sign-in
+account come from `lib/local-demo.ts`, which is empty in the repo. On Jack's
+machine, `next.config.ts` aliases that import to the gitignored
+`active/execution/local-demo/index.ts` (a fake club made up for demos)
+when the file exists and the build isn't on Vercel. So the live
+site can never show the demo, even by accident.

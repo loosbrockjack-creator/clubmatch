@@ -1,4 +1,13 @@
+import { existsSync } from "node:fs";
 import type { NextConfig } from "next";
+
+/**
+ * Local-only demo club for client demos. When this gitignored file exists and
+ * the build isn't on Vercel, it replaces the empty lib/local-demo.ts. The live
+ * site never has it, because the file is never committed.
+ */
+const LOCAL_DEMO = "./active/execution/local-demo/index.ts";
+const useLocalDemo = !process.env.VERCEL && existsSync(LOCAL_DEMO);
 
 /**
  * A production deploy with a setting missing would otherwise look fine and quietly
@@ -24,6 +33,9 @@ if (process.env.VERCEL_ENV === "production") {
 }
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    resolveAlias: useLocalDemo ? { "@/lib/local-demo": LOCAL_DEMO } : {},
+  },
   images: {
     // 75 is the default for every photo; 90 is for the watercolor club covers.
     qualities: [75, 90],

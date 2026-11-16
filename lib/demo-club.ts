@@ -1,6 +1,8 @@
 import "server-only";
 import { demoUpcomingEvents } from "./demo-events";
 import type { ActivityRow } from "./club-insights";
+import type { DemoContent } from "./demo-types";
+import { localDemo } from "@/lib/local-demo";
 import type {
   ClubEvent,
   GoodFitLead,
@@ -10,14 +12,15 @@ import type {
 } from "./club-types";
 
 /**
- * Demo mode for showing the admin panel to prospective clients. For these clubs
+ * Demo mode for showing the admin panel to prospective clients. For demo clubs
  * only, the panel's read views mix sample students, events, campaigns, and
- * activity in with the real data. Nothing here is written to the database, so
- * the public site and other clubs never see it. Remove a slug to switch it off.
+ * activity in with the real data. Nothing here is written to the database.
+ * The live site has no demo clubs: their content comes from lib/local-demo.ts,
+ * which is empty in the repo and swapped for a gitignored file on Jack's machine.
  */
-export const DEMO_CLUBS = new Set(["entrepreneurial-product-development-club"]);
+const content = (slug: string): DemoContent | undefined => localDemo.content[slug];
 
-export const isDemoClub = (slug: string) => DEMO_CLUBS.has(slug);
+export const isDemoClub = (slug: string) => content(slug) !== undefined;
 
 /** Sample ids share one prefix, so routes can tell them apart from real users. */
 const DEMO_PREFIX = "de300000-0000-4000-8000-";
@@ -31,37 +34,8 @@ const daysAgo = (n: number, hour = 15) => {
   return date.toISOString();
 };
 
-type Person = [name: string, major: string, year: string, interests: string[], lookingFor: string];
-
-const PEOPLE: Person[] = [
-  ["Maya Patel", "Industrial Engineering", "Junior", ["career:entrepreneurship", "goal:hands-on"], "teammates"],
-  ["Ethan Brooks", "Mechanical Engineering", "Senior", ["career:engineering-design", "goal:skills"], "club"],
-  ["Sofia Ramirez", "Marketing", "Sophomore", ["career:marketing", "goal:entrepreneurship"], "teammates"],
-  ["Noah Kim", "Computer Engineering", "Junior", ["career:software", "goal:hands-on"], "club"],
-  ["Ava Johnson", "Entrepreneurship", "Senior", ["career:entrepreneurship", "area:business"], "teammates"],
-  ["Liam Nguyen", "Industrial Design", "Junior", ["area:design", "goal:hands-on"], "club"],
-  ["Olivia Chen", "Management Information Systems", "Sophomore", ["career:consulting", "goal:skills"], "club"],
-  ["Lucas Meyer", "Mechanical Engineering", "Freshman", ["career:engineering-design", "goal:entrepreneurship"], "browsing"],
-  ["Emma Schultz", "Supply Chain Management", "Junior", ["area:business", "goal:skills"], "friends"],
-  ["Jackson Lee", "Software Engineering", "Senior", ["career:software", "career:entrepreneurship"], "teammates"],
-  ["Isabella Torres", "Graphic Design", "Sophomore", ["area:design", "goal:entrepreneurship"], "club"],
-  ["Owen Fischer", "Electrical Engineering", "Junior", ["area:engineering", "goal:hands-on"], "study_group"],
-  ["Chloe Anderson", "Finance", "Senior", ["career:finance", "career:entrepreneurship"], "club"],
-  ["Daniel Okafor", "Aerospace Engineering", "Sophomore", ["career:engineering-design", "goal:skills"], "teammates"],
-  ["Grace Wilson", "Business Analytics", "Junior", ["career:data-ai", "goal:entrepreneurship"], "club"],
-  ["Ryan Hoffman", "Agricultural Engineering", "Senior", ["area:engineering", "goal:hands-on"], "browsing"],
-  ["Zoe Martinez", "Marketing", "Freshman", ["career:marketing", "goal:skills"], "friends"],
-  ["Henry Larson", "Industrial Engineering", "Junior", ["career:consulting", "goal:hands-on"], "club"],
-  ["Lily Nelson", "Computer Science", "Sophomore", ["career:software", "goal:entrepreneurship"], "teammates"],
-  ["Mason Clark", "Mechanical Engineering", "Graduate", ["career:engineering-design", "career:entrepreneurship"], "club"],
-  ["Harper Davis", "Entrepreneurship", "Sophomore", ["career:entrepreneurship", "goal:skills"], "club"],
-  ["Elijah Brown", "Construction Engineering", "Junior", ["area:engineering", "goal:entrepreneurship"], "browsing"],
-  ["Amelia Thompson", "Apparel, Merchandising, and Design", "Senior", ["area:design", "career:marketing"], "club"],
-  ["Benjamin Wright", "Management", "Junior", ["career:consulting", "career:entrepreneurship"], "teammates"],
-];
-
-const student = (n: number): LeadStudent => {
-  const [name, major, year, interests, lookingFor] = PEOPLE[n];
+const student = (slug: string, n: number): LeadStudent => {
+  const [name, major, year, interests, lookingFor] = content(slug)!.people[n];
   return {
     id: demoId(n + 1),
     display_name: name,
@@ -76,103 +50,74 @@ const student = (n: number): LeadStudent => {
 };
 
 /** Members: the first 14 people, three of them officers. */
-export function demoMembers(): RosterMember[] {
+export function demoMembers(slug: string): RosterMember[] {
   return Array.from({ length: 14 }, (_, n) => ({
     id: demoId(n + 1),
-    profile: student(n),
+    profile: student(slug, n),
     role: n < 3 ? "officer" : "member",
     verified: n < 11,
     since: daysAgo(4 + n * 9),
   }));
 }
 
-const FIT: string[][] = [
-  ["Into Entrepreneurship", "Wants hands-on projects"],
-  ["Into Engineering design", "Wants to build skills"],
-  ["Interested in Business", "Wants to start something"],
-  ["Into Entrepreneurship", "Interested in Engineering"],
-];
+const fitFor = (slug: string, i: number) => {
+  const fit = content(slug)!.fit;
+  return fit[i % fit.length];
+};
 
-export function demoGoodFit(): GoodFitLead[] {
+export function demoGoodFit(slug: string): GoodFitLead[] {
   const matches = [94, 91, 89, 87, 86, 84, 82, 80, 78, 76];
   return matches.map((match, i) => ({
-    ...student(14 + i),
+    ...student(slug, 14 + i),
     match,
-    fit: FIT[i % FIT.length],
+    fit: fitFor(slug, i),
     invited: i === 2 || i === 6,
   }));
 }
 
-export function demoInterested(): InterestedLead[] {
+export function demoInterested(slug: string): InterestedLead[] {
   return [14, 16, 18, 20, 22, 23].map((n, i) => ({
-    ...student(n),
+    ...student(slug, n),
     since: daysAgo(1 + i * 3, 13 + i),
-    fit: FIT[i % FIT.length],
+    fit: fitFor(slug, i),
   }));
 }
 
 export function demoEvents(slug: string): ClubEvent[] {
-  const event = (
-    n: number,
-    title: string,
-    description: string,
-    location: string,
-    starts: string,
-    hours: number,
-  ): ClubEvent => ({
-    id: demoId(900 + n),
-    club_slug: slug,
-    title,
-    description,
-    location,
-    link: null,
-    starts_at: starts,
-    ends_at: new Date(new Date(starts).getTime() + hours * 60 * 60 * 1000).toISOString(),
-  });
-  return [
-    ...demoUpcomingEvents(slug),
-    event(4, "Kickoff Meeting and Team Matching", "Meet the club, hear this semester's project ideas, and find a team.", "Student Innovation Center, Room 0102", daysAgo(24, 23), 1.5),
-    event(5, "Customer Discovery Bootcamp", "How to run interviews that tell you whether anyone wants what you're building.", "Pearson Hall, Room 1110", daysAgo(10, 23), 2),
-  ];
+  const past = (content(slug)?.past ?? []).map(
+    (e, i): ClubEvent => {
+      const starts = daysAgo(e.daysAgo, e.hourUtc);
+      return {
+        id: demoId(950 + i),
+        club_slug: slug,
+        title: e.title,
+        description: e.description,
+        location: e.location,
+        link: null,
+        starts_at: starts,
+        ends_at: new Date(new Date(starts).getTime() + e.hours * 60 * 60 * 1000).toISOString(),
+      };
+    },
+  );
+  return [...demoUpcomingEvents(slug), ...past];
 }
 
-export function demoCampaigns() {
-  return [
-    {
-      id: demoId(801),
-      subject: "Pitch Night is next Thursday",
-      body: "Teams, slides are due Monday. Everyone else, come watch and vote for your favorite product. Pizza at 6.",
-      audience: "both",
-      recipient_count: 20,
-      created_at: daysAgo(2, 18),
-    },
-    {
-      id: demoId(802),
-      subject: "Makerspace hours for prototype week",
-      body: "We booked the makerspace Tuesday and Wednesday nights. Sign up for a printer slot in the group chat.",
-      audience: "members",
-      recipient_count: 14,
-      created_at: daysAgo(9, 16),
-    },
-    {
-      id: demoId(803),
-      subject: "Thanks for your interest in EPDC",
-      body: "Our next kickoff is open to everyone. Come meet the teams and see if there's a project you'd like to join.",
-      audience: "interested",
-      recipient_count: 6,
-      created_at: daysAgo(21, 17),
-    },
-  ];
+export function demoCampaigns(slug: string) {
+  return (content(slug)?.campaigns ?? []).map((c, i) => ({
+    id: demoId(801 + i),
+    subject: c.subject,
+    body: c.body,
+    audience: c.audience,
+    recipient_count: c.recipient_count,
+    created_at: daysAgo(c.daysAgo, c.hourUtc),
+  }));
 }
 
 /** Shown in the Profile tab until officers save their own. Saving makes it real. */
 export function demoProfile(slug: string) {
   return {
     club_slug: slug,
-    tagline: "Build real products with a team, from first sketch to working prototype.",
-    description:
-      "EPDC is where Iowa State students turn product ideas into things people can hold. Each semester we form small cross-functional teams of engineers, designers, and business majors, and each team takes one idea through customer discovery, prototyping, and a final pitch.\n\nNo experience needed. New members join a team in their first week, learn the tools in our makerspace workshops, and leave the semester with a real project for their resume. Past teams have gone on to the CYstarters accelerator and the Iowa State pitch competition.",
-    meeting_info: "Thursdays, 6:00 to 7:30 PM, Student Innovation Center, Room 0102. About 2 to 3 hours a week with team work.",
+    ...content(slug)!.profile,
     photos: [],
     links: [] as { label: string; url: string }[],
     updated_at: daysAgo(3),
@@ -200,21 +145,10 @@ function seeded(seed: number) {
   };
 }
 
-const MAJORS: [string, string][] = [
-  ["Industrial Engineering", "engineering"],
-  ["Mechanical Engineering", "engineering"],
-  ["Entrepreneurship", "business"],
-  ["Marketing", "business"],
-  ["Management Information Systems", "business"],
-  ["Computer Engineering", "engineering"],
-  ["Industrial Design", "design"],
-  ["Finance", "business"],
-  ["Software Engineering", "computing"],
-  ["Supply Chain Management", "business"],
-];
-
 /** About 90 days of sample activity, growing a little week over week. */
-export function demoActivity(days: number, chicagoDay: (date: Date) => string): ActivityRow[] {
+export function demoActivity(slug: string, days: number, chicagoDay: (date: Date) => string): ActivityRow[] {
+  const majors = content(slug)?.majors ?? [];
+  if (majors.length === 0) return [];
   const rand = seeded(42);
   const rows: ActivityRow[] = [];
   let viewer = 0;
@@ -223,7 +157,7 @@ export function demoActivity(days: number, chicagoDay: (date: Date) => string): 
     const growth = 1 + (89 - ago) / 120;
     const impressions = Math.round((14 + rand() * 12) * growth);
     for (let i = 0; i < impressions; i++) {
-      const [major, area] = MAJORS[Math.floor(rand() * MAJORS.length)];
+      const [major, area] = majors[Math.floor(rand() * majors.length)];
       const anonymous = rand() < 0.2;
       const hash = `demo-${viewer++}`;
       const add = (kind: ActivityRow["kind"]) =>

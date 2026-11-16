@@ -61,3 +61,6 @@ __pycache__/
 
 # Playwright MCP snapshots
 .playwright-mcp/
+
+# Local-only demo club for client demos. Never commit (see lib/local-demo.ts)
+/active/execution/local-demo/

@@ -1,4 +1,5 @@
 import fullClubs from "@/data/clubs.json";
+import { localDemo } from "@/lib/local-demo";
 import type { Club } from "./types";
 
 /**
@@ -7,7 +8,7 @@ import type { Club } from "./types";
  * Import this from server components only. A client component that pulls it in
  * drags the whole dataset into the browser bundle; use lib/clubs.ts there.
  */
-const bySlug = new Map((fullClubs as Club[]).map((club) => [club.slug, club]));
+const bySlug = new Map([...(fullClubs as Club[]), ...localDemo.clubs].map((club) => [club.slug, club]));
 
 export function getClub(slug: string): Club | undefined {
   return bySlug.get(slug);

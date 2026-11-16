@@ -1,13 +1,14 @@
 import type { ClubEvent } from "./club-types";
+import { localDemo } from "@/lib/local-demo";
 
 /**
  * Sample upcoming events for demo clubs, shown on Explore's This week row, on
  * the club page, and in the admin panel. Unlike the rest of demo mode these
  * appear on public pages, because they're what a demo has to show. Dates are
  * worked out from today, so the events always fall on weekdays in the coming
- * week. Empty the set to take them down.
+ * week. Demo clubs exist only on Jack's machine (see lib/local-demo.ts).
  */
-export const DEMO_EVENT_CLUBS = new Set(["entrepreneurial-product-development-club"]);
+const DEMO_EVENT_CLUBS = Object.keys(localDemo.content);
 
 const ZONE = "America/Chicago";
 
@@ -50,51 +51,20 @@ const addHours = (iso: string, hours: number) =>
   new Date(new Date(iso).getTime() + hours * 60 * 60 * 1000).toISOString();
 
 export function demoUpcomingEvents(slug: string): ClubEvent[] {
-  if (!DEMO_EVENT_CLUBS.has(slug)) return [];
-  const event = (n: number, e: Omit<ClubEvent, "id" | "club_slug" | "ends_at">, hours: number): ClubEvent => ({
-    id: `de300000-0000-4000-8000-${String(900 + n).padStart(12, "0")}`,
-    club_slug: slug,
-    ends_at: addHours(e.starts_at, hours),
-    ...e,
+  const upcoming = localDemo.content[slug]?.upcoming ?? [];
+  return upcoming.map((e, i) => {
+    const starts_at = amesTime(weekdayOffset(e.weekday), e.hour, e.minute ?? 0);
+    return {
+      id: `de300000-0000-4000-8000-${String(901 + i).padStart(12, "0")}`,
+      club_slug: slug,
+      title: e.title,
+      description: e.description,
+      location: e.location,
+      link: null,
+      starts_at,
+      ends_at: addHours(starts_at, e.hours),
+    };
   });
-  return [
-    event(
-      1,
-      {
-        title: "Fall Pitch Night",
-        description:
-          "Five student product teams pitch what they built this semester to a panel of Ames founders and investors. Vote for your favorite, stay for pizza, and meet the teams if you want to join one in the spring.",
-        location: "Student Innovation Center, Room 0102",
-        link: null,
-        starts_at: amesTime(weekdayOffset(0), 18, 0),
-      },
-      2,
-    ),
-    event(
-      2,
-      {
-        title: "Prototype Lab: 3D Printing and Laser Cutting",
-        description:
-          "Bring an idea and leave with a physical part. We'll cover CAD export, slicing, and laser cutter safety, then you'll print your own piece. No experience needed, and materials are free.",
-        location: "Student Innovation Center Makerspace",
-        link: null,
-        starts_at: amesTime(weekdayOffset(1), 18, 30),
-      },
-      1.5,
-    ),
-    event(
-      3,
-      {
-        title: "Founder Panel: Building a Company at Iowa State",
-        description:
-          "Three Iowa State alumni founders share how a class project or side idea became a real company: finding a co-founder, first customers, and what they'd do differently. Open Q&A after.",
-        location: "Gerdin Business Building, Room 1148",
-        link: null,
-        starts_at: amesTime(weekdayOffset(3), 17, 30),
-      },
-      1.5,
-    ),
-  ];
 }
 
 /** Adds demo events to a list from the database, keeping the caller's filters. */
@@ -102,7 +72,7 @@ export function withDemoEvents(
   rows: ClubEvent[],
   options: { slug?: string; withinDays?: number; limit?: number },
 ): ClubEvent[] {
-  const slugs = options.slug ? [options.slug] : [...DEMO_EVENT_CLUBS];
+  const slugs = options.slug ? [options.slug] : DEMO_EVENT_CLUBS;
   const latest = options.withinDays ? Date.now() + options.withinDays * 24 * 60 * 60 * 1000 : Infinity;
   const extra = slugs
     .flatMap(demoUpcomingEvents)
