@@ -2,9 +2,9 @@ import { existsSync } from "node:fs";
 import type { NextConfig } from "next";
 
 /**
- * Local-only demo club for client demos. When this gitignored file exists and
- * the build isn't on Vercel, it replaces the empty lib/local-demo.ts. The live
- * site never has it, because the file is never committed.
+ * Local demo settings. When this gitignored file exists and the build isn't on
+ * Vercel, it replaces lib/local-demo.ts: the demo club is listed everywhere and
+ * Jack's localhost sign-in is added. The live site always uses lib/local-demo.ts.
  */
 const LOCAL_DEMO = "./active/execution/local-demo/index.ts";
 const useLocalDemo = !process.env.VERCEL && existsSync(LOCAL_DEMO);

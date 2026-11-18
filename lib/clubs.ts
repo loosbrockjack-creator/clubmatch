@@ -11,10 +11,13 @@ import type { ClubSummary } from "./types";
  * through lib/clubs-detail.ts, which server components import. Keeping the two
  * apart is what stops roughly a megabyte of text from shipping to the client.
  */
-// Plus any local-only demo club (empty on the live site, see lib/local-demo.ts).
-export const clubs = [...(clubIndex as ClubSummary[]), ...localDemo.clubs];
+/** Every club students can find. Unlisted demo clubs stay out (see lib/local-demo.ts). */
+export const clubs = [...(clubIndex as ClubSummary[]), ...(localDemo.listed ? localDemo.clubs : [])];
 
-export const clubBySlug = new Map(clubs.map((club) => [club.slug, club]));
+/** Every club with a page, including unlisted demo clubs. */
+export const allClubs = [...(clubIndex as ClubSummary[]), ...localDemo.clubs];
+
+export const clubBySlug = new Map(allClubs.map((club) => [club.slug, club]));
 
 export function getClubSummary(slug: string): ClubSummary | undefined {
   return clubBySlug.get(slug);

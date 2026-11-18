@@ -24,7 +24,7 @@ import { WhyItFits } from "@/components/why-it-fits";
 import { ClubCard } from "@/components/club-card";
 import { ChapterFacts } from "@/components/chapter-facts";
 import { ChapterQuote } from "@/components/chapter-quote";
-import { clubs } from "@/lib/clubs";
+import { allClubs, clubs } from "@/lib/clubs";
 import { getClub } from "@/lib/clubs-detail";
 import { getClubOverlay } from "@/lib/club-overlay";
 import { clubUrl, shareDescription, shareTitle, SITE_URL } from "@/lib/club-seo";
@@ -46,7 +46,7 @@ import {
 export const revalidate = 60;
 
 export function generateStaticParams() {
-  return clubs.map((club) => ({ slug: club.slug }));
+  return allClubs.map((club) => ({ slug: club.slug }));
 }
 
 /** How many clubs carry each category, used to weight overlap by rarity. */
@@ -74,6 +74,8 @@ export async function generateMetadata({
     title: club.name,
     description,
     alternates: { canonical: `/clubs/${slug}` },
+    // Unlisted demo clubs are for direct links only, so search engines skip them.
+    ...(clubs.some((c) => c.slug === slug) ? {} : { robots: { index: false, follow: false } }),
     openGraph: {
       title,
       description,

@@ -6,9 +6,9 @@ import { localDemo } from "@/lib/local-demo";
  * the club page, and in the admin panel. Unlike the rest of demo mode these
  * appear on public pages, because they're what a demo has to show. Dates are
  * worked out from today, so the events always fall on weekdays in the coming
- * week. Demo clubs exist only on Jack's machine (see lib/local-demo.ts).
+ * week. Unlisted demo clubs show them only on their own page (see lib/local-demo.ts).
  */
-const DEMO_EVENT_CLUBS = Object.keys(localDemo.content);
+const DEMO_EVENT_CLUBS = localDemo.listed ? Object.keys(localDemo.content) : [];
 
 const ZONE = "America/Chicago";
 

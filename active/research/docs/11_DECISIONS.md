@@ -627,3 +627,15 @@ machine, `next.config.ts` aliases that import to the gitignored
 `active/execution/local-demo/index.ts` (a fake club made up for demos)
 when the file exists and the build isn't on Vercel. So the live
 site can never show the demo, even by accident.
+
+## 2026-11-18: Demo club on the live site, unlisted
+
+Product Management Collective (a made-up club, `lib/demo-clubs-data.ts`) is now
+on the live site so prospective clients can try the admin panel. It's
+unlisted: the club page and admin panel work by direct link, but it stays out
+of Explore, search, quiz matches, the sitemap, This week, and search engines
+(`clubs` excludes it, `allClubs` and `clubBySlug` include it). Officers are
+granted through `officer_allowlist` like any real club. Locally, the gitignored
+`active/execution/local-demo/index.ts` lists it everywhere and adds Jack's
+dev sign-in. Its cover is registered in `lib/photos.ts`, not
+`club-covers.json`, because the cover sync rebuilds that file from real clubs.

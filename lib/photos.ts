@@ -12,6 +12,7 @@
  * Files live in public/photos and are hand-picked Pexels images, free license.
  */
 
+import { localDemo } from "@/lib/local-demo";
 import clubCovers from "./club-covers.json";
 
 export type PhotoKey =
@@ -127,7 +128,9 @@ const CATEGORY_PHOTO: Record<string, PhotoKey> = {
  */
 export const CLUB_COVERS: string[] = clubCovers;
 
-const CLUB_COVER_SET = new Set(CLUB_COVERS);
+// Demo clubs always ship a cover at public/photos/clubs/<slug>.jpg. They're kept
+// out of club-covers.json because the cover sync rebuilds it from real clubs only.
+const CLUB_COVER_SET = new Set([...CLUB_COVERS, ...localDemo.clubs.map((club) => club.slug)]);
 
 /** Small deterministic string hash (djb2), used to pick a stable pool index. */
 function hash(input: string): number {

@@ -19,14 +19,12 @@ export type DemoContent = {
   majors: [major: string, area: string][];
 };
 
-/**
- * Local-only demo data. The repo ships an empty one (lib/local-demo.ts). On
- * Jack's machine, next.config.ts swaps in a gitignored file with a fake club,
- * so the demo never reaches the live site.
- */
+/** Demo clubs and their sample content (see lib/local-demo.ts). */
 export type LocalDemo = {
   clubs: Club[];
   content: Record<string, DemoContent>;
   devAccounts: { key: string; email: string; label: string }[];
+  /** False keeps demo clubs out of Explore, search, quiz matches, and This week. */
+  listed: boolean;
 };
 

@@ -1,8 +1,15 @@
+import { DEMO_SLUG, demoClub, demoContent } from "./demo-clubs-data";
 import type { LocalDemo } from "./demo-types";
 
 /**
- * Empty on purpose. The live site has no demo clubs. On Jack's machine,
- * next.config.ts points this import at active/execution/local-demo/index.ts
- * (gitignored), which adds a fake club with sample data for client demos.
+ * Demo clubs on the live site: Product Management Collective, unlisted. On
+ * Jack's machine, next.config.ts points this import at the gitignored
+ * active/execution/local-demo/index.ts, which lists the club everywhere and
+ * adds his localhost sign-in.
  */
-export const localDemo: LocalDemo = { clubs: [], content: {}, devAccounts: [] };
+export const localDemo: LocalDemo = {
+  clubs: [demoClub],
+  content: { [DEMO_SLUG]: demoContent },
+  devAccounts: [],
+  listed: false,
+};
