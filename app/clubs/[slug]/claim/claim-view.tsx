@@ -38,6 +38,18 @@ export function ClaimView({ slug, clubName }: { slug: string; clubName: string }
   const [state, setState] = useState<ClaimState | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
+  // A count for the owner dashboard: once per club per browser session, nothing about the visitor.
+  useEffect(() => {
+    const key = `clubmatch:claim-view:${slug}`;
+    try {
+      if (window.sessionStorage.getItem(key)) return;
+      window.sessionStorage.setItem(key, "1");
+    } catch {
+      // Storage blocked: still count it, the server caps repeats.
+    }
+    void fetch(`/api/clubs/${slug}/claim/view`, { method: "POST" }).catch(() => {});
+  }, [slug]);
+
   const load = useCallback(async () => {
     const { data, error } = await apiFetch<ClaimState>(`/api/clubs/${slug}/claim`);
     if (data) {

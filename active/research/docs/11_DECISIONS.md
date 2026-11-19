@@ -639,3 +639,25 @@ granted through `officer_allowlist` like any real club. Locally, the gitignored
 `active/execution/local-demo/index.ts` lists it everywhere and adds Jack's
 dev sign-in. Its cover is registered in `lib/photos.ts`, not
 `club-covers.json`, because the cover sync rebuilds that file from real clubs.
+
+## 2026-11-18: Owner dashboard at /admin
+
+Jack's private dashboard: Overview (signup funnel, weekly signups, majors,
+class years, things needing attention), Claims (approve or reject in place),
+Students, Clubs (status, quiet clubs, paid plans), Demand (unclaimed clubs
+ranked by student interest, with a copyable pitch line), Reports (read only).
+CSV export on Students, Clubs, Claims, Demand.
+
+Access is the signed-in account's email against the `ADMIN_EMAILS` env var
+(`lib/admin-server.ts`), checked on every `/api/admin/*` call. Not a separate
+password: a shared password guarding every student's email would be the
+weakest lock in the app. Non-admins and signed-out visitors get a 404; with
+the env var unset nobody gets in. The email lives only in env, never in the
+public repo.
+
+Approving from the dashboard and from the alert email's links run the same
+code (`lib/claim-decide.ts`). Claim page visits are counted per club per day
+in `claim_page_views` (migration 0015), counts only, written by a rate
+limited server route, so the dashboard can show officers who are looking but
+haven't asked yet. Outreach contact data stays local and is not in the
+dashboard.

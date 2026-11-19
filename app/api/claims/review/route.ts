@@ -1,6 +1,5 @@
 import { getClubSummary } from "@/lib/clubs";
-import { activateClub } from "@/lib/club-activate";
-import { sendClaimDecision } from "@/lib/club-alerts";
+import { decideClaim } from "@/lib/claim-decide";
 import { verifyClaimReview, type ClaimDecision } from "@/lib/claim-review";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
@@ -92,35 +91,14 @@ export async function POST(request: Request) {
   if ("error" in result) return result.error;
   const { admin, claim, clubName } = result;
 
-  // Only a pending row changes, so a double submit can't send two emails.
-  // The database trigger posts the matching ClubMatch inbox message.
-  const { data: updated, error } = await admin
-    .from("club_claims")
-    .update({ status: result.decision, reviewed_at: new Date().toISOString() })
-    .eq("id", claim.id)
-    .eq("status", "pending")
-    .select("id");
-  if (error) return page("Couldn't save that", p("Try the link again in a minute."), 500);
-  if (!updated?.length) return page("Already decided", p("Someone decided this request a moment ago. Nothing changed."));
-
-  const approved = result.decision === "approved";
-  if (approved) {
-    try {
-      await activateClub(admin, claim.club_slug, claim.user_id);
-    } catch (err) {
-      // The claim stays approved, and opening the claim page retries this.
-      console.error("Activation failed:", err instanceof Error ? err.message : "unknown");
-    }
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
+  const decided = await decideClaim(admin, claim.id, result.decision, origin);
+  if (!decided.ok) {
+    if (decided.reason === "save_failed") return page("Couldn't save that", p("Try the link again in a minute."), 500);
+    return page("Already decided", p("Someone decided this request a moment ago. Nothing changed."));
   }
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
-  await sendClaimDecision({
-    to: claim.email,
-    clubName,
-    decision: result.decision,
-    url: approved ? `${origin}/manage/${claim.club_slug}` : `${origin}/clubs/${claim.club_slug}/claim`,
-  });
-
+  const approved = result.decision === "approved";
   return page(
     approved ? "Approved" : "Rejected",
     p(
