@@ -11,7 +11,8 @@ function adminEmails(): Set<string> {
   return new Set(
     (process.env.ADMIN_EMAILS ?? "")
       .split(",")
-      .map((email) => email.trim().toLowerCase())
+      // Tolerate a value pasted with quotes around it.
+      .map((email) => email.trim().replace(/^["']|["']$/g, "").trim().toLowerCase())
       .filter(Boolean),
   );
 }
